@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Plantuml Plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.eclipse; singleton:=true
-Bundle-Version: 1.0.7.5826
+Bundle-Version: 1.1.0.5826
 Bundle-Activator: net.sourceforge.plantuml.Activator
 Bundle-Vendor: PlantUML Team
 Require-Bundle: org.eclipse.ui,
