@@ -70,7 +70,7 @@
             id="net.sourceforge.plantuml.eclipse.diagramsource">
       </category>
       <view
-            name="PlantUML Diagram Source"
+            name="PlantUML Source"
             icon="icons/p5.gif"
             category="net.sourceforge.plantuml.eclipse"
             class="net.sourceforge.plantuml.eclipse.views.DiagramSourceView"
