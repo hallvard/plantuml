@@ -49,7 +49,8 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 	private static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_SUPERCLASS = 1<<2, GEN_INTERFACES = 1<<3, GEN_ASSOCIATIONS = 1<<4;
 	
 	private void generateForType(IType type, StringBuilder result, int genFlags, List<IType> allTypes) {
-		result.append("class ");
+		result.append(getClassType(type));
+		result.append(" ");
 		result.append(type.getElementName());
 		result.append(" {\n");
 		try {
@@ -61,19 +62,21 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 						generateRelatedClass(type, field.getTypeSignature(), "-->", body, null, field.getElementName(), (isMulti(fieldTypeSignature) ? "*" : "1"));
 					} else {
 						body.append("\t");
-						if ((genFlags & GEN_MODIFIERS) > 0) {
-							body.append(getModifier(field));
+						if (! Flags.isEnum(type.getFlags())) {
+							if ((genFlags & GEN_MODIFIERS) > 0 && (! Flags.isInterface(type.getFlags()))) {
+								body.append(getMemberModifier(field));
+							}
+							body.append(fieldTypeSignature);
+							body.append(" ");
 						}
-						body.append(fieldTypeSignature);
-						body.append(" ");
 						body.append(field.getElementName());
 						body.append("\n");
 					}
 				}
 				for (IMethod method : type.getMethods()) {
 					body.append("\t");
-					if ((genFlags & GEN_MODIFIERS) > 0) {
-						body.append(getModifier(method));
+					if ((genFlags & GEN_MODIFIERS) > 0 && (! Flags.isInterface(type.getFlags()))) {
+						body.append(getMemberModifier(method));
 					}
 					body.append(method.getElementName());
 					body.append("(");
@@ -152,16 +155,34 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		return Signature.toString(signature).replace("java.lang.", "");
 	}
 
-	private String getModifier(IMember member) {
+	private String getMemberModifier(IMember member) {
 		try {
-			if ((member.getFlags() & Flags.AccPrivate) != 0) {
+			int flags = member.getFlags();
+			if (Flags.isPrivate(flags)) {
 				return "-";
-			} else if ((member.getFlags() & Flags.AccProtected) != 0) {
+			} else if (Flags.isProtected(flags)) {
 				return "#";
-			} else if ((member.getFlags() & Flags.AccPublic) != 0) {
+			} else if (Flags.isPublic(flags)) {
 				return "+";
 			} else {
 				return "~";
+			}
+		} catch (JavaModelException e) {
+			return "";
+		}
+	}
+
+	private String getClassType(IType type) {
+		try {
+			int flags = type.getFlags();
+			if (Flags.isEnum(flags)) {
+				return "enum";
+			} else if (Flags.isInterface(flags)) {
+				return "interface";
+			} else if (Flags.isAbstract(flags)) {
+				return "abstract class";
+			} else {
+				return "class";
 			}
 		} catch (JavaModelException e) {
 			return "";
