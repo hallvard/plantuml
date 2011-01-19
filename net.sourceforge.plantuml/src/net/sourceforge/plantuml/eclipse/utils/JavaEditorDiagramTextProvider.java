@@ -79,7 +79,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 						body.append(getMemberModifier(method));
 					}
 					// don't show the return type for constructors
-					if (! method.getElementName().equals(type.getElementName())) {
+					if (! method.isConstructor()) {
 						body.append(getSignature(method.getReturnType()));
 						body.append(" ");
 					}
