@@ -78,6 +78,11 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 					if ((genFlags & GEN_MODIFIERS) > 0 && (! Flags.isInterface(type.getFlags()))) {
 						body.append(getMemberModifier(method));
 					}
+					// don't show the return type for constructors
+					if (! method.getElementName().equals(type.getElementName())) {
+						body.append(getSignature(method.getReturnType()));
+						body.append(" ");
+					}
 					body.append(method.getElementName());
 					body.append("(");
 					String[] parameterTypes = method.getParameterTypes();
