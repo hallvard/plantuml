@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
@@ -26,28 +27,44 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		setEditorType(ITextEditor.class);
 	}
 
+	private class Context {
+		IEditorPart editorPart;
+		IEditorInput editorInput;
+		IProject project;
+		IJavaProject javaProject;
+		ICompilationUnit compUnit;
+	}
+	
+	private Context currentContext = null;
+	
 	@Override
 	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput) {
 		if (! (editorInput instanceof IFileEditorInput)) {
 			return null;
 		}
+		currentContext = new Context();
 		IPath path = ((IFileEditorInput) editorInput).getFile().getFullPath();
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(path.segment(0));
-		ICompilationUnit compUnit = JavaCore.createCompilationUnitFrom(project.getFile(path.removeFirstSegments(1)));
+		currentContext.project = ResourcesPlugin.getWorkspace().getRoot().getProject(path.segment(0));
+		currentContext.javaProject = JavaCore.create(currentContext.project);
+		currentContext.compUnit = JavaCore.createCompilationUnitFrom(currentContext.project.getFile(path.removeFirstSegments(1)));
 		StringBuilder result = new StringBuilder();
 		try {
-			compUnit.open(new NullProgressMonitor());
-			for (IType type: compUnit.getTypes()) {
+			currentContext.compUnit.open(new NullProgressMonitor());
+			for (IType type: currentContext.compUnit.getTypes()) {
 				generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_SUPERCLASS | GEN_INTERFACES, null);
 			}
 		} catch (JavaModelException e) {
 			System.err.println(e);
+		} finally {
+			currentContext = null;
 		}
 		return (result.length() > 0 ? result.toString() : null);
 	}
 
 	private static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_SUPERCLASS = 1<<2, GEN_INTERFACES = 1<<3, GEN_ASSOCIATIONS = 1<<4;
 	
+	private static String EXTENDS_RELATION = "<|--", IMPLEMENTS_RELATION = "<|..";
+
 	private void generateForType(IType type, StringBuilder result, int genFlags, List<IType> allTypes) {
 		result.append(getClassType(type));
 		result.append(" ");
@@ -107,12 +124,12 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		result.append("}\n");
 		try {
 			if ((genFlags & GEN_SUPERCLASS) > 0) {
-				generateRelatedClass(type, type.getSuperclassTypeSignature(), "<|--", result);
+				generateRelatedClass(type, type.getSuperclassTypeSignature(), EXTENDS_RELATION, result);
 			}
 			if ((genFlags & GEN_INTERFACES) > 0) {
 				String[] interfaceSignatures = type.getSuperInterfaceTypeSignatures();
 				for (int i = 0; i < interfaceSignatures.length; i++) {
-					generateRelatedClass(type, interfaceSignatures[i], "<|..", result);
+					generateRelatedClass(type, interfaceSignatures[i], IMPLEMENTS_RELATION, result);
 				}
 			}
 		} catch (JavaModelException e) {
@@ -136,7 +153,8 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		if (superClassSignature != null) {
 			String superClassName = getSignature(superClassSignature);
 			if (! superClassName.equals("Object")) {
-				result.append("class ");
+				result.append(getClassType(superClassSignature, type, "class"));
+				result.append(" ");
 				result.append(superClassName);
 				result.append(" {\n}\n");
 				result.append(superClassName);
@@ -177,6 +195,27 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		}
 	}
 
+	private String getClassType(String signature, IType relativeTo, String def) {
+		IType type = null;
+		if (currentContext != null && currentContext.javaProject != null) {
+			String typeName = Signature.toString(signature);
+			if (typeName.lastIndexOf('.') < 0) {
+				try {
+					String[][] typeNames = relativeTo.resolveType(typeName);
+					if (typeNames.length > 0 && typeNames[0].length >= 2) {
+						typeName = (typeNames[0][0] != null ? typeNames[0][0] + "." : "") + typeNames[0][1];
+					}
+				} catch (JavaModelException e) {
+				}
+			}
+			try {
+				type = currentContext.javaProject.findType(typeName);
+			} catch (JavaModelException e) {
+			} catch (IllegalArgumentException e) {
+			}
+		}
+		return (type != null ? getClassType(type) : def);
+	}
 	private String getClassType(IType type) {
 		try {
 			int flags = type.getFlags();
