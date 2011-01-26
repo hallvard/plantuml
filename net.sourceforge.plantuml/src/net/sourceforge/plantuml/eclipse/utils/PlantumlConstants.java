@@ -12,6 +12,8 @@ public interface PlantumlConstants {
 	 * Labels of the view PlantUml
 	 */
 	public static final String COPY_MENU = "Copy";
+	public static final String COPY_SOURCE_MENU = "Copy source";
+	public static final String COPY_ASCII_MENU = "Copy as ASCII art";
 	public static final String EXPORT_MENU = "Export";
 	public static final String PRINT_MENU = "Print";
 

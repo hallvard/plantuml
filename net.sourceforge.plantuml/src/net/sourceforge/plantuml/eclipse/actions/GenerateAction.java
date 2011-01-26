@@ -1,6 +1,8 @@
 package net.sourceforge.plantuml.eclipse.actions;
 
+import net.sourceforge.plantuml.eclipse.listener.CopyAsciiRightClickListener;
 import net.sourceforge.plantuml.eclipse.listener.CopyRightClickListener;
+import net.sourceforge.plantuml.eclipse.listener.CopySourceRightClickListener;
 import net.sourceforge.plantuml.eclipse.listener.ExportRightClickListener;
 import net.sourceforge.plantuml.eclipse.listener.PrintRightClickListener;
 import net.sourceforge.plantuml.eclipse.model.Diagram;
@@ -76,6 +78,15 @@ public class GenerateAction extends Action {
 		        item.addListener(SWT.Selection, new CopyRightClickListener(
 		                diagram));
 
+				item = new MenuItem(menu, SWT.PUSH);
+				item.setText(PlantumlConstants.COPY_SOURCE_MENU);
+				item.addListener(SWT.Selection, new CopySourceRightClickListener(diagram));
+
+				item = new MenuItem(menu, SWT.PUSH);
+				item.setText(PlantumlConstants.COPY_ASCII_MENU);
+				item.addListener(SWT.Selection, new CopyAsciiRightClickListener(diagram));
+
+				
 		        item = new MenuItem(menu, SWT.PUSH);
 		        item.setText(PlantumlConstants.EXPORT_MENU);
 		        item.setEnabled(true);
