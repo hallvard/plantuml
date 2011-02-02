@@ -159,8 +159,8 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		return false;
 	}
 
-	private void generateRelatedClass(IType type, String superClassSignature, String relation, StringBuilder result) {
-		generateRelatedClass(type, superClassSignature, relation, result, null, null, null);
+	private void generateRelatedClass(IType type, String classSignature, String relation, StringBuilder result) {
+		generateRelatedClass(type, classSignature, relation, result, null, null, null);
 	}
 	private void generateRelatedClass(IType type, String classSignature, String relation, StringBuilder result, String start, String middle, String end) {
 		if (classSignature != null) {
