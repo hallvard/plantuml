@@ -81,7 +81,7 @@
    <extension
          point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
       <diagramTextProvider
-            fileExtensions="java"
+            fileExtensions="*"
             providerClass="net.sourceforge.plantuml.eclipse.utils.TextEditorDiagramTextProvider">
       </diagramTextProvider>
       

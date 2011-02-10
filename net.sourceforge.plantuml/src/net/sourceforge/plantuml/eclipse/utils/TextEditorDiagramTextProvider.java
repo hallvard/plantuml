@@ -15,7 +15,7 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		setEditorType(ITextEditor.class);
 	}
 
-	private String startuml = "@startuml", enduml = "@enduml";
+	public static String startuml = "@startuml", enduml = "@enduml";
 	private boolean startIsRegexp = true, endIsRegexp = true;
 	private boolean includeStart = false, includeEnd = false;
 
