@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPathEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
 
 /**
  * Definition of a Diagram Object.
@@ -57,11 +58,15 @@ public class Diagram {
 	public Diagram() {
 	}
 
-	public static IPath getActiveEditorPath(IEditorPart part) {
-		if (part != null) {
-			IEditorInput input = part.getEditorInput();
-			if (input instanceof IPathEditorInput) {
-				return ((IPathEditorInput) input).getPath();
+	public static IPath getActiveEditorPath() {
+		IWorkbenchPage activePage = WorkbenchUtil.getCurrentActiveWindows().getActivePage();
+		if (activePage != null) {
+			IEditorPart part = activePage.getActiveEditor();
+			if (part != null) {
+				IEditorInput input = part.getEditorInput();
+				if (input instanceof IPathEditorInput) {
+					return ((IPathEditorInput) input).getPath();
+				}
 			}
 		}
 		return null;
@@ -81,8 +86,7 @@ public class Diagram {
 			// generate the image for textDiagram and imageNumber
 			try {
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				IPath path = getActiveEditorPath(WorkbenchUtil.getCurrentActiveWindows().getActivePage()
-						.getActiveEditor());
+				IPath path = getActiveEditorPath();
 				if (path != null) {
 					FileSystem.getInstance().setCurrentDir(path.toFile().getAbsoluteFile().getParentFile());
 				} else {
@@ -257,7 +261,7 @@ public class Diagram {
 	 * @return {@link ImageData}
 	 */
 	public ImageData getImageData() {
-		return image.getImageData();
+		return (image != null ? image.getImageData() : null);
 	}
 
 	/**

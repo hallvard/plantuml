@@ -9,13 +9,18 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -31,7 +36,7 @@ public class SWTImageCanvas extends Canvas {
 	private Image sourceImage; /* original image */
 	private Image screenImage; /* screen image */
 	private AffineTransform transform = new AffineTransform();
-
+	private Cursor handCursor;
 	public SWTImageCanvas(final Composite parent) {
 		this(parent, SWT.NULL);
 	}
@@ -60,51 +65,71 @@ public class SWTImageCanvas extends Canvas {
 		});
 		addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent e) {
-				int move = 0;
-				boolean vertical = true;
+				int dx = 0, dy = 0;
 				switch (e.keyCode) {
 				case SWT.ARROW_DOWN:
-					move = 10;
+					dy = 10;
 					break;
 				case SWT.ARROW_UP:
-					move = -10;
+					dy = -10;
 					break;
 				case SWT.PAGE_DOWN:
-					move = 100;
+					dy = 100;
 					break;
 				case SWT.PAGE_UP:
-					move = -100;
+					dy = -100;
 					break;
 				case SWT.ARROW_LEFT:
-					move = -10;
-					vertical = false;
+					dx = -10;
 					break;
 				case SWT.ARROW_RIGHT:
-					move = 10;
-					vertical = false;
+					dx = 10;
 					break;
 				default:
 					break;
 				}
-
-				if (vertical) {
-					getVerticalBar().setSelection(getVerticalBar().getSelection() + move);
-					scrollVertically(getVerticalBar());
-				} else {
-					getHorizontalBar().setSelection(getHorizontalBar().getSelection() + move);
-					scrollHorizontally(getHorizontalBar());					
+				if (dx != 0 || dy != 0) {
+					pan(new Point(dx, dy));
 				}
-
 			}
 
 			public void keyReleased(KeyEvent e) {
 				// nothing to do
 			}
 		});
-
+		PanHandler panHandler = new PanHandler();
+		addMouseListener(panHandler);
+		addMouseMoveListener(panHandler);
+		handCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
+		setCursor(handCursor);
 		initScrollBars();
 	}
 
+	private Point panPoint = null, panDelta = null;
+	
+	private class PanHandler implements MouseListener, MouseMoveListener {
+
+		public void mouseDoubleClick(MouseEvent e) {
+		}
+
+		public void mouseDown(MouseEvent e) {
+			panPoint = new Point(e.x, e.y);
+			panDelta = new Point(0, 0);
+		}
+
+		public void mouseMove(MouseEvent e) {
+			if (panPoint != null && panDelta != null) {
+				panDelta.x += panPoint.x - e.x; panDelta.y += panPoint.y - e.y;
+				panPoint.x = e.x; panPoint.y = e.y;
+				pan(panDelta);
+			}
+		}
+		
+		public void mouseUp(MouseEvent e) {
+			panPoint = null;
+		}
+	}
+	
 	/**
 	 * Dispose the garbage here
 	 */
@@ -114,6 +139,9 @@ public class SWTImageCanvas extends Canvas {
 		}
 		if (screenImage != null && !screenImage.isDisposed()) {
 			screenImage.dispose();
+		}
+		if (handCursor != null && !handCursor.isDisposed()) {
+			handCursor.dispose();
 		}
 	}
 
@@ -359,5 +387,31 @@ public class SWTImageCanvas extends Canvas {
 		double dx = ((double) w) / 2;
 		double dy = ((double) h) / 2;
 		centerZoom(dx, dy, ZOOMOUT_RATE, transform);
+	}
+	
+	/**
+	 * Adjusts the scrollbars to give the effect of panning
+	 * @param dx the relative adjustment in x-direction
+	 * @param dy the relative adjustment in y-direction
+	 */
+	private void pan(Point p) {
+		Rectangle bounds = screenImage.getBounds();
+		ScrollBar hBar = getHorizontalBar(), vBar = getVerticalBar();
+		Rectangle barBounds = bounds; // new Rectangle(hBar.getMinimum(), vBar.getMinimum(), hBar.getMaximum() - hBar.getMinimum(), vBar.getMaximum() - vBar.getMinimum());
+		
+		int sdx = p.x * barBounds.width / bounds.width;
+		int sdy = p.y * barBounds.height / bounds.height;
+		// report back the remaining delta
+		p.x = p.x - sdx * bounds.width / barBounds.width;
+		p.y = p.y - sdy * bounds.height / barBounds.height;
+
+		if (sdx != 0) {
+			hBar.setSelection(hBar.getSelection() + sdx);
+			scrollHorizontally(hBar);					
+		}
+		if (sdy != 0) {
+			vBar.setSelection(vBar.getSelection() + sdy);
+			scrollVertically(vBar);
+		}
 	}
 }

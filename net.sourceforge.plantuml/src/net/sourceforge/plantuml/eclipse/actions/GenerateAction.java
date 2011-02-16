@@ -16,6 +16,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
@@ -212,9 +213,12 @@ public class GenerateAction extends Action {
 			String textDiagram = diagram.extractTextDiagram(cursorPosition, contents);
 			if (textDiagram != null && (!textDiagram.equals(lastTextDiagram) ||
 					lastImageNumber != diagram.getImageNumber())) {
-				canvas.loadImage(diagram.getImage());
-				lastTextDiagram = diagram.getTextDiagram();
-				lastImageNumber = diagram.getImageNumber();
+				ImageData imageData = diagram.getImage();
+				if (imageData != null) {
+					canvas.loadImage(imageData);
+					lastTextDiagram = diagram.getTextDiagram();
+					lastImageNumber = diagram.getImageNumber();
+				}
 			}
 		} catch (StackOverflowError e) {
 			WorkbenchUtil.errorBox("StackOverFlowError",
