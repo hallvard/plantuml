@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.feature"
       label="PlantUML Feature"
-      version="1.1.5.6055"
+      version="1.1.5.6121"
       provider-name="PlantUML Team">
 
    <description url="http://www.example.com/description">

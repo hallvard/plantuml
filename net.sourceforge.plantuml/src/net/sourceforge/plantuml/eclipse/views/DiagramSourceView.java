@@ -10,7 +10,7 @@ public class DiagramSourceView extends AbstractDiagramSourceView {
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		diagramTextView = new Text(parent, SWT.MULTI);
+		diagramTextView = new Text(parent, SWT.MULTI | SWT.V_SCROLL);
 		super.createPartControl(parent);
 	}
 
