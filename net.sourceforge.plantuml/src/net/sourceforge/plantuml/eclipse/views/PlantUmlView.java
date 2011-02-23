@@ -29,7 +29,7 @@ import org.eclipse.ui.IActionBars;
  * @author durif_c
  */
 
-public class PlantUmlView extends AbstractDiagramSourceView { // ViewPart implements ISelectionListener {
+public class PlantUmlView extends AbstractDiagramSourceView {
 
 	private SWTImageCanvas canvas;
 	/**
@@ -67,7 +67,6 @@ public class PlantUmlView extends AbstractDiagramSourceView { // ViewPart implem
 		contributeToActionBars();
 
 		super.createPartControl(parent);
-//		setListener(true); // add the listener
 	}
 
 	/**
@@ -116,7 +115,7 @@ public class PlantUmlView extends AbstractDiagramSourceView { // ViewPart implem
 		showOriginalAction.setImageDescriptor(PlantUmlUtils.getImageDescriptor(
 				display, "/icons/Original16.gif"));
 
-		// action to start or stop the plantuml listener
+		// action to start or stop the generation of the actual diagram
 		toggleAction = new ToggleButtonAction(this, display);
 	}
 
@@ -140,46 +139,11 @@ public class PlantUmlView extends AbstractDiagramSourceView { // ViewPart implem
 	public void setFocus() {
 		canvas.setFocus();
 	}
-
-	/**
-	 * Implemented actions for the selection listeners.
-	 * 
-	 * @author durif_c
-	 */
-//	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-//		if (selection instanceof TextSelection) {
-//			ITextSelection select = (ITextSelection) selection;
-//			int cursorPosition = select.getOffset();
-//
-//			// treat the text flow to construct the image.
-//			generateAction.treatFlow(cursorPosition);
-//		}
-//	}
-
-	/**
-	 * Add or remove the selection listener
-	 * 
-	 * @param activate
-	 *            true to add the listener, false to remove them
-	 */
-//	public void setListener(boolean activate) {
-//		if (activate) {
-//			getSite().getPage().addPostSelectionListener(this);
-//		} else {
-//			getSite().getPage().removePostSelectionListener(this);
-//		}
-//    }
-    
-    /**
-     * Remove the selectionListener
-     */
-//    public void dispose() {
-//    	super.dispose();
-//    	setListener(false);
-//    }
-
+	
 	@Override
 	protected void updateDiagramText(String text) {
-		generateAction.treatPlantUmlSelected(-1, text);
+		if (toggleAction != null && toggleAction.isChecked()) {
+			generateAction.treatPlantUmlSelected(-1, text);
+		}
 	}
 }
