@@ -81,7 +81,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 						body.append("\t");
 						if (! Flags.isEnum(type.getFlags())) {
 							if ((genFlags & GEN_MODIFIERS) > 0 && (! Flags.isInterface(type.getFlags()))) {
-								body.append(getMemberModifier(field));
+								body.append(getMemberModifiers(field));
 							}
 							body.append(fieldTypeSignature);
 							body.append(" ");
@@ -93,7 +93,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 				for (IMethod method : type.getMethods()) {
 					body.append("\t");
 					if ((genFlags & GEN_MODIFIERS) > 0 && (! Flags.isInterface(type.getFlags()))) {
-						body.append(getMemberModifier(method));
+						body.append(getMemberModifiers(method));
 					}
 					// don't show the return type for constructors
 					if (! method.isConstructor()) {
@@ -209,7 +209,22 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		return Signature.toString(signature).replace("java.lang.", "");
 	}
 
-	private String getMemberModifier(IMember member) {
+	private String getMemberModifiers(IMember member) {
+		try {
+			String modifiers = getMemberVisibilityModifier(member);
+			int flags = member.getFlags();
+			if (Flags.isStatic(flags)) {
+				modifiers += "{static}";
+			} else if (Flags.isAbstract(flags)) {
+				modifiers += "{abstract}";
+			}
+			return modifiers;
+		} catch (JavaModelException e) {
+			return "";
+		}
+	}
+
+	private String getMemberVisibilityModifier(IMember member) throws JavaModelException {
 		try {
 			int flags = member.getFlags();
 			if (Flags.isPrivate(flags)) {
@@ -225,7 +240,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 			return "";
 		}
 	}
-
+	
 	private String getClassType(String signature, IType relativeTo, String def) {
 		IType type = null;
 		if (currentContext != null && currentContext.javaProject != null) {
