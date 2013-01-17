@@ -12,12 +12,13 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
-public abstract class AbstractDiagramSourceView extends ViewPart {
+public abstract class AbstractDiagramSourceView extends ViewPart implements Runnable {
 
 	@Override
 	public void createPartControl(Composite parent) {
 		registerListeners();
-		updateDiagramText(true);
+		// without this it deadlocked during startup
+		parent.getDisplay().asyncExec(this);
 	}
 
 	protected void registerListeners() {
@@ -34,6 +35,11 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		getSite().getPage().removePostSelectionListener(diagramTextChangedListener);
 	}
 	
+	// implements Runnable.run()
+	public void run() {
+		updateDiagramText(true, null);
+	}
+	
 	protected abstract void updateDiagramText(String text);
 
 	private IPartListener partListener = new IPartListener() {
@@ -45,13 +51,14 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		public void partClosed(IWorkbenchPart part) {
 		}
 		public void partBroughtToTop(IWorkbenchPart part) {
-			updateDiagramText(false);
+			updateDiagramText(false, part);
 		}
 		public void partActivated(IWorkbenchPart part) {
 		}
 	};
 	
 	private class DiagramTextChangedListener implements IPropertyListener, ISelectionListener {
+
 		public void propertyChanged(Object source, int propId) {
 			if (source == lastEditor && propId == IEditorPart.PROP_DIRTY && (! lastEditor.isDirty())) {
 				diagramChanged(lastEditor);
@@ -63,7 +70,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 			}			
 		}
 		public void diagramChanged(IEditorPart editor) {
-			updateDiagramText(true);
+			updateDiagramText(true, editor);
 		}
 	}
 	
@@ -80,8 +87,8 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		}
 	}
 
-	private void updateDiagramText(boolean force) {
-		IEditorPart activeEditor = getSite().getPage().getActiveEditor();
+	private void updateDiagramText(boolean force, IWorkbenchPart part) {
+		IEditorPart activeEditor = (part instanceof IEditorPart ? (IEditorPart) part : getSite().getPage().getActiveEditor());
 		if (force || activeEditor != lastEditor) {
 			handleEditorChange(activeEditor);
 			if (activeEditor != null) {
