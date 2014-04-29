@@ -1,29 +1,23 @@
-package net.sourceforge.plantuml.eclipse.utils;
+package net.sourceforge.plantuml.text;
 
 import java.util.Iterator;
-import java.util.StringTokenizer;
+
+import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IPathEditorInput;
 
 public abstract class AbstractDiagramTextProvider implements DiagramTextProvider {
 
-	private String fileExtensions = null;
 	private Class<?> editorType = null;
 
 	public AbstractDiagramTextProvider() {
 		
 	}
-	public AbstractDiagramTextProvider(String fileExtensions, Class<?> editorType) {
+	public AbstractDiagramTextProvider(Class<?> editorType) {
 		this();
-		setFileExtensions(fileExtensions);
 		setEditorType(editorType);
-	}
-
-	public void setFileExtensions(String fileExtensions) {
-		this.fileExtensions = fileExtensions;
 	}
 
 	public void setEditorType(Class<?> editorType) {
@@ -33,23 +27,6 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	public boolean supportsEditor(IEditorPart editorPart) {
 		if (editorType != null && (! (editorType.isInstance(editorPart)))) {
 			return false;
-		}
-		if (fileExtensions != null) {
-			String fileExtension = null;
-			if (fileExtension == null && editorPart.getEditorInput() instanceof IPathEditorInput) {
-				fileExtension = ((IPathEditorInput) editorPart.getEditorInput()).getPath().getFileExtension();
-			}
-			boolean supportsFileExtension = false;
-			StringTokenizer tokens = new StringTokenizer(fileExtensions, ",");
-			while ((! supportsFileExtension) && tokens.hasMoreTokens()) {
-				String ext = tokens.nextToken();
-				if ("*".equals(ext) || ext.equals(fileExtension)) {
-					supportsFileExtension = true;
-				}
-			}
-			if (! supportsFileExtension) {
-				return false;
-			}
 		}
 		return true;
 	}

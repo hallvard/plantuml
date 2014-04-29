@@ -10,7 +10,7 @@ import org.eclipse.ui.IEditorPart;
 public class EcoreDiagramTextProvider extends AbstractEcoreDiagramTextProvider {
 
 	public EcoreDiagramTextProvider() {
-		super(null, IEditingDomainProvider.class);
+		super(IEditingDomainProvider.class);
 	}
 
 	@Override

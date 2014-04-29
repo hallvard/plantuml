@@ -49,13 +49,6 @@
 
    <element name="diagramTextProvider">
       <complexType>
-         <attribute name="fileExtensions" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
          <attribute name="providerClass" type="string" use="required">
             <annotation>
                <documentation>

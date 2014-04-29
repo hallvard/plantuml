@@ -1,4 +1,4 @@
-package net.sourceforge.plantuml.eclipse.utils;
+package net.sourceforge.plantuml.text;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;

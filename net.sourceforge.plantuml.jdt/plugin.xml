@@ -4,9 +4,9 @@
 
    <extension
          point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
-
+      
       <diagramTextProvider
-            providerClass="net.sourceforge.plantuml.ecore.EcoreDiagramTextProvider">
+            providerClass="net.sourceforge.plantuml.jdt.JavaEditorDiagramTextProvider">
       </diagramTextProvider>
    </extension>
 

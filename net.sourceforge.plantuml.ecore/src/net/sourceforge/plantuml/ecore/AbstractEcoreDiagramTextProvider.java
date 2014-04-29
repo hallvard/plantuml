@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import net.sourceforge.plantuml.eclipse.utils.AbstractDiagramTextProvider;
+import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
@@ -30,8 +30,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTextProvider {
 
-	protected AbstractEcoreDiagramTextProvider(String fileExtensions, Class<?> editorType) {
-		super(fileExtensions, editorType);
+	protected AbstractEcoreDiagramTextProvider(Class<?> editorType) {
+		super(editorType);
 	}
 
 	public boolean supportsSelection(ISelection selection) {

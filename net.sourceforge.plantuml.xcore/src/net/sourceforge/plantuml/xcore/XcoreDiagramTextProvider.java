@@ -12,7 +12,7 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 public class XcoreDiagramTextProvider extends AbstractEcoreDiagramTextProvider {
 
 	public XcoreDiagramTextProvider() {
-		super(null, XtextEditor.class);
+		super(XtextEditor.class);
 	}
 
 	@Override

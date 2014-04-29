@@ -78,17 +78,4 @@
       </view>
    </extension>
 
-   <extension
-         point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
-      <diagramTextProvider
-            fileExtensions="*"
-            providerClass="net.sourceforge.plantuml.eclipse.utils.TextEditorDiagramTextProvider">
-      </diagramTextProvider>
-      
-      <diagramTextProvider
-            fileExtensions="java"
-            providerClass="net.sourceforge.plantuml.eclipse.utils.JavaEditorDiagramTextProvider">
-      </diagramTextProvider>
-   </extension>
-
 </plugin>

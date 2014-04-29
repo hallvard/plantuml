@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.feature"
       label="PlantUML Feature"
-      version="1.1.10.7997"
+      version="1.1.11.7997"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
@@ -25,14 +25,14 @@
          unpack="false"/>
 
    <plugin
-         id="net.sourceforge.plantuml.ecore"
+         id="net.sourceforge.plantuml.jdt"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="net.sourceforge.plantuml.xcore"
+         id="net.sourceforge.plantuml.text"
          download-size="0"
          install-size="0"
          version="0.0.0"

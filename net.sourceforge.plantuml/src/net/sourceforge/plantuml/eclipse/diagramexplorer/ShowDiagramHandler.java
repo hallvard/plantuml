@@ -28,7 +28,7 @@ public class ShowDiagramHandler extends AbstractHandler {
 		shell.setLayout(layout);
 
 		Label l1 = new Label(shell, SWT.LEFT);
-		l1.setText("Prénom : ");
+		l1.setText("Prï¿½nom : ");
 		new Text(shell, SWT.BORDER);
 		Button b1 = new Button(shell, SWT.PUSH);
 		b1.setText("Valider");
@@ -47,9 +47,8 @@ public class ShowDiagramHandler extends AbstractHandler {
 		while (!shell.isDisposed ()) {
 			if (!display.readAndDispatch ()) display.sleep ();
 		}
-		display.dispose ();
+		display.dispose();
 		return null;
 
 	}
-
 }

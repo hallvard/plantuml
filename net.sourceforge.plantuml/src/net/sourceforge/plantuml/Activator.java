@@ -3,7 +3,6 @@ package net.sourceforge.plantuml;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.plantuml.eclipse.utils.AbstractDiagramTextProvider;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 
 import org.eclipse.core.runtime.CoreException;
@@ -96,12 +95,6 @@ public class Activator extends AbstractUIPlugin {
 				if ("diagramTextProvider".equals(name)) {
 					try {
 						DiagramTextProvider diagramTextProvider = (DiagramTextProvider) ces.createExecutableExtension("providerClass");
-						if (diagramTextProvider instanceof AbstractDiagramTextProvider) {
-							String fileExtensions = ces.getAttribute("fileExtensions");
-							if (fileExtensions != null) {
-								((AbstractDiagramTextProvider) diagramTextProvider).setFileExtensions(fileExtensions);
-							}
-						}
 						diagramTextProviders.add(diagramTextProvider);
 					} catch (InvalidRegistryObjectException e) {
 					} catch (CoreException e) {

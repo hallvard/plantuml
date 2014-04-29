@@ -1,6 +1,8 @@
-package net.sourceforge.plantuml.eclipse.utils;
+package net.sourceforge.plantuml.jdt;
 
 import java.util.List;
+
+import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -44,7 +46,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 	
 	@Override
 	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection ignore) {
-		if (! (editorInput instanceof IFileEditorInput)) {
+		if (! (editorInput instanceof IFileEditorInput && "java".equals(((IFileEditorInput) editorInput).getFile().getFileExtension()))) {
 			return null;
 		}
 		currentContext = new Context();
