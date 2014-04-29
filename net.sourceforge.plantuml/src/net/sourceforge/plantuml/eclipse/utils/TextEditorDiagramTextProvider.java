@@ -26,8 +26,9 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 
 	@Override
 	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
-		IDocument document = ((ITextEditor) editorPart).getDocumentProvider().getDocument(editorInput);
-		int selectionStart = ((ITextSelection) selection).getOffset();
+		ITextEditor textEditor = (ITextEditor) editorPart;
+		IDocument document = textEditor.getDocumentProvider().getDocument(editorInput);
+		int selectionStart = ((ITextSelection) textEditor.getSelectionProvider().getSelection()).getOffset();
 		FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
 		try {
 			IRegion start = finder.find(selectionStart, startuml, true, true, (! startIsRegexp), startIsRegexp);
