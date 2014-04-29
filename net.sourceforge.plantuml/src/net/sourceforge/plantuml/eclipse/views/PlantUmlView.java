@@ -5,6 +5,9 @@ import net.sourceforge.plantuml.eclipse.actions.ToggleButtonAction;
 import net.sourceforge.plantuml.eclipse.utils.PlantUmlUtils;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -141,7 +144,7 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 	}
 	
 	@Override
-	protected void updateDiagramText(String text) {
+	protected void updateDiagramText(final String text) {
 		if (toggleAction != null && toggleAction.isChecked()) {
 			generateAction.treatPlantUmlSelected(-1, text);
 		}

@@ -37,7 +37,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 	
 	// implements Runnable.run()
 	public void run() {
-		updateDiagramText(true, null);
+		updateDiagramText(true, null, null);
 	}
 	
 	protected abstract void updateDiagramText(String text);
@@ -51,7 +51,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 		public void partClosed(IWorkbenchPart part) {
 		}
 		public void partBroughtToTop(IWorkbenchPart part) {
-			updateDiagramText(false, part);
+			updateDiagramText(false, part, null);
 		}
 		public void partActivated(IWorkbenchPart part) {
 		}
@@ -61,16 +61,16 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 
 		public void propertyChanged(Object source, int propId) {
 			if (source == lastEditor && propId == IEditorPart.PROP_DIRTY && (! lastEditor.isDirty())) {
-				diagramChanged(lastEditor);
+				diagramChanged(lastEditor, null);
 			}
 		}		
 		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 			if (part == lastEditor) {
-				diagramChanged(lastEditor);
-			}			
+				diagramChanged(lastEditor, selection);
+			}
 		}
-		public void diagramChanged(IEditorPart editor) {
-			updateDiagramText(true, editor);
+		public void diagramChanged(IEditorPart editor, ISelection selection) {
+			updateDiagramText(true, editor, selection);
 		}
 	}
 	
@@ -87,7 +87,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 		}
 	}
 
-	private void updateDiagramText(boolean force, IWorkbenchPart part) {
+	private void updateDiagramText(boolean force, IWorkbenchPart part, ISelection selection) {
 		IEditorPart activeEditor = (part instanceof IEditorPart ? (IEditorPart) part : getSite().getPage().getActiveEditor());
 		if (force || activeEditor != lastEditor) {
 			handleEditorChange(activeEditor);
@@ -95,10 +95,12 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 				DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders();
 				for (int i = 0; i < diagramTextProviders.length; i++) {
 					DiagramTextProvider diagramTextProvider = diagramTextProviders[i];
-					String diagramText = diagramTextProvider.getDiagramText(activeEditor);
-					if (diagramText != null) {
-						updateDiagramText(diagramText);
-						return;
+					if (diagramTextProvider.supportsEditor(activeEditor) && (selection == null || diagramTextProvider.supportsSelection(selection))) {
+						String diagramText = diagramTextProvider.getDiagramText(activeEditor, selection);
+						if (diagramText != null) {
+							updateDiagramText(diagramText);
+							return;
+						}
 					}
 				}
 			}

@@ -79,14 +79,13 @@ public class Diagram {
 	 * 
 	 * @return ImageData of the current textDiagram and imageNumber
 	 */
-	public ImageData getImage() {
+	public ImageData getImage(IPath path) {
 		setGraphvizPath();
 
 		if (textDiagram != null) {
 			// generate the image for textDiagram and imageNumber
 			try {
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				IPath path = getActiveEditorPath();
 				if (path != null) {
 					FileSystem.getInstance().setCurrentDir(path.toFile().getAbsoluteFile().getParentFile());
 				} else {

@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -27,6 +28,10 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		setEditorType(ITextEditor.class);
 	}
 
+	public boolean supportsSelection(ISelection selection) {
+		return false;
+	}
+	
 	private class Context {
 		IEditorPart editorPart;
 		IEditorInput editorInput;
@@ -38,7 +43,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 	private Context currentContext = null;
 	
 	@Override
-	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput) {
+	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection ignore) {
 		if (! (editorInput instanceof IFileEditorInput)) {
 			return null;
 		}
@@ -51,7 +56,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		try {
 			currentContext.compUnit.open(new NullProgressMonitor());
 			for (IType type: currentContext.compUnit.getTypes()) {
-				generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_SUPERCLASS | GEN_INTERFACES, null);
+				generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS, null);
 			}
 		} catch (JavaModelException e) {
 			System.err.println(e);
@@ -61,10 +66,6 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		return (result.length() > 0 ? result.toString() : null);
 	}
 
-	private static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_SUPERCLASS = 1<<2, GEN_INTERFACES = 1<<3, GEN_ASSOCIATIONS = 1<<4;
-	
-	private static String ASSOCIATION_RELATION = "-->", SUPERCLASS_RELATION = "<|--", SUPERTYPE_RELATION = "<|..";
-
 	private void generateForType(IType type, StringBuilder result, int genFlags, List<IType> allTypes) {
 		result.append(getClassType(type));
 		result.append(" ");
@@ -72,15 +73,15 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		result.append(" {\n");
 		try {
 			StringBuilder body = new StringBuilder();
-			if ((genFlags & GEN_MEMBERS) > 0) {
+			if (includes(genFlags, GEN_MEMBERS)) {
 				for (IField field : type.getFields()) {
 					String fieldTypeSignature = getSignature(field.getTypeSignature());
-					if ((genFlags & GEN_ASSOCIATIONS) > 0) {
+					if (includes(genFlags, GEN_ASSOCIATIONS)) {
 						generateRelatedClass(type, field.getTypeSignature(), ASSOCIATION_RELATION, body, null, field.getElementName(), (isMulti(fieldTypeSignature) ? "*" : "1"));
 					} else {
 						body.append("\t");
 						if (! Flags.isEnum(type.getFlags())) {
-							if ((genFlags & GEN_MODIFIERS) > 0 && (! Flags.isInterface(type.getFlags()))) {
+							if (includes(genFlags, GEN_MODIFIERS) && (! Flags.isInterface(type.getFlags()))) {
 								body.append(getMemberModifiers(field));
 							}
 							body.append(fieldTypeSignature);
@@ -92,7 +93,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 				}
 				for (IMethod method : type.getMethods()) {
 					body.append("\t");
-					if ((genFlags & GEN_MODIFIERS) > 0 && (! Flags.isInterface(type.getFlags()))) {
+					if (includes(genFlags, GEN_MODIFIERS) && (! Flags.isInterface(type.getFlags()))) {
 						body.append(getMemberModifiers(method));
 					}
 					// don't show the return type for constructors
@@ -123,29 +124,16 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		}
 		result.append("}\n");
 		try {
-			if ((genFlags & GEN_SUPERCLASS) > 0) {
-				generateRelatedClass(type, type.getSuperclassTypeSignature(), SUPERCLASS_RELATION, result);
+			if (includes(genFlags, GEN_EXTENDS)) {
+				generateRelatedClass(type, type.getSuperclassTypeSignature(), EXTENDS_RELATION, result);
 			}
-			if ((genFlags & GEN_INTERFACES) > 0) {
+			if (includes(genFlags, GEN_IMPLEMENTS)) {
 				String[] interfaceSignatures = type.getSuperInterfaceTypeSignatures();
 				for (int i = 0; i < interfaceSignatures.length; i++) {
-					generateRelatedClass(type, interfaceSignatures[i], SUPERTYPE_RELATION, result);
+					generateRelatedClass(type, interfaceSignatures[i], IMPLEMENTS_RELATION, result);
 				}
 			}
 		} catch (JavaModelException e) {
-		}
-	}
-
-	private void appendNameDeclaration(String name, StringBuilder result) {
-		String logicalName = getLogicalName(name);
-		if (name.equals(logicalName)) {
-			result.append(name);
-		} else {
-			result.append("\"");
-			result.append(name);
-			result.append("\"");
-			result.append(" as ");
-			result.append(logicalName);
 		}
 	}
 
@@ -162,47 +150,15 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 	private void generateRelatedClass(IType type, String classSignature, String relation, StringBuilder result) {
 		generateRelatedClass(type, classSignature, relation, result, null, null, null);
 	}
-	private void generateRelatedClass(IType type, String classSignature, String relation, StringBuilder result, String start, String middle, String end) {
+	private void generateRelatedClass(IType type, String classSignature, String relation, StringBuilder result, String startLabel, String middleLabel, String endLabel) {
 		if (classSignature != null) {
 			String className = getSignature(classSignature);
 			if (! className.equals("Object")) {
-				result.append(getClassType(classSignature, type, (relation.equals(SUPERTYPE_RELATION) ? "interface" : "class")));
-				result.append(" ");
-				appendNameDeclaration(className, result);
-				result.append(" {\n}\n");
-				result.append(getLogicalName(className));
-				if (start != null) {
-					result.append(" \"" + start + "\" ");
-				}
-				result.append(" " + relation + " ");
-				if (end != null) {
-					result.append(" \"" + end + "\" ");
-				}
-				result.append(getLogicalName(type.getElementName()));
-				if (middle != null) {
-					result.append(" : " + middle);
-				}
-				result.append("\n");
+				appendClassStart(null, "class", className, result);
+				appendClassEnd(result);
+				appendRelation(className, false, startLabel, relation, null, type.getElementName(), false, endLabel, middleLabel, result);
 			}
 		}
-	}
-
-	private String getLogicalName(String name) {
-		StringBuilder builder = null;
-		for (int i = 0; i < name.length(); i++) {
-			char c = name.charAt(i);
-			if (i == 0 ? Character.isJavaIdentifierStart(c) : Character.isJavaIdentifierPart(c)) {
-				if (builder != null) {
-					builder.append(c);
-				}
-			} else {
-				if (builder == null) {
-					builder = new StringBuilder(name.substring(0, i));
-				}
-				builder.append("_");
-			}
-		}
-		return builder != null ? builder.toString() : name;
 	}
 
 	private String getSignature(String signature) {

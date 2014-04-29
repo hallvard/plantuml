@@ -5,6 +5,7 @@ import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -19,10 +20,14 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 	private boolean startIsRegexp = true, endIsRegexp = true;
 	private boolean includeStart = false, includeEnd = false;
 
+	public boolean supportsSelection(ISelection selection) {
+		return selection instanceof ITextSelection;
+	}
+
 	@Override
-	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput) {
+	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
 		IDocument document = ((ITextEditor) editorPart).getDocumentProvider().getDocument(editorInput);
-		int selectionStart = ((ITextSelection) ((ITextEditor) editorPart).getSelectionProvider().getSelection()).getOffset();
+		int selectionStart = ((ITextSelection) selection).getOffset();
 		FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
 		try {
 			IRegion start = finder.find(selectionStart, startuml, true, true, (! startIsRegexp), startIsRegexp);
