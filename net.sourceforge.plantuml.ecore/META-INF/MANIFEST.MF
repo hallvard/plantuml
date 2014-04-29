@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ecore PlantUML mapping
+Bundle-SymbolicName: net.sourceforge.plantuml.ecore; singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: net.sourceforge.plantuml.eclipse;bundle-version="1.1.9",
+ org.eclipse.emf.ecore;bundle-version="2.5",
+ org.eclipse.emf.edit;bundle-version="2.5",
+ org.eclipse.ui;bundle-version="3.105.0"
+Export-Package: net.sourceforge.plantuml.ecore
