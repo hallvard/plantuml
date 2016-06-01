@@ -32,26 +32,17 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	}
 	
 	public String getDiagramText(IEditorPart editorPart, ISelection selection) {
+		String diagramText = null;
+		
 		if (supportsEditor(editorPart) && (selection == null || supportsSelection(selection))) {
-			String diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection);
-			if (diagramText != null) {
-				diagramText = diagramText.trim();
-				if (! diagramText.startsWith(TextEditorDiagramTextProvider.startuml)) {
-					diagramText = TextEditorDiagramTextProvider.startuml + "\n" + diagramText;
-				}
-				if (! diagramText.endsWith(TextEditorDiagramTextProvider.enduml)) {
-					diagramText = diagramText + "\n" + TextEditorDiagramTextProvider.enduml;
-				}
-			}
-			return diagramText;
+			diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection);
 		}
-		return null;
+		
+		return diagramText;
 	}
 	
 	protected abstract String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection);
 
-	//
-	
 	protected static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_EXTENDS = 1<<2, GEN_IMPLEMENTS = 1<<3, GEN_ASSOCIATIONS = 1<<4;
 	
 	protected static boolean includes(int flags, int... bits) {

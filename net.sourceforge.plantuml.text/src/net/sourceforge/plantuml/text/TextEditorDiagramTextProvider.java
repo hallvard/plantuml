@@ -1,6 +1,8 @@
 package net.sourceforge.plantuml.text;
 
-import org.eclipse.jface.text.BadLocationException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -16,10 +18,6 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		setEditorType(ITextEditor.class);
 	}
 
-	public static String startuml = "@startuml", enduml = "@enduml";
-	private boolean startIsRegexp = true, endIsRegexp = true;
-	private boolean includeStart = false, includeEnd = false;
-
 	public boolean supportsSelection(ISelection selection) {
 		return selection instanceof ITextSelection;
 	}
@@ -28,38 +26,53 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
 		ITextEditor textEditor = (ITextEditor) editorPart;
 		IDocument document = textEditor.getDocumentProvider().getDocument(editorInput);
-		int selectionStart = ((ITextSelection) textEditor.getSelectionProvider().getSelection()).getOffset();
-		FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
+		int cursorPosition = ((ITextSelection) textEditor.getSelectionProvider().getSelection()).getOffset();
+		
+		String extractedText = extractTextFromStartToEndTag(document, cursorPosition);
+		String filteredText = filterCommentsAtBeginningOfEachLine(extractedText);
+		
+		return filteredText;
+	}
+	
+	private String extractTextFromStartToEndTag(IDocument document, int cursorPosition) {
+		String extractedText = null;
+		
 		try {
-			IRegion start = finder.find(selectionStart, startuml, true, true, (! startIsRegexp), startIsRegexp);
-			IRegion end = finder.find(selectionStart, enduml, true, true, (! endIsRegexp), endIsRegexp);
-			if (start == null || (end != null && end.getOffset() < start.getOffset())) {
-				// use a slightly larger selection offset, in case the cursor is within startuml
-				start = finder.find(Math.min(selectionStart + startuml.length(), document.getLength()), startuml, false, true, (! startIsRegexp), startIsRegexp);
-			}
-			if (start != null) {
-				end = finder.find(start.getOffset(), enduml, true, true, (! endIsRegexp), endIsRegexp);
-				if (end != null) {
-					int startOffset = start.getOffset(), endOffset = end.getOffset() + end.getLength();
-					int startLine = document.getLineOfOffset(startOffset);
-					String linePrefix = document.get(document.getLineOffset(startLine), startOffset - document.getLineOffset(startLine));
-					if (linePrefix.trim().length() == 0) {
-						linePrefix = null;
-					}
-					StringBuilder result = new StringBuilder();
-					int maxLine = Math.min(document.getLineOfOffset(endOffset) + (includeEnd ? 1 : 0), document.getNumberOfLines());
-					for (int lineNum = startLine + (includeStart ? 0 : 1); lineNum < maxLine; lineNum++) {
-						String line = document.get(document.getLineOffset(lineNum), document.getLineLength(lineNum));
-						if (linePrefix != null && line.startsWith(linePrefix)) {
-							line = line.substring(linePrefix.length());
-						}
-						result.append(line);
-					}
-					return result.toString();
+			FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
+			
+			String startSearchString = "@startuml";
+			String endSearchString = "@enduml";
+			boolean forwardSearch = true;
+			boolean wholeWord = true;
+			boolean isRegex = true;
+			
+			IRegion start = finder.find(cursorPosition, startSearchString, !forwardSearch, wholeWord, !isRegex, isRegex);
+			IRegion end = finder.find(cursorPosition, endSearchString, forwardSearch, wholeWord, !isRegex, isRegex);
+
+			if (start != null && end != null) {
+				if (start.getOffset() < end.getOffset()) {
+					int textLength = (end.getOffset() + endSearchString.length()) - start.getOffset();
+					extractedText = document.get(start.getOffset(), textLength);
 				}
 			}
-		} catch (BadLocationException e) {
+		} catch (Exception e) {
+			
 		}
-		return null;
+		
+		return extractedText;
+	}
+	
+	private String filterCommentsAtBeginningOfEachLine(String text) {
+		String filteredText = null;
+
+		try {
+			Pattern pattern = Pattern.compile("^[\t ]*(\\*|//)+[\t ]*", Pattern.MULTILINE);
+			Matcher matcher = pattern.matcher(text);
+			filteredText = matcher.replaceAll("");
+		} catch (Exception e) {
+
+		}
+
+		return filteredText;
 	}
 }
