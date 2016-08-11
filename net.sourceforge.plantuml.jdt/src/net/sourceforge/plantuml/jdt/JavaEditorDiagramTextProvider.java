@@ -2,8 +2,6 @@ package net.sourceforge.plantuml.jdt;
 
 import java.util.List;
 
-import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -11,7 +9,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
@@ -24,6 +21,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
+
 public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 
 	public JavaEditorDiagramTextProvider() {
@@ -35,10 +34,10 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 	}
 	
 	private class Context {
-		IEditorPart editorPart;
-		IEditorInput editorInput;
+//		IEditorPart editorPart;
+//		IEditorInput editorInput;
 		IProject project;
-		IJavaProject javaProject;
+//		IJavaProject javaProject;
 		ICompilationUnit compUnit;
 	}
 	
@@ -52,7 +51,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		currentContext = new Context();
 		IPath path = ((IFileEditorInput) editorInput).getFile().getFullPath();
 		currentContext.project = ResourcesPlugin.getWorkspace().getRoot().getProject(path.segment(0));
-		currentContext.javaProject = JavaCore.create(currentContext.project);
+//		currentContext.javaProject = JavaCore.create(currentContext.project);
 		currentContext.compUnit = JavaCore.createCompilationUnitFrom(currentContext.project.getFile(path.removeFirstSegments(1)));
 		StringBuilder result = new StringBuilder();
 		try {
@@ -199,27 +198,28 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		}
 	}
 	
-	private String getClassType(String signature, IType relativeTo, String def) {
-		IType type = null;
-		if (currentContext != null && currentContext.javaProject != null) {
-			String typeName = Signature.toString(signature);
-			if (typeName.lastIndexOf('.') < 0) {
-				try {
-					String[][] typeNames = relativeTo.resolveType(typeName);
-					if (typeNames != null && typeNames.length > 0 && typeNames[0].length >= 2) {
-						typeName = (typeNames[0][0] != null ? typeNames[0][0] + "." : "") + typeNames[0][1];
-					}
-				} catch (JavaModelException e) {
-				}
-			}
-			try {
-				type = currentContext.javaProject.findType(typeName);
-			} catch (JavaModelException e) {
-			} catch (IllegalArgumentException e) {
-			}
-		}
-		return (type != null ? getClassType(type) : def);
-	}
+//	private String getClassType(String signature, IType relativeTo, String def) {
+//		IType type = null;
+//		if (currentContext != null && currentContext.javaProject != null) {
+//			String typeName = Signature.toString(signature);
+//			if (typeName.lastIndexOf('.') < 0) {
+//				try {
+//					String[][] typeNames = relativeTo.resolveType(typeName);
+//					if (typeNames != null && typeNames.length > 0 && typeNames[0].length >= 2) {
+//						typeName = (typeNames[0][0] != null ? typeNames[0][0] + "." : "") + typeNames[0][1];
+//					}
+//				} catch (JavaModelException e) {
+//				}
+//			}
+//			try {
+//				type = currentContext.javaProject.findType(typeName);
+//			} catch (JavaModelException e) {
+//			} catch (IllegalArgumentException e) {
+//			}
+//		}
+//		return (type != null ? getClassType(type) : def);
+//	}
+
 	private String getClassType(IType type) {
 		try {
 			int flags = type.getFlags();

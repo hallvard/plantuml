@@ -1,0 +1,59 @@
+@startuml
+actor toto
+toto->titi
+newpage
+titi->Bob
+@enduml
+
+@startuml
+A <|--Btoto
+A <|--CBOB
+@enduml
+
+@startuml
+skin BlueModern
+
+actor User
+participant "First Class" as A
+participant "Second Class" as B
+participant "Last Class" as C
+
+User -> A: DoWork
+activate A
+
+A -> B: << createRequest >>
+activate B
+
+B -> C: DoWork
+activate C
+C --> B: WorkDone
+destroy C
+
+B --> A: Request <u>Created</u>
+deactivate B
+
+A --> User: Done
+deactivate A
+@enduml
+
+@startuml
+actor "Main Admin" as Admin
+actor "Local Admin" as LAdmin
+actor Expert
+actor User
+Admin -|> LAdmin
+User <|- Expert
+
+
+Admin --> UC1
+LAdmin --> UC2 : To delete
+LAdmin ---> UC3
+LAdmin --> UC4 : Migration init
+LAdmin --> UC5
+
+UC2 <-- Expert : To create/modify
+UC2 <-- User : To consult
+UC4 <-- User : Help, Search
+
+@enduml
+

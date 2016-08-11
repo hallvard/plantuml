@@ -24,6 +24,8 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		return selection instanceof ITextSelection;
 	}
 
+	private final static String newline = "\n";
+
 	@Override
 	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
 		ITextEditor textEditor = (ITextEditor) editorPart;
@@ -41,19 +43,19 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 				end = finder.find(start.getOffset(), enduml, true, true, (! endIsRegexp), endIsRegexp);
 				if (end != null) {
 					int startOffset = start.getOffset(), endOffset = end.getOffset() + end.getLength();
-					int startLine = document.getLineOfOffset(startOffset);
-					String linePrefix = document.get(document.getLineOffset(startLine), startOffset - document.getLineOffset(startLine));
-					if (linePrefix.trim().length() == 0) {
-						linePrefix = null;
-					}
+					int startLine = document.getLineOfOffset(startOffset), startLinePos = document.getLineOffset(startLine);
+					String linePrefix = document.get(startLinePos, startOffset - startLinePos).trim();
 					StringBuilder result = new StringBuilder();
 					int maxLine = Math.min(document.getLineOfOffset(endOffset) + (includeEnd ? 1 : 0), document.getNumberOfLines());
 					for (int lineNum = startLine + (includeStart ? 0 : 1); lineNum < maxLine; lineNum++) {
-						String line = document.get(document.getLineOffset(lineNum), document.getLineLength(lineNum));
-						if (linePrefix != null && line.startsWith(linePrefix)) {
+						String line = document.get(document.getLineOffset(lineNum), document.getLineLength(lineNum)).trim();
+						if (line.startsWith(linePrefix)) {
 							line = line.substring(linePrefix.length());
 						}
 						result.append(line);
+						if (! line.endsWith(newline)) {
+							result.append(newline);
+						}
 					}
 					return result.toString();
 				}

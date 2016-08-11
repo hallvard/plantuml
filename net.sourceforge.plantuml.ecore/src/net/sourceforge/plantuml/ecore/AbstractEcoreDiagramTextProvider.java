@@ -3,11 +3,15 @@ package net.sourceforge.plantuml.ecore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
 
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -30,6 +34,13 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTextProvider {
 
+	public static String PLANTUML_ANNOTATION_KEY = "net.sourceforge.plantuml";
+	public static String PLANTUML_SKINPARAMS_ANNOTATION_KEY = PLANTUML_ANNOTATION_KEY + "/skinparams";
+
+	private static final String DEFAULT_EXTERNAL_STEREOTYPE = null;
+
+	//
+
 	protected AbstractEcoreDiagramTextProvider(Class<?> editorType) {
 		super(editorType);
 	}
@@ -41,6 +52,7 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 	private int maxResourceCount = 1, maxPackageCount = 1;
 	private Collection<String> excludePackages = Arrays.asList();
 
+	private Map<String, String> skinParams = null;
 	private List<EClassifier> classifiers;
 	
 	protected String getDiagramText(ResourceSet resourceSet) {
@@ -52,7 +64,7 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 				if (root instanceof EPackage) {
 					pack = (EPackage) root;
 					if (! excludePackages.contains(pack.getNsURI())) {
-						addClassifiers(pack);
+						init(pack);
 						packageCount++;
 						if (packageCount == maxPackageCount) {
 							break outer;
@@ -75,13 +87,47 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 	protected String getDiagramText(EPackage pack) {
 		this.classifiers = new ArrayList<EClassifier>();
 		if (! excludePackages.contains(pack.getNsURI())) {
-			addClassifiers(pack);
+			init(pack);
 		}
 		String result = classifiers.size() > 0 ? getDiagramText(GEN_MEMBERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS) : null;
 		this.classifiers = null;
 		return result;
 	}
 
+	private void init(EPackage pack) {
+		addClassifiers(pack);
+		skinParams = getSkinParams(pack, skinParams);
+	}
+
+	protected Map<String, String> getSkinParams(EModelElement element, Map<String, String> map) {
+		for (EAnnotation annotation : element.getEAnnotations()) {
+			if (annotation.getSource().startsWith(PLANTUML_SKINPARAMS_ANNOTATION_KEY)) {
+				String key = annotation.getSource().substring(PLANTUML_SKINPARAMS_ANNOTATION_KEY.length());
+				String qualifier = null;
+				if (key.startsWith("/")) {
+					qualifier = key.substring(1);
+				}
+				map = getSkinParams(qualifier, annotation, map);
+			}
+		}
+		return map;
+	}
+
+	protected Map<String, String> getSkinParams(String qualifier, EAnnotation annotation, Map<String, String> map) {
+		if (annotation != null) {
+			EMap<String, String> eMap = annotation.getDetails();
+			if (eMap.size() > 0) {
+				if (map == null) {
+					map = new HashMap<String, String>();
+				}
+				for (String key : eMap.keySet()) {
+					map.put((qualifier != null ? qualifier : "") + key, eMap.get(key));
+				}
+			}
+		}
+		return map;
+	}
+	
 	protected void addClassifiers(EPackage pack) {
 		TreeIterator<EObject> it = pack.eAllContents();
 		while (it.hasNext()) {
@@ -93,9 +139,7 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 		}
 	}
 	
-	public static String PLANTUML_ANNOTATION_KEY = "net.sourceforge.plantuml";
-	
-	protected static String getAnnotation(EObject element, String key, boolean checkContainers) {
+	protected static String getAnnotation(EObject element, String key, boolean checkContainers, String def) {
 		while (element instanceof EModelElement) {
 			String value = EcoreUtil.getAnnotation((EModelElement) element, PLANTUML_ANNOTATION_KEY, key);
 			if (value != null) {
@@ -106,10 +150,10 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 			}
 			element = element.eContainer();
 		}
-		return null;
+		return def;
 	}
 	protected static boolean checkAnnotation(EObject element, String key, boolean checkContainers) {
-		return "true".equals(getAnnotation(element, key, checkContainers));
+		return "true".equals(getAnnotation(element, key, checkContainers, null));
 	}
 	
 	protected static boolean shouldSuppress(EModelElement element, String name, String role) {
@@ -126,6 +170,9 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 	
 	protected String getDiagramText(int genFlags) {
 		StringBuilder buffer = new StringBuilder();
+		if (skinParams != null) {
+			appendSkinParams(skinParams, buffer);
+		}
 		for (EClassifier classifier : classifiers) {
 			if (! shouldSuppress(classifier, null)) {
 				if (classifier instanceof EClass) {
@@ -145,7 +192,7 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 						if (! shouldSuppress(superClass, "superType")) {
 							boolean isImplements = superClass.isInterface() && (! subClass.isInterface());
 							if (includes(genFlags, isImplements ? GEN_IMPLEMENTS : GEN_EXTENDS)) {
-								appendGeneralisation(subClass.getName(), superClass.getName(), isImplements, buffer);
+								appendGeneralisation(subClass, superClass, isImplements, buffer);
 							}
 						}
 					}
@@ -168,9 +215,30 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 		return buffer.toString();
 	}
 
+	protected void appendGeneralisation(EClass subClass, EClass superClass, boolean isImplements, StringBuilder buffer) {
+		String otherName = getOtherName(subClass, superClass);
+		appendGeneralisation(subClass.getName(), otherName, isImplements, buffer);
+	}
+
+	protected String getOtherName(EClassifier origin, EClassifier other) {
+		String otherName = other.getName();
+		if (! classifiers.contains(other)) {
+			String externalStereotype = getAnnotation(origin, "externalStereotype", true, DEFAULT_EXTERNAL_STEREOTYPE);
+			if (externalStereotype != null && externalStereotype.length() > 0) {
+				otherName = "<<" + externalStereotype + ">>";
+			}
+		}
+		return otherName;
+	}
+
+	protected String getClassifierColor(EClassifier classifier) {
+		Map<String, String> skinParams = getSkinParams(classifier, null);
+		return (skinParams != null ? skinParams.get("BackgroundColor") : null);
+	}
+	
 	protected void appendClass(EClass eClass, int genFlags, StringBuilder buffer) {
 		String modifiers = eClass.isAbstract() && (! eClass.isInterface()) ? "abstract" : null;
-		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", eClass.getName(), buffer);
+		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", eClass.getName(), getClassifierColor(eClass), buffer);
 		if (includes(genFlags, GEN_MEMBERS)) {
 			for (EStructuralFeature feature : eClass.getEStructuralFeatures()) {
 				EClassifier eType = feature.getEType();
@@ -200,7 +268,7 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 	}
 
 	protected void appendDataType(EDataType dataType, int genFlags, StringBuilder buffer) {
-		appendClassStart(null, "class", dataType.getName(), buffer);
+		appendClassStart(null, "class", dataType.getName(), getClassifierColor(dataType), buffer);
 		if (dataType.getInstanceClassName() != null) {
 			appendAttribute(null, null, null, dataType.getInstanceClassName(), buffer);
 		}
@@ -208,7 +276,7 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 	}
 
 	protected void appendEnum(EEnum eEnum, int genFlags, StringBuilder buffer) {
-		appendClassStart(null, "enum", eEnum.getName(), buffer);
+		appendClassStart(null, "enum", eEnum.getName(), getClassifierColor(eEnum), buffer);
 		for (EEnumLiteral literal : eEnum.getELiterals()) {
 			appendAttribute(null, null, literal.getName(), literal.getLiteral(), buffer);
 		}
@@ -230,12 +298,15 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 
 	protected void appendAssociation(EReference ref, StringBuilder buffer) {
 		EReference opposite = ref.getEOpposite();
-		String source = ref.getEContainingClass().getName();
-		String target = ref.getEType().getName();
-		String direction = getAnnotation(ref, "direction", false);
+		EClass sourceClass = ref.getEContainingClass();
+		String source = sourceClass.getName();
+		EClassifier targetType = ref.getEType();
+		String target = getOtherName(sourceClass, targetType);
+		String direction = getAnnotation(ref, "direction", false, null);
 		if (opposite != null) {
 			// avoid duplicates
-			if (classifiers.indexOf(ref.getEContainingClass()) < classifiers.indexOf(ref.getEType())) {
+			int otherIndex = classifiers.indexOf(targetType);
+			if (classifiers.indexOf(sourceClass) < otherIndex || otherIndex < 0) {
 				appendAssociation(source, ref.isContainment(), opposite.getName(), getMultiplicity(opposite), direction, target, opposite.isContainment(), ref.getName(), getMultiplicity(ref), null, buffer);
 			}
 		} else {

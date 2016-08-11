@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target name="Mars runtime" sequenceNumber="205">
+<locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="org.eclipse.platform.feature.group" version="4.5.0.v20150603-2358"/>
+<unit id="org.eclipse.jdt.feature.group" version="3.11.0.v20150603-2000"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.11.0.v20150601-0402"/>
+<unit id="org.eclipse.xtext.sdk.feature.group" version="2.8.3.v201506010551"/>
+<repository location="http://download.eclipse.org/releases/mars"/>
+</location>
+</locations>
+<environment>
+<os>macosx</os>
+<ws>cocoa</ws>
+<arch>x86_64</arch>
+<nl>en_US</nl>
+</environment>
+<launcherArgs>
+<vmArgs>-Dosgi.requiredJavaVersion=1.6 -XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts -XX:MaxPermSize=256m -Xms40m -Xmx2048m -Xdock:icon=../Resources/Eclipse.icns -XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgs>
+</launcherArgs>
+</target>

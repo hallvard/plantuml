@@ -1,12 +1,13 @@
 package net.sourceforge.plantuml.text;
 
 import java.util.Iterator;
-
-import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+
+import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 
 public abstract class AbstractDiagramTextProvider implements DiagramTextProvider {
 
@@ -81,7 +82,41 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		}
 	}
 
+	protected void appendSkinParams(Map<String, String> skinParams, StringBuilder buffer) {
+		appendSkinParams(null, skinParams, buffer);
+	}
+
+	protected void appendSkinParams(String qualifier, Map<String, String> skinParams, StringBuilder buffer) {
+		if (qualifier != null) {
+			buffer.append("skinparam");
+			buffer.append(" ");
+			buffer.append(qualifier);
+			buffer.append(" {\n");
+		}
+		for (String param : skinParams.keySet()) {
+			if (qualifier != null) {
+				buffer.append("\t");
+				if (param.startsWith(qualifier)) {
+					param = param.substring(qualifier.length());
+				}
+			} else {
+				buffer.append("skinparam ");
+			}
+			buffer.append(param);
+			buffer.append(" ");
+			buffer.append(skinParams.get(param));
+			buffer.append("\n");
+		}
+		if (qualifier != null) {
+			buffer.append("}\n");
+		}
+	}
+	
 	protected void appendClassStart(String modifiers, String classType, String name, StringBuilder buffer) {
+		appendClassStart(modifiers, classType, name, null, buffer);
+	}
+
+	protected void appendClassStart(String modifiers, String classType, String name, String color, StringBuilder buffer) {
 		if (modifiers != null) {
 			buffer.append(modifiers);
 			buffer.append(" ");
@@ -89,6 +124,10 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		buffer.append(classType);
 		buffer.append(" ");
 		appendNameDeclaration(name, buffer);
+		if (color != null) {
+			buffer.append(" #");
+			buffer.append(color);
+		}
 		buffer.append(" {\n");
 	}
 

@@ -3,11 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PlantUML text editor support
 Bundle-SymbolicName: net.sourceforge.plantuml.text;singleton:=true
 Bundle-Version: 0.9.0.qualifier
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Require-Bundle: net.sourceforge.plantuml.eclipse;bundle-version="1.1.11.7997"
-Import-Package: org.eclipse.core.runtime;version="3.4.0",
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: net.sourceforge.plantuml.text
+Import-Package: net.sourceforge.plantuml.eclipse.utils,
  org.eclipse.jface.text,
  org.eclipse.jface.viewers,
  org.eclipse.ui,
  org.eclipse.ui.texteditor
-Export-Package: net.sourceforge.plantuml.text

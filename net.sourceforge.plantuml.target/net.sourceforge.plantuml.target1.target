@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<target name="Mars runtime" sequenceNumber="200">
+	<locations>
+		<location includeMode="slicer" includeAllPlatforms="false" includeSource="false" includeConfigurePhase="false" type="InstallableUnit">
+<!--
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
+-->
+			<unit id="org.eclipse.platform.feature.group" version="4.5.2.v20160212-1500"/>
+			<unit id="org.eclipse.emf.ecore.feature.group" version="2.11.2.v20160208-0816"/>
+			<unit id="org.eclipse.emf.common.feature.group" version="2.11.1.v20160208-0816"/>
+			<unit id="org.eclipse.emf.edit.feature.group" version="2.11.1.v20160208-0841"/>
+			<unit id="org.eclipse.jdt.feature.group" version="3.11.2.v20160212-1500"/>
+			<unit id="org.eclipse.xtext.runtime.feature.group" version="2.9.1.v201512180746"/>
+			<repository location="http://download.eclipse.org/releases/mars"/>
+		</location>
+	</locations>
+	<environment>
+		<os>macosx</os>
+		<ws>cocoa</ws>
+		<arch>x86_64</arch>
+		<nl>en_US</nl>
+	</environment>
+	<launcherArgs>
+		<vmArgs>-Dosgi.requiredJavaVersion=1.6 -XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts -XX:MaxPermSize=256m -Xms40m -Xmx2048m -Xdock:icon=../Resources/Eclipse.icns -XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgs>
+	</launcherArgs>
+</target>
