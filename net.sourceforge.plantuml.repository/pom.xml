@@ -19,6 +19,7 @@
         <configuration>
           <includeAllDependencies>false</includeAllDependencies>
           <createArtifactRepository>true</createArtifactRepository>
+          <compress>false</compress>
         </configuration>
       </plugin>
     </plugins>
