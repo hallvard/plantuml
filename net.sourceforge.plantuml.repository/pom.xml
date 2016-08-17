@@ -19,8 +19,8 @@
         <configuration>
           <includeAllDependencies>false</includeAllDependencies>
           <createArtifactRepository>true</createArtifactRepository>
-          <compress>false</compress>
-          <xzCompress>false</xzCompress>
+          <compress>true</compress>
+          <xzCompress>true</xzCompress>
         </configuration>
       </plugin>
     </plugins>
