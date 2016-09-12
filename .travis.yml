@@ -1,0 +1,10 @@
+language: java
+sudo: false
+jdk:
+  - oraclejdk8
+cache:
+  directories:
+    - $HOME/.m2
+script:
+  - cd net.sourceforge.plantuml.parent
+  - mvn clean install
