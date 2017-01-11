@@ -90,12 +90,13 @@
 	<modules>
 		<module>../net.sourceforge.plantuml.target</module>
 		<module>../net.sourceforge.plantuml.lib</module>
+		<module>../net.sourceforge.plantuml.lib.feature</module>
 		<module>../net.sourceforge.plantuml.eclipse</module>
-		<!--
 		<module>../net.sourceforge.plantuml.eclipse.test</module>
-		-->
 		<module>../net.sourceforge.plantuml.text</module>
+		<module>../net.sourceforge.plantuml.text.test</module>
 		<module>../net.sourceforge.plantuml.jdt</module>
+		<module>../net.sourceforge.plantuml.jdt.test</module>
 		<module>../net.sourceforge.plantuml.feature</module>
 
 		<module>../net.sourceforge.plantuml.ecore</module>

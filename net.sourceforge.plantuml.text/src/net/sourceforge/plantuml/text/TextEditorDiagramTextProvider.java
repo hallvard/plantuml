@@ -18,7 +18,7 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 
 	public static String startuml = "@startuml", enduml = "@enduml";
 	private boolean startIsRegexp = true, endIsRegexp = true;
-	private boolean includeStart = false, includeEnd = false;
+	private boolean includeStart = true, includeEnd = true;
 
 	public boolean supportsSelection(ISelection selection) {
 		return selection instanceof ITextSelection;
@@ -28,6 +28,11 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 
 	@Override
 	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
+		StringBuilder lines = getDiagramTextLines(editorPart, editorInput, selection);
+		return (lines != null ? getDiagramText(lines) : null);
+	}
+
+	protected StringBuilder getDiagramTextLines(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
 		ITextEditor textEditor = (ITextEditor) editorPart;
 		IDocument document = textEditor.getDocumentProvider().getDocument(editorInput);
 		int selectionStart = ((ITextSelection) textEditor.getSelectionProvider().getSelection()).getOffset();
@@ -43,25 +48,46 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 				end = finder.find(start.getOffset(), enduml, true, true, (! endIsRegexp), endIsRegexp);
 				if (end != null) {
 					int startOffset = start.getOffset(), endOffset = end.getOffset() + end.getLength();
-					int startLine = document.getLineOfOffset(startOffset), startLinePos = document.getLineOffset(startLine);
-					String linePrefix = document.get(startLinePos, startOffset - startLinePos).trim();
+					int startLine = document.getLineOfOffset(startOffset);
+//					String linePrefix = document.get(startLinePos, startOffset - startLinePos).trim();
 					StringBuilder result = new StringBuilder();
 					int maxLine = Math.min(document.getLineOfOffset(endOffset) + (includeEnd ? 1 : 0), document.getNumberOfLines());
 					for (int lineNum = startLine + (includeStart ? 0 : 1); lineNum < maxLine; lineNum++) {
 						String line = document.get(document.getLineOffset(lineNum), document.getLineLength(lineNum)).trim();
-						if (line.startsWith(linePrefix)) {
-							line = line.substring(linePrefix.length());
-						}
 						result.append(line);
 						if (! line.endsWith(newline)) {
 							result.append(newline);
 						}
 					}
-					return result.toString();
+					return result;
 				}
 			}
 		} catch (BadLocationException e) {
 		}
 		return null;
+	}
+
+	public String getDiagramText(CharSequence lines) {
+		return getDiagramText(new StringBuilder(lines.toString()));
+	}
+
+	protected String getDiagramText(StringBuilder lines) {
+		int start = Math.max(lines.indexOf(startuml), 0), end = Math.min(lines.lastIndexOf(enduml), lines.length());
+		String linePrefix = lines.substring(0, start).trim();
+		StringBuilder result = new StringBuilder(lines.length());
+		while (start < end + enduml.length()) {
+			int lineEnd = lines.indexOf("\n", start);
+			if (lineEnd > end) {
+				break;
+			}
+			String line = lines.substring(start, lineEnd).trim();
+			if (line.startsWith(linePrefix)) {
+				line = line.substring(linePrefix.length()).trim();
+			}
+			result.append(line);
+			result.append("\n");
+			start = lineEnd + 1;
+		}
+		return result.toString().trim();
 	}
 }

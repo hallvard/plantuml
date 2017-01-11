@@ -146,4 +146,9 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 			generateAction.treatPlantUmlSelected(-1, text);
 		}
 	}
+	
+	@Override
+	public String getDiagramText() {
+		return generateAction.getDiagramText();
+	}
 }

@@ -41,6 +41,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 	}
 	
 	protected abstract void updateDiagramText(String text);
+	public abstract String getDiagramText();
 
 	private IPartListener partListener = new IPartListener() {
 		
@@ -92,19 +93,31 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 		if (force || activeEditor != lastEditor) {
 			handleEditorChange(activeEditor);
 			if (activeEditor != null) {
-				DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders();
-				for (int i = 0; i < diagramTextProviders.length; i++) {
-					DiagramTextProvider diagramTextProvider = diagramTextProviders[i];
-					if (diagramTextProvider.supportsEditor(activeEditor) && (selection == null || diagramTextProvider.supportsSelection(selection))) {
-						String diagramText = diagramTextProvider.getDiagramText(activeEditor, selection);
-						if (diagramText != null) {
-							updateDiagramText(diagramText);
-							return;
-						}
-					}
+				if (updateDiagramText(activeEditor, selection)) {
+					return;
+				}
+				if (selection != null && updateDiagramText(activeEditor, null)) {
+					return;
 				}
 			}
 			updateDiagramText(null);
 		}
+	}
+	
+	private boolean updateDiagramText(IEditorPart activeEditor, ISelection selection) {
+		if (activeEditor != null) {
+			DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders();
+			for (int i = 0; i < diagramTextProviders.length; i++) {
+				DiagramTextProvider diagramTextProvider = diagramTextProviders[i];
+				if (diagramTextProvider.supportsEditor(activeEditor) && (selection == null || diagramTextProvider.supportsSelection(selection))) {
+					String diagramText = diagramTextProvider.getDiagramText(activeEditor, selection);
+					if (diagramText != null) {
+						updateDiagramText(diagramText);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

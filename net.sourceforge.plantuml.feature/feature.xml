@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="net.sourceforge.plantuml.feature"
-      label="PlantUML Feature"
+      label="%featureName"
       version="1.1.11.7998"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
-      PlantUML feature
+      %description
    </description>
 
    <copyright url="http://www.example.com/copyright">
       [Enter Copyright Description here.]
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="%licenseURL">
+      %license
    </license>
+
+   <requires>
+      <import feature="net.sourceforge.plantuml.lib.feature" version="1.1.11.7998"/>
+   </requires>
 
    <plugin
          id="net.sourceforge.plantuml.eclipse"
@@ -37,11 +41,5 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-   <plugin
-         id="net.sourceforge.plantuml.lib"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
 
 </feature>

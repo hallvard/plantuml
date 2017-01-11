@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Plantuml Plug-in
+Bundle-SymbolicName: net.sourceforge.plantuml.text.test
+Bundle-Version: 0.9.0.qualifier
+Bundle-Vendor: PlantUML Team
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.3.1",
+ org.eclipse.core.resources;bundle-version="3.3.1",
+ net.sourceforge.plantuml.eclipse;bundle-version="0.9.0",
+ org.junit,
+ org.eclipse.ui;bundle-version="3.107.0",
+ org.eclipse.ui.editors;bundle-version="3.9.0",
+ org.eclipse.ui.ide;bundle-version="3.11.0",
+ org.eclipse.ui.workbench.texteditor;bundle-version="3.9.100",
+ net.sourceforge.plantuml.eclipse.test;bundle-version="0.9.0",
+ net.sourceforge.plantuml.text;bundle-version="0.9.0"
+Bundle-ClassPath: .
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: net.sourceforge.plantuml.text.test

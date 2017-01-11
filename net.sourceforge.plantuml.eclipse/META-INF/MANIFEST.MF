@@ -9,8 +9,7 @@ Require-Bundle: net.sourceforge.plantuml.lib;bundle-version="1.1.11.7998",
  org.eclipse.ui.ide;bundle-version="3.11.0",
  org.eclipse.ui.editors;bundle-version="3.9.0"
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/plantUml/plantuml.jar,
- .
+Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.core.commands,
  org.eclipse.core.runtime,
@@ -36,4 +35,5 @@ Import-Package: org.eclipse.core.commands,
  org.eclipse.ui.texteditor,
  org.osgi.framework;version="1.8.0"
 Export-Package: net.sourceforge.plantuml.eclipse.model,
- net.sourceforge.plantuml.eclipse.utils
+ net.sourceforge.plantuml.eclipse.utils,
+ net.sourceforge.plantuml.eclipse.views

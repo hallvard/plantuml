@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="net.sourceforge.plantuml.ecore.feature"
-      label="PlantUML Ecore Feature"
+      label="%featureName"
       version="0.9.0.qualifier"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
-      PlantUML feature
+      %description
    </description>
 
    <copyright url="http://www.example.com/copyright">
       [Enter Copyright Description here.]
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="%licenseURL">
+      %license
    </license>
 
    <requires>

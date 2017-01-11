@@ -207,6 +207,14 @@ public class GenerateAction extends Action {
 	}
 
 	/**
+	 * Get the current diagram as text
+	 * @return the current diagram as text
+	 */
+	public String getDiagramText() {
+		return diagram.getTextDiagram();
+	}
+	
+	/**
 	 * display diagram corresponding to the UML script where the cursor is
 	 * 
 	 * @param cursorPosition -
@@ -223,7 +231,7 @@ public class GenerateAction extends Action {
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
 						final ImageData imageData = diagram.getImage(path);
-						if (imageData != null) {
+						if (imageData != null && canvas != null && (! canvas.isDisposed())) {
 							canvas.getDisplay().asyncExec(new Runnable() {
 								public void run() {
 									canvas.loadImage(imageData);

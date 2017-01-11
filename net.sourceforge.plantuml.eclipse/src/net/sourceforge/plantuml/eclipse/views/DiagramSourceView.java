@@ -23,6 +23,11 @@ public class DiagramSourceView extends AbstractDiagramSourceView {
 	}
 	
 	@Override
+	public String getDiagramText() {
+		return (diagramTextView != null && (! diagramTextView.isDisposed()) ? diagramTextView.getText() : null);
+	}
+	
+	@Override
 	public void setFocus() {
 		diagramTextView.setFocus();
 	}
