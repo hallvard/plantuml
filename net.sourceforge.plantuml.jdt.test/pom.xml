@@ -19,6 +19,7 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 		        <version>${tycho-version}</version>
 				<configuration>
+					<skipTests>${skip-ui-tests}</skipTests>
 					<providerHint>junit4</providerHint>
 		          	<useUIHarness>true</useUIHarness>
 		          	<argLine>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</argLine>
