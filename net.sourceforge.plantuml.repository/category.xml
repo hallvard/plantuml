@@ -6,5 +6,8 @@
    <feature url="features/net.sourceforge.plantuml.lib.feature_1.1.12.8054.jar" id="net.sourceforge.plantuml.lib.feature" version="1.1.12.8054">
       <category name="net.sourceforge.plantuml.feature"/>
    </feature>
+   <feature url="features/net.sourceforge.plantuml.feature_1.1.12.8054.jar" id="net.sourceforge.plantuml.feature" version="1.1.12.8054">
+      <category name="net.sourceforge.plantuml.feature"/>
+   </feature>
    <category-def name="net.sourceforge.plantuml.feature" label="PlantUML Eclipse support"/>
 </site>
