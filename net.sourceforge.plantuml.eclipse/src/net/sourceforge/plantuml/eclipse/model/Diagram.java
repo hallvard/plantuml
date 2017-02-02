@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
-import net.sourceforge.plantuml.Activator;
 import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 

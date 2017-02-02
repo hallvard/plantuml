@@ -3,15 +3,15 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Plantuml Plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.eclipse; singleton:=true
 Bundle-Version: 0.9.0.qualifier
-Bundle-Activator: net.sourceforge.plantuml.Activator
+Bundle-Activator: net.sourceforge.plantuml.eclipse.Activator
 Bundle-Vendor: PlantUML Team
-Require-Bundle: net.sourceforge.plantuml.lib;bundle-version="1.1.11.7998",
- org.eclipse.ui.ide;bundle-version="3.11.0",
+Require-Bundle: org.eclipse.ui.ide;bundle-version="3.11.0",
  org.eclipse.ui.editors;bundle-version="3.9.0"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.eclipse.core.commands,
+Import-Package: net.sourceforge.plantuml,
+ org.eclipse.core.commands,
  org.eclipse.core.runtime,
  org.eclipse.core.runtime.jobs,
  org.eclipse.jface.action,

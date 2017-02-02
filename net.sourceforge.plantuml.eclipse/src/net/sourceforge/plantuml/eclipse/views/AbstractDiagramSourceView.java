@@ -1,6 +1,6 @@
 package net.sourceforge.plantuml.eclipse.views;
 
-import net.sourceforge.plantuml.Activator;
+import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 
 import org.eclipse.jface.viewers.ISelection;

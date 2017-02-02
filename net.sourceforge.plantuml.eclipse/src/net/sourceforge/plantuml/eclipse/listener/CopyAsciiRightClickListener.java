@@ -34,7 +34,8 @@ public class CopyAsciiRightClickListener extends RightClickListener {
 	protected void run() {
 		String s = "empty";
 		try {
-			final String source = StringUtils.uncommentSource(diagram.getTextDiagram());
+//			final String source = StringUtils.uncommentSource(diagram.getTextDiagram());
+			final String source = diagram.getTextDiagram();
 			final SourceStringReader sourceStringReader = new SourceStringReader(source);
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();
 			sourceStringReader.generateImage(os, new FileFormatOption(FileFormat.ATXT));
