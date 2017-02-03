@@ -78,7 +78,7 @@ public class WorkbenchPreferencePage extends PreferencePage implements
 		plantumlLink.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Program.launch("http://plantuml.sourceforge.net");				
+				Program.launch("http://plantuml.com");				
 			}			
 		});
 		
