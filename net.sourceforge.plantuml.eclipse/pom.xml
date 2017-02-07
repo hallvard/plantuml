@@ -2,6 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>net.sourceforge.plantuml.eclipse</artifactId>
+	<version>1.1.12.8054</version>
 	<packaging>eclipse-plugin</packaging>
 
 	  <parent>
@@ -24,5 +25,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<version>1.1.12.8054</version>
 </project>
