@@ -38,28 +38,6 @@
          </view>
       </perspectiveExtension>
    </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            defaultHandler="net.sourceforge.plantuml.eclipse.diagramexplorer.ShowDiagramHandler"
-            id="net.sourceforge.plantuml.showDiagram"
-            name="Show Diagrams">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
-         <menu
-               id="net.sourceforge.plantuml.cat"
-               label="PlantUml">
-            <command
-                  commandId="net.sourceforge.plantuml.showDiagram"
-                  id="Show Diagrams">
-            </command>
-         </menu>
-      </menuContribution>
-   </extension>
 
    <extension-point id="diagramTextProvider" name="Diagram Text Provider" schema="schema/diagramTextProvider.exsd"/>
 
