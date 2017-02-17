@@ -52,9 +52,9 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 		public void partClosed(IWorkbenchPart part) {
 		}
 		public void partBroughtToTop(IWorkbenchPart part) {
-			updateDiagramText(false, part, null);
 		}
 		public void partActivated(IWorkbenchPart part) {
+			updateDiagramText(false, part, null);
 		}
 	};
 	
