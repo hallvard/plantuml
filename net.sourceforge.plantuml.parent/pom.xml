@@ -8,8 +8,8 @@
 	<name>net.sourceforge.plantuml maven parent project</name>
 
 	<properties>
-		<tycho-maven-plugin-version>0.25.0</tycho-maven-plugin-version>
-		<tycho-version>0.25.0</tycho-version>
+		<tycho-maven-plugin-version>1.0.0</tycho-maven-plugin-version>
+		<tycho-version>1.0.0</tycho-version>
 		<xtextVersion>2.9.1</xtextVersion>
 		<xtend-maven-plugin-version>2.9.1</xtend-maven-plugin-version>
 		
@@ -45,7 +45,7 @@
 							<type>eclipse-plugin</type>
 							<id>org.eclipse.jdt.core</id>
 							<restrictTo>
-								<version>3.11.0.v20150602-1242</version>
+								<version>3.10.2.v20150120-1634</version>
 							</restrictTo>
 						</filter>
 					</filters>

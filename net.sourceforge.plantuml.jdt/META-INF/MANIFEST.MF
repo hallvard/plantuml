@@ -7,7 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: net.sourceforge.plantuml.eclipse.utils,
  net.sourceforge.plantuml.text,
  org.eclipse.core.resources,
- org.eclipse.core.runtime;version="3.5.0",
+ org.eclipse.core.runtime,
  org.eclipse.jdt.core,
  org.eclipse.jface.viewers,
  org.eclipse.ui,
