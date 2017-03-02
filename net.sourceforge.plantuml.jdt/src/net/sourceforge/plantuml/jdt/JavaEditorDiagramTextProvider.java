@@ -78,7 +78,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 				for (IField field : type.getFields()) {
 					String fieldTypeSignature = getSignature(field.getTypeSignature());
 					if (includes(genFlags, GEN_ASSOCIATIONS)) {
-						generateRelatedClass(type, field.getTypeSignature(), ASSOCIATION_RELATION, body, null, field.getElementName(), (isMulti(fieldTypeSignature) ? "*" : "1"));
+						generateRelated(type, ASSOCIATION_RELATION, field.getTypeSignature(), false, body, null, field.getElementName(), (isMulti(fieldTypeSignature) ? "*" : "1"));
 					} else {
 						body.append("\t");
 						if (! Flags.isEnum(type.getFlags())) {
@@ -126,12 +126,12 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		result.append("}\n");
 		try {
 			if (includes(genFlags, GEN_EXTENDS)) {
-				generateRelatedClass(type, type.getSuperclassTypeSignature(), EXTENDS_RELATION, result);
+				generateRelated(type, EXTENDS_RELATION, type.getSuperclassTypeSignature(), type.isInterface(), result);
 			}
 			if (includes(genFlags, GEN_IMPLEMENTS)) {
 				String[] interfaceSignatures = type.getSuperInterfaceTypeSignatures();
 				for (int i = 0; i < interfaceSignatures.length; i++) {
-					generateRelatedClass(type, interfaceSignatures[i], IMPLEMENTS_RELATION, result);
+					generateRelated(type, type.isInterface() ? EXTENDS_RELATION : IMPLEMENTS_RELATION, interfaceSignatures[i], true, result);
 				}
 			}
 		} catch (JavaModelException e) {
@@ -148,14 +148,15 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		return false;
 	}
 
-	private void generateRelatedClass(IType type, String classSignature, String relation, StringBuilder result) {
-		generateRelatedClass(type, classSignature, relation, result, null, null, null);
+	private void generateRelated(IType type, String relation, String relatedSignature, boolean relatedIsInterface, StringBuilder result) {
+		generateRelated(type, relation, relatedSignature, relatedIsInterface, result, null, null, null);
 	}
-	private void generateRelatedClass(IType type, String classSignature, String relation, StringBuilder result, String startLabel, String middleLabel, String endLabel) {
-		if (classSignature != null) {
-			String className = getSignature(classSignature);
+	
+	private void generateRelated(IType type, String relation, String relatedSignature, boolean relatedIsInterface, StringBuilder result, String startLabel, String middleLabel, String endLabel) {
+		if (relatedSignature != null) {
+			String className = getSignature(relatedSignature);
 			if (! className.equals("Object")) {
-				appendClassStart(null, "class", className, result);
+				appendClassStart(null, relatedIsInterface ? "interface" : "class", className, result);
 				appendClassEnd(result);
 				appendRelation(className, false, startLabel, relation, null, type.getElementName(), false, endLabel, middleLabel, result);
 			}
