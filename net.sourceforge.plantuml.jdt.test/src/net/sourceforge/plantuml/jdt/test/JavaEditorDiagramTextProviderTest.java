@@ -1,7 +1,5 @@
 package net.sourceforge.plantuml.jdt.test;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -10,7 +8,6 @@ import java.util.Scanner;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
@@ -19,7 +16,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.LibraryLocation;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,8 +30,7 @@ public class JavaEditorDiagramTextProviderTest extends AbstractDiagramTextTest {
 	
 	@Before
 	public void setUpJavaProject() throws Exception {
-		project = createProject("javaeditortest");
-		addNature(project, JavaCore.NATURE_ID);
+		project = createProject("javaeditortest", JavaCore.NATURE_ID);
 		javaProject = JavaCore.create(project);
 
 		List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
@@ -53,7 +48,6 @@ public class JavaEditorDiagramTextProviderTest extends AbstractDiagramTextTest {
 		IPackageFragment pack = srcRoot.createPackageFragment(packName, false, null);
 		StringBuilder buffer = new StringBuilder();
 		URL url = new URL("platform:/plugin/net.sourceforge.plantuml.jdt.test/src/" + sourceClassName.replace('.', '/') + ".java");
-		System.out.println(sourceClassName + " @ " + url);
 		Scanner scanner = new Scanner(url.openStream());
 		while (scanner.hasNextLine()) {
 			buffer.append(scanner.nextLine());
@@ -67,17 +61,32 @@ public class JavaEditorDiagramTextProviderTest extends AbstractDiagramTextTest {
 		ICompilationUnit cu = createJavaSource(sourceClassName);
 		waitForBuild();
 		openEditor((IFile) cu.getResource(), null);
-		PlantUmlView view = openView("net.sourceforge.plantuml.eclipse.views.PlantUmlView", PlantUmlView.class);
+		PlantUmlView view = openPlantUMLView();
 		AbstractDiagramTextTest.assertDiagramText(expected, view.getDiagramText());
+	}
+	
+	private void testJavaEditorClassDiagramText(String fullClassName, String... members) throws Exception, Exception {
+		StringBuilder builder = new StringBuilder();
+		builder.append("@startuml\nclass ");
+		int pos = fullClassName.lastIndexOf('.');
+		builder.append(pos < 0 ? fullClassName : fullClassName.substring(pos + 1));
+		builder.append(" {\n");
+		for (String member : members) {
+			builder.append("\t");
+			builder.append(member);
+			builder.append("\n");
+		}
+		builder.append("}\n@enduml");
+		testJavaEditorDiagramText(fullClassName, builder.toString());
+	}
+	private void testJavaEditorClassDiagramText(Class<?> clazz, String... members) throws Exception, Exception {
+		testJavaEditorClassDiagramText(clazz.getName(), members);
 	}
 
 	@Test
-	public void testJavaEditorDiagramFromComment() throws Exception, Exception {
-		testJavaEditorDiagramText(ClassWithDiagramInComment.class.getName(), "@startuml\nclass ClassWithDiagramInComment\n{\n}\n@enduml");
+	public void testDiagramForClassWithoutMembers() throws Exception, Exception {
+		testJavaEditorClassDiagramText(ClassWithoutMembers.class);
 	}
 	
-	@Test
-	public void testJavaEditorDiagramFromJavaModel() throws Exception, Exception {
-		testJavaEditorDiagramText(ClassWithoutDiagram.class.getName(), "@startuml\nclass ClassWithoutDiagram {\n}\n@enduml");
-	}
+	// TODO test other variants of class members
 }

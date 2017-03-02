@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>net.sourceforge.plantuml.text.test</artifactId>
-	<packaging>eclipse-plugin</packaging>
+	<packaging>eclipse-test-plugin</packaging>
 
 	  <parent>
 	  	<groupId>net.sourceforge.plantuml</groupId>
@@ -14,6 +14,23 @@
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+		        <version>${tycho-version}</version>
+				<configuration>
+					<skipTests>${skip-ui-tests}</skipTests>
+					<providerHint>junit4</providerHint>
+		          	<useUIHarness>true</useUIHarness>
+		          	<argLine>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</argLine>
+		          	<dependencies>
+    					<dependency>
+      						<artifactId>org.eclipse.e4.rcp</artifactId>
+      						<type>eclipse-feature</type>
+    					</dependency>
+  					</dependencies>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>

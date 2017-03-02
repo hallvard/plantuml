@@ -1,8 +1,10 @@
 package net.sourceforge.plantuml.eclipse.test.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
@@ -37,34 +39,36 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
+import net.sourceforge.plantuml.eclipse.views.PlantUmlView;
+
 public abstract class AbstractWorkbenchTest {
 
 	protected IWorkspaceRoot root() {
 		return ResourcesPlugin.getWorkspace().getRoot();
 	}
 
-	protected IProject createProject(String name) throws CoreException, InvocationTargetException, InterruptedException {
+	protected IProject createProject(String name, String... natures) throws CoreException, InvocationTargetException, InterruptedException {
 		IProject project = root().getProject(name);
 		createProject(project);
+		addNatures(project, natures);			
 		return project;
 	}
 
 	protected IProject createProject(IProject project) throws CoreException {
 		if (!project.exists())
-			project.create(monitor());
-		project.open(monitor());
+			project.create(getDefaultMonitor());
+		project.open(getDefaultMonitor());
 		return project;
 	}
 
-	protected void addNature(IProject project, String nature)
-			throws CoreException {
+	protected void addNatures(IProject project, String... natures) throws CoreException {
 		IProjectDescription description = project.getDescription();
-		String[] natures = description.getNatureIds();
+		String[] existingNatures = description.getNatureIds();
 
 		// Add the nature
-		String[] newNatures = new String[natures.length + 1];
-		System.arraycopy(natures, 0, newNatures, 0, natures.length);
-		newNatures[natures.length] = nature;
+		String[] newNatures = new String[existingNatures.length + natures.length];
+		System.arraycopy(existingNatures, 0, newNatures, 0, existingNatures.length);
+		System.arraycopy(natures, 0, newNatures, existingNatures.length, natures.length);
 		description.setNatureIds(newNatures);
 		project.setDescription(description, null);
 	}
@@ -79,7 +83,7 @@ public abstract class AbstractWorkbenchTest {
 		System.arraycopy(specs, 0, specsModified, 0, specs.length);
 		specsModified[specs.length] = command;
 		description.setBuildSpec(specsModified);
-		project.setDescription(description, monitor());
+		project.setDescription(description, getDefaultMonitor());
 	}
 
 	protected void removeNature(IProject project, String nature)
@@ -136,9 +140,9 @@ public abstract class AbstractWorkbenchTest {
 				System.arraycopy(projects, 0, newProjects, 0, projects.length);
 				newProjects[projects.length] = to;
 				projectDescription.setReferencedProjects(newProjects);
-				from.setDescription(projectDescription, monitor());
+				from.setDescription(projectDescription, getDefaultMonitor());
 			}
-		}.run(monitor());
+		}.run(getDefaultMonitor());
 	}
 	
 	protected void removeReference(final IProject from, final IProject to)
@@ -166,7 +170,7 @@ public abstract class AbstractWorkbenchTest {
 					}
 				}
 			}
-		}.run(monitor());
+		}.run(getDefaultMonitor());
 	}
 
 	protected IFolder createFolder(IResource resource, String relativePath) throws InvocationTargetException, InterruptedException {
@@ -184,11 +188,11 @@ public abstract class AbstractWorkbenchTest {
 					throws CoreException, InvocationTargetException,
 					InterruptedException {
 				create(folder.getParent());
-				folder.delete(true, monitor());
-				folder.create(true, true, monitor());
+				folder.delete(true, getDefaultMonitor());
+				folder.create(true, true, getDefaultMonitor());
 			}
 
-		}.run(monitor());
+		}.run(getDefaultMonitor());
 		return folder;
 	}
 
@@ -213,14 +217,22 @@ public abstract class AbstractWorkbenchTest {
 					throws CoreException, InvocationTargetException,
 					InterruptedException {
 				create(file.getParent());
-				file.delete(true, monitor());
-				file.create(contents, true, monitor());
+				file.delete(true, getDefaultMonitor());
+				file.create(contents, true, getDefaultMonitor());
 			}
 
-		}.run(monitor());
+		}.run(getDefaultMonitor());
 		return file;
 	}
 
+	protected InputStream getPluginTestFileContents(String pluginProject, String path) throws IOException {
+		if (! path.startsWith("/")) {
+			path = "/" + path;
+		}
+		URL url = new URL("platform:/plugin/" + pluginProject + path);
+		return url.openStream();
+	}
+	
 	protected IResource file(String path) {
 		return root().findMember(new Path(path));
 	}
@@ -237,26 +249,26 @@ public abstract class AbstractWorkbenchTest {
 				if (!container.exists()) {
 					create(container.getParent());
 					if (container instanceof IFolder) {
-						((IFolder) container).create(true, true, monitor());
+						((IFolder) container).create(true, true, getDefaultMonitor());
 					} else {
 						IProject iProject = (IProject) container;
 						createProject(iProject);
 					}
 				}
 			}
-		}.run(monitor());
+		}.run(getDefaultMonitor());
 	}
 
-	protected IProgressMonitor monitor() {
+	protected IProgressMonitor getDefaultMonitor() {
 		return new NullProgressMonitor();
 	}
 
 	protected void fullBuild() throws CoreException {
-		ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD, monitor());
+		ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD, getDefaultMonitor());
 	}
 	
 	protected void cleanBuild() throws CoreException {
-		ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.CLEAN_BUILD, monitor());
+		ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.CLEAN_BUILD, getDefaultMonitor());
 	}
 
 	/**
@@ -312,7 +324,7 @@ public abstract class AbstractWorkbenchTest {
 					IProject[] hiddenProjects = root().getProjects(IContainer.INCLUDE_HIDDEN);
 					deleteProjects(hiddenProjects);
 				}
-			}.run(monitor());
+			}.run(getDefaultMonitor());
 		} catch(Exception e) {
 			throw new RuntimeException();
 		}
@@ -321,7 +333,7 @@ public abstract class AbstractWorkbenchTest {
 	protected void deleteProjects(IProject[] projects) throws CoreException {
 		for (IProject iProject : projects) {
 			if (iProject.exists()) {
-				iProject.delete(true,true, monitor());
+				iProject.delete(true,true, getDefaultMonitor());
 			}
 		}
 	}
@@ -397,6 +409,10 @@ public abstract class AbstractWorkbenchTest {
 		return view;
 	}
 	
+	protected PlantUmlView openPlantUMLView() throws Exception {
+		return openView("net.sourceforge.plantuml.eclipse.views.PlantUmlView", PlantUmlView.class);
+	}
+
 	protected <T extends IEditorPart> T openEditor(IFile file, String editorId, Class<T> clazz) throws Exception {
 		IEditorPart editor = openEditor(file, editorId);
 		if (clazz != null && (! clazz.isInstance(editor))) {

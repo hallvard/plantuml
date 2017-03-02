@@ -4,12 +4,14 @@ import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 public abstract class AbstractDiagramSourceView extends ViewPart implements Runnable {
@@ -93,6 +95,9 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 		if (force || activeEditor != lastEditor) {
 			handleEditorChange(activeEditor);
 			if (activeEditor != null) {
+				if (selection == null) {
+					selection = activeEditor.getSite().getWorkbenchWindow().getSelectionService().getSelection();
+				}
 				if (updateDiagramText(activeEditor, selection)) {
 					return;
 				}

@@ -72,13 +72,15 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 	}
 
 	protected String getDiagramText(StringBuilder lines) {
-		int start = Math.max(lines.indexOf(startuml), 0), end = Math.min(lines.lastIndexOf(enduml), lines.length());
+		int start = Math.max(lines.indexOf(startuml), 0), end = Math.min(lines.lastIndexOf(enduml) + enduml.length(), lines.length());
 		String linePrefix = lines.substring(0, start).trim();
 		StringBuilder result = new StringBuilder(lines.length());
-		while (start < end + enduml.length()) {
+		while (start < end) {
 			int lineEnd = lines.indexOf("\n", start);
 			if (lineEnd > end) {
 				break;
+			} else if (lineEnd < 0) {
+				lineEnd = lines.length();
 			}
 			String line = lines.substring(start, lineEnd).trim();
 			if (line.startsWith(linePrefix)) {
