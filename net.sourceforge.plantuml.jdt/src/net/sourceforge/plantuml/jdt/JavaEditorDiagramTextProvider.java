@@ -78,7 +78,7 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 				for (IField field : type.getFields()) {
 					String fieldTypeSignature = getSignature(field.getTypeSignature());
 					if (includes(genFlags, GEN_ASSOCIATIONS)) {
-						generateRelatedClass(type, field.getTypeSignature(), ASSOCIATION_RELATION, body, null, field.getElementName(), (isMulti(fieldTypeSignature) ? "*" : "1"));
+						generateRelatedType(type, field.getTypeSignature(), ASSOCIATION_RELATION, null, body, null, field.getElementName(), (isMulti(fieldTypeSignature) ? "*" : "1"));
 					} else {
 						body.append("\t");
 						if (! Flags.isEnum(type.getFlags())) {
@@ -126,12 +126,12 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		result.append("}\n");
 		try {
 			if (includes(genFlags, GEN_EXTENDS)) {
-				generateRelatedClass(type, type.getSuperclassTypeSignature(), EXTENDS_RELATION, result);
+				generateRelatedType(type, type.getSuperclassTypeSignature(), EXTENDS_RELATION, (type.isInterface() ? INTERFACE_TYPE : null), result);
 			}
 			if (includes(genFlags, GEN_IMPLEMENTS)) {
 				String[] interfaceSignatures = type.getSuperInterfaceTypeSignatures();
 				for (int i = 0; i < interfaceSignatures.length; i++) {
-					generateRelatedClass(type, interfaceSignatures[i], IMPLEMENTS_RELATION, result);
+					generateRelatedType(type, interfaceSignatures[i], (type.isInterface() ? EXTENDS_RELATION : IMPLEMENTS_RELATION), INTERFACE_TYPE, result);
 				}
 			}
 		} catch (JavaModelException e) {
@@ -142,20 +142,23 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		if (typeSignature.contains("[]")) {
 			return true;
 		}
+		if (typeSignature.contains("Collection<")) {
+			return true;
+		}
 		if (typeSignature.contains("List<")) {
 			return true;
 		}
 		return false;
 	}
 
-	private void generateRelatedClass(IType type, String classSignature, String relation, StringBuilder result) {
-		generateRelatedClass(type, classSignature, relation, result, null, null, null);
+	private void generateRelatedType(IType type, String classSignature, String relation, String classType, StringBuilder result) {
+		generateRelatedType(type, classSignature, relation, classType, result, null, null, null);
 	}
-	private void generateRelatedClass(IType type, String classSignature, String relation, StringBuilder result, String startLabel, String middleLabel, String endLabel) {
+	private void generateRelatedType(IType type, String classSignature, String relation, String classType, StringBuilder result, String startLabel, String middleLabel, String endLabel) {
 		if (classSignature != null) {
 			String className = getSignature(classSignature);
 			if (! className.equals("Object")) {
-				appendClassStart(null, "class", className, result);
+				appendClassStart(null, (classType != null ? classType : CLASS_TYPE), className, result);
 				appendClassEnd(result);
 				appendRelation(className, false, startLabel, relation, null, type.getElementName(), false, endLabel, middleLabel, result);
 			}
@@ -224,13 +227,13 @@ public class JavaEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		try {
 			int flags = type.getFlags();
 			if (Flags.isEnum(flags)) {
-				return "enum";
+				return ENUM_TYPE;
 			} else if (Flags.isInterface(flags)) {
-				return "interface";
+				return INTERFACE_TYPE;
 			} else if (Flags.isAbstract(flags)) {
-				return "abstract class";
+				return "abstract " + CLASS_TYPE;
 			} else {
-				return "class";
+				return CLASS_TYPE;
 			}
 		} catch (JavaModelException e) {
 			return "";

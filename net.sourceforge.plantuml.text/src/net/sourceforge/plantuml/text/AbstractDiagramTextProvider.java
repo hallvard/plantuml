@@ -64,10 +64,12 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		return true;
 	}
 	
-	protected static String RELATION_LINE = "--";
+	protected final static String CLASS_TYPE = "class", INTERFACE_TYPE = "interface", ENUM_TYPE = "enum";
+
+	protected final static String RELATION_LINE = "--";
 	
-	protected static String BIDIRECTIONAL_ASSOCIATION_RELATION = RELATION_LINE, ASSOCIATION_RELATION = RELATION_LINE + ">";
-	protected static String EXTENDS_RELATION = "<|" + RELATION_LINE, IMPLEMENTS_RELATION = "<|..";
+	protected final static String BIDIRECTIONAL_ASSOCIATION_RELATION = RELATION_LINE, ASSOCIATION_RELATION = RELATION_LINE + ">";
+	protected final static String EXTENDS_RELATION = "<|" + RELATION_LINE, IMPLEMENTS_RELATION = "<|..";
 
 	protected void appendNameDeclaration(String name, StringBuilder buffer) {
 		String logicalName = getLogicalName(name);
