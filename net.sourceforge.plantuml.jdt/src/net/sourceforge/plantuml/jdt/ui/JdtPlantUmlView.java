@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IParent;
 import org.eclipse.jdt.core.IType;
@@ -114,9 +115,16 @@ public class JdtPlantUmlView extends PlantUmlView {
 
 	private void addTypes(Iterable<IJavaElement> elements, Collection<IType> result) {
 		for (IJavaElement javaElement : elements) {
-			if (javaElement instanceof IType) {
-				result.add((IType) javaElement);
-			} else if (javaElement instanceof IParent) {
+			if (javaElement instanceof ICompilationUnit) {
+				IType[] types = null;
+				try {
+					types = ((ICompilationUnit) javaElement).getTypes();
+				} catch (JavaModelException e) {
+				}
+				for (int i = 0; types != null && i < types.length; i++) {
+					result.add(types[i]);
+				}
+			} else if (javaElement instanceof IParent && (! javaElement.getElementName().endsWith(".jar"))) {
 				try {
 					addTypes(Arrays.asList(((IParent) javaElement).getChildren()), result);
 				} catch (JavaModelException e) {

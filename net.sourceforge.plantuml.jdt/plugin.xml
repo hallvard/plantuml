@@ -13,7 +13,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="PlantUML Class Diagram"
+            name="PlantUML Project Class Diagram"
             icon="platform:/plugin/net.sourceforge.plantuml.eclipse/icons/p5.gif"
             category="net.sourceforge.plantuml.eclipse"
             class="net.sourceforge.plantuml.jdt.ui.JdtPlantUmlView"
