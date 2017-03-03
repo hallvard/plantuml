@@ -1,26 +1,35 @@
 package net.sourceforge.plantuml.eclipse.views;
 
-import net.sourceforge.plantuml.eclipse.Activator;
-import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
-
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-public abstract class AbstractDiagramSourceView extends ViewPart implements Runnable {
+import net.sourceforge.plantuml.eclipse.Activator;
+import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
+
+public abstract class AbstractDiagramSourceView extends ViewPart {
+	
+	public boolean isLinkedToActiveEditor() {
+		return true;
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-		registerListeners();
-		// without this it deadlocked during startup
-		parent.getDisplay().asyncExec(this);
+		if (isLinkedToActiveEditor()) {
+			registerListeners();
+			// without this it deadlocked during startup
+			parent.getDisplay().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					updateDiagramText(true, null, null);
+				}
+			});
+		}
 	}
 
 	protected void registerListeners() {
@@ -37,27 +46,20 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 		getSite().getPage().removePostSelectionListener(diagramTextChangedListener);
 	}
 	
-	// implements Runnable.run()
-	public void run() {
-		updateDiagramText(true, null, null);
-	}
-	
 	protected abstract void updateDiagramText(String text);
 	public abstract String getDiagramText();
 
 	private IPartListener partListener = new IPartListener() {
 		
-		public void partOpened(IWorkbenchPart part) {
-		}
-		public void partDeactivated(IWorkbenchPart part) {
-		}
-		public void partClosed(IWorkbenchPart part) {
-		}
-		public void partBroughtToTop(IWorkbenchPart part) {
-		}
 		public void partActivated(IWorkbenchPart part) {
-			updateDiagramText(false, part, null);
+			if (isLinkedToActiveEditor()) {
+				updateDiagramText(false, part, null);
+			}
 		}
+		public void partOpened(IWorkbenchPart part) {}
+		public void partDeactivated(IWorkbenchPart part) {}
+		public void partClosed(IWorkbenchPart part) {}
+		public void partBroughtToTop(IWorkbenchPart part) {}
 	};
 	
 	private class DiagramTextChangedListener implements IPropertyListener, ISelectionListener {
@@ -90,13 +92,13 @@ public abstract class AbstractDiagramSourceView extends ViewPart implements Runn
 		}
 	}
 
-	private void updateDiagramText(boolean force, IWorkbenchPart part, ISelection selection) {
-		IEditorPart activeEditor = (part instanceof IEditorPart ? (IEditorPart) part : getSite().getPage().getActiveEditor());
+	protected void updateDiagramText(boolean force, IWorkbenchPart part, ISelection selection) {
+		IEditorPart activeEditor = (part instanceof IEditorPart ? (IEditorPart) part : (isLinkedToActiveEditor() ? getSite().getPage().getActiveEditor() : null));
 		if (force || activeEditor != lastEditor) {
 			handleEditorChange(activeEditor);
 			if (activeEditor != null) {
 				if (selection == null) {
-					selection = activeEditor.getSite().getWorkbenchWindow().getSelectionService().getSelection();
+					selection = activeEditor.getSite().getSelectionProvider().getSelection(); // getWorkbenchWindow().getSelectionService().getSelection();
 				}
 				if (updateDiagramText(activeEditor, selection)) {
 					return;
