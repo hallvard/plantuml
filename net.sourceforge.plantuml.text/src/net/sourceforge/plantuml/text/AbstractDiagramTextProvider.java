@@ -52,8 +52,8 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	protected abstract String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection);
 
 	//
-	
-	protected static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_EXTENDS = 1<<2, GEN_IMPLEMENTS = 1<<3, GEN_ASSOCIATIONS = 1<<4;
+
+	public static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_EXTENDS = 1<<2, GEN_IMPLEMENTS = 1<<3, GEN_ASSOCIATIONS = 1<<4;
 	
 	protected static boolean includes(int flags, int... bits) {
 		for (int i = 0; i < bits.length; i++) {
