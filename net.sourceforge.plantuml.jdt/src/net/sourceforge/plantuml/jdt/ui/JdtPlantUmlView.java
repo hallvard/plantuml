@@ -27,6 +27,7 @@ import org.eclipse.ui.IEditorPart;
 import net.sourceforge.plantuml.eclipse.views.PlantUmlView;
 import net.sourceforge.plantuml.jdt.JdtDiagramTextProvider;
 import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
+import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.*;
 
 public class JdtPlantUmlView extends PlantUmlView {
 
@@ -105,7 +106,7 @@ public class JdtPlantUmlView extends PlantUmlView {
 		addTypes(this.rootSet, allTypes);
 		System.out.println(allTypes);
 		for (IType type : allTypes) {
-			jdtDiagramTextProvider.generateForType(type, result, allTypes);			
+			jdtDiagramTextProvider.generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS, allTypes);
 		}
 		result.append("\n@enduml");
 		System.out.println(result);

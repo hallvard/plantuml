@@ -1,5 +1,7 @@
 package net.sourceforge.plantuml.jdt;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.eclipse.jdt.core.Flags;
@@ -24,7 +26,33 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 		generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS, allTypes);
 	}
 
+	private boolean isInTypes(String typeName, Collection<IType> allTypes) {
+		for (IType type : allTypes) {
+			if (type.getElementName().equals(typeName) || type.getFullyQualifiedName().equals(typeName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static class Assoc {
+		String name;
+		String targetName;
+		boolean multi;
+	}
+	
+	private Collection<String> multiAssociationClassNames = new ArrayList<String>(Arrays.asList("java.util.Collection", "java.util.List", "java.util.Set"));
+	
+	public void addMultiAssociationClassName(String className) {
+		multiAssociationClassNames.add(className);
+	}
+	
+	public boolean isMultiAssociationClassName(String className) {
+		return multiAssociationClassNames.contains(className);
+	}
+	
 	public void generateForType(IType type, StringBuilder result, int genFlags, Collection<IType> allTypes) {
+		Collection<Assoc> associations = (includes(genFlags, GEN_ASSOCIATIONS) ? new ArrayList<Assoc>() : null);
 		result.append(getClassType(type));
 		result.append(" ");
 		appendNameDeclaration(type.getElementName(), result);
@@ -33,16 +61,38 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 			StringBuilder body = new StringBuilder();
 			if (includes(genFlags, GEN_MEMBERS)) {
 				for (IField field : type.getFields()) {
-					String fieldTypeSignature = getSignature(field.getTypeSignature());
+					Assoc assoc = null;
+
+					String fieldSignature = field.getTypeSignature(), fieldTypeName = getTypeName(fieldSignature);
 					if (includes(genFlags, GEN_ASSOCIATIONS)) {
-						generateRelatedType(type, field.getTypeSignature(), ASSOCIATION_RELATION, null, body, null, field.getElementName(), (isMulti(fieldTypeSignature) ? "*" : "1"));
+						if (fieldTypeName.endsWith("[]")) {
+							assoc = new Assoc();
+							assoc.targetName = fieldTypeName.substring(0, fieldTypeName.length() - 2);
+							assoc.multi = true;
+						} else {
+							String[][] resolvedFieldType = type.resolveType(fieldTypeName);
+							String[] typeArguments = Signature.getTypeArguments(fieldSignature);
+							if (resolvedFieldType != null && resolvedFieldType.length > 0 && typeArguments != null && typeArguments.length == 1 && isMultiAssociationClassName(Signature.toQualifiedName(resolvedFieldType[0]))) {
+								assoc = new Assoc();
+								assoc.multi = true;
+								assoc.targetName = getTypeName(typeArguments[0]);
+							} else {
+								assoc = new Assoc();
+								assoc.multi = false;
+								assoc.targetName = fieldTypeName;								
+							}
+						}
+					}
+					if (assoc != null && isInTypes(assoc.targetName, allTypes) && associations != null) {
+						assoc.name = field.getElementName();
+						associations.add(assoc);
 					} else {
 						body.append("\t");
 						if (! Flags.isEnum(type.getFlags())) {
 							if (includes(genFlags, GEN_MODIFIERS) && (! Flags.isInterface(type.getFlags()))) {
 								body.append(getMemberModifiers(field));
 							}
-							body.append(fieldTypeSignature);
+							body.append(fieldTypeName);
 							body.append(" ");
 						}
 						body.append(field.getElementName());
@@ -56,7 +106,7 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 					}
 					// don't show the return type for constructors
 					if (! method.isConstructor()) {
-						body.append(getSignature(method.getReturnType()));
+						body.append(getTypeName(method.getReturnType()));
 						body.append(" ");
 					}
 					body.append(method.getElementName());
@@ -68,7 +118,7 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 						if (body.charAt(body.length() - 1) != '(') {
 							body.append(", ");
 						}
-						body.append(getSignature(parameterTypes[i]));
+						body.append(getTypeName(parameterTypes[i]));
 						if (parameterNames != null) {
 							body.append(" ");
 							body.append(parameterNames[i]);
@@ -81,49 +131,42 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 		} catch (JavaModelException e) {
 		}
 		result.append("}\n");
+		if (includes(genFlags, GEN_ASSOCIATIONS) && associations != null) {
+			for (Assoc assoc : associations) {
+				generateRelatedType(type, assoc.targetName, ASSOCIATION_RELATION, null, result, null, assoc.name, assoc.multi ? "*" : "1");
+			}
+		}
 		try {
 			if (includes(genFlags, GEN_EXTENDS)) {
-				generateRelatedType(type, type.getSuperclassTypeSignature(), EXTENDS_RELATION, (type.isInterface() ? INTERFACE_TYPE : null), result);
+				generateRelatedType(type, getTypeName(type.getSuperclassTypeSignature()), EXTENDS_RELATION, (type.isInterface() ? INTERFACE_TYPE : null), result);
 			}
 			if (includes(genFlags, GEN_IMPLEMENTS)) {
 				String[] interfaceSignatures = type.getSuperInterfaceTypeSignatures();
 				for (int i = 0; i < interfaceSignatures.length; i++) {
-					generateRelatedType(type, interfaceSignatures[i], (type.isInterface() ? EXTENDS_RELATION : IMPLEMENTS_RELATION), INTERFACE_TYPE, result);
+					generateRelatedType(type, getTypeName(interfaceSignatures[i]), (type.isInterface() ? EXTENDS_RELATION : IMPLEMENTS_RELATION), INTERFACE_TYPE, result);
 				}
 			}
 		} catch (JavaModelException e) {
 		}
 	}
 
-	private boolean isMulti(String typeSignature) {
-		if (typeSignature.contains("[]")) {
-			return true;
-		}
-		if (typeSignature.contains("Collection<")) {
-			return true;
-		}
-		if (typeSignature.contains("List<")) {
-			return true;
-		}
-		return false;
+	private void generateRelatedType(IType type, String className, String relation, String classType, StringBuilder result) {
+		generateRelatedType(type, className, relation, classType, result, null, null, null);
 	}
-
-	private void generateRelatedType(IType type, String classSignature, String relation, String classType, StringBuilder result) {
-		generateRelatedType(type, classSignature, relation, classType, result, null, null, null);
-	}
-	private void generateRelatedType(IType type, String classSignature, String relation, String classType, StringBuilder result, String startLabel, String middleLabel, String endLabel) {
-		if (classSignature != null) {
-			String className = getSignature(classSignature);
-			if (! className.equals("Object")) {
-				appendClassStart(null, (classType != null ? classType : CLASS_TYPE), className, result);
-				appendClassEnd(result);
+	private void generateRelatedType(IType type, String className, String relation, String classType, StringBuilder result, String startLabel, String middleLabel, String endLabel) {
+		if (className != null && (! className.equals("Object"))) {
+			appendClassStart(null, (classType != null ? classType : CLASS_TYPE), className, result);
+			appendClassEnd(result);
+			if (relation == ASSOCIATION_RELATION) {
+				appendRelation(type.getElementName(), false, startLabel, relation, null, className, false, endLabel, middleLabel, result);				
+			} else {
 				appendRelation(className, false, startLabel, relation, null, type.getElementName(), false, endLabel, middleLabel, result);
 			}
 		}
 	}
 
-	private String getSignature(String signature) {
-		return Signature.toString(signature).replace("java.lang.", "");
+	private String getTypeName(String signature) {
+		return signature != null ? Signature.toString(signature).replace("java.lang.", "") : null;
 	}
 
 	private String getMemberModifiers(IMember member) {

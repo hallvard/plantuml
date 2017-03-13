@@ -1,13 +1,12 @@
 package net.sourceforge.plantuml.jdt;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.ui.javaeditor.IClassFileEditorInput;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -19,38 +18,36 @@ public class JavaEditorDiagramTextProvider extends JdtDiagramTextProvider {
 	public JavaEditorDiagramTextProvider() {
 		setEditorType(ITextEditor.class);
 	}
-
-	private class Context {
-//		IEditorPart editorPart;
-//		IEditorInput editorInput;
-		IProject project;
-//		IJavaProject javaProject;
-		ICompilationUnit compUnit;
-	}
-	
-	private Context currentContext = null;
 	
 	@Override
 	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection ignore) {
-		if (! (editorInput instanceof IFileEditorInput && "java".equals(((IFileEditorInput) editorInput).getFile().getFileExtension()))) {
-			return null;
+		IType[] types = null;
+		if (editorInput instanceof IFileEditorInput) {
+			String ext = ((IFileEditorInput) editorInput).getFile().getFileExtension();
+			if (! "java".equals(ext)) {
+				return null;
+			}
+			ICompilationUnit compUnit = JavaCore.createCompilationUnitFrom(((IFileEditorInput) editorInput).getFile()); //currentContext.project.getFile(path.removeFirstSegments(1)));
+			try {
+				compUnit.open(new NullProgressMonitor());
+				types = compUnit.getTypes();
+			} catch (JavaModelException e) {
+			}
+		} else if (editorInput instanceof IClassFileEditorInput) {
+			IClassFile classFile = ((IClassFileEditorInput) editorInput).getClassFile();
+			try {
+				classFile.open(new NullProgressMonitor());
+				types = new IType[]{classFile.getType()};
+			} catch (JavaModelException e) {
+			}
 		}
-		currentContext = new Context();
-		IPath path = ((IFileEditorInput) editorInput).getFile().getFullPath();
-		currentContext.project = ResourcesPlugin.getWorkspace().getRoot().getProject(path.segment(0));
-//		currentContext.javaProject = JavaCore.create(currentContext.project);
-		currentContext.compUnit = JavaCore.createCompilationUnitFrom(currentContext.project.getFile(path.removeFirstSegments(1)));
-		StringBuilder result = new StringBuilder();
-		try {
-			currentContext.compUnit.open(new NullProgressMonitor());
-			for (IType type: currentContext.compUnit.getTypes()) {
+		if (types != null) {
+			StringBuilder result = new StringBuilder();
+			for (IType type: types) {
 				generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS, null);
 			}
-		} catch (JavaModelException e) {
-			System.err.println(e);
-		} finally {
-			currentContext = null;
+			return (result.length() > 0 ? result.toString() : null);
 		}
-		return (result.length() > 0 ? result.toString() : null);
+		return null;
 	}
 }
