@@ -79,47 +79,39 @@ public class Diagram {
 	 * 
 	 * @return ImageData of the current textDiagram and imageNumber
 	 */
-	public ImageData getImage(IPath path) {
+	public ImageData getImage(IPath path) throws IOException {
 		setGraphvizPath();
 
 		if (textDiagram != null) {
 			// generate the image for textDiagram and imageNumber
-			try {
-				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				if (path != null) {
-					FileSystem.getInstance().setCurrentDir(path.toFile().getAbsoluteFile().getParentFile());
-				} else {
-					FileSystem.getInstance().reset();
-				}
-				OptionFlags.getInstance().setQuiet(true);
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			if (path != null) {
+				FileSystem.getInstance().setCurrentDir(path.toFile().getAbsoluteFile().getParentFile());
+			} else {
+				FileSystem.getInstance().reset();
+			}
+			OptionFlags.getInstance().setQuiet(true);
 
-				// image generation.
-				SourceStringReader reader = new SourceStringReader(textDiagram);
+			// image generation.
+			SourceStringReader reader = new SourceStringReader(textDiagram);
 
-				// Write the image to "os"
-				String desc = reader.generateImage(os, imageNumber);
+			// Write the image to "os"
+			String desc = reader.generateImage(os, imageNumber);
 
-				// close all the flow.
-				os.flush();
-				os.close();
+			// close all the flow.
+			os.close();
 
-				if (StringUtils.isNotEmpty(desc)) {
+			if (StringUtils.isNotEmpty(desc)) {
 
-					InputStream is = new ByteArrayInputStream(os.toByteArray());
-					BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(os.toByteArray()));
-					ImageData imageData = new ImageData(is);
-					image = new DiagramImage(bufferedImage, imageData);
+				InputStream is = new ByteArrayInputStream(os.toByteArray());
+				BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(os.toByteArray()));
+				ImageData imageData = new ImageData(is);
+				image = new DiagramImage(bufferedImage, imageData);
 
-					// close the input stream
-					is.close();
-
-				}
-			} catch (Throwable e) {
-				e.printStackTrace();
-				WorkbenchUtil.errorBox("Error during image generation.", e);
+				// close the input stream
+				is.close();
 			}
 		}
-
 		return getImageData();
 	}
 

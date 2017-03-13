@@ -1,6 +1,8 @@
 package net.sourceforge.plantuml.eclipse.views;
 
 import java.awt.geom.AffineTransform;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
 
 import net.sourceforge.plantuml.eclipse.utils.SWTUtil;
 
@@ -290,14 +292,44 @@ public class SWTImageCanvas extends Canvas {
 	 *            image file
 	 * @return swt image created from image file
 	 */
-	public Image loadImage(ImageData imageData) {
+	public void loadImage(ImageData imageData) {
 		if (sourceImage != null && !sourceImage.isDisposed()) {
 			sourceImage.dispose();
 			sourceImage = null;
 		}
 		sourceImage = new Image(getDisplay(), imageData);
 		showOriginal();
-		return sourceImage;
+	}
+
+	public void showErrorMessage(Throwable t) {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintWriter pw = new PrintWriter(os);
+		t.printStackTrace(pw);
+		pw.close();
+		showErrorMessage(os.toString());
+	}
+
+	public void showErrorMessage(String s) {
+		if (sourceImage != null && !sourceImage.isDisposed()) {
+			sourceImage.dispose();
+			sourceImage = null;
+		}
+		sourceImage = new Image(getDisplay(), 500, 500);
+		GC gc = new GC(sourceImage);
+		String[] ss = s.split("\n");
+		int lineHeight = gc.getFontMetrics().getHeight();
+		for (int i = 0; i < ss.length; i++) {
+			String line = ss[i];
+			if (line.startsWith("\t")) {
+				line = "    " + line.substring(1);
+				gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+			} else {
+				gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
+			}
+			gc.drawString(line, 10, i * lineHeight);
+		}
+		gc.dispose();
+		showOriginal();
 	}
 
 	/**
