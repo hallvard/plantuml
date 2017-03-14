@@ -1,9 +1,9 @@
 package net.sourceforge.plantuml.eclipse.listener;
 
-import net.sourceforge.plantuml.eclipse.model.Diagram;
-
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+
+import net.sourceforge.plantuml.eclipse.model.Diagram;
 
 /**Right click listener manager.
  * 

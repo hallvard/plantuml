@@ -1,12 +1,12 @@
 package net.sourceforge.plantuml.eclipse.listener;
 
-import net.sourceforge.plantuml.StringUtils;
-import net.sourceforge.plantuml.eclipse.model.Diagram;
-import net.sourceforge.plantuml.eclipse.utils.PlantUmlUtils;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
+
+import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.eclipse.model.Diagram;
+import net.sourceforge.plantuml.eclipse.utils.PlantUmlUtils;
 
 /**Manage the Export of the diagram.
  * 

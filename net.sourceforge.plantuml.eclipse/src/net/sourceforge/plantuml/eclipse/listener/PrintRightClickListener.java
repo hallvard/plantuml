@@ -1,8 +1,5 @@
 package net.sourceforge.plantuml.eclipse.listener;
 
-import net.sourceforge.plantuml.eclipse.model.Diagram;
-import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -13,6 +10,9 @@ import org.eclipse.swt.printing.PrintDialog;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
 import org.eclipse.swt.widgets.Composite;
+
+import net.sourceforge.plantuml.eclipse.model.Diagram;
+import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 
 /**
  * manage the print of the diagram image.

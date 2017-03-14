@@ -7,7 +7,6 @@ import java.io.ByteArrayOutputStream;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.eclipse.model.Diagram;
 
 /**
