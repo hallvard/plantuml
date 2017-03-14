@@ -1,12 +1,11 @@
 package net.sourceforge.plantuml.jdt;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.ui.javaeditor.IClassFileEditorInput;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -21,32 +20,21 @@ public class JavaEditorDiagramTextProvider extends JdtDiagramTextProvider {
 	
 	@Override
 	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection ignore) {
-		IType[] types = null;
 		if (editorInput instanceof IFileEditorInput) {
-			String ext = ((IFileEditorInput) editorInput).getFile().getFileExtension();
-			if (! "java".equals(ext)) {
+			IFile file = ((IFileEditorInput) editorInput).getFile();
+			if (! "java".equals(file.getFileExtension())) {
 				return null;
 			}
-			ICompilationUnit compUnit = JavaCore.createCompilationUnitFrom(((IFileEditorInput) editorInput).getFile()); //currentContext.project.getFile(path.removeFirstSegments(1)));
+			ICompilationUnit compUnit = JavaCore.createCompilationUnitFrom(file);
 			try {
 				compUnit.open(new NullProgressMonitor());
-				types = compUnit.getTypes();
+				StringBuilder result = new StringBuilder();
+				for (IType type: compUnit.getTypes()) {
+					generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS, null);
+				}
+				return (result.length() > 0 ? result.toString() : null);
 			} catch (JavaModelException e) {
 			}
-		} else if (editorInput instanceof IClassFileEditorInput) {
-			IClassFile classFile = ((IClassFileEditorInput) editorInput).getClassFile();
-			try {
-				classFile.open(new NullProgressMonitor());
-				types = new IType[]{classFile.getType()};
-			} catch (JavaModelException e) {
-			}
-		}
-		if (types != null) {
-			StringBuilder result = new StringBuilder();
-			for (IType type: types) {
-				generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS, null);
-			}
-			return (result.length() > 0 ? result.toString() : null);
 		}
 		return null;
 	}
