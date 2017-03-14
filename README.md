@@ -15,7 +15,7 @@ There's also experimental support for generating a diagram for all the Java clas
 
 Diagram generation is handled by (implementations of) an extension point, so you can customize the process of generating a diagram for other file types or editor content.
 
-# main plugins
+# Main plugins
 - net.sourceforge.plantuml.lib - plantuml.jar packaged as a bundle
 - net.sourceforge.plantuml.eclipse - core Eclipse integration, including the extension point for providing diagrams
 - net.sourceforge.plantuml.text - diagrams based on explicit DSL code, with support for editors based on the standard Eclipse text editor
@@ -29,3 +29,4 @@ The version number is a bit special, since it includes the version of the includ
 
 ## 1.1.13.8054
 - includes EPL-ed version of plantuml.jar
+- Fix for issue #13 - Recompute diagram on activate not just broughtOnTop.
