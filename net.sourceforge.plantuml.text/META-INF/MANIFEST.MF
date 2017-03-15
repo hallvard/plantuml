@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: PlantUML text editor support
+Bundle-Name: PlantUML Text Editor Support
 Bundle-SymbolicName: net.sourceforge.plantuml.text;singleton:=true
-Bundle-Version: 0.9.0.qualifier
+Bundle-Version: 1.1.14.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sourceforge.plantuml.text
 Import-Package: net.sourceforge.plantuml.eclipse.utils,
