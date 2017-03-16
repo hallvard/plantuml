@@ -34,7 +34,7 @@ The version number is a bit special, since it includes the version of the includ
 ## 1.1.14.8059
 - updated to 8059 version of plantuml.jar, as part of the fix to [issue #19](../../issues/19) 
 - a generic solution for showing exceptions instead of a diagram, if such are thrown during diagram generation, part of the fix to [issue #19](../../issues/19) 
-- experimental support for generating a class diagram for a set of Java files, as suggested in [issue #18](../../issues/15). Open the PlantUML Project Class Diagram and drag a Java project or package into the view (suggest improvements by adding a comment to the issue).
+- experimental support for generating a class diagram for a set of Java files, as suggested in [issue #18](../../issues/18). Open the PlantUML Project Class Diagram and drag a Java project or package into the view (suggest improvements by adding a comment to the issue).
 - support for generating class diagram for .class files shown in the Class File editor
 - fix for [issue #15](../../issues/15)
 - improved documentation, including this readme 
