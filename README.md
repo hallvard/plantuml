@@ -15,9 +15,13 @@ There's also experimental support for generating a diagram for all the Java clas
 
 Diagram generation is handled by (implementations of) an extension point, so you can customize the process of generating a diagram for other file types or editor content.
 
-# Main plugins
+# License
 
 This repo uses the [EPL license](net.sourceforge.plantuml.feature/epl-v10.html). 
+
+# Installation
+
+Use http://files.idi.ntnu.no/publish/plantuml/repository/ as the update site URL, in the Help > Install New Software... dialog.
 
 # Main plugins
 - net.sourceforge.plantuml.lib - plantuml.jar packaged as a bundle
@@ -27,7 +31,7 @@ This repo uses the [EPL license](net.sourceforge.plantuml.feature/epl-v10.html).
 - net.sourceforge.plantuml.ecore - diagrams based on Ecore models, with support for most Ecore editors
 - net.sourceforge.plantuml.xcore - diagrams based on Xcore models, with support for the Xtext editor
 
-# Versions
+# Version history
 
 The version number is a bit special, since it includes the version of the included plantuml.jar
 
