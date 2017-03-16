@@ -1,4 +1,4 @@
-# plantuml - Embed UML diagrams in files and view them in Eclipse
+# plantuml - generate UML diagrams from files and view them in Eclipse
 
 The plantuml library implements a DSL and renderer for many UML diagrams (class, sequence, objects, states, activities, ...).
 See http://plantuml.com for more info about the DSL and renderer.
@@ -16,6 +16,10 @@ There's also experimental support for generating a diagram for all the Java clas
 Diagram generation is handled by (implementations of) an extension point, so you can customize the process of generating a diagram for other file types or editor content.
 
 # Main plugins
+
+This repo uses the [EPL license](net.sourceforge.plantuml.feature/epl-v10.html). 
+
+# Main plugins
 - net.sourceforge.plantuml.lib - plantuml.jar packaged as a bundle
 - net.sourceforge.plantuml.eclipse - core Eclipse integration, including the extension point for providing diagrams
 - net.sourceforge.plantuml.text - diagrams based on explicit DSL code, with support for editors based on the standard Eclipse text editor
@@ -27,6 +31,14 @@ Diagram generation is handled by (implementations of) an extension point, so you
 
 The version number is a bit special, since it includes the version of the included plantuml.jar
 
+## 1.1.14.8059
+- updated to 8059 version of plantuml.jar, as part of the fix to [issue #19](../../issues/19) 
+- a generic solution for showing exceptions instead of a diagram, if such are thrown during diagram generation, part of the fix to [issue #19](../../issues/19) 
+- experimental support for generating a class diagram for a set of Java files, as suggested in [issue #18](../../issues/15). Open the PlantUML Project Class Diagram and drag a Java project or package into the view (suggest improvements by adding a comment to the issue).
+- support for generating class diagram for .class files shown in the Class File editor
+- fix for [issue #15](../../issues/15)
+- improved documentation, including this readme 
+
 ## 1.1.13.8054
 - includes EPL-ed version of plantuml.jar
-- Fix for issue #13 - Recompute diagram on activate not just broughtOnTop.
+- Fix for [issue #13](../../issues/13) - recompute diagram on activate not just broughtOnTop
