@@ -42,6 +42,7 @@ The version number is a bit special, since it includes the version of the includ
 - support for generating class diagram for .class files shown in the Class File editor
 - fix for [issue #15](../../issues/15)
 - improved documentation, including this readme 
+See [release 1.1.14.8059](../..releases/tag/v1.1.14.8059)
 
 ## 1.1.13.8054
 - includes EPL-ed version of plantuml.jar
