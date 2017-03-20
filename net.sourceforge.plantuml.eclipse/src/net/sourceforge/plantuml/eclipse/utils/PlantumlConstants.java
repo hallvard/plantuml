@@ -21,7 +21,7 @@ public interface PlantumlConstants {
 	public static final String ZOOM_OUT_BUTTON = "Zoom out";
 	public static final String FIT_CANVAS_BUTTON = "Fit to canvas";
 	public static final String SHOW_ORIGINAL_BUTTON = "Show original";
-	public static final String TOGGLE_GENERATION_BUTTON = "Activate/desactivate generation of diagrams";
+	public static final String TOGGLE_GENERATION_BUTTON = "Activate/deactivate generation of diagrams";
 
 	/**
 	 * Labels for the Preferences

@@ -21,7 +21,18 @@
             icon="icons/p5.gif"
             category="net.sourceforge.plantuml.eclipse"
             class="net.sourceforge.plantuml.eclipse.views.PlantUmlView"
-            id="net.sourceforge.plantuml.eclipse.views.PlantUmlView">
+            id="net.sourceforge.plantuml.eclipse.views.PlantUmlView"
+            allowMultiple="true"
+            >
+      </view>
+      <view
+            name="PlantUML Source"
+            icon="icons/p5.gif"
+            category="net.sourceforge.plantuml.eclipse"
+            class="net.sourceforge.plantuml.eclipse.views.DiagramSourceView"
+            id="net.sourceforge.plantuml.eclipse.views.DiagramSourceView"
+            allowMultiple="true"
+            >
       </view>
    </extension>
    <extension
@@ -40,20 +51,5 @@
    </extension>
 
    <extension-point id="diagramTextProvider" name="Diagram Text Provider" schema="schema/diagramTextProvider.exsd"/>
-
-   <extension
-         point="org.eclipse.ui.views">
-      <category
-            name="PlantUml"
-            id="net.sourceforge.plantuml.eclipse.diagramsource">
-      </category>
-      <view
-            name="PlantUML Source"
-            icon="icons/p5.gif"
-            category="net.sourceforge.plantuml.eclipse"
-            class="net.sourceforge.plantuml.eclipse.views.DiagramSourceView"
-            id="net.sourceforge.plantuml.eclipse.views.DiagramSourceView">
-      </view>
-   </extension>
 
 </plugin>

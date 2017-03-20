@@ -66,11 +66,7 @@ public class PlantUmlUtils {
 		
 	}
 
-    public static ImageDescriptor getImageDescriptor(Display display, String fileName) {
-        InputStream is = PlantUmlUtils.class.getResourceAsStream(fileName);   
-        Image image = new Image(display, is);  
-        return ImageDescriptor.createFromImage(image);    
+    public static ImageDescriptor getImageDescriptor(String fileName) {
+        return ImageDescriptor.createFromFile(PlantUmlUtils.class, fileName);
     }
-
-
 }

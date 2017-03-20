@@ -94,15 +94,10 @@ public class Diagram {
 
 			// image generation.
 			SourceStringReader reader = new SourceStringReader(textDiagram);
-
-			// Write the image to "os"
 			String desc = reader.generateImage(os, imageNumber);
-
-			// close all the flow.
 			os.close();
 
 			if (StringUtils.isNotEmpty(desc)) {
-
 				InputStream is = new ByteArrayInputStream(os.toByteArray());
 				BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(os.toByteArray()));
 				ImageData imageData = new ImageData(is);
@@ -122,7 +117,7 @@ public class Diagram {
 	private static void setGraphvizPath() {
 		IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
 		String dotPath = prefStore.getString(PlantumlConstants.GRAPHVIZ_PATH);
-		if (dotPath != null && !"".equals(dotPath)) {
+		if (dotPath != null && (! "".equals(dotPath))) {
 			System.setProperty("GRAPHVIZ_DOT", dotPath);
 		}
 	}
@@ -143,21 +138,14 @@ public class Diagram {
 
 			// image generation.
 			SourceStringReader reader = new SourceStringReader(textDiagram);
-			// Write the first image to "os"
 			String desc = reader.generateImage(os, 0);
-
-			// close all the flow.
 			os.flush();
 			os.close();
 
 			if (StringUtils.isNotEmpty(desc)) {
-
 				InputStream is = new ByteArrayInputStream(os.toByteArray());
 				imageData = new ImageData(is);
-
-				// close the input stream
 				is.close();
-
 			}
 		} catch (IOException e) {
 			WorkbenchUtil.errorBox("Error during image generation.", e);
@@ -165,68 +153,7 @@ public class Diagram {
 		return imageData;
 	}
 
-	/**
-	 * Method to get the startUml script in the contents using regular
-	 * expressions. We use the position of the cursor to determine the good
-	 * script to keep in the case of there are many plantUml scripts in the
-	 * file. This method sets the textDiagram and the imageNumber parameters.
-	 * 
-	 * @param cursorPosition
-	 *            position of the cursor at the end of the current line
-	 * @param contents
-	 *            {@link String}
-	 * 
-	 * @return the PlantUml Script {@link String}
-	 * 
-	 * @author roques_a
-	 */
-	public String extractTextDiagram(int cursorPosition, String contents) {
-		if (cursorPosition < 0) {
-			return extractTextDiagram(contents);
-		}
-		String startingString = contents.substring(0, cursorPosition);
-
-		if (startingString.indexOf("@startuml") == -1) {
-			// to optimize, we don't use pattern if @startuml is not found
-			return extractTextDiagram(null);
-		}
-
-		Pattern patternStart = Pattern.compile("(?s)(?m).*^(\\W*@startuml.*)");
-		Matcher matcherStart = patternStart.matcher(startingString);
-		if (matcherStart.find() == false) {
-			// Not found
-			return extractTextDiagram(null);
-		}
-
-		// part1 contains the string starting from startuml up to the cursor
-		// position
-		String part1 = matcherStart.group(1);
-		// part1 = part1.replaceAll("@enduml[ */\\t]+", "@enduml");
-		String part2 = "";
-		if (part1.endsWith("@enduml") == false) {
-			if (part1.contains("@enduml")) {
-				return extractTextDiagram(null);
-			}
-			String endingString = contents.substring(cursorPosition);
-			if (endingString.indexOf("@enduml") == -1) {
-				// to optimize, we don't use pattern if @startuml is not found
-				return extractTextDiagram(null);
-			}
-			Pattern patternEnd = Pattern.compile("(?s)(?m)(.*?^\\W*@enduml)");
-			Matcher matcherEnd = patternEnd.matcher(endingString);
-			if (matcherEnd.find() == false) {
-				// Not found
-				return extractTextDiagram(null);
-			}
-			part2 = matcherEnd.group(1);
-
-			// Remove the * or space in the enduml
-			// part2 = part2.replaceAll("(?s)(?m)^\\W+@enduml", "@enduml");
-		}
-		return extractTextDiagram(part1 + part2); 
-	}
-	
-	private String extractTextDiagram(String diagramText) {
+	public String extractTextDiagram(String diagramText) {
 		textDiagram = diagramText;
 		if (textDiagram == null) {
 			return null;
@@ -240,11 +167,6 @@ public class Diagram {
 		while (matcherNewpage.find()) {
 			imageNumber++;
 		}
-
-//		String partAll = part1 + part2;
-		// System.err.println("partAll="+partAll);
-		// partAll = partAll.replaceAll("(?s)(?m)^( \\* |[ *~\\t/]*)", "");
-//		textDiagram = partAll;
 		return textDiagram;
 	}
 
