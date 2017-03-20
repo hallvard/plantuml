@@ -10,13 +10,14 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
+
 public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 
 	public TextEditorDiagramTextProvider() {
 		setEditorType(ITextEditor.class);
 	}
 
-	public static String startuml = "@startuml", enduml = "@enduml";
 	private boolean startIsRegexp = true, endIsRegexp = true;
 	private boolean includeStart = true, includeEnd = true;
 
@@ -38,14 +39,14 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 		int selectionStart = ((ITextSelection) textEditor.getSelectionProvider().getSelection()).getOffset();
 		FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
 		try {
-			IRegion start = finder.find(selectionStart, startuml, true, true, (! startIsRegexp), startIsRegexp);
-			IRegion end = finder.find(selectionStart, enduml, true, true, (! endIsRegexp), endIsRegexp);
+			IRegion start = finder.find(selectionStart, PlantumlConstants.START_UML, true, true, (! startIsRegexp), startIsRegexp);
+			IRegion end = finder.find(selectionStart, PlantumlConstants.END_UML, true, true, (! endIsRegexp), endIsRegexp);
 			if (start == null || (end != null && end.getOffset() < start.getOffset())) {
 				// use a slightly larger selection offset, in case the cursor is within startuml
-				start = finder.find(Math.min(selectionStart + startuml.length(), document.getLength()), startuml, false, true, (! startIsRegexp), startIsRegexp);
+				start = finder.find(Math.min(selectionStart + PlantumlConstants.START_UML.length(), document.getLength()), PlantumlConstants.START_UML, false, true, (! startIsRegexp), startIsRegexp);
 			}
 			if (start != null) {
-				end = finder.find(start.getOffset(), enduml, true, true, (! endIsRegexp), endIsRegexp);
+				end = finder.find(start.getOffset(), PlantumlConstants.END_UML, true, true, (! endIsRegexp), endIsRegexp);
 				if (end != null) {
 					int startOffset = start.getOffset(), endOffset = end.getOffset() + end.getLength();
 					int startLine = document.getLineOfOffset(startOffset);
@@ -72,7 +73,7 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
 	}
 
 	protected String getDiagramText(StringBuilder lines) {
-		int start = Math.max(lines.indexOf(startuml), 0), end = Math.min(lines.lastIndexOf(enduml) + enduml.length(), lines.length());
+		int start = Math.max(lines.indexOf(PlantumlConstants.START_UML), 0), end = Math.min(lines.lastIndexOf(PlantumlConstants.END_UML) + PlantumlConstants.END_UML.length(), lines.length());
 		String linePrefix = lines.substring(0, start).trim();
 		StringBuilder result = new StringBuilder(lines.length());
 		while (start < end) {

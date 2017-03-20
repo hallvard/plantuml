@@ -8,6 +8,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 
 public abstract class AbstractDiagramTextProvider implements DiagramTextProvider {
 
@@ -37,11 +38,11 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 			String diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection);
 			if (diagramText != null) {
 				diagramText = diagramText.trim();
-				if (! diagramText.startsWith(TextEditorDiagramTextProvider.startuml)) {
-					diagramText = TextEditorDiagramTextProvider.startuml + "\n" + diagramText;
+				if (! diagramText.startsWith(PlantumlConstants.START_UML)) {
+					diagramText = PlantumlConstants.START_UML + "\n" + diagramText;
 				}
-				if (! diagramText.endsWith(TextEditorDiagramTextProvider.enduml)) {
-					diagramText = diagramText + "\n" + TextEditorDiagramTextProvider.enduml;
+				if (! diagramText.endsWith(PlantumlConstants.END_UML)) {
+					diagramText = diagramText + "\n" + PlantumlConstants.END_UML;
 				}
 			}
 			return diagramText;

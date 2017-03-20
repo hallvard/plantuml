@@ -1,22 +1,11 @@
-package net.sourceforge.plantuml.eclipse.model;
+package net.sourceforge.plantuml.eclipse.utils;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.imageio.ImageIO;
-
-import net.sourceforge.plantuml.FileSystem;
-import net.sourceforge.plantuml.OptionFlags;
-import net.sourceforge.plantuml.SourceStringReader;
-import net.sourceforge.plantuml.StringUtils;
-import net.sourceforge.plantuml.eclipse.Activator;
-import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
-import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -25,6 +14,12 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPathEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
+
+import net.sourceforge.plantuml.FileSystem;
+import net.sourceforge.plantuml.OptionFlags;
+import net.sourceforge.plantuml.SourceStringReader;
+import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.eclipse.Activator;
 
 /**
  * Definition of a Diagram Object.
@@ -49,7 +44,7 @@ public class Diagram {
 	/**
 	 * Diagram
 	 */
-	private DiagramImage image;
+	private ImageData imageData;
 
 	/**
 	 * Create a diagram
@@ -80,11 +75,8 @@ public class Diagram {
 	 * @return ImageData of the current textDiagram and imageNumber
 	 */
 	public ImageData getImage(IPath path) throws IOException {
-		setGraphvizPath();
-
 		if (textDiagram != null) {
 			// generate the image for textDiagram and imageNumber
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			if (path != null) {
 				FileSystem.getInstance().setCurrentDir(path.toFile().getAbsoluteFile().getParentFile());
 			} else {
@@ -92,20 +84,7 @@ public class Diagram {
 			}
 			OptionFlags.getInstance().setQuiet(true);
 
-			// image generation.
-			SourceStringReader reader = new SourceStringReader(textDiagram);
-			String desc = reader.generateImage(os, imageNumber);
-			os.close();
-
-			if (StringUtils.isNotEmpty(desc)) {
-				InputStream is = new ByteArrayInputStream(os.toByteArray());
-				BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(os.toByteArray()));
-				ImageData imageData = new ImageData(is);
-				image = new DiagramImage(bufferedImage, imageData);
-
-				// close the input stream
-				is.close();
-			}
+			imageData = getImage(textDiagram, imageNumber);
 		}
 		return getImageData();
 	}
@@ -130,6 +109,10 @@ public class Diagram {
 	 * @return ImageData
 	 */
 	public static ImageData getImage(String textDiagram) {
+		return getImage(textDiagram, 0);
+	}
+
+	private static ImageData getImage(String textDiagram, int imageNum) {
 		setGraphvizPath();
 
 		ImageData imageData = null;
@@ -138,7 +121,7 @@ public class Diagram {
 
 			// image generation.
 			SourceStringReader reader = new SourceStringReader(textDiagram);
-			String desc = reader.generateImage(os, 0);
+			String desc = reader.generateImage(os, imageNum);
 			os.flush();
 			os.close();
 
@@ -174,14 +157,7 @@ public class Diagram {
 	 * @return {@link ImageData}
 	 */
 	public ImageData getImageData() {
-		return (image != null ? image.getImageData() : null);
-	}
-
-	/**
-	 * @return {@link BufferedImage}
-	 */
-	public BufferedImage getBufferedImage() {
-		return image.getBufferedImage();
+		return imageData;
 	}
 
 	/**

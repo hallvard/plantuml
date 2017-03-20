@@ -3,13 +3,14 @@ package net.sourceforge.plantuml.text.test;
 import org.junit.Test;
 
 import net.sourceforge.plantuml.eclipse.test.util.AbstractDiagramTextTest;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.text.TextEditorDiagramTextProvider;
 
 public class TextEditorDiagramTextProviderTest {
 
 	private TextEditorDiagramTextProvider diagramTextProvider = new TextEditorDiagramTextProvider();
 
-	private String toto = TextEditorDiagramTextProvider.startuml + "\ntoto\n" + TextEditorDiagramTextProvider.enduml;
+	private String toto = PlantumlConstants.START_UML + "\ntoto\n" + PlantumlConstants.END_UML;
 	
 	private String getDiagramText(String s) {
 		return diagramTextProvider.getDiagramText(s);
@@ -22,16 +23,16 @@ public class TextEditorDiagramTextProviderTest {
 
 	@Test
 	public void testWithWrongPrefix() {
-		AbstractDiagramTextTest.assertDiagramText(TextEditorDiagramTextProvider.startuml + "\n\n" + TextEditorDiagramTextProvider.enduml, getDiagramText("toto" + toto));
+		AbstractDiagramTextTest.assertDiagramText(PlantumlConstants.START_UML + "\n\n" + PlantumlConstants.END_UML, getDiagramText("toto" + toto));
 	}
 
 	@Test
 	public void testWithSimplePrefix() {
-		AbstractDiagramTextTest.assertDiagramText(toto, getDiagramText(" * " + TextEditorDiagramTextProvider.startuml + "\n * toto\n * " + TextEditorDiagramTextProvider.enduml + "\n"));
+		AbstractDiagramTextTest.assertDiagramText(toto, getDiagramText(" * " + PlantumlConstants.START_UML + "\n * toto\n * " + PlantumlConstants.END_UML + "\n"));
 	}
 	
 	@Test
 	public void testWithMixedWhitespacePrefix() {
-		AbstractDiagramTextTest.assertDiagramText(toto, getDiagramText("  *\t" + TextEditorDiagramTextProvider.startuml + "\n\t*\ttoto\n * " + TextEditorDiagramTextProvider.enduml + "\n"));
+		AbstractDiagramTextTest.assertDiagramText(toto, getDiagramText("  *\t" + PlantumlConstants.START_UML + "\n\t*\ttoto\n * " + PlantumlConstants.END_UML + "\n"));
 	}
 }

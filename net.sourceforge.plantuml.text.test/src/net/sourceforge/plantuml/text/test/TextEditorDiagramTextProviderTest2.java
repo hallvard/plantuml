@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.sourceforge.plantuml.eclipse.test.util.AbstractDiagramTextTest;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.views.PlantUmlView;
 
 public class TextEditorDiagramTextProviderTest2 extends AbstractDiagramTextTest {
@@ -26,6 +27,6 @@ public class TextEditorDiagramTextProviderTest2 extends AbstractDiagramTextTest 
 
 	@Test
 	public void testJavaEditorDiagramFromComment() throws Exception, Exception {
-		testJavaEditorDiagramText("src/net/sourceforge/plantuml/text/test/ClassWithDiagramInComment.java", "@startuml\nclass ClassWithDiagramInComment {\nint field\n}\n@enduml");
+		testJavaEditorDiagramText("src/net/sourceforge/plantuml/text/test/ClassWithDiagramInComment.java", PlantumlConstants.START_UML + "\nclass ClassWithDiagramInComment {\nint field\n}\n" + PlantumlConstants.END_UML);
 	}
 }

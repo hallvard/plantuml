@@ -47,17 +47,6 @@ public class WorkbenchUtil {
     }
 
     /**
-     * open a message box.
-     * 
-     * @param message :
-     *            {@link String}
-     * @author durif_c
-     */
-    public static void messageBox(String message) {
-        messageBox("INFO", message, null);
-    }
-
-    /**
      * open an error box.
      * 
      * @param message :
@@ -66,22 +55,6 @@ public class WorkbenchUtil {
      */
     public static void errorBox(String message) {
         errorBox("ERROR", message, null);
-    }
-
-    /**
-     * open a message box.
-     * 
-     * @param title :
-     *            {@link String}
-     * @param message :
-     *            {@link String}
-     * @param e :
-     *            {@link Throwable}
-     * @author durif_c
-     */
-    public static void messageBox(String title, String message, Throwable e) {
-        MessageDialog.openInformation(getShell(), title, message + "\n"
-                + (e != null ? e.getMessage() : ""));
     }
 
     /**
@@ -102,20 +75,6 @@ public class WorkbenchUtil {
     }
 
     /**
-     * open a message box.
-     * 
-     * @param message :
-     *            {@link String}
-     * @param e :
-     *            {@link Throwable}
-     * @author durif_c
-     */
-    public static void messageBox(String message, Throwable e) {
-        MessageDialog.openInformation(getShell(), "INFO", message + "\n"
-                + (e != null ? e.getMessage() : ""));
-    }
-
-    /**
      * open an error box.
      * 
      * @param message :
@@ -125,8 +84,6 @@ public class WorkbenchUtil {
      * @author durif_c
      */
     public static void errorBox(String message, Throwable e) {
-        MessageDialog.openError(getShell(), "ERROR", message + "\n"
-                + (e != null ? e.getMessage() : ""));
-
+        errorBox("ERROR", message, e);
     }
 }

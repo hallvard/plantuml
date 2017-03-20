@@ -2,6 +2,7 @@ package net.sourceforge.plantuml.eclipse.views;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
@@ -19,7 +20,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
-import net.sourceforge.plantuml.eclipse.utils.PlantUmlUtils;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 
 public abstract class AbstractDiagramSourceView extends ViewPart {
 	
@@ -79,7 +80,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	protected class PinToAction extends Action {
 		public PinToAction() {
 			setToolTipText("Pin view editor");
-			setImageDescriptor(PlantUmlUtils.getImageDescriptor("/icons/pin.png"));
+			setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/pin.png"));
 			setChecked(pinnedTo != null || pinnedToId != null);
 		}
 		@Override

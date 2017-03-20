@@ -2,7 +2,7 @@ package net.sourceforge.plantuml.preferences;
 
 import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.eclipse.Activator;
-import net.sourceforge.plantuml.eclipse.model.Diagram;
+import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 

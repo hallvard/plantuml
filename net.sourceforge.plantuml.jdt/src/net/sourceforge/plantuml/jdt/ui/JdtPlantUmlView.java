@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.views.PlantUmlView;
 import net.sourceforge.plantuml.jdt.JdtDiagramTextProvider;
 import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
@@ -101,7 +102,7 @@ public class JdtPlantUmlView extends PlantUmlView {
 
 	private void updateView() {
 		StringBuilder result = new StringBuilder();
-		result.append("@startuml\n");
+		result.append(PlantumlConstants.START_UML + "\n");
 		Collection<IType> allTypes = new HashSet<IType>();
 		addTypes(this.rootSet, allTypes);
 		System.out.println(allTypes);

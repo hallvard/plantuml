@@ -5,22 +5,22 @@ Bundle-SymbolicName: net.sourceforge.plantuml.eclipse; singleton:=true
 Bundle-Version: 1.1.14.8059
 Bundle-Activator: net.sourceforge.plantuml.eclipse.Activator
 Bundle-Vendor: PlantUML Team
-Require-Bundle: org.eclipse.ui.ide;bundle-version="3.10.2"
+Require-Bundle: org.eclipse.ui.ide;bundle-version="3.10.2",
+ org.eclipse.ui;bundle-version="3.106.1"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: net.sourceforge.plantuml,
- org.eclipse.core.commands,
  org.eclipse.core.runtime,
  org.eclipse.core.runtime.jobs,
  org.eclipse.jface.action,
  org.eclipse.jface.dialogs,
  org.eclipse.jface.preference,
  org.eclipse.jface.resource,
- org.eclipse.jface.text,
  org.eclipse.jface.util,
  org.eclipse.jface.viewers,
  org.eclipse.swt,
+ org.eclipse.swt.dnd,
  org.eclipse.swt.events,
  org.eclipse.swt.graphics,
  org.eclipse.swt.layout,
@@ -28,11 +28,8 @@ Import-Package: net.sourceforge.plantuml,
  org.eclipse.swt.program,
  org.eclipse.swt.widgets,
  org.eclipse.ui,
- org.eclipse.ui.handlers,
  org.eclipse.ui.part,
  org.eclipse.ui.plugin,
- org.eclipse.ui.texteditor,
  org.osgi.framework;version="1.8.0"
-Export-Package: net.sourceforge.plantuml.eclipse.model,
- net.sourceforge.plantuml.eclipse.utils,
+Export-Package: net.sourceforge.plantuml.eclipse.utils,
  net.sourceforge.plantuml.eclipse.views

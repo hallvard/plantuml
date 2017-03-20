@@ -31,6 +31,9 @@ public interface PlantumlConstants {
 	public static final String GRAPHVIZ_PATH_TEXT_LABEL = "If the Graphviz software is not installed in the default directory, set the path in the field below.";
 	public static final String GRAPHVIZ_PATH_GROUP_LABEL = "Graphviz path";
 
-	public static final String AUTHORS_DIAGRAM = "@startuml\nauthor\n@enduml";
-	public static final String TEST_DOT_DIAGRAM = "@startuml\ntestdot\n@enduml";
+	public static final String START_UML = "@startuml";
+	public static final String END_UML = "@enduml";
+
+	public static final String AUTHORS_DIAGRAM = START_UML + "\nauthor\n" + END_UML;
+	public static final String TEST_DOT_DIAGRAM = START_UML + "\ntestdot\n" + END_UML;
 }

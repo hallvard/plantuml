@@ -9,6 +9,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -20,14 +21,13 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 
-import net.sourceforge.plantuml.eclipse.listener.CopyAsciiRightClickListener;
-import net.sourceforge.plantuml.eclipse.listener.CopyRightClickListener;
-import net.sourceforge.plantuml.eclipse.listener.CopySourceRightClickListener;
-import net.sourceforge.plantuml.eclipse.listener.ExportRightClickListener;
-import net.sourceforge.plantuml.eclipse.listener.PrintRightClickListener;
-import net.sourceforge.plantuml.eclipse.model.Diagram;
-import net.sourceforge.plantuml.eclipse.utils.PlantUmlUtils;
+import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
+import net.sourceforge.plantuml.eclipse.views.listener.CopyAsciiRightClickListener;
+import net.sourceforge.plantuml.eclipse.views.listener.CopyRightClickListener;
+import net.sourceforge.plantuml.eclipse.views.listener.CopySourceRightClickListener;
+import net.sourceforge.plantuml.eclipse.views.listener.ExportRightClickListener;
+import net.sourceforge.plantuml.eclipse.views.listener.PrintRightClickListener;
 
 /**
  * 
@@ -84,28 +84,27 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 				menu = new Menu(canvas.getDisplay().getFocusControl());
 				MenuItem item = new MenuItem(menu, SWT.PUSH);
 				item.setText(PlantumlConstants.COPY_MENU);
-				item.addListener(SWT.Selection, new CopyRightClickListener(diagram));
+				item.addListener(SWT.Selection, new CopyRightClickListener(canvas.getDisplay(), diagram));
 
 				item = new MenuItem(menu, SWT.PUSH);
 				item.setText(PlantumlConstants.COPY_SOURCE_MENU);
-				item.addListener(SWT.Selection, new CopySourceRightClickListener(diagram));
+				item.addListener(SWT.Selection, new CopySourceRightClickListener(canvas.getDisplay(), diagram));
 
 				item = new MenuItem(menu, SWT.PUSH);
 				item.setText(PlantumlConstants.COPY_ASCII_MENU);
-				item.addListener(SWT.Selection, new CopyAsciiRightClickListener(diagram));
+				item.addListener(SWT.Selection, new CopyAsciiRightClickListener(canvas.getDisplay(), diagram));
 
 				item = new MenuItem(menu, SWT.PUSH);
 				item.setText(PlantumlConstants.EXPORT_MENU);
 				item.setEnabled(true);
 				item.addListener(SWT.Selection,
-						new ExportRightClickListener(diagram, canvas));
+						new ExportRightClickListener(canvas.getDisplay(), diagram, canvas));
 
 				item = new MenuItem(menu, SWT.PUSH);
 				item.setText(PlantumlConstants.PRINT_MENU);
 				item.setEnabled(true);
 				item.addListener(SWT.Selection,
-						new PrintRightClickListener(diagram, canvas));
-
+						new PrintRightClickListener(canvas.getDisplay(), diagram, canvas));
 				canvas.setMenu(menu);
 			}
 		});
@@ -151,7 +150,7 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 			}
 		};
 		zoomInAction.setToolTipText(PlantumlConstants.ZOOM_IN_BUTTON);
-		zoomInAction.setImageDescriptor(PlantUmlUtils.getImageDescriptor("/icons/ZoomIn16.gif"));
+		zoomInAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/ZoomIn16.gif"));
 
 		zoomOutAction = new Action() {
 			public void run() {
@@ -159,7 +158,7 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 			}
 		};
 		zoomOutAction.setToolTipText(PlantumlConstants.ZOOM_OUT_BUTTON);
-		zoomOutAction.setImageDescriptor(PlantUmlUtils.getImageDescriptor("/icons/ZoomOut16.gif"));
+		zoomOutAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/ZoomOut16.gif"));
 
 		fitCanvasAction = new Action() {
 			public void run() {
@@ -167,7 +166,7 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 			}
 		};
 		fitCanvasAction.setToolTipText(PlantumlConstants.FIT_CANVAS_BUTTON);
-		fitCanvasAction.setImageDescriptor(PlantUmlUtils.getImageDescriptor("/icons/Fit16.gif"));
+		fitCanvasAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/Fit16.gif"));
 
 		showOriginalAction = new Action() {
 			public void run() {
@@ -176,7 +175,7 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 		};
 		showOriginalAction
 				.setToolTipText(PlantumlConstants.SHOW_ORIGINAL_BUTTON);
-		showOriginalAction.setImageDescriptor(PlantUmlUtils.getImageDescriptor("/icons/Original16.gif"));
+		showOriginalAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/Original16.gif"));
 
 		// action to start or stop the generation of the actual diagram
 		toggleAction = 	new Action() {
@@ -187,7 +186,7 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 			}
 		};
 		toggleAction.setToolTipText(PlantumlConstants.TOGGLE_GENERATION_BUTTON);
-		toggleAction.setImageDescriptor(PlantUmlUtils.getImageDescriptor("/icons/link.gif"));
+		toggleAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/link.gif"));
 		toggleAction.setChecked(true);
 	}
 

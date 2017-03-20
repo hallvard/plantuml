@@ -8,5 +8,5 @@ Export-Package: net.sourceforge.plantuml.text
 Import-Package: net.sourceforge.plantuml.eclipse.utils,
  org.eclipse.jface.text,
  org.eclipse.jface.viewers,
- org.eclipse.ui,
- org.eclipse.ui.texteditor
+ org.eclipse.ui
+Require-Bundle: org.eclipse.ui.editors;bundle-version="3.8.200"

@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.sourceforge.plantuml.eclipse.test.util.AbstractDiagramTextTest;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.views.PlantUmlView;
 
 public class JavaEditorDiagramTextProviderTest extends AbstractDiagramTextTest {
@@ -67,7 +68,7 @@ public class JavaEditorDiagramTextProviderTest extends AbstractDiagramTextTest {
 	
 	private void testJavaEditorClassDiagramText(String fullClassName, String... members) throws Exception, Exception {
 		StringBuilder builder = new StringBuilder();
-		builder.append("@startuml\nclass ");
+		builder.append(PlantumlConstants.START_UML + "\nclass ");
 		int pos = fullClassName.lastIndexOf('.');
 		builder.append(pos < 0 ? fullClassName : fullClassName.substring(pos + 1));
 		builder.append(" {\n");
@@ -76,7 +77,7 @@ public class JavaEditorDiagramTextProviderTest extends AbstractDiagramTextTest {
 			builder.append(member);
 			builder.append("\n");
 		}
-		builder.append("}\n@enduml");
+		builder.append("}\n" + PlantumlConstants.END_UML);
 		testJavaEditorDiagramText(fullClassName, builder.toString());
 	}
 	private void testJavaEditorClassDiagramText(Class<?> clazz, String... members) throws Exception, Exception {

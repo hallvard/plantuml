@@ -1,4 +1,4 @@
-package net.sourceforge.plantuml.eclipse.listener;
+package net.sourceforge.plantuml.eclipse.views.listener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -10,8 +10,9 @@ import org.eclipse.swt.printing.PrintDialog;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
-import net.sourceforge.plantuml.eclipse.model.Diagram;
+import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 
 /**
@@ -31,20 +32,14 @@ public class PrintRightClickListener extends RightClickListener {
      * @param diagram Diagram
      * @param container Composite
      */
-    public PrintRightClickListener(Diagram diagram, Composite container) {
-        super();
-        this.diagram = diagram;
+    public PrintRightClickListener(Display display, Diagram diagram, Composite container) {
+        super(display, diagram);
         this.composite = container;
     }
 
-    /**
-     * Printing method management.
-     * 
-     * @author durif_c
-     */
-    protected void run() {
-        final PrintDialog pDialog = new PrintDialog(this.composite.getShell(),
-                SWT.APPLICATION_MODAL);
+    @Override
+    public void run() {
+        final PrintDialog pDialog = new PrintDialog(this.composite.getShell(), SWT.APPLICATION_MODAL);
         pDialog.setText("UML Printing.");
 
         pDialog.setScope(PrinterData.ALL_PAGES);
