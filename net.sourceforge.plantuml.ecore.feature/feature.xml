@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.ecore.feature"
       label="%featureName"
-      version="1.1.15.qualifier"
+      version="1.1.16.qualifier"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
@@ -25,7 +25,7 @@
          id="net.sourceforge.plantuml.ecore"
          download-size="0"
          install-size="0"
-         version="1.1.15.qualifier"
+         version="1.1.16.qualifier"
          unpack="false"/>
 
 </feature>

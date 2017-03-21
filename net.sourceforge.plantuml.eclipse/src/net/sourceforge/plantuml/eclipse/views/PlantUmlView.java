@@ -139,7 +139,6 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 	private IAction zoomInAction, zoomOutAction;
 	private IAction fitCanvasAction;
 	private IAction showOriginalAction;
-	private IAction toggleAction;
 
 	@Override
 	protected void makeActions() {
@@ -176,31 +175,20 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 		showOriginalAction
 				.setToolTipText(PlantumlConstants.SHOW_ORIGINAL_BUTTON);
 		showOriginalAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/Original16.gif"));
-
-		// action to start or stop the generation of the actual diagram
-		toggleAction = 	new Action() {
-			public void run() {
-				if (isChecked()) {
-					updateDiagramText(true, null, null);
-				}
-			}
-		};
-		toggleAction.setToolTipText(PlantumlConstants.TOGGLE_GENERATION_BUTTON);
-		toggleAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/link.gif"));
-		toggleAction.setChecked(true);
 	}
 
 	@Override
 	protected void contributeToActionBars() {
 		IActionBars bars = getViewSite().getActionBars();
 		IToolBarManager toolBarManager = bars.getToolBarManager();
-		toolBarManager.add(toggleAction);
-		toolBarManager.add(new Separator());
 		toolBarManager.add(zoomInAction);
 		toolBarManager.add(zoomOutAction);
 		toolBarManager.add(fitCanvasAction);
 		toolBarManager.add(showOriginalAction);
+		toolBarManager.add(new Separator());
+		toolBarManager.add(spawnAction);
 		toolBarManager.add(pinToAction);
+		toolBarManager.add(toggleAction);
 		super.contributeToActionBars();
 	}
 
@@ -215,42 +203,40 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 	
 	@Override
 	protected void updateDiagramText(final String text) {
-		if (toggleAction != null && toggleAction.isChecked()) {
-			String textDiagram = diagram.extractTextDiagram(text);
-			if (textDiagram != null && (! textDiagram.equals(lastTextDiagram) || lastImageNumber != diagram.getImageNumber())) {
-				final IPath path = Diagram.getActiveEditorPath();
-				Job job = new Job("Generate diagram") {
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							final ImageData imageData = diagram.getImage(path);
-							if (imageData != null && canvas != null && (! canvas.isDisposed())) {
-								canvas.getDisplay().asyncExec(new Runnable() {
-									public void run() {
-										if (! canvas.isDisposed()) {
-											canvas.loadImage(imageData);
-											lastTextDiagram = diagram.getTextDiagram();
-											lastImageNumber = diagram.getImageNumber();
-										}
+		String textDiagram = diagram.extractTextDiagram(text);
+		if (textDiagram != null && (! textDiagram.equals(lastTextDiagram) || lastImageNumber != diagram.getImageNumber())) {
+			final IPath path = Diagram.getActiveEditorPath();
+			Job job = new Job("Generate diagram") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						final ImageData imageData = diagram.getImage(path);
+						if (imageData != null && canvas != null && (! canvas.isDisposed())) {
+							canvas.getDisplay().asyncExec(new Runnable() {
+								public void run() {
+									if (! canvas.isDisposed()) {
+										canvas.loadImage(imageData);
+										lastTextDiagram = diagram.getTextDiagram();
+										lastImageNumber = diagram.getImageNumber();
 									}
-								});
-							}
-						} catch (final Throwable e) {
-							if (canvas != null && (! canvas.isDisposed())) {
-								canvas.getDisplay().asyncExec(new Runnable() {
-									public void run() {
-										if (! canvas.isDisposed()) {
-											canvas.showErrorMessage(e);
-										}
-									}
-								});
-							}
+								}
+							});
 						}
-						return Status.OK_STATUS;
+					} catch (final Throwable e) {
+						if (canvas != null && (! canvas.isDisposed())) {
+							canvas.getDisplay().asyncExec(new Runnable() {
+								public void run() {
+									if (! canvas.isDisposed()) {
+										canvas.showErrorMessage(e);
+									}
+								}
+							});
+						}
 					}
-				};
-				job.schedule();
-			}
+					return Status.OK_STATUS;
+				}
+			};
+			job.schedule();
 		}
 	}
 	

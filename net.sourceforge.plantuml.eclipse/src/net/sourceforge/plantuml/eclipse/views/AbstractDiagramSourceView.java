@@ -1,5 +1,7 @@
 package net.sourceforge.plantuml.eclipse.views;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -12,10 +14,13 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPathEditorInput;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import net.sourceforge.plantuml.eclipse.Activator;
@@ -48,6 +53,10 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		return true;
 	}
 
+	public boolean isLinkingActive() {
+		return isLinkedToActiveEditor() && toggleAction == null || toggleAction.isChecked();
+	}
+
 	@Override
 	public void createPartControl(Composite parent) {
 		if (isLinkedToActiveEditor()) {
@@ -71,34 +80,69 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	protected void contributeToActionBars() {
 	}
 
-	protected IAction pinToAction;
+	protected IAction toggleAction, pinToAction, spawnAction;
 
 	protected void makeActions() {
-		pinToAction = new PinToAction();
-	}
-
-	protected class PinToAction extends Action {
-		public PinToAction() {
-			setToolTipText("Pin view editor");
-			setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/pin.png"));
-			setChecked(pinnedTo != null || pinnedToId != null);
-		}
-		@Override
-		public boolean isEnabled() {
-			return isLinkedToActiveEditor();
-		}
-		public void run() {
-			pinnedTo = (isChecked() ? currentEditor : null);
-			if (pinnedTo == null) {
-				updateDiagramText(true, null, null);
+		pinToAction = new Action() {
+			@Override
+			public boolean isEnabled() {
+				return isLinkedToActiveEditor();
 			}
-		}
+			public void run() {
+				pinnedTo = (isChecked() ? currentEditor : null);
+				if (pinnedTo != null) {
+					setToolTipText("Pinned to " + getEditorInputId(pinnedTo.getEditorInput()));					
+				} else {
+					updateDiagramText(true, null, null);
+					setToolTipText(PlantumlConstants.PIN_TO_BUTTON);
+				}
+			}
+		};
+		pinToAction.setToolTipText(PlantumlConstants.PIN_TO_BUTTON);
+		pinToAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/pin.png"));
+		pinToAction.setChecked(pinnedTo != null || pinnedToId != null);
+
+		spawnAction = new Action() {
+			public void run() {
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				String id = AbstractDiagramSourceView.this.getViewSite().getId();
+				try {
+					page.showView(id, id + "-" + System.currentTimeMillis(), IWorkbenchPage.VIEW_ACTIVATE);
+				} catch (PartInitException e) {
+				}
+			}
+		};
+		spawnAction.setToolTipText(PlantumlConstants.SPAWN_BUTTON);
+		spawnAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/spawn.png"));
+		
+		// action to start or stop the generation of the actual diagram
+		toggleAction = 	new Action() {
+			public void run() {
+				if (isChecked()) {
+					updateDiagramText(true, null, null);
+				}
+			}
+		};
+		toggleAction.setToolTipText(PlantumlConstants.TOGGLE_GENERATION_BUTTON);
+		toggleAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/link.gif"));
+		toggleAction.setChecked(true);
 	}
 	
 	protected String getEditorInputId(IEditorInput editorInput) {
+		if (editorInput instanceof IStorageEditorInput) {
+			IPath path = null;
+			try {
+				path = ((IStorageEditorInput) editorInput).getStorage().getFullPath();
+			} catch (CoreException e) {
+			}
+			if (path != null) {
+				return path.toString();
+			}
+		}
 		if (editorInput instanceof IPathEditorInput) {
 			return ((IPathEditorInput) editorInput).getPath().toString();
-		} else if (editorInput instanceof IURIEditorInput) {
+		}
+		if (editorInput instanceof IURIEditorInput) {
 			return ((IURIEditorInput) editorInput).getURI().toString();
 		}
 		return editorInput.getName();
@@ -141,10 +185,12 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	public abstract String getDiagramText();
 
 	private IPartListener partListener = new IPartListener() {
-		
 		public void partActivated(IWorkbenchPart part) {
-			if (isLinkedToActiveEditor()) {
-				updateDiagramText(false, part, null);
+			updateDiagramText(part);
+		}
+		protected void updateDiagramText(IWorkbenchPart part) {
+			if (isLinkingActive()) {
+				AbstractDiagramSourceView.this.updateDiagramText(false, part, null);
 			}
 		}
 		public void partOpened(IWorkbenchPart part) {}
@@ -165,8 +211,10 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 				diagramChanged(currentEditor, selection);
 			}
 		}
-		public void diagramChanged(IEditorPart editor, ISelection selection) {
-			updateDiagramText(true, editor, selection);
+		protected void diagramChanged(IEditorPart editor, ISelection selection) {
+			if (isLinkingActive()) {
+				updateDiagramText(true, editor, selection);
+			}
 		}
 	}
 	
