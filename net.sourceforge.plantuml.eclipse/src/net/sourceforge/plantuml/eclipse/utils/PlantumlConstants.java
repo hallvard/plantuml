@@ -24,7 +24,7 @@ public interface PlantumlConstants {
 	
 	public static final String PIN_TO_BUTTON = "Pin view to editor";
 	public static final String SPAWN_BUTTON = "Open another view";
-	public static final String TOGGLE_GENERATION_BUTTON = "Activate/deactivate generation of diagrams";
+	public static final String TOGGLE_GENERATION_BUTTON = "Link with editor";
 
 	/**
 	 * Labels for the Preferences
