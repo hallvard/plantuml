@@ -4,6 +4,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.util.Collection;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
@@ -23,9 +25,15 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ScrollBar;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+
+import net.sourceforge.plantuml.eclipse.utils.LinkData;
 
 /**
  * 
@@ -37,7 +45,9 @@ public class SWTImageCanvas extends Canvas {
 	private Image sourceImage; /* original image */
 	private Image screenImage; /* screen image */
 	private AffineTransform transform = new AffineTransform();
-	private Cursor handCursor;
+	private Cursor panCursor;
+	private Cursor linkCursor;
+
 	public SWTImageCanvas(final Composite parent) {
 		this(parent, SWT.NULL);
 	}
@@ -51,8 +61,7 @@ public class SWTImageCanvas extends Canvas {
 	 *            the style of this control.
 	 */
 	public SWTImageCanvas(final Composite parent, int style) {
-		super(parent, style | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL
-				| SWT.NO_BACKGROUND);
+		super(parent, style | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_BACKGROUND);
 
 		addControlListener(new ControlAdapter() { /* resize listener. */
 			public void controlResized(ControlEvent event) {
@@ -86,6 +95,10 @@ public class SWTImageCanvas extends Canvas {
 				case SWT.ARROW_RIGHT:
 					dx = 10;
 					break;
+				case SWT.SHIFT:
+					paintLinks = true;
+					redraw();
+					break;
 				default:
 					break;
 				}
@@ -95,39 +108,75 @@ public class SWTImageCanvas extends Canvas {
 			}
 
 			public void keyReleased(KeyEvent e) {
-				// nothing to do
+				switch (e.keyCode) {
+				case SWT.SHIFT:
+					paintLinks = false;
+					redraw();
+					break;
+				default:
+					break;
+				}
 			}
 		});
 		PanHandler panHandler = new PanHandler();
 		addMouseListener(panHandler);
 		addMouseMoveListener(panHandler);
-		handCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
-		setCursor(handCursor);
+		panCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW);
+		linkCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
+		setCursor(panCursor);
 		initScrollBars();
 	}
 
 	private Point panPoint = null, panDelta = null;
-	
+
 	private class PanHandler implements MouseListener, MouseMoveListener {
 
 		public void mouseDoubleClick(MouseEvent e) {
 		}
 
 		public void mouseDown(MouseEvent e) {
-			panPoint = new Point(e.x, e.y);
-			panDelta = new Point(0, 0);
+			LinkData link = findLink(e.x, e.y);
+			if (link == null) {
+				panPoint = new Point(e.x, e.y);
+				panDelta = new Point(0, 0);
+			}
 		}
 
 		public void mouseMove(MouseEvent e) {
 			if (panPoint != null && panDelta != null) {
-				panDelta.x += panPoint.x - e.x; panDelta.y += panPoint.y - e.y;
-				panPoint.x = e.x; panPoint.y = e.y;
+				panDelta.x += panPoint.x - e.x;
+				panDelta.y += panPoint.y - e.y;
+				panPoint.x = e.x;
+				panPoint.y = e.y;
 				pan(panDelta);
+			} else {
+				LinkData link = findLink(e.x, e.y);
+				Cursor cursor = (link != null && link.href != null ? linkCursor : panCursor);
+				if (cursor != getCursor()) {
+					setCursor(cursor);
+				}
+				String toolTip = (link != null && (link.title != null || link.href != null) ? (link.title != null ? link.title : link.href) : null), oldToolTip = getToolTipText();
+				if (toolTip != oldToolTip && (toolTip == null || (! toolTip.equals(oldToolTip)))) {
+					setToolTipText(toolTip);
+				}
 			}
 		}
-		
+
 		public void mouseUp(MouseEvent e) {
-			panPoint = null;
+			if (panPoint != null && panDelta != null) {
+				panPoint = null;
+			} else {
+				LinkData link = findLink(e.x, e.y);
+				if (link != null && link.href != null) {
+					openLink(link);
+				}
+			}
+		}
+	}
+
+	private void dispose(Resource resource) {
+		if (resource != null && !resource.isDisposed()) {
+			resource.dispose();
 		}
 	}
 	
@@ -135,23 +184,17 @@ public class SWTImageCanvas extends Canvas {
 	 * Dispose the garbage here
 	 */
 	public void dispose() {
-		if (sourceImage != null && !sourceImage.isDisposed()) {
-			sourceImage.dispose();
-		}
-		if (screenImage != null && !screenImage.isDisposed()) {
-			screenImage.dispose();
-		}
-		if (handCursor != null && !handCursor.isDisposed()) {
-			handCursor.dispose();
-		}
+		dispose(sourceImage);
+		dispose(screenImage);
+		dispose(panCursor);
+		dispose(linkCursor);
 	}
 
 	/* Paint function */
 	private void paint(GC gc) {
 		Rectangle clientRect = getClientArea(); // Canvas' painting area
 		if (sourceImage != null) {
-			Rectangle imageRect = inverseTransformRect(transform,
-					clientRect);
+			Rectangle imageRect = inverseTransformRect(transform, clientRect);
 			int gap = 2; // find a better start point to render
 			imageRect.x -= gap;
 			imageRect.y -= gap;
@@ -161,23 +204,66 @@ public class SWTImageCanvas extends Canvas {
 			Rectangle imageBound = sourceImage.getBounds();
 			imageRect = imageRect.intersection(imageBound);
 			Rectangle destRect = transformRect(transform, imageRect);
-
-			if (screenImage != null)
+			if (screenImage != null) {
 				screenImage.dispose();
-			screenImage = new Image(getDisplay(), clientRect.width,
-					clientRect.height);
+			}
+			screenImage = new Image(getDisplay(), clientRect.width, clientRect.height);
 			GC newGC = new GC(screenImage);
 			newGC.setClipping(clientRect);
-			newGC.drawImage(sourceImage, imageRect.x, imageRect.y,
-					imageRect.width, imageRect.height, destRect.x, destRect.y,
-					destRect.width, destRect.height);
+			newGC.drawImage(sourceImage, imageRect.x, imageRect.y, imageRect.width, imageRect.height, destRect.x,
+					destRect.y, destRect.width, destRect.height);
 			newGC.dispose();
-
 			gc.drawImage(screenImage, 0, 0);
+			if (paintLinks) {
+				paintLinks(gc);
+			}
 		} else {
 			gc.setClipping(clientRect);
 			gc.fillRectangle(clientRect);
 			initScrollBars();
+		}
+	}
+
+	private LinkData findLink(int canvasX, int canvasY) {
+		if (links != null && links.size() > 0) {
+			Point pt = null;
+			for (LinkData link : links) {
+				if (link.rect != null) {
+					if (pt == null) {
+//						pt = new Point(canvasX, canvasY);
+						pt = inverseTransformPoint(transform, new Point(canvasX, canvasY));
+					}
+//					Rectangle destRect = transformRect(transform, link.rect);
+					Rectangle destRect = link.rect;
+					if (destRect.contains(pt)) {
+						return link;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public void openLink(LinkData link) {
+		try {
+			URL url = new URL(link.href);
+			IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
+			IWebBrowser browser = (paintLinks ? browserSupport.createBrowser(IWorkbenchBrowserSupport.AS_VIEW, "plantuml", "PlantUML Browser", null) : browserSupport.getExternalBrowser());
+			browser.openURL(url);
+		} catch (Exception e) {
+		}
+	}
+
+	private boolean paintLinks = false;
+	
+	private void paintLinks(GC gc) {
+		if (links != null) {
+			for (LinkData link : links) {
+				if (link.rect != null) {
+					Rectangle destRect = transformRect(transform, link.rect);
+					gc.drawRectangle(destRect);
+				}
+			}
 		}
 	}
 
@@ -227,8 +313,8 @@ public class SWTImageCanvas extends Canvas {
 
 	/**
 	 * Synchronize the scrollbar with the image. If the transform is out of
-	 * range, it will correct it. This function considers only following factors :<b>
-	 * transform, image size, client area</b>.
+	 * range, it will correct it. This function considers only following factors
+	 * :<b> transform, image size, client area</b>.
 	 */
 	public void syncScrollBars() {
 		if (sourceImage == null) {
@@ -264,7 +350,8 @@ public class SWTImageCanvas extends Canvas {
 		ScrollBar vertical = getVerticalBar();
 		vertical.setIncrement((int) (getClientArea().height / 20));
 		vertical.setPageIncrement((int) (getClientArea().height));
-		if (imageBound.height * sy > ch) { /* image is higher than client area */
+		if (imageBound.height
+				* sy > ch) { /* image is higher than client area */
 			vertical.setMaximum((int) (imageBound.height * sy));
 			vertical.setEnabled(true);
 			if (((int) -ty) > vertical.getMaximum() - ch)
@@ -298,6 +385,12 @@ public class SWTImageCanvas extends Canvas {
 		}
 		sourceImage = new Image(getDisplay(), imageData);
 		showOriginal();
+	}
+	
+	private Collection<LinkData> links;
+	
+	public void setLinks(Collection<LinkData> links) {
+		this.links = links;
 	}
 
 	public void showErrorMessage(Throwable t) {
@@ -365,10 +458,10 @@ public class SWTImageCanvas extends Canvas {
 	 * Show the image with the original size
 	 */
 	public void showOriginal() {
-		if (sourceImage == null)
-			return;
-		transform = new AffineTransform();
-		syncScrollBars();
+		if (sourceImage != null) {
+			transform = new AffineTransform();
+			syncScrollBars();
+		}
 	}
 
 	/**
@@ -385,8 +478,7 @@ public class SWTImageCanvas extends Canvas {
 	 * @param af
 	 *            original affinetransform
 	 */
-	public void centerZoom(double dx, double dy, double scale,
-			AffineTransform af) {
+	public void centerZoom(double dx, double dy, double scale, AffineTransform af) {
 		af.preConcatenate(AffineTransform.getTranslateInstance(-dx, -dy));
 		af.preConcatenate(AffineTransform.getScaleInstance(scale, scale));
 		af.preConcatenate(AffineTransform.getTranslateInstance(dx, dy));
@@ -419,17 +511,24 @@ public class SWTImageCanvas extends Canvas {
 		double dy = ((double) h) / 2;
 		centerZoom(dx, dy, ZOOMOUT_RATE, transform);
 	}
-	
+
 	/**
 	 * Adjusts the scrollbars to give the effect of panning
-	 * @param dx the relative adjustment in x-direction
-	 * @param dy the relative adjustment in y-direction
+	 * 
+	 * @param dx
+	 *            the relative adjustment in x-direction
+	 * @param dy
+	 *            the relative adjustment in y-direction
 	 */
 	private void pan(Point p) {
 		Rectangle bounds = screenImage.getBounds();
 		ScrollBar hBar = getHorizontalBar(), vBar = getVerticalBar();
-		Rectangle barBounds = bounds; // new Rectangle(hBar.getMinimum(), vBar.getMinimum(), hBar.getMaximum() - hBar.getMinimum(), vBar.getMaximum() - vBar.getMinimum());
-		
+		Rectangle barBounds = bounds; // new Rectangle(hBar.getMinimum(),
+										// vBar.getMinimum(), hBar.getMaximum()
+										// - hBar.getMinimum(),
+										// vBar.getMaximum() -
+										// vBar.getMinimum());
+
 		int sdx = p.x * barBounds.width / bounds.width;
 		int sdy = p.y * barBounds.height / bounds.height;
 		// report back the remaining delta
@@ -438,16 +537,16 @@ public class SWTImageCanvas extends Canvas {
 
 		if (sdx != 0) {
 			hBar.setSelection(hBar.getSelection() + sdx);
-			scrollHorizontally(hBar);					
+			scrollHorizontally(hBar);
 		}
 		if (sdy != 0) {
 			vBar.setSelection(vBar.getSelection() + sdy);
 			scrollVertically(vBar);
 		}
 	}
-	
+
 	// helper methods
-	
+
 	/**
 	 * Given an arbitrary rectangle, get the rectangle with the given transform.
 	 * The result rectangle is positive width and positive height.
@@ -480,8 +579,7 @@ public class SWTImageCanvas extends Canvas {
 	 *            source rectangle
 	 * @return rectangle after transform with positive width and height
 	 */
-	private static Rectangle inverseTransformRect(AffineTransform af,
-			Rectangle src) {
+	private static Rectangle inverseTransformRect(AffineTransform af, Rectangle src) {
 		Rectangle dest = new Rectangle(0, 0, 0, 0);
 		src = absRect(src);
 		Point p1 = new Point(src.x, src.y);
@@ -505,8 +603,7 @@ public class SWTImageCanvas extends Canvas {
 	private static Point transformPoint(AffineTransform af, Point pt) {
 		Point2D src = new Point2D.Float(pt.x, pt.y);
 		Point2D dest = af.transform(src, null);
-		Point point = new Point((int) Math.floor(dest.getX()), (int) Math
-				.floor(dest.getY()));
+		Point point = new Point((int) Math.floor(dest.getX()), (int) Math.floor(dest.getY()));
 		return point;
 	}
 
@@ -523,8 +620,7 @@ public class SWTImageCanvas extends Canvas {
 		Point2D src = new Point2D.Float(pt.x, pt.y);
 		try {
 			Point2D dest = af.inverseTransform(src, null);
-			return new Point((int) Math.floor(dest.getX()), (int) Math
-					.floor(dest.getY()));
+			return new Point((int) Math.floor(dest.getX()), (int) Math.floor(dest.getY()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Point(0, 0);

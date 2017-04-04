@@ -216,6 +216,7 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 								public void run() {
 									if (! canvas.isDisposed()) {
 										canvas.loadImage(imageData);
+										canvas.setLinks(diagram.getLinks());
 										lastTextDiagram = diagram.getTextDiagram();
 										lastImageNumber = diagram.getImageNumber();
 									}
