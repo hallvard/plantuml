@@ -35,7 +35,7 @@ Use http://files.idi.ntnu.no/publish/plantuml/repository/ as the update site URL
 
 The version number is a bit special, since it includes the version of the included plantuml.jar
 
-## [1.1.16.8059](../../releases/tag/v1.1.16.8059)
+## [1.1.16.8059](../../releases/tag/1.1.16.8059)
 
 ## [1.1.14.8059](../../releases/tag/v1.1.14.8059)
 
