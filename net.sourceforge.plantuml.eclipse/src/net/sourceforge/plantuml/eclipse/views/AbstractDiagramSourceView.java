@@ -6,6 +6,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -238,7 +239,12 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 				handleEditorChange(activeEditor);
 				if (activeEditor != null) {
 					if (selection == null) {
-						selection = activeEditor.getSite().getSelectionProvider().getSelection();
+						ISelectionProvider selectionProvider = activeEditor.getSite().getSelectionProvider();
+						if(selectionProvider == null) {
+							updateDiagramText(null);
+							return;
+						}
+						selection = selectionProvider.getSelection();
 					}
 					if (updateDiagramText(activeEditor, selection)) {
 						return;
