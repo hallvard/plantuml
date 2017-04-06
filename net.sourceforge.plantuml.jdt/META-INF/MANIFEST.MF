@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: PlantUML Java Support
 Bundle-SymbolicName: net.sourceforge.plantuml.jdt;singleton:=true
-Bundle-Version: 1.1.16.qualifier
+Bundle-Version: 1.1.17.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: net.sourceforge.plantuml.eclipse;bundle-version="1.1.13",
  org.eclipse.ui;bundle-version="3.106.1"

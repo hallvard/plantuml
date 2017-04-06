@@ -33,12 +33,20 @@ Use http://files.idi.ntnu.no/publish/plantuml/repository/ as the update site URL
 
 # Releases
 
-The version number is a bit special, since it includes the version of the included plantuml.jar
+Notable features in recent releases, details are found in [https://github.com/hallvard/plantuml/releases].
+Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
+
+## [1.1.17.8059](../../releases/tag/1.1.17.8059)
+- Hyperlinks that are just paths or use the platform scheme are opened in the default Eclipse editor ([issue #25](../../issues/25)). Class diagrams generated from Java code utilize this feature by including navigatable path links.
 
 ## [1.1.16.8059](../../releases/tag/1.1.16.8059)
+- Open several PlantUML views and pin them to a specific resource ([issue #21](../../issues/21)). Please comment on the behaviour.
+- Support for hyperlinks, see http://plantuml.com/link ([issue #24](../../issues/24))
 
 ## [1.1.14.8059](../../releases/tag/v1.1.14.8059)
+- Experimental support for generating a class diagram for a set of Java files ([issue #18](../../issues/18)). Open the PlantUML Project Class Diagram and drag a Java project or package into the view (suggest improvements by adding a comment to the issue).
+- support for generating class diagram for .class files shown in the Class File editor
 
 ## 1.1.13.8054
-- includes EPL-ed version of plantuml.jar
+- Includes EPL-ed version of plantuml.jar
 - Fix for [issue #13](../../issues/13) - recompute diagram on activate not just broughtOnTop
