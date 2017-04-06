@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMember;
@@ -11,6 +13,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
+import org.eclipse.jdt.internal.debug.ui.actions.OpenTypeAction;
 import org.eclipse.jface.viewers.ISelection;
 
 import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
@@ -23,7 +26,7 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 	}
 
 	public void generateForType(IType type, StringBuilder result, Collection<IType> allTypes) {
-		generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS, allTypes);
+		generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_CLASS_LINKS , allTypes);
 	}
 
 	private boolean isInTypes(String typeName, Collection<IType> allTypes) {
@@ -51,11 +54,22 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 		return multiAssociationClassNames.contains(className);
 	}
 	
+	protected String getLink(IType type) {
+		IResource resource = type.getResource();
+		if (resource != null) {
+			return resource.getFullPath().toString();
+		}
+		return null;
+	}
+	
 	public void generateForType(IType type, StringBuilder result, int genFlags, Collection<IType> allTypes) {
 		Collection<Assoc> associations = (includes(genFlags, GEN_ASSOCIATIONS) ? new ArrayList<Assoc>() : null);
 		result.append(getClassType(type));
 		result.append(" ");
 		appendNameDeclaration(type.getElementName(), result);
+		if (includes(genFlags, GEN_CLASS_LINKS)) {
+			appendLink(getLink(type), false, result);
+		}
 		result.append(" {\n");
 		try {
 			StringBuilder body = new StringBuilder();
@@ -133,29 +147,39 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 		result.append("}\n");
 		if (includes(genFlags, GEN_ASSOCIATIONS) && associations != null) {
 			for (Assoc assoc : associations) {
-				generateRelatedType(type, assoc.targetName, ASSOCIATION_RELATION, null, result, null, assoc.name, assoc.multi ? "*" : "1");
+				generateRelatedType(type, assoc.targetName, ASSOCIATION_RELATION, null, result, genFlags, null, assoc.name, assoc.multi ? "*" : "1");
 			}
 		}
 		try {
 			if (includes(genFlags, GEN_EXTENDS)) {
-				generateRelatedType(type, getTypeName(type.getSuperclassTypeSignature()), EXTENDS_RELATION, (type.isInterface() ? INTERFACE_TYPE : null), result);
+				generateRelatedType(type, getTypeName(type.getSuperclassTypeSignature()), EXTENDS_RELATION, (type.isInterface() ? INTERFACE_TYPE : null), result, genFlags);
 			}
 			if (includes(genFlags, GEN_IMPLEMENTS)) {
 				String[] interfaceSignatures = type.getSuperInterfaceTypeSignatures();
 				for (int i = 0; i < interfaceSignatures.length; i++) {
-					generateRelatedType(type, getTypeName(interfaceSignatures[i]), (type.isInterface() ? EXTENDS_RELATION : IMPLEMENTS_RELATION), INTERFACE_TYPE, result);
+					generateRelatedType(type, getTypeName(interfaceSignatures[i]), (type.isInterface() ? EXTENDS_RELATION : IMPLEMENTS_RELATION), INTERFACE_TYPE, result, genFlags);
 				}
 			}
 		} catch (JavaModelException e) {
 		}
 	}
 
-	private void generateRelatedType(IType type, String className, String relation, String classType, StringBuilder result) {
-		generateRelatedType(type, className, relation, classType, result, null, null, null);
+	private void generateRelatedType(IType type, String className, String relation, String classType, StringBuilder result, int genFlags) {
+		generateRelatedType(type, className, relation, classType, result, genFlags, null, null, null);
 	}
-	private void generateRelatedType(IType type, String className, String relation, String classType, StringBuilder result, String startLabel, String middleLabel, String endLabel) {
+	private void generateRelatedType(IType type, String className, String relation, String classType, StringBuilder result, int genFlags, String startLabel, String middleLabel, String endLabel) {
 		if (className != null && (! className.equals("Object"))) {
-			appendClassStart(null, (classType != null ? classType : CLASS_TYPE), className, result);
+			String link = null;
+			if (includes(genFlags, GEN_CLASS_LINKS)) {
+				try {
+					IType relatedType = OpenTypeAction.findTypeInWorkspace(className, false);
+					if (relatedType != null) {
+						link = getLink(relatedType);
+					}
+				} catch (CoreException e) {
+				}
+			}
+			appendClassStart(null, (classType != null ? classType : CLASS_TYPE), className, link, result);
 			appendClassEnd(result);
 			if (relation == ASSOCIATION_RELATION) {
 				appendRelation(type.getElementName(), false, startLabel, relation, null, className, false, endLabel, middleLabel, result);				

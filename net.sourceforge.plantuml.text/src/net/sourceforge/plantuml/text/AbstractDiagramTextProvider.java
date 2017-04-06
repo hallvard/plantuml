@@ -54,7 +54,7 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 
 	//
 
-	public static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_EXTENDS = 1<<2, GEN_IMPLEMENTS = 1<<3, GEN_ASSOCIATIONS = 1<<4;
+	public static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_EXTENDS = 1<<2, GEN_IMPLEMENTS = 1<<3, GEN_ASSOCIATIONS = 1<<4, GEN_CLASS_LINKS = 1<<5;
 	
 	protected static boolean includes(int flags, int... bits) {
 		for (int i = 0; i < bits.length; i++) {
@@ -115,11 +115,11 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		}
 	}
 	
-	protected void appendClassStart(String modifiers, String classType, String name, StringBuilder buffer) {
-		appendClassStart(modifiers, classType, name, null, buffer);
+	protected void appendClassStart(String modifiers, String classType, String name, String link, StringBuilder buffer) {
+		appendClassStart(modifiers, classType, name, link, null, buffer);
 	}
 
-	protected void appendClassStart(String modifiers, String classType, String name, String color, StringBuilder buffer) {
+	protected void appendClassStart(String modifiers, String classType, String name, String link, String color, StringBuilder buffer) {
 		if (modifiers != null) {
 			buffer.append(modifiers);
 			buffer.append(" ");
@@ -127,11 +127,26 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		buffer.append(classType);
 		buffer.append(" ");
 		appendNameDeclaration(name, buffer);
+		appendLink(link, false, buffer);
 		if (color != null) {
 			buffer.append(" #");
 			buffer.append(color);
 		}
 		buffer.append(" {\n");
+	}
+
+	protected void appendLink(String link, boolean isMember, StringBuilder result) {
+		if (link != null) {
+			result.append(" [[");
+			if (isMember) {
+				result.append("[");				
+			}
+			result.append(link);
+			if (isMember) {
+				result.append("]");				
+			}
+			result.append("]]");
+		}
 	}
 
 	protected void appendClassEnd(StringBuilder buffer) {

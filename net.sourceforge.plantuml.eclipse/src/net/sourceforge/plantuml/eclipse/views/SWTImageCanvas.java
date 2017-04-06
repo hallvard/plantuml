@@ -4,7 +4,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.eclipse.swt.SWT;
@@ -29,11 +30,11 @@ import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ScrollBar;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.browser.IWebBrowser;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
+import net.sourceforge.plantuml.eclipse.utils.DefaultLinkOpener;
+import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.LinkData;
+import net.sourceforge.plantuml.eclipse.utils.PlatformLinkOpener;
 
 /**
  * 
@@ -46,7 +47,7 @@ public class SWTImageCanvas extends Canvas {
 	private Image screenImage; /* screen image */
 	private AffineTransform transform = new AffineTransform();
 	private Cursor panCursor;
-	private Cursor linkCursor;
+	private Cursor linkCursor, unsupportedLinkCursor;
 
 	public SWTImageCanvas(final Composite parent) {
 		this(parent, SWT.NULL);
@@ -123,6 +124,7 @@ public class SWTImageCanvas extends Canvas {
 		addMouseMoveListener(panHandler);
 		panCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW);
 		linkCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
+		unsupportedLinkCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_NO);
 		setCursor(panCursor);
 		initScrollBars();
 	}
@@ -151,7 +153,7 @@ public class SWTImageCanvas extends Canvas {
 				pan(panDelta);
 			} else {
 				LinkData link = findLink(e.x, e.y);
-				Cursor cursor = (link != null && link.href != null ? linkCursor : panCursor);
+				Cursor cursor = (link != null && link.href != null ? (findBestLinkOpener(link, ILinkOpener.DEFAULT_SUPPORT) != null ? linkCursor : unsupportedLinkCursor) : panCursor);
 				if (cursor != getCursor()) {
 					setCursor(cursor);
 				}
@@ -188,6 +190,7 @@ public class SWTImageCanvas extends Canvas {
 		dispose(screenImage);
 		dispose(panCursor);
 		dispose(linkCursor);
+		dispose(unsupportedLinkCursor);
 	}
 
 	/* Paint function */
@@ -244,13 +247,37 @@ public class SWTImageCanvas extends Canvas {
 		return null;
 	}
 	
+	// should provide extension point
+	private Collection<ILinkOpener> linkOpeners = new ArrayList<ILinkOpener>(Arrays.asList(
+			new DefaultLinkOpener(),
+			new PlatformLinkOpener()
+	));
+	
+	public void addLinkOpener(ILinkOpener linkOpener) {
+		linkOpeners.add(linkOpener);
+	}
+
+	public void removeLinkOpener(ILinkOpener linkOpener) {
+		linkOpeners.remove(linkOpener);
+	}
+
+	public ILinkOpener findBestLinkOpener(LinkData link, int minSupport) {
+		int bestSupport = ILinkOpener.NO_SUPPORT;
+		ILinkOpener best = null;
+		for (ILinkOpener linkOpener : linkOpeners) {
+			int support = linkOpener.supportsLink(link);
+			if (support >= bestSupport) {
+				bestSupport = support;
+				best = linkOpener;
+			}
+		}
+		return (bestSupport >= minSupport ? best : null);
+	}
+	
 	public void openLink(LinkData link) {
-		try {
-			URL url = new URL(link.href);
-			IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
-			IWebBrowser browser = (paintLinks ? browserSupport.createBrowser(IWorkbenchBrowserSupport.AS_VIEW, "plantuml", "PlantUML Browser", null) : browserSupport.getExternalBrowser());
-			browser.openURL(url);
-		} catch (Exception e) {
+		ILinkOpener best = findBestLinkOpener(link, ILinkOpener.DEFAULT_SUPPORT);
+		if (best != null) {
+			best.openLink(link);
 		}
 	}
 

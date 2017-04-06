@@ -1,5 +1,12 @@
 package net.sourceforge.plantuml.jdt.ui;
 
+import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_ASSOCIATIONS;
+import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_EXTENDS;
+import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_IMPLEMENTS;
+import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_MEMBERS;
+import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_MODIFIERS;
+import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_CLASS_LINKS;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,8 +34,6 @@ import org.eclipse.ui.IEditorPart;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.views.PlantUmlView;
 import net.sourceforge.plantuml.jdt.JdtDiagramTextProvider;
-import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
-import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.*;
 
 public class JdtPlantUmlView extends PlantUmlView {
 
@@ -107,7 +112,7 @@ public class JdtPlantUmlView extends PlantUmlView {
 		addTypes(this.rootSet, allTypes);
 		System.out.println(allTypes);
 		for (IType type : allTypes) {
-			jdtDiagramTextProvider.generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS, allTypes);
+			jdtDiagramTextProvider.generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_LINKS, allTypes);
 		}
 		result.append("\n@enduml");
 		System.out.println(result);
