@@ -76,9 +76,8 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 			if (includes(genFlags, GEN_MEMBERS)) {
 				for (IField field : type.getFields()) {
 					Assoc assoc = null;
-
 					String fieldSignature = field.getTypeSignature(), fieldTypeName = getTypeName(fieldSignature);
-					if (includes(genFlags, GEN_ASSOCIATIONS)) {
+					if (includes(genFlags, GEN_ASSOCIATIONS) && (! Flags.isStatic(field.getFlags()))) {
 						if (fieldTypeName.endsWith("[]")) {
 							assoc = new Assoc();
 							assoc.targetName = fieldTypeName.substring(0, fieldTypeName.length() - 2);
