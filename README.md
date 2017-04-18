@@ -33,8 +33,12 @@ Use http://files.idi.ntnu.no/publish/plantuml/repository/ as the update site URL
 
 # Releases
 
-Notable features in recent releases, details are found in [https://github.com/hallvard/plantuml/releases].
+Notable features in recent releases, details are found in [../../releases].
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
+
+## [1.1.18.8059](../../releases/tag/1.1.18.8059)
+- Support links to fully qualified java classes with java scheme links ([issue #31](../../issues/31)), e.g. java:java.lang.String. Add a fragment to navigate to a specific member. Default diagram generation from java source now uses this kind of link.
+- Fix problem with enums in project class diagrams, where associations where generated for the literals ([issue #30](../../issues/30)).
 
 ## [1.1.17.8059](../../releases/tag/1.1.17.8059)
 - Hyperlinks that are just paths or use the platform scheme are opened in the default Eclipse editor ([issue #25](../../issues/25)). Class diagrams generated from Java code utilize this feature by including navigatable path links.
