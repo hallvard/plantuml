@@ -17,7 +17,7 @@ public class PlatformLinkOpener extends EditorLinkOpener {
 			}
 			IPath path = getPath(link);
 			// should perhaps check if the file exists and has a default editor
-			if (path.getFileExtension() != null) {
+			if (path != null && path.getFileExtension() != null) {
 				return DEFAULT_SUPPORT;
 			}
 		} catch (URISyntaxException e) {
@@ -29,13 +29,16 @@ public class PlatformLinkOpener extends EditorLinkOpener {
 	protected IPath getPath(LinkData link) {
 		try {
 			URI uri = new URI(link.href);
-			IPath path = new Path(uri.getPath());
-			if ("platform".equals(uri.getScheme())) {
-				path = path.removeFirstSegments(1);
+			if (uri.getPath() != null) {
+				IPath path = new Path(uri.getPath());
+				if ("platform".equals(uri.getScheme())) {
+					path = path.removeFirstSegments(1);
+				}
+				return path;
 			}
-			return path;
 		} catch (URISyntaxException e) {
 			return new Path(link.href);
 		}
+		return null;
 	}
 }

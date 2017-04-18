@@ -263,7 +263,11 @@ public class SWTImageCanvas extends Canvas {
 		int bestSupport = ILinkOpener.NO_SUPPORT;
 		ILinkOpener best = null;
 		for (ILinkOpener linkOpener : linkOpeners) {
-			int support = linkOpener.supportsLink(link);
+			int support = ILinkOpener.NO_SUPPORT;
+			try {
+				support = linkOpener.supportsLink(link);
+			} catch (Exception e) {
+			}
 			if (support >= bestSupport) {
 				bestSupport = support;
 				best = linkOpener;
