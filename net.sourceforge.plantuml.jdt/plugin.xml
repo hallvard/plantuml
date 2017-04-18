@@ -19,5 +19,11 @@
             id="net.sourceforge.plantuml.jdt.ui.JdtPlantUmlView">
       </view>
    </extension>
+   <extension
+         point="net.sourceforge.plantuml.eclipse.linkOpener">
+      <linkOpener
+            linkOpenerClass="net.sourceforge.plantuml.jdt.JavaLinkOpener">
+      </linkOpener>
+   </extension>
 
 </plugin>

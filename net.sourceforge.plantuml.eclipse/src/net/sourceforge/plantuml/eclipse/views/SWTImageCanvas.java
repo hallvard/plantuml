@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ScrollBar;
 
+import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.utils.DefaultLinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.LinkData;
@@ -248,10 +249,7 @@ public class SWTImageCanvas extends Canvas {
 	}
 	
 	// should provide extension point
-	private Collection<ILinkOpener> linkOpeners = new ArrayList<ILinkOpener>(Arrays.asList(
-			new DefaultLinkOpener(),
-			new PlatformLinkOpener()
-	));
+	private Collection<ILinkOpener> linkOpeners = new ArrayList<ILinkOpener>(Arrays.asList(Activator.getDefault().getLinkOpeners()));
 	
 	public void addLinkOpener(ILinkOpener linkOpener) {
 		linkOpeners.add(linkOpener);
