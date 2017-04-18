@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.corext.refactoring.JDTRefactoringDescriptorComment;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,8 @@ import org.junit.Test;
 import net.sourceforge.plantuml.eclipse.test.util.AbstractDiagramTextTest;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.views.PlantUmlView;
+import net.sourceforge.plantuml.jdt.JavaLinkOpener;
+import net.sourceforge.plantuml.jdt.JdtDiagramTextProvider;
 
 public class JavaEditorDiagramTextProviderTest extends AbstractDiagramTextTest {
 
@@ -71,6 +74,10 @@ public class JavaEditorDiagramTextProviderTest extends AbstractDiagramTextTest {
 		builder.append(PlantumlConstants.START_UML + "\nclass ");
 		int pos = fullClassName.lastIndexOf('.');
 		builder.append(pos < 0 ? fullClassName : fullClassName.substring(pos + 1));
+		builder.append(" [[");
+		builder.append(JavaLinkOpener.JAVA_LINK_PREFIX);
+		builder.append(fullClassName);
+		builder.append("]]");
 		builder.append(" {\n");
 		for (String member : members) {
 			builder.append("\t");

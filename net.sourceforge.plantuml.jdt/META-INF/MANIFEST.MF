@@ -18,3 +18,4 @@ Import-Package: net.sourceforge.plantuml.eclipse.utils,
  org.eclipse.jface.viewers,
  org.eclipse.ui,
  org.eclipse.ui.texteditor
+Export-Package: net.sourceforge.plantuml.jdt

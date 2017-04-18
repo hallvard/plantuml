@@ -58,7 +58,7 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 	
 	protected String getLink(IType type) {
 		if (useJavaLinks) {
-			return "java:/" + type.getFullyQualifiedName();
+			return JavaLinkOpener.JAVA_LINK_PREFIX + type.getFullyQualifiedName();
 		} else {
 			IResource resource = type.getResource();
 			if (resource != null) {

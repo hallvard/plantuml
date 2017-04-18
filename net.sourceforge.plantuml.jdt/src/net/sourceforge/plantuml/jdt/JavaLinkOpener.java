@@ -1,7 +1,6 @@
 package net.sourceforge.plantuml.jdt;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
@@ -14,15 +13,13 @@ import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.LinkData;
 
 public class JavaLinkOpener implements ILinkOpener {
+
+	public final static String JAVA_LINK_PREFIX = "java:/";
 	
 	@Override
 	public int supportsLink(LinkData link) {
-		try {
-			URI uri = new URI(link.href);
-			if ("java".equals(uri.getScheme()) && getJavaElement(link) != null) {
-				return CUSTOM_SUPPORT;
-			}
-		} catch (URISyntaxException e) {
+		if (link.href.startsWith(JAVA_LINK_PREFIX) && getJavaElement(link) != null) {
+			return CUSTOM_SUPPORT;
 		}
 		return NO_SUPPORT;
 	}
