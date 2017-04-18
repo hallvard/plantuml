@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
+import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -103,5 +104,34 @@ public class Activator extends AbstractUIPlugin {
 			}
 		}
 
+	}
+	
+	private List<ILinkOpener> linkOpeners;
+	
+	public ILinkOpener[] getLinkOpeners() {
+		if (linkOpeners == null) {
+			linkOpeners = new ArrayList<ILinkOpener>();
+			processLinkOpeners();
+		}
+		return linkOpeners.toArray(new ILinkOpener[linkOpeners.size()]);
+	}
+	
+	private void processLinkOpeners() {
+		IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint(getBundle().getSymbolicName() + ".linkOpener");
+		IExtension[] extensions = ep.getExtensions();
+		for (int i = 0; i < extensions.length; i++) {
+			for (IConfigurationElement ces: extensions[i].getConfigurationElements()) {
+				String name = ces.getName();
+				if ("linkOpener".equals(name)) {
+					try {
+						ILinkOpener linkOpener = (ILinkOpener) ces.createExecutableExtension("linkOpenerClass");
+						linkOpeners.add(linkOpener);
+					} catch (InvalidRegistryObjectException e) {
+					} catch (CoreException e) {
+					}
+				}
+			}
+		}
+		
 	}
 }

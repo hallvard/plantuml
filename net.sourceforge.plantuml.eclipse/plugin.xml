@@ -51,5 +51,15 @@
    </extension>
 
    <extension-point id="diagramTextProvider" name="Diagram Text Provider" schema="schema/diagramTextProvider.exsd"/>
+   <extension-point id="linkOpener" name="Link Opener" schema="schema/linkOpener.exsd"/>
+   <extension
+         point="net.sourceforge.plantuml.eclipse.linkOpener">
+      <linkOpener
+            linkOpenerClass="net.sourceforge.plantuml.eclipse.utils.DefaultLinkOpener">
+      </linkOpener>
+      <linkOpener
+            linkOpenerClass="net.sourceforge.plantuml.eclipse.utils.PlatformLinkOpener">
+      </linkOpener>
+   </extension>
 
 </plugin>
