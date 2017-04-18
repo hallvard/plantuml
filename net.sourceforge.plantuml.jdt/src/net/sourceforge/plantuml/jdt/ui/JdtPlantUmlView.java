@@ -110,14 +110,11 @@ public class JdtPlantUmlView extends PlantUmlView {
 		result.append(PlantumlConstants.START_UML + "\n");
 		Collection<IType> allTypes = new HashSet<IType>();
 		addTypes(this.rootSet, allTypes);
-		System.out.println(allTypes);
 		for (IType type : allTypes) {
 			jdtDiagramTextProvider.generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_LINKS, allTypes);
 		}
 		result.append("\n@enduml");
-		System.out.println(result);
-		String diagramText = result.toString();
-		updateDiagramText(diagramText);
+		updateDiagramText(result.toString());
 	}
 
 	private void addTypes(Iterable<IJavaElement> elements, Collection<IType> result) {

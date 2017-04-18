@@ -76,25 +76,8 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 			if (includes(genFlags, GEN_MEMBERS)) {
 				for (IField field : type.getFields()) {
 					Assoc assoc = null;
-					String fieldSignature = field.getTypeSignature(), fieldTypeName = getTypeName(fieldSignature);
-					if (includes(genFlags, GEN_ASSOCIATIONS) && (! Flags.isStatic(field.getFlags()))) {
-						if (fieldTypeName.endsWith("[]")) {
-							assoc = new Assoc();
-							assoc.targetName = fieldTypeName.substring(0, fieldTypeName.length() - 2);
-							assoc.multi = true;
-						} else {
-							String[][] resolvedFieldType = type.resolveType(fieldTypeName);
-							String[] typeArguments = Signature.getTypeArguments(fieldSignature);
-							if (resolvedFieldType != null && resolvedFieldType.length > 0 && typeArguments != null && typeArguments.length == 1 && isMultiAssociationClassName(Signature.toQualifiedName(resolvedFieldType[0]))) {
-								assoc = new Assoc();
-								assoc.multi = true;
-								assoc.targetName = getTypeName(typeArguments[0]);
-							} else {
-								assoc = new Assoc();
-								assoc.multi = false;
-								assoc.targetName = fieldTypeName;								
-							}
-						}
+					if (includes(genFlags, GEN_ASSOCIATIONS) && acceptAssociation(type, field)) {
+						assoc = generateAssociation(type, field);
 					}
 					if (assoc != null && isInTypes(assoc.targetName, allTypes) && associations != null) {
 						assoc.name = field.getElementName();
@@ -105,7 +88,7 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 							if (includes(genFlags, GEN_MODIFIERS) && (! Flags.isInterface(type.getFlags()))) {
 								body.append(getMemberModifiers(field));
 							}
-							body.append(fieldTypeName);
+							body.append(getTypeName(field.getTypeSignature()));
 							body.append(" ");
 						}
 						body.append(field.getElementName());
@@ -161,6 +144,38 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 			}
 		} catch (JavaModelException e) {
 		}
+	}
+	
+	protected boolean acceptAssociation(IType type, IField field) {
+		try {
+			int flags = field.getFlags();
+			return (! Flags.isEnum(flags)) && (! Flags.isStatic(flags));
+		} catch (JavaModelException e) {
+		}
+		return false;
+	}
+
+	protected Assoc generateAssociation(IType type, IField field) throws JavaModelException {
+		String fieldSignature = field.getTypeSignature(), fieldTypeName = getTypeName(fieldSignature);
+		Assoc assoc = null;
+		if (fieldTypeName.endsWith("[]")) {
+			assoc = new Assoc();
+			assoc.targetName = fieldTypeName.substring(0, fieldTypeName.length() - 2);
+			assoc.multi = true;
+		} else {
+			String[][] resolvedFieldType = type.resolveType(fieldTypeName);
+			String[] typeArguments = Signature.getTypeArguments(fieldSignature);
+			if (resolvedFieldType != null && resolvedFieldType.length > 0 && typeArguments != null && typeArguments.length == 1 && isMultiAssociationClassName(Signature.toQualifiedName(resolvedFieldType[0]))) {
+				assoc = new Assoc();
+				assoc.multi = true;
+				assoc.targetName = getTypeName(typeArguments[0]);
+			} else {
+				assoc = new Assoc();
+				assoc.multi = false;
+				assoc.targetName = fieldTypeName;								
+			}
+		}
+		return assoc;
 	}
 
 	private void generateRelatedType(IType type, String className, String relation, String classType, StringBuilder result, int genFlags) {
