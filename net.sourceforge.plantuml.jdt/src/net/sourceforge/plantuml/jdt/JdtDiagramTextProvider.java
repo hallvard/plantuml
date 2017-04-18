@@ -26,7 +26,7 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 	}
 
 	public void generateForType(IType type, StringBuilder result, Collection<IType> allTypes) {
-		generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_CLASS_LINKS , allTypes);
+		generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_LINKS , allTypes);
 	}
 
 	private boolean isInTypes(String typeName, Collection<IType> allTypes) {
@@ -54,14 +54,20 @@ public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider
 		return multiAssociationClassNames.contains(className);
 	}
 	
+	private boolean useJavaLinks = true;
+	
 	protected String getLink(IType type) {
-		IResource resource = type.getResource();
-		if (resource != null) {
-			return resource.getFullPath().toString();
+		if (useJavaLinks) {
+			return "java:/" + type.getFullyQualifiedName();
+		} else {
+			IResource resource = type.getResource();
+			if (resource != null) {
+				return resource.getFullPath().toString();
+			}
 		}
 		return null;
 	}
-	
+
 	public void generateForType(IType type, StringBuilder result, int genFlags, Collection<IType> allTypes) {
 		Collection<Assoc> associations = (includes(genFlags, GEN_ASSOCIATIONS) ? new ArrayList<Assoc>() : null);
 		result.append(getClassType(type));

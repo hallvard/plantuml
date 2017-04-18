@@ -1,5 +1,8 @@
 package net.sourceforge.plantuml.jdt;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -29,8 +32,9 @@ public class JavaEditorDiagramTextProvider extends JdtDiagramTextProvider {
 			try {
 				compUnit.open(new NullProgressMonitor());
 				StringBuilder result = new StringBuilder();
-				for (IType type: compUnit.getTypes()) {
-					generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS, null);
+				Collection<IType> allTypes = Arrays.asList(compUnit.getTypes());
+				for (IType type: allTypes) {
+					generateForType(type, result, allTypes);
 				}
 				return (result.length() > 0 ? result.toString() : null);
 			} catch (JavaModelException e) {
