@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Plantuml library plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.lib
-Bundle-Version: 1.1.17.8059
+Bundle-Version: 1.1.18.8059
 Bundle-Vendor: PlantUML Team
 Bundle-ClassPath: lib/plantuml-epl-8059.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
