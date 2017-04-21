@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>net.sourceforge.plantuml.aggregator</artifactId>
+	<version>1.1.18-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	  <parent>
+	  	<groupId>net.sourceforge.plantuml</groupId>
+	  	<artifactId>net.sourceforge.plantuml.parent</artifactId>
+	  	<version>1.1.18-SNAPSHOT</version>
+	  	<relativePath>../net.sourceforge.plantuml.parent</relativePath>
+	  </parent>
+
+	<modules>
+		<module>../net.sourceforge.plantuml.target</module>
+		<module>../../bundles/net.sourceforge.plantuml.lib</module>
+		
+		<module>../../bundles/net.sourceforge.plantuml.eclipse</module>
+		<module>../../tests/net.sourceforge.plantuml.eclipse.tests</module>
+		<module>../../bundles/net.sourceforge.plantuml.text</module>
+		<module>../../tests/net.sourceforge.plantuml.text.tests</module>
+		<module>../../bundles/net.sourceforge.plantuml.jdt</module>
+		<module>../../tests/net.sourceforge.plantuml.jdt.tests</module>
+		<module>../../features/net.sourceforge.plantuml.feature</module>
+
+		<module>../../bundles/net.sourceforge.plantuml.ecore</module>
+		<!-- 
+		<module>../bundles/net.sourceforge.plantuml.xcore</module>
+		 -->
+		<module>../../features/net.sourceforge.plantuml.ecore.feature</module>
+
+		<module>../net.sourceforge.plantuml.repository</module>
+	</modules>
+</project>

@@ -1,0 +1,159 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.sourceforge.plantuml</groupId>
+	<artifactId>net.sourceforge.plantuml.parent</artifactId>
+	<version>1.1.18-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>net.sourceforge.plantuml maven parent project</name>
+
+	<properties>
+		<tycho-maven-plugin-version>1.0.0</tycho-maven-plugin-version>
+		<tycho-version>1.0.0</tycho-version>
+		<xtextVersion>2.9.1</xtextVersion>
+		<xtend-maven-plugin-version>2.9.1</xtend-maven-plugin-version>
+		
+		<skip-ui-tests>true</skip-ui-tests>
+
+	</properties>
+
+	<repositories>
+		<!-- <repository> <id>eclipse-luna</id> <layout>p2</layout> <url>http://download.eclipse.org/releases/luna</url> 
+			</repository> <repository> <id>eclipse-mars</id> <layout>p2</layout> <url>http://download.eclipse.org/releases/mars</url> 
+			</repository> -->
+	</repositories>
+
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<resources>
+     		<resource>
+       			<directory>src</directory>
+     		</resource>
+   		</resources>
+		<testSourceDirectory>src</testSourceDirectory>
+		<testResources>
+     		<testResource>
+       			<directory>src</directory>
+     		</testResource>
+   		</testResources>
+
+	    <pluginManagement>
+	      <plugins>
+	        <plugin>
+	          <groupId>org.eclipse.tycho</groupId>
+	          <artifactId>tycho-versions-plugin</artifactId>
+	          <version>${tycho-version}</version>
+	        </plugin>
+		    <plugin>
+		       <groupId>org.eclipse.tycho</groupId>
+		       <artifactId>tycho-p2-repository-plugin</artifactId>
+		       <version>${tycho-maven-plugin-version}</version>
+		       <configuration>
+		          <includeAllDependencies>false</includeAllDependencies>
+		          <createArtifactRepository>true</createArtifactRepository>
+		          <compress>true</compress>
+		          <xzCompress>true</xzCompress>
+		       </configuration>
+		    </plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+				</configuration>
+			</plugin>
+	      </plugins>
+	    </pluginManagement>
+		<plugins>
+	      <plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<pomDependencies>consider</pomDependencies>
+					<executionEnvironment>JavaSE-1.7</executionEnvironment>
+					<target>
+						<artifact>
+							<groupId>net.sourceforge.plantuml</groupId>
+							<artifactId>net.sourceforge.plantuml.target</artifactId>
+							<version>1.1.14-SNAPSHOT</version>
+						</artifact>
+					</target>
+					<filters>
+						<filter>
+							<type>eclipse-plugin</type>
+							<id>org.eclipse.jdt.core</id>
+							<restrictTo>
+								<version>3.10.2.v20150120-1634</version>
+							</restrictTo>
+						</filter>
+					</filters>
+					<!-- 
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+					 -->
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-maven-plugin-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<modules>
+		<module>../net.sourceforge.plantuml.target</module>
+		<module>../net.sourceforge.plantuml.lib</module>
+		<module>../net.sourceforge.plantuml.lib.feature</module>
+		<module>../net.sourceforge.plantuml.eclipse</module>
+		<module>../net.sourceforge.plantuml.eclipse.test</module>
+		<module>../net.sourceforge.plantuml.text</module>
+		<module>../net.sourceforge.plantuml.text.test</module>
+		<module>../net.sourceforge.plantuml.jdt</module>
+		<module>../net.sourceforge.plantuml.jdt.test</module>
+		<module>../net.sourceforge.plantuml.feature</module>
+
+		<module>../net.sourceforge.plantuml.ecore</module>
+		<!-- 
+		<module>../net.sourceforge.plantuml.xcore</module>
+		 -->
+		<module>../net.sourceforge.plantuml.ecore.feature</module>
+		<module>../net.sourceforge.plantuml.repository</module>
+	</modules>
+</project>
