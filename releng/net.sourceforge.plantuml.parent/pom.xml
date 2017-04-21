@@ -25,19 +25,6 @@
 
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<resources>
-     		<resource>
-       			<directory>src</directory>
-     		</resource>
-   		</resources>
-		<testSourceDirectory>src</testSourceDirectory>
-		<testResources>
-     		<testResource>
-       			<directory>src</directory>
-     		</testResource>
-   		</testResources>
-
 	    <pluginManagement>
 	      <plugins>
 	        <plugin>
@@ -45,31 +32,6 @@
 	          <artifactId>tycho-versions-plugin</artifactId>
 	          <version>${tycho-version}</version>
 	        </plugin>
-		    <plugin>
-		       <groupId>org.eclipse.tycho</groupId>
-		       <artifactId>tycho-p2-repository-plugin</artifactId>
-		       <version>${tycho-maven-plugin-version}</version>
-		       <configuration>
-		          <includeAllDependencies>false</includeAllDependencies>
-		          <createArtifactRepository>true</createArtifactRepository>
-		          <compress>true</compress>
-		          <xzCompress>true</xzCompress>
-		       </configuration>
-		    </plugin>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-				</configuration>
-			</plugin>
 	      </plugins>
 	    </pluginManagement>
 		<plugins>
@@ -136,24 +98,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<modules>
-		<module>../net.sourceforge.plantuml.target</module>
-		<module>../net.sourceforge.plantuml.lib</module>
-		<module>../net.sourceforge.plantuml.lib.feature</module>
-		<module>../net.sourceforge.plantuml.eclipse</module>
-		<module>../net.sourceforge.plantuml.eclipse.test</module>
-		<module>../net.sourceforge.plantuml.text</module>
-		<module>../net.sourceforge.plantuml.text.test</module>
-		<module>../net.sourceforge.plantuml.jdt</module>
-		<module>../net.sourceforge.plantuml.jdt.test</module>
-		<module>../net.sourceforge.plantuml.feature</module>
-
-		<module>../net.sourceforge.plantuml.ecore</module>
-		<!-- 
-		<module>../net.sourceforge.plantuml.xcore</module>
-		 -->
-		<module>../net.sourceforge.plantuml.ecore.feature</module>
-		<module>../net.sourceforge.plantuml.repository</module>
-	</modules>
 </project>

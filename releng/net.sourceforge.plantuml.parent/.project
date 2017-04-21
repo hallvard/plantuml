@@ -18,7 +18,12 @@
 		<link>
 			<name>README.md</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/README.md</locationURI>
+			<locationURI>PARENT-2-PARENT_LOC/README.md</locationURI>
+		</link>
+		<link>
+			<name>travis.yml</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/.travis.yml</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
