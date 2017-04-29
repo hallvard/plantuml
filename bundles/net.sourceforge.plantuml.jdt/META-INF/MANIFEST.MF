@@ -5,6 +5,7 @@ Bundle-SymbolicName: net.sourceforge.plantuml.jdt;singleton:=true
 Bundle-Version: 1.1.18.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: net.sourceforge.plantuml.eclipse;bundle-version="1.1.13",
+ net.sourceforge.plantuml.eclipse.imagecontrol;bundle-version="1.1.18",
  org.eclipse.ui;bundle-version="3.106.1"
 Import-Package: net.sourceforge.plantuml.eclipse.utils,
  net.sourceforge.plantuml.text,

@@ -1,13 +1,13 @@
-package net.sourceforge.plantuml.eclipse.views;
+package net.sourceforge.plantuml.eclipse.imagecontrol;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -29,26 +29,23 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ScrollBar;
-
-import net.sourceforge.plantuml.eclipse.Activator;
-import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
-import net.sourceforge.plantuml.eclipse.utils.LinkData;
 
 /**
  * 
  */
-public class SWTImageCanvas extends Canvas {
-	/* zooming rates in x and y direction are equal. */
-	final float ZOOMIN_RATE = 1.1f; /* zoomin rate */
-	final float ZOOMOUT_RATE = 0.9f; /* zoomout rate */
+public class ImageControl extends Canvas {
 	private Image sourceImage; /* original image */
 	private Image screenImage; /* screen image */
 	private AffineTransform transform = new AffineTransform();
 	private Cursor panCursor;
 	private Cursor linkCursor, unsupportedLinkCursor;
 
-	public SWTImageCanvas(final Composite parent) {
+	public ImageControl(final Composite parent) {
 		this(parent, SWT.NULL);
 	}
 
@@ -60,8 +57,10 @@ public class SWTImageCanvas extends Canvas {
 	 * @param style
 	 *            the style of this control.
 	 */
-	public SWTImageCanvas(final Composite parent, int style) {
+	public ImageControl(final Composite parent, int style) {
 		super(parent, style | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_BACKGROUND);
+
+		addMenuDetectListener();
 
 		addControlListener(new ControlAdapter() { /* resize listener. */
 			public void controlResized(ControlEvent event) {
@@ -246,9 +245,8 @@ public class SWTImageCanvas extends Canvas {
 		return null;
 	}
 	
-	// should provide extension point
-	private Collection<ILinkOpener> linkOpeners = new ArrayList<ILinkOpener>(Arrays.asList(Activator.getDefault().getLinkOpeners()));
-	
+	private Collection<ILinkOpener> linkOpeners = new ArrayList<ILinkOpener>();
+
 	public void addLinkOpener(ILinkOpener linkOpener) {
 		linkOpeners.add(linkOpener);
 	}
@@ -411,7 +409,7 @@ public class SWTImageCanvas extends Canvas {
 			sourceImage = null;
 		}
 		sourceImage = new Image(getDisplay(), imageData);
-		showOriginal();
+		resetZoom();
 	}
 	
 	private Collection<LinkData> links;
@@ -448,7 +446,7 @@ public class SWTImageCanvas extends Canvas {
 			gc.drawString(line, 10, i * lineHeight);
 		}
 		gc.dispose();
-		showOriginal();
+		resetZoom();
 	}
 
 	/**
@@ -468,9 +466,10 @@ public class SWTImageCanvas extends Canvas {
 	/**
 	 * Fit the image onto the canvas
 	 */
-	public void fitCanvas() {
-		if (sourceImage == null)
+	public void fitZoom() {
+		if (sourceImage == null) {
 			return;
+		}
 		Rectangle imageBound = sourceImage.getBounds();
 		Rectangle destRect = getClientArea();
 		double sx = (double) destRect.width / (double) imageBound.width;
@@ -478,13 +477,14 @@ public class SWTImageCanvas extends Canvas {
 		double s = Math.min(sx, sy);
 		double dx = 0.5 * destRect.width;
 		double dy = 0.5 * destRect.height;
-		centerZoom(dx, dy, s, new AffineTransform());
+		transform = new AffineTransform();
+		zoom(dx, dy, s);
 	}
 
 	/**
 	 * Show the image with the original size
 	 */
-	public void showOriginal() {
+	public void resetZoom() {
 		if (sourceImage != null) {
 			transform = new AffineTransform();
 			syncScrollBars();
@@ -505,38 +505,25 @@ public class SWTImageCanvas extends Canvas {
 	 * @param af
 	 *            original affinetransform
 	 */
-	public void centerZoom(double dx, double dy, double scale, AffineTransform af) {
-		af.preConcatenate(AffineTransform.getTranslateInstance(-dx, -dy));
-		af.preConcatenate(AffineTransform.getScaleInstance(scale, scale));
-		af.preConcatenate(AffineTransform.getTranslateInstance(dx, dy));
-		transform = af;
+	public void zoom(double dx, double dy, double scale) {
+		if (sourceImage == null) {
+			return;
+		}
+		transform.preConcatenate(AffineTransform.getTranslateInstance(-dx, -dy));
+		transform.preConcatenate(AffineTransform.getScaleInstance(scale, scale));
+		transform.preConcatenate(AffineTransform.getTranslateInstance(dx, dy));
 		syncScrollBars();
 	}
 
 	/**
 	 * Zoom in around the center of client Area.
 	 */
-	public void zoomIn() {
-		if (sourceImage == null)
-			return;
+	public void zoomCentered(double scale) {
 		Rectangle rect = getClientArea();
 		int w = rect.width, h = rect.height;
 		double dx = ((double) w) / 2;
 		double dy = ((double) h) / 2;
-		centerZoom(dx, dy, ZOOMIN_RATE, transform);
-	}
-
-	/**
-	 * Zoom out around the center of client Area.
-	 */
-	public void zoomOut() {
-		if (sourceImage == null)
-			return;
-		Rectangle rect = getClientArea();
-		int w = rect.width, h = rect.height;
-		double dx = ((double) w) / 2;
-		double dy = ((double) h) / 2;
-		centerZoom(dx, dy, ZOOMOUT_RATE, transform);
+		zoom(dx, dy, scale);
 	}
 
 	/**
@@ -679,5 +666,40 @@ public class SWTImageCanvas extends Canvas {
 			dest.height = src.height;
 		}
 		return dest;
+	}
+
+	//
+
+	private Collection<Action> menuActions = new ArrayList<Action>();
+
+	public void addMenuAction(Action action) {
+		menuActions.add(action);
+	}
+
+	public void removeMenuAction(Action action) {
+		menuActions.remove(action);
+	}
+	
+	protected void addMenuDetectListener() {
+		addListener(SWT.MenuDetect, new Listener() {
+			public void handleEvent(Event event) {
+				Menu menu = getMenu();
+				if (menu != null) {
+					menu.dispose();
+				}
+				menu = new Menu(getDisplay().getFocusControl());
+				for (final Action action : menuActions) {
+					MenuItem item = new MenuItem(menu, SWT.PUSH);
+					item.setText(action.getText());
+					item.addListener(SWT.Selection, new Listener() {
+						@Override
+						public void handleEvent(Event event) {
+							action.run();
+						}
+					});					
+				}
+				setMenu(menu);
+			}
+		});
 	}
 }

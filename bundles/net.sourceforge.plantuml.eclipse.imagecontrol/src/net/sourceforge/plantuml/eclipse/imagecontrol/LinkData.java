@@ -1,4 +1,4 @@
-package net.sourceforge.plantuml.eclipse.utils;
+package net.sourceforge.plantuml.eclipse.imagecontrol;
 
 import org.eclipse.swt.graphics.Rectangle;
 

@@ -1,4 +1,4 @@
-package net.sourceforge.plantuml.eclipse.views.listener;
+package net.sourceforge.plantuml.eclipse.views.actions;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +15,7 @@ import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.eclipse.utils.Diagram;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 
 /**Manage the Export of the diagram.
@@ -22,7 +23,7 @@ import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
  * @author durif_c
  * 
  */
-public class ExportRightClickListener extends RightClickListener {
+public class ExportAction extends DiagramAction {
 
 	private final Composite composite;
 
@@ -31,9 +32,10 @@ public class ExportRightClickListener extends RightClickListener {
      * @param diagram Diagram
      * @param container Composite
      */
-    public ExportRightClickListener(Display display, Diagram diagram, Composite container) {
+    public ExportAction(Display display, Diagram diagram, Composite container) {
 		super(display, diagram);
         this.composite = container;
+        setText(PlantumlConstants.EXPORT_MENU);
     }
 
     @Override

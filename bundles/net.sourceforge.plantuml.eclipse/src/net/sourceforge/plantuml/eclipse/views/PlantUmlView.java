@@ -5,7 +5,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -17,17 +16,19 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 
+import net.sourceforge.plantuml.eclipse.imagecontrol.ImageControl;
+import net.sourceforge.plantuml.eclipse.imagecontrol.ZoomAction;
+import net.sourceforge.plantuml.eclipse.imagecontrol.ZoomFitAction;
+import net.sourceforge.plantuml.eclipse.imagecontrol.ZoomResetAction;
 import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
-import net.sourceforge.plantuml.eclipse.views.listener.CopyAsciiRightClickListener;
-import net.sourceforge.plantuml.eclipse.views.listener.CopyRightClickListener;
-import net.sourceforge.plantuml.eclipse.views.listener.CopySourceRightClickListener;
-import net.sourceforge.plantuml.eclipse.views.listener.ExportRightClickListener;
-import net.sourceforge.plantuml.eclipse.views.listener.PrintRightClickListener;
+import net.sourceforge.plantuml.eclipse.views.actions.CopyAction;
+import net.sourceforge.plantuml.eclipse.views.actions.CopyAsciiAction;
+import net.sourceforge.plantuml.eclipse.views.actions.CopySourceAction;
+import net.sourceforge.plantuml.eclipse.views.actions.ExportAction;
+import net.sourceforge.plantuml.eclipse.views.actions.PrintAction;
 
 /**
  * 
@@ -48,7 +49,7 @@ import net.sourceforge.plantuml.eclipse.views.listener.PrintRightClickListener;
 
 public class PlantUmlView extends AbstractDiagramSourceView {
 
-	private SWTImageCanvas canvas;
+	private ImageControl canvas;
 
 	/**
 	 * The default constructor.
@@ -64,7 +65,7 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 	 */
 	public void createPartControl(Composite parent) {
 		// Display of the view.
-		canvas = new SWTImageCanvas(parent);
+		canvas = new ImageControl(parent);
 		diagram = new Diagram();
 		addListeners();
 
@@ -75,47 +76,16 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 	 * add listeners to the canvas
 	 */
 	private void addListeners() {
-		canvas.addListener(SWT.MenuDetect, new Listener() {
-			public void handleEvent(Event event) {
-				Menu menu = canvas.getMenu();
-				if (menu != null) {
-					menu.dispose();
-				}
-				menu = new Menu(canvas.getDisplay().getFocusControl());
-				MenuItem item = new MenuItem(menu, SWT.PUSH);
-				item.setText(PlantumlConstants.COPY_MENU);
-				item.addListener(SWT.Selection, new CopyRightClickListener(canvas.getDisplay(), diagram));
-
-				item = new MenuItem(menu, SWT.PUSH);
-				item.setText(PlantumlConstants.COPY_SOURCE_MENU);
-				item.addListener(SWT.Selection, new CopySourceRightClickListener(canvas.getDisplay(), diagram));
-
-				item = new MenuItem(menu, SWT.PUSH);
-				item.setText(PlantumlConstants.COPY_ASCII_MENU);
-				item.addListener(SWT.Selection, new CopyAsciiRightClickListener(canvas.getDisplay(), diagram));
-
-				item = new MenuItem(menu, SWT.PUSH);
-				item.setText(PlantumlConstants.EXPORT_MENU);
-				item.setEnabled(true);
-				item.addListener(SWT.Selection,
-						new ExportRightClickListener(canvas.getDisplay(), diagram, canvas));
-
-				item = new MenuItem(menu, SWT.PUSH);
-				item.setText(PlantumlConstants.PRINT_MENU);
-				item.setEnabled(true);
-				item.addListener(SWT.Selection,
-						new PrintRightClickListener(canvas.getDisplay(), diagram, canvas));
-				canvas.setMenu(menu);
-			}
-		});
+		addCanvasActions();
 
 		canvas.addListener(SWT.MouseWheel, new Listener() {
 			public void handleEvent(Event e) {
 				if ((e.stateMask & SWT.CTRL) != 0) {
-					if (e.count > 0)
-						canvas.zoomIn();
-					else
-						canvas.zoomOut();
+					if (e.count > 0) {
+						zoomInAction.run();
+					} else {
+						zoomOutAction.run();
+					}
 				}
 			}
 		});
@@ -124,10 +94,10 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 			public void keyPressed(KeyEvent e) {
 				switch (e.character) {
 				case '+':
-					canvas.zoomIn();
+					zoomInAction.run();
 					break;
 				case '-':
-					canvas.zoomOut();
+					zoomOutAction.run();
 					break;
 				default:
 					break;
@@ -136,44 +106,38 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 		});
 	}
 
+	private void addCanvasActions() {
+		canvas.addMenuAction(new CopyAction(canvas.getDisplay(), diagram));
+		canvas.addMenuAction(new CopySourceAction(canvas.getDisplay(), diagram));
+		canvas.addMenuAction(new CopyAsciiAction(canvas.getDisplay(), diagram));
+		canvas.addMenuAction(new ExportAction(canvas.getDisplay(), diagram, canvas));
+		canvas.addMenuAction(new PrintAction(canvas.getDisplay(), diagram, canvas));
+	}
+
 	private IAction zoomInAction, zoomOutAction;
 	private IAction fitCanvasAction;
 	private IAction showOriginalAction;
 
+	private final float ZOOMIN_RATE = 1.1f; /* zoomin rate */
+	private final float ZOOMOUT_RATE = 0.9f; /* zoomout rate */
+
 	@Override
 	protected void makeActions() {
 		super.makeActions();
-		zoomInAction = new Action() {
-			public void run() {
-				canvas.zoomIn();
-			}
-		};
+		zoomInAction = new ZoomAction(canvas, ZOOMIN_RATE);
 		zoomInAction.setToolTipText(PlantumlConstants.ZOOM_IN_BUTTON);
 		zoomInAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/ZoomIn16.gif"));
 
-		zoomOutAction = new Action() {
-			public void run() {
-				canvas.zoomOut();
-			}
-		};
+		zoomOutAction = new ZoomAction(canvas, ZOOMOUT_RATE);
 		zoomOutAction.setToolTipText(PlantumlConstants.ZOOM_OUT_BUTTON);
 		zoomOutAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/ZoomOut16.gif"));
 
-		fitCanvasAction = new Action() {
-			public void run() {
-				canvas.fitCanvas();
-			}
-		};
+		fitCanvasAction = new ZoomFitAction(canvas);
 		fitCanvasAction.setToolTipText(PlantumlConstants.FIT_CANVAS_BUTTON);
 		fitCanvasAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/Fit16.gif"));
 
-		showOriginalAction = new Action() {
-			public void run() {
-				canvas.showOriginal();
-			}
-		};
-		showOriginalAction
-				.setToolTipText(PlantumlConstants.SHOW_ORIGINAL_BUTTON);
+		showOriginalAction = new ZoomResetAction(canvas);
+		showOriginalAction.setToolTipText(PlantumlConstants.SHOW_ORIGINAL_BUTTON);
 		showOriginalAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/Original16.gif"));
 	}
 

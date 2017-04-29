@@ -3,8 +3,8 @@ package net.sourceforge.plantuml.eclipse;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
-import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;

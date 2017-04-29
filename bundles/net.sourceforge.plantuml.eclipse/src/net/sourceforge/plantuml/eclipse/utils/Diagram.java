@@ -25,6 +25,7 @@ import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.eclipse.Activator;
+import net.sourceforge.plantuml.eclipse.imagecontrol.LinkData;
 
 /**
  * Definition of a Diagram Object.
@@ -265,5 +266,4 @@ public class Diagram {
 	public int getImageNumber() {
 		return imageNumber;
 	}
-
 }

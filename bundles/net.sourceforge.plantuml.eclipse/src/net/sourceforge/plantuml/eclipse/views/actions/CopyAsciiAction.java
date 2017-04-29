@@ -1,4 +1,4 @@
-package net.sourceforge.plantuml.eclipse.views.listener;
+package net.sourceforge.plantuml.eclipse.views.actions;
 
 import java.io.ByteArrayOutputStream;
 
@@ -11,6 +11,7 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.eclipse.utils.Diagram;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 
 /**
  * Manage the copy action.
@@ -18,15 +19,16 @@ import net.sourceforge.plantuml.eclipse.utils.Diagram;
  * @author durif_c
  * 
  */
-public class CopyAsciiRightClickListener extends RightClickListener {
+public class CopyAsciiAction extends DiagramAction {
 
 	/**
 	 * 
 	 * @param diagram
 	 *            Diagram
 	 */
-	public CopyAsciiRightClickListener(Display display, Diagram diagram) {
+	public CopyAsciiAction(Display display, Diagram diagram) {
 		super(display, diagram);
+		setText(PlantumlConstants.COPY_ASCII_MENU);
 	}
 
 	@Override

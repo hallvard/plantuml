@@ -1,4 +1,4 @@
-package net.sourceforge.plantuml.eclipse.views.listener;
+package net.sourceforge.plantuml.eclipse.views.actions;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import net.sourceforge.plantuml.eclipse.utils.Diagram;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 
 /**
@@ -21,7 +22,7 @@ import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
  * @author durif_c
  * 
  */
-public class PrintRightClickListener extends RightClickListener {
+public class PrintAction extends DiagramAction {
     /**
      * 
      */
@@ -32,9 +33,10 @@ public class PrintRightClickListener extends RightClickListener {
      * @param diagram Diagram
      * @param container Composite
      */
-    public PrintRightClickListener(Display display, Diagram diagram, Composite container) {
+    public PrintAction(Display display, Diagram diagram, Composite container) {
         super(display, diagram);
         this.composite = container;
+        setText(PlantumlConstants.PRINT_MENU);
     }
 
     @Override

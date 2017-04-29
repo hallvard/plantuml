@@ -6,5 +6,5 @@ cache:
   directories:
     - $HOME/.m2
 script:
-  - cd releng/net.sourceforge.plantuml.parent
+  - cd releng/net.sourceforge.plantuml.aggregator
   - mvn clean install
