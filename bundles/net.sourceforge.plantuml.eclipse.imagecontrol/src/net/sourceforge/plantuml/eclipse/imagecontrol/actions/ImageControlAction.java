@@ -1,6 +1,8 @@
-package net.sourceforge.plantuml.eclipse.imagecontrol;
+package net.sourceforge.plantuml.eclipse.imagecontrol.actions;
 
 import org.eclipse.jface.action.Action;
+
+import net.sourceforge.plantuml.eclipse.imagecontrol.ImageControl;
 
 public abstract class ImageControlAction extends Action {
 

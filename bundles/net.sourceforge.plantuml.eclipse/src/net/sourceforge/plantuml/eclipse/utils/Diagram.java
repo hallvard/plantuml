@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +26,6 @@ import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.eclipse.Activator;
-import net.sourceforge.plantuml.eclipse.imagecontrol.LinkData;
 
 /**
  * Definition of a Diagram Object.
@@ -250,7 +250,7 @@ public class Diagram {
 	}
 
 	public Collection<LinkData> getLinks() {
-		return links;
+		return links != null ? links : Collections.<LinkData>emptyList();
 	}
 	
 	/**

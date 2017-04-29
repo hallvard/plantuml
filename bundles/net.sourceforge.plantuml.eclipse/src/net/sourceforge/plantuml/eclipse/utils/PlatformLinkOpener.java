@@ -6,8 +6,6 @@ import java.net.URISyntaxException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-import net.sourceforge.plantuml.eclipse.imagecontrol.LinkData;
-
 public class PlatformLinkOpener extends EditorLinkOpener {
 	
 	@Override

@@ -9,9 +9,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
-import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkOpener;
-import net.sourceforge.plantuml.eclipse.imagecontrol.LinkData;
-
 public abstract class EditorLinkOpener implements ILinkOpener {
 	
 	@Override

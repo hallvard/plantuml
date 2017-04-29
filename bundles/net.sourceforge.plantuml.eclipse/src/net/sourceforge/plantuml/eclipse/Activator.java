@@ -3,9 +3,6 @@ package net.sourceforge.plantuml.eclipse;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkOpener;
-import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -15,6 +12,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
+import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 
 /**
  * The activator class controls the plug-in life cycle

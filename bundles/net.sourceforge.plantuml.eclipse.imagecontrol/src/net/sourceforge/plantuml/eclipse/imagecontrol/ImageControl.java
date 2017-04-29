@@ -94,10 +94,6 @@ public class ImageControl extends Canvas {
 				case SWT.ARROW_RIGHT:
 					dx = 10;
 					break;
-				case SWT.SHIFT:
-					paintLinks = true;
-					redraw();
-					break;
 				default:
 					break;
 				}
@@ -107,14 +103,6 @@ public class ImageControl extends Canvas {
 			}
 
 			public void keyReleased(KeyEvent e) {
-				switch (e.keyCode) {
-				case SWT.SHIFT:
-					paintLinks = false;
-					redraw();
-					break;
-				default:
-					break;
-				}
 			}
 		});
 		PanHandler panHandler = new PanHandler();
@@ -135,8 +123,7 @@ public class ImageControl extends Canvas {
 		}
 
 		public void mouseDown(MouseEvent e) {
-			LinkData link = findLink(e.x, e.y);
-			if (link == null) {
+			if (findLink(e.x, e.y, false) == null) {
 				panPoint = new Point(e.x, e.y);
 				panDelta = new Point(0, 0);
 			}
@@ -150,12 +137,13 @@ public class ImageControl extends Canvas {
 				panPoint.y = e.y;
 				pan(panDelta);
 			} else {
-				LinkData link = findLink(e.x, e.y);
-				Cursor cursor = (link != null && link.href != null ? (findBestLinkOpener(link, ILinkOpener.DEFAULT_SUPPORT) != null ? linkCursor : unsupportedLinkCursor) : panCursor);
+				Object link = findLink(e.x, e.y, false);
+				Cursor cursor = (link != null ? linkCursor : panCursor);
 				if (cursor != getCursor()) {
 					setCursor(cursor);
 				}
-				String toolTip = (link != null && (link.title != null || link.href != null) ? (link.title != null ? link.title : link.href) : null), oldToolTip = getToolTipText();
+				String toolTip = (link != null ? link.toString() : null); // (link != null && (link.title != null || link.href != null) ? (link.title != null ? link.title : link.href) : null)
+				String oldToolTip = getToolTipText();
 				if (toolTip != oldToolTip && (toolTip == null || (! toolTip.equals(oldToolTip)))) {
 					setToolTipText(toolTip);
 				}
@@ -166,10 +154,7 @@ public class ImageControl extends Canvas {
 			if (panPoint != null && panDelta != null) {
 				panPoint = null;
 			} else {
-				LinkData link = findLink(e.x, e.y);
-				if (link != null && link.href != null) {
-					openLink(link);
-				}
+				findLink(e.x, e.y, true);
 			}
 		}
 	}
@@ -215,9 +200,6 @@ public class ImageControl extends Canvas {
 					destRect.y, destRect.width, destRect.height);
 			newGC.dispose();
 			gc.drawImage(screenImage, 0, 0);
-			if (paintLinks) {
-				paintLinks(gc);
-			}
 		} else {
 			gc.setClipping(clientRect);
 			gc.fillRectangle(clientRect);
@@ -225,71 +207,31 @@ public class ImageControl extends Canvas {
 		}
 	}
 
-	private LinkData findLink(int canvasX, int canvasY) {
-		if (links != null && links.size() > 0) {
+	private Object findLink(int canvasX, int canvasY, boolean open) {
+		for (ILinkSupport linkSupport : linkSupports) {
 			Point pt = null;
-			for (LinkData link : links) {
-				if (link.rect != null) {
-					if (pt == null) {
-//						pt = new Point(canvasX, canvasY);
-						pt = inverseTransformPoint(transform, new Point(canvasX, canvasY));
-					}
-//					Rectangle destRect = transformRect(transform, link.rect);
-					Rectangle destRect = link.rect;
-					if (destRect.contains(pt)) {
-						return link;
-					}
+			if (pt == null) {
+				pt = inverseTransformPoint(transform, new Point(canvasX, canvasY));
+			}
+			Object link = linkSupport.getLink(pt.x, pt.y);
+			if (link != null) {
+				if (open) {
+					linkSupport.openLink(link);
 				}
+				return link;
 			}
 		}
 		return null;
 	}
 	
-	private Collection<ILinkOpener> linkOpeners = new ArrayList<ILinkOpener>();
+	private Collection<ILinkSupport> linkSupports = new ArrayList<ILinkSupport>();
 
-	public void addLinkOpener(ILinkOpener linkOpener) {
-		linkOpeners.add(linkOpener);
+	public void addLinkSupport(ILinkSupport linkSupport) {
+		linkSupports.add(linkSupport);
 	}
 
-	public void removeLinkOpener(ILinkOpener linkOpener) {
-		linkOpeners.remove(linkOpener);
-	}
-
-	public ILinkOpener findBestLinkOpener(LinkData link, int minSupport) {
-		int bestSupport = ILinkOpener.NO_SUPPORT;
-		ILinkOpener best = null;
-		for (ILinkOpener linkOpener : linkOpeners) {
-			int support = ILinkOpener.NO_SUPPORT;
-			try {
-				support = linkOpener.supportsLink(link);
-			} catch (Exception e) {
-			}
-			if (support >= bestSupport) {
-				bestSupport = support;
-				best = linkOpener;
-			}
-		}
-		return (bestSupport >= minSupport ? best : null);
-	}
-	
-	public void openLink(LinkData link) {
-		ILinkOpener best = findBestLinkOpener(link, ILinkOpener.DEFAULT_SUPPORT);
-		if (best != null) {
-			best.openLink(link);
-		}
-	}
-
-	private boolean paintLinks = false;
-	
-	private void paintLinks(GC gc) {
-		if (links != null) {
-			for (LinkData link : links) {
-				if (link.rect != null) {
-					Rectangle destRect = transformRect(transform, link.rect);
-					gc.drawRectangle(destRect);
-				}
-			}
-		}
+	public void removeLinkSupport(ILinkSupport linkSupport) {
+		linkSupports.remove(linkSupport);
 	}
 
 	/* Initalize the scrollbar and register listeners. */
@@ -412,12 +354,6 @@ public class ImageControl extends Canvas {
 		resetZoom();
 	}
 	
-	private Collection<LinkData> links;
-	
-	public void setLinks(Collection<LinkData> links) {
-		this.links = links;
-	}
-
 	public void showErrorMessage(Throwable t) {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		PrintWriter pw = new PrintWriter(os);

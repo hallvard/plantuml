@@ -10,8 +10,8 @@ import org.eclipse.jdt.internal.debug.ui.actions.OpenTypeAction;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.PartInitException;
 
-import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkOpener;
-import net.sourceforge.plantuml.eclipse.imagecontrol.LinkData;
+import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
+import net.sourceforge.plantuml.eclipse.utils.LinkData;
 
 public class JavaLinkOpener implements ILinkOpener {
 

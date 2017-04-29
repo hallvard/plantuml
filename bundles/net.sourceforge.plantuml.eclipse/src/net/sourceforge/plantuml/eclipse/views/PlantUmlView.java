@@ -1,5 +1,8 @@
 package net.sourceforge.plantuml.eclipse.views;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -8,7 +11,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -18,11 +20,15 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IActionBars;
 
+import net.sourceforge.plantuml.eclipse.Activator;
+import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkSupport;
 import net.sourceforge.plantuml.eclipse.imagecontrol.ImageControl;
-import net.sourceforge.plantuml.eclipse.imagecontrol.ZoomAction;
-import net.sourceforge.plantuml.eclipse.imagecontrol.ZoomFitAction;
-import net.sourceforge.plantuml.eclipse.imagecontrol.ZoomResetAction;
+import net.sourceforge.plantuml.eclipse.imagecontrol.actions.ZoomAction;
+import net.sourceforge.plantuml.eclipse.imagecontrol.actions.ZoomFitAction;
+import net.sourceforge.plantuml.eclipse.imagecontrol.actions.ZoomResetAction;
 import net.sourceforge.plantuml.eclipse.utils.Diagram;
+import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
+import net.sourceforge.plantuml.eclipse.utils.LinkData;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.views.actions.CopyAction;
 import net.sourceforge.plantuml.eclipse.views.actions.CopyAsciiAction;
@@ -47,7 +53,7 @@ import net.sourceforge.plantuml.eclipse.views.actions.PrintAction;
  * @author durif_c
  */
 
-public class PlantUmlView extends AbstractDiagramSourceView {
+public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupport {
 
 	private ImageControl canvas;
 
@@ -66,9 +72,9 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 	public void createPartControl(Composite parent) {
 		// Display of the view.
 		canvas = new ImageControl(parent);
+		canvas.addLinkSupport(this);
 		diagram = new Diagram();
 		addListeners();
-
 		super.createPartControl(parent);
 	}
 
@@ -114,9 +120,7 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 		canvas.addMenuAction(new PrintAction(canvas.getDisplay(), diagram, canvas));
 	}
 
-	private IAction zoomInAction, zoomOutAction;
-	private IAction fitCanvasAction;
-	private IAction showOriginalAction;
+	private IAction zoomInAction, zoomOutAction, fitCanvasAction, showOriginalAction;
 
 	private final float ZOOMIN_RATE = 1.1f; /* zoomin rate */
 	private final float ZOOMOUT_RATE = 0.9f; /* zoomout rate */
@@ -126,19 +130,15 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 		super.makeActions();
 		zoomInAction = new ZoomAction(canvas, ZOOMIN_RATE);
 		zoomInAction.setToolTipText(PlantumlConstants.ZOOM_IN_BUTTON);
-		zoomInAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/ZoomIn16.gif"));
 
 		zoomOutAction = new ZoomAction(canvas, ZOOMOUT_RATE);
 		zoomOutAction.setToolTipText(PlantumlConstants.ZOOM_OUT_BUTTON);
-		zoomOutAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/ZoomOut16.gif"));
 
 		fitCanvasAction = new ZoomFitAction(canvas);
 		fitCanvasAction.setToolTipText(PlantumlConstants.FIT_CANVAS_BUTTON);
-		fitCanvasAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/Fit16.gif"));
 
 		showOriginalAction = new ZoomResetAction(canvas);
 		showOriginalAction.setToolTipText(PlantumlConstants.SHOW_ORIGINAL_BUTTON);
-		showOriginalAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/Original16.gif"));
 	}
 
 	@Override
@@ -180,7 +180,6 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 								public void run() {
 									if (! canvas.isDisposed()) {
 										canvas.loadImage(imageData);
-										canvas.setLinks(diagram.getLinks());
 										lastTextDiagram = diagram.getTextDiagram();
 										lastImageNumber = diagram.getImageNumber();
 									}
@@ -205,6 +204,56 @@ public class PlantUmlView extends AbstractDiagramSourceView {
 		}
 	}
 	
+	private Collection<ILinkOpener> linkOpeners = null;
+	
+	private Collection<ILinkOpener> getLinkOpeners() {
+		if (linkOpeners == null) {
+			linkOpeners = Arrays.asList(Activator.getDefault().getLinkOpeners());
+		}
+		return linkOpeners;
+	}
+
+	@Override
+	public Object getLink(int x, int y) {
+		for (LinkData linkData : diagram.getLinks()) {
+			if (linkData.rect != null && linkData.rect.contains(x, y)) {
+				return linkData.title != null ? linkData.title : linkData.href;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void openLink(Object href) {
+		for (LinkData linkData : diagram.getLinks()) {
+			// don't use equals, we want the same linkData instances as above
+			if (linkData.title == href || linkData.href == href) {
+				ILinkOpener linkOpener = findBestLinkOpener(linkData, ILinkOpener.DEFAULT_SUPPORT);
+				if (linkOpener != null) {
+					linkOpener.openLink(linkData);
+					return;
+				}
+			}
+		}
+	}
+
+	private ILinkOpener findBestLinkOpener(LinkData link, int minSupport) {
+		int bestSupport = ILinkOpener.NO_SUPPORT;
+		ILinkOpener best = null;
+		for (ILinkOpener linkOpener : getLinkOpeners()) {
+			int support = ILinkOpener.NO_SUPPORT;
+			try {
+				support = linkOpener.supportsLink(link);
+			} catch (Exception e) {
+			}
+			if (support >= bestSupport) {
+				bestSupport = support;
+				best = linkOpener;
+			}
+		}
+		return (bestSupport >= minSupport ? best : null);
+	}
+
 	@Override
 	public String getDiagramText() {
 		return diagram.getTextDiagram();
