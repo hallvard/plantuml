@@ -1,4 +1,4 @@
-package net.sourceforge.plantuml.eclipse.imagecontrol.actions;
+package net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions;
 
 import org.eclipse.jface.action.Action;
 

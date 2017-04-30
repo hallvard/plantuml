@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -29,10 +28,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ScrollBar;
 
 /**
@@ -59,8 +54,6 @@ public class ImageControl extends Canvas {
 	 */
 	public ImageControl(final Composite parent, int style) {
 		super(parent, style | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_BACKGROUND);
-
-		addMenuDetectListener();
 
 		addControlListener(new ControlAdapter() { /* resize listener. */
 			public void controlResized(ControlEvent event) {
@@ -602,40 +595,5 @@ public class ImageControl extends Canvas {
 			dest.height = src.height;
 		}
 		return dest;
-	}
-
-	//
-
-	private Collection<Action> menuActions = new ArrayList<Action>();
-
-	public void addMenuAction(Action action) {
-		menuActions.add(action);
-	}
-
-	public void removeMenuAction(Action action) {
-		menuActions.remove(action);
-	}
-	
-	protected void addMenuDetectListener() {
-		addListener(SWT.MenuDetect, new Listener() {
-			public void handleEvent(Event event) {
-				Menu menu = getMenu();
-				if (menu != null) {
-					menu.dispose();
-				}
-				menu = new Menu(getDisplay().getFocusControl());
-				for (final Action action : menuActions) {
-					MenuItem item = new MenuItem(menu, SWT.PUSH);
-					item.setText(action.getText());
-					item.addListener(SWT.Selection, new Listener() {
-						@Override
-						public void handleEvent(Event event) {
-							action.run();
-						}
-					});					
-				}
-				setMenu(menu);
-			}
-		});
 	}
 }

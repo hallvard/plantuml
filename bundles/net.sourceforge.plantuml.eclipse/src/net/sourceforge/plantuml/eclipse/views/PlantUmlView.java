@@ -16,6 +16,7 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IActionBars;
@@ -23,9 +24,10 @@ import org.eclipse.ui.IActionBars;
 import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkSupport;
 import net.sourceforge.plantuml.eclipse.imagecontrol.ImageControl;
-import net.sourceforge.plantuml.eclipse.imagecontrol.actions.ZoomAction;
-import net.sourceforge.plantuml.eclipse.imagecontrol.actions.ZoomFitAction;
-import net.sourceforge.plantuml.eclipse.imagecontrol.actions.ZoomResetAction;
+import net.sourceforge.plantuml.eclipse.imagecontrol.jface.MenuSupport;
+import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ZoomAction;
+import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ZoomFitAction;
+import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ZoomResetAction;
 import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.LinkData;
@@ -55,7 +57,8 @@ import net.sourceforge.plantuml.eclipse.views.actions.PrintAction;
 
 public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupport {
 
-	private ImageControl canvas;
+	private ImageControl imageControl;
+	private MenuSupport menuSupport;
 
 	/**
 	 * The default constructor.
@@ -71,8 +74,9 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	 */
 	public void createPartControl(Composite parent) {
 		// Display of the view.
-		canvas = new ImageControl(parent);
-		canvas.addLinkSupport(this);
+		imageControl = new ImageControl(parent);
+		imageControl.addLinkSupport(this);
+		menuSupport = new MenuSupport(imageControl);
 		diagram = new Diagram();
 		addListeners();
 		super.createPartControl(parent);
@@ -84,7 +88,7 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	private void addListeners() {
 		addCanvasActions();
 
-		canvas.addListener(SWT.MouseWheel, new Listener() {
+		imageControl.addListener(SWT.MouseWheel, new Listener() {
 			public void handleEvent(Event e) {
 				if ((e.stateMask & SWT.CTRL) != 0) {
 					if (e.count > 0) {
@@ -96,7 +100,7 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 			}
 		});
 
-		canvas.addKeyListener(new KeyAdapter() {
+		imageControl.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				switch (e.character) {
 				case '+':
@@ -113,11 +117,12 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	}
 
 	private void addCanvasActions() {
-		canvas.addMenuAction(new CopyAction(canvas.getDisplay(), diagram));
-		canvas.addMenuAction(new CopySourceAction(canvas.getDisplay(), diagram));
-		canvas.addMenuAction(new CopyAsciiAction(canvas.getDisplay(), diagram));
-		canvas.addMenuAction(new ExportAction(canvas.getDisplay(), diagram, canvas));
-		canvas.addMenuAction(new PrintAction(canvas.getDisplay(), diagram, canvas));
+		Display display = imageControl.getDisplay();
+		menuSupport.addMenuAction(new CopyAction(display, diagram));
+		menuSupport.addMenuAction(new CopySourceAction(display, diagram));
+		menuSupport.addMenuAction(new CopyAsciiAction(display, diagram));
+		menuSupport.addMenuAction(new ExportAction(display, diagram, imageControl));
+		menuSupport.addMenuAction(new PrintAction(display, diagram, imageControl));
 	}
 
 	private IAction zoomInAction, zoomOutAction, fitCanvasAction, showOriginalAction;
@@ -128,16 +133,16 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	@Override
 	protected void makeActions() {
 		super.makeActions();
-		zoomInAction = new ZoomAction(canvas, ZOOMIN_RATE);
+		zoomInAction = new ZoomAction(imageControl, ZOOMIN_RATE);
 		zoomInAction.setToolTipText(PlantumlConstants.ZOOM_IN_BUTTON);
 
-		zoomOutAction = new ZoomAction(canvas, ZOOMOUT_RATE);
+		zoomOutAction = new ZoomAction(imageControl, ZOOMOUT_RATE);
 		zoomOutAction.setToolTipText(PlantumlConstants.ZOOM_OUT_BUTTON);
 
-		fitCanvasAction = new ZoomFitAction(canvas);
+		fitCanvasAction = new ZoomFitAction(imageControl);
 		fitCanvasAction.setToolTipText(PlantumlConstants.FIT_CANVAS_BUTTON);
 
-		showOriginalAction = new ZoomResetAction(canvas);
+		showOriginalAction = new ZoomResetAction(imageControl);
 		showOriginalAction.setToolTipText(PlantumlConstants.SHOW_ORIGINAL_BUTTON);
 	}
 
@@ -160,7 +165,7 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	 * Passing the focus request to the viewer's control.
 	 */
 	public void setFocus() {
-		canvas.setFocus();
+		imageControl.setFocus();
 	}
 	
 	//
@@ -175,11 +180,11 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
 						final ImageData imageData = diagram.getImage(path);
-						if (imageData != null && canvas != null && (! canvas.isDisposed())) {
-							canvas.getDisplay().asyncExec(new Runnable() {
+						if (imageData != null && imageControl != null && (! imageControl.isDisposed())) {
+							imageControl.getDisplay().asyncExec(new Runnable() {
 								public void run() {
-									if (! canvas.isDisposed()) {
-										canvas.loadImage(imageData);
+									if (! imageControl.isDisposed()) {
+										imageControl.loadImage(imageData);
 										lastTextDiagram = diagram.getTextDiagram();
 										lastImageNumber = diagram.getImageNumber();
 									}
@@ -187,11 +192,11 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 							});
 						}
 					} catch (final Throwable e) {
-						if (canvas != null && (! canvas.isDisposed())) {
-							canvas.getDisplay().asyncExec(new Runnable() {
+						if (imageControl != null && (! imageControl.isDisposed())) {
+							imageControl.getDisplay().asyncExec(new Runnable() {
 								public void run() {
-									if (! canvas.isDisposed()) {
-										canvas.showErrorMessage(e);
+									if (! imageControl.isDisposed()) {
+										imageControl.showErrorMessage(e);
 									}
 								}
 							});
