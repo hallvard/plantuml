@@ -16,9 +16,9 @@ import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.internal.debug.ui.actions.OpenTypeAction;
 import org.eclipse.jface.viewers.ISelection;
 
-import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
+import net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider;
 
-public abstract class JdtDiagramTextProvider extends AbstractDiagramTextProvider {
+public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextProvider {
 
 	@Override
 	public boolean supportsSelection(ISelection selection) {

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
+import net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTextProvider {
+public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClassDiagramTextProvider {
 
 	public static String PLANTUML_ANNOTATION_KEY = "net.sourceforge.plantuml";
 	public static String PLANTUML_SKINPARAMS_ANNOTATION_KEY = PLANTUML_ANNOTATION_KEY + "/skinparams";
@@ -41,7 +41,7 @@ public abstract class AbstractEcoreDiagramTextProvider extends AbstractDiagramTe
 
 	//
 
-	protected AbstractEcoreDiagramTextProvider(Class<?> editorType) {
+	protected AbstractEcoreClassDiagramTextProvider(Class<?> editorType) {
 		super(editorType);
 	}
 

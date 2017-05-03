@@ -1,6 +1,6 @@
 package net.sourceforge.plantuml.xcore;
 
-import net.sourceforge.plantuml.ecore.AbstractEcoreDiagramTextProvider;
+import net.sourceforge.plantuml.ecore.AbstractEcoreClassDiagramTextProvider;
 
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.viewers.ISelection;
@@ -10,7 +10,7 @@ import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
-public class XcoreDiagramTextProvider extends AbstractEcoreDiagramTextProvider {
+public class XcoreDiagramTextProvider extends AbstractEcoreClassDiagramTextProvider {
 
 	public XcoreDiagramTextProvider() {
 		super(XtextEditor.class);

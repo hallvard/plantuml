@@ -12,7 +12,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 
-public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider {
+public class TextEditorDiagramTextProvider extends AbstractClassDiagramTextProvider {
 
 	public TextEditorDiagramTextProvider() {
 		setEditorType(ITextEditor.class);

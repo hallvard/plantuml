@@ -1,11 +1,11 @@
 package net.sourceforge.plantuml.jdt.ui;
 
-import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_ASSOCIATIONS;
-import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_EXTENDS;
-import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_IMPLEMENTS;
-import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_MEMBERS;
-import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_MODIFIERS;
-import static net.sourceforge.plantuml.text.AbstractDiagramTextProvider.GEN_CLASS_LINKS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_ASSOCIATIONS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_EXTENDS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_IMPLEMENTS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_MEMBERS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_MODIFIERS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_CLASS_LINKS;
 
 import java.util.ArrayList;
 import java.util.Arrays;

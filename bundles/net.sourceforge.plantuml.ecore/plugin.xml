@@ -6,7 +6,7 @@
          point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
 
       <diagramTextProvider
-            providerClass="net.sourceforge.plantuml.ecore.EcoreDiagramTextProvider">
+            providerClass="net.sourceforge.plantuml.ecore.EcoreClassDiagramTextProvider">
       </diagramTextProvider>
    </extension>
 

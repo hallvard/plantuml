@@ -7,9 +7,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
-public class EcoreDiagramTextProvider extends AbstractEcoreDiagramTextProvider {
+public class EcoreClassDiagramTextProvider extends AbstractEcoreClassDiagramTextProvider {
 
-	public EcoreDiagramTextProvider() {
+	public EcoreClassDiagramTextProvider() {
 		super(IEditingDomainProvider.class);
 	}
 
