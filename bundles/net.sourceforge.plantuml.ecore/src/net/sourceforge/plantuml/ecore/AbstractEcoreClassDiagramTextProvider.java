@@ -34,9 +34,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClassDiagramTextProvider {
 
-	public static String PLANTUML_ANNOTATION_KEY = "net.sourceforge.plantuml";
-	public static String PLANTUML_SKINPARAMS_ANNOTATION_KEY = PLANTUML_ANNOTATION_KEY + "/skinparams";
-
 	private static final String DEFAULT_EXTERNAL_STEREOTYPE = null;
 
 	//
@@ -93,41 +90,14 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		this.classifiers = null;
 		return result;
 	}
+	
+	private EcoreDiagramHelper diagramHelper = new EcoreDiagramHelper();
 
 	private void init(EPackage pack) {
 		addClassifiers(pack);
-		skinParams = getSkinParams(pack, skinParams);
+		skinParams = diagramHelper.getSkinParams(pack, skinParams);
 	}
 
-	protected Map<String, String> getSkinParams(EModelElement element, Map<String, String> map) {
-		for (EAnnotation annotation : element.getEAnnotations()) {
-			if (annotation.getSource().startsWith(PLANTUML_SKINPARAMS_ANNOTATION_KEY)) {
-				String key = annotation.getSource().substring(PLANTUML_SKINPARAMS_ANNOTATION_KEY.length());
-				String qualifier = null;
-				if (key.startsWith("/")) {
-					qualifier = key.substring(1);
-				}
-				map = getSkinParams(qualifier, annotation, map);
-			}
-		}
-		return map;
-	}
-
-	protected Map<String, String> getSkinParams(String qualifier, EAnnotation annotation, Map<String, String> map) {
-		if (annotation != null) {
-			EMap<String, String> eMap = annotation.getDetails();
-			if (eMap.size() > 0) {
-				if (map == null) {
-					map = new HashMap<String, String>();
-				}
-				for (String key : eMap.keySet()) {
-					map.put((qualifier != null ? qualifier : "") + key, eMap.get(key));
-				}
-			}
-		}
-		return map;
-	}
-	
 	protected void addClassifiers(EPackage pack) {
 		TreeIterator<EObject> it = pack.eAllContents();
 		while (it.hasNext()) {
@@ -139,42 +109,13 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		}
 	}
 	
-	protected static String getAnnotation(EObject element, String key, boolean checkContainers, String def) {
-		while (element instanceof EModelElement) {
-			String value = EcoreUtil.getAnnotation((EModelElement) element, PLANTUML_ANNOTATION_KEY, key);
-			if (value != null) {
-				return value;
-			}
-			if (! checkContainers) {
-				break;
-			}
-			element = element.eContainer();
-		}
-		return def;
-	}
-	protected static boolean checkAnnotation(EObject element, String key, boolean checkContainers) {
-		return "true".equals(getAnnotation(element, key, checkContainers, null));
-	}
-	
-	protected static boolean shouldSuppress(EModelElement element, String name, String role) {
-		String key = "suppress", containerKey = key + name;
-		if (role != null) {
-			key = key + "As" + role;
-			containerKey = containerKey + "As" + role;
-		}
-		return checkAnnotation(element, key, false) || checkAnnotation(element.eContainer(), containerKey, true);
-	}
-	protected static boolean shouldSuppress(ENamedElement element, String role) {
-		return shouldSuppress(element, element.getName(), role);
-	}
-	
 	protected String getDiagramText(int genFlags) {
 		StringBuilder buffer = new StringBuilder();
 		if (skinParams != null) {
 			appendSkinParams(skinParams, buffer);
 		}
 		for (EClassifier classifier : classifiers) {
-			if (! shouldSuppress(classifier, null)) {
+			if (! diagramHelper.shouldSuppress(classifier, null)) {
 				if (classifier instanceof EClass) {
 					appendClass((EClass) classifier, genFlags, buffer);
 				} else if (classifier instanceof EEnum) {
@@ -189,7 +130,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 				if (eClassifier instanceof EClass) {
 					EClass subClass = (EClass) eClassifier;
 					for (EClass superClass : subClass.getESuperTypes()) {
-						if (! shouldSuppress(superClass, "superType")) {
+						if (! diagramHelper.shouldSuppress(superClass, "superType")) {
 							boolean isImplements = superClass.isInterface() && (! subClass.isInterface());
 							if (includes(genFlags, isImplements ? GEN_IMPLEMENTS : GEN_EXTENDS)) {
 								appendGeneralisation(subClass, superClass, isImplements, buffer);
@@ -204,7 +145,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 				if (eClassifier instanceof EClass) {
 					for (EStructuralFeature feature : ((EClass) eClassifier).getEStructuralFeatures()) {
 						if (feature.getEType() != null && feature instanceof EReference) {
-							if (! (shouldSuppress(feature, null) || shouldSuppress(feature.getEType(), "reference"))) {
+							if (! (diagramHelper.shouldSuppress(feature, null) || diagramHelper.shouldSuppress(feature.getEType(), "reference"))) {
 								appendAssociation((EReference) feature, buffer);
 							}
 						}
@@ -223,7 +164,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 	protected String getOtherName(EClassifier origin, EClassifier other) {
 		String otherName = other.getName();
 		if (! classifiers.contains(other)) {
-			String externalStereotype = getAnnotation(origin, "externalStereotype", true, DEFAULT_EXTERNAL_STEREOTYPE);
+			String externalStereotype = diagramHelper.getAnnotation(origin, "externalStereotype", true, DEFAULT_EXTERNAL_STEREOTYPE);
 			if (externalStereotype != null && externalStereotype.length() > 0) {
 				otherName = "<<" + externalStereotype + ">>";
 			}
@@ -232,7 +173,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 	}
 
 	protected String getClassifierColor(EClassifier classifier) {
-		Map<String, String> skinParams = getSkinParams(classifier, null);
+		Map<String, String> skinParams = diagramHelper.getSkinParams(classifier, null);
 		return (skinParams != null ? skinParams.get("BackgroundColor") : null);
 	}
 	
@@ -243,14 +184,14 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 			for (EStructuralFeature feature : eClass.getEStructuralFeatures()) {
 				EClassifier eType = feature.getEType();
 				if (eType != null && feature instanceof EAttribute) {
-					if (! (shouldSuppress(feature, null) || shouldSuppress(eType, "attribute"))) {
+					if (! (diagramHelper.shouldSuppress(feature, null) || diagramHelper.shouldSuppress(eType, "attribute"))) {
 						appendAttribute(null, null, getTypeName(eType), feature.getName(), buffer);
 					}
 				}
 			}
 			for (EOperation op : eClass.getEOperations()) {
 				if (op.getEType() != null) {
-					if (! (shouldSuppress(op, null) || shouldSuppress(op.getEType(), "operation"))) {
+					if (! (diagramHelper.shouldSuppress(op, null) || diagramHelper.shouldSuppress(op.getEType(), "operation"))) {
 						Collection<String> parameters = new ArrayList<String>();
 						for (EParameter parameter : op.getEParameters()) {
 							String paramString = parameter.getName();
@@ -302,7 +243,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		String source = sourceClass.getName();
 		EClassifier targetType = ref.getEType();
 		String target = getOtherName(sourceClass, targetType);
-		String direction = getAnnotation(ref, "direction", false, null);
+		String direction = diagramHelper.getAnnotation(ref, "direction", false, null);
 		if (opposite != null) {
 			// avoid duplicates
 			int otherIndex = classifiers.indexOf(targetType);

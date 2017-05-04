@@ -22,6 +22,6 @@ public class EcoreObjectDiagramTextProvider extends AbstractEcoreObjectDiagramTe
 			}
 			return null;
 		}
-		return getDiagramText(((IEditingDomainProvider) editorPart).getEditingDomain().getResourceSet());
+		return getDiagramText(((IEditingDomainProvider) editorPart).getEditingDomain().getResourceSet().getAllContents());
 	}
 }

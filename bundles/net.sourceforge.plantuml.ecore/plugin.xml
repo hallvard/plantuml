@@ -8,6 +8,9 @@
       <diagramTextProvider
             providerClass="net.sourceforge.plantuml.ecore.EcoreClassDiagramTextProvider">
       </diagramTextProvider>
+      <diagramTextProvider
+            providerClass="net.sourceforge.plantuml.ecore.EcoreObjectDiagramTextProvider">
+      </diagramTextProvider>
    </extension>
 
 </plugin>

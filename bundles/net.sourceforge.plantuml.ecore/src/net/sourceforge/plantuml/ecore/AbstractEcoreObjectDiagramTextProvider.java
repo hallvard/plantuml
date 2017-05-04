@@ -1,15 +1,20 @@
 package net.sourceforge.plantuml.ecore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
@@ -22,72 +27,111 @@ public abstract class AbstractEcoreObjectDiagramTextProvider extends AbstractObj
 	}
 
 	public boolean supportsSelection(ISelection selection) {
-		return selection instanceof IStructuredSelection && ((IStructuredSelection) selection).getFirstElement() instanceof EPackage;
+		return selection instanceof IStructuredSelection && (! (((IStructuredSelection) selection).getFirstElement() instanceof EModelElement));
 	}
 
-	private int maxResourceCount = 1, maxObjectCount = 1;
+	private List<EObject> eObjects = new ArrayList<EObject>();
 
-	private List<EClassifier> eObjects;
-	
-	protected String getDiagramText(ResourceSet resourceSet) {
-		int resourceCount = 0, objectCount = 0;
-		this.eObjects = new ArrayList<EClassifier>();
-		outer: for (Resource resource : resourceSet.getResources()) {
-			EObject eObject = null;
-			for (EObject root : resource.getContents()) {
-				if (! (root instanceof EPackage)) {
-					eObject = root;
-					init(eObject);
-					objectCount++;
-					if (objectCount == maxObjectCount) {
-						break outer;
-					}
-				}
-			}
-			if (eObject != null) {
-				resourceCount++;
-				if (resourceCount == maxResourceCount) {
-					break;
-				}
-			}
-		}
-		String result = eObjects.size() > 0 ? getDiagramText(GEN_ATTRIBUTES | GEN_LINKS) : null;
-		this.eObjects = null;
-		return result;
+	protected String getDiagramText(Iterator<?> it) {
+		return getObjectDiagramText(null, it);
 	}
-
 	protected String getDiagramText(EObject eObject) {
-		this.eObjects = new ArrayList<EClassifier>();
-		init(eObject);
-		String result = eObjects.size() > 0 ? getDiagramText(GEN_ATTRIBUTES | GEN_LINKS) : null;
-		this.eObjects = null;
-		return result;
+		return getObjectDiagramText(eObject, eObject.eAllContents());
 	}
 
-	private void init(EObject eObject) {
-		addContained(eObject);
+	protected String getObjectDiagramText(EObject root, Iterator<?> it) {
+		this.eObjects.clear();
+		if (root != null) {
+			this.eObjects.add(root);
+		}
+		while (it.hasNext()) {
+			Object contained = it.next();
+			if (contained instanceof EObject) {
+				eObjects.add((EObject) contained);
+			}
+		}
+		String result = eObjects.size() > 0 ? getDiagramText(GEN_ATTRIBUTES | GEN_LINKS) : null;
+		return result;		
 	}
 	
-	protected void addContained(EObject eObject) {
-		TreeIterator<EObject> it = eObject.eAllContents();
-		while (it.hasNext()) {
-			EObject contained = it.next();
-			eObjects.add((EClassifier) contained);
+
+	private EcoreDiagramHelper diagramHelper = new EcoreDiagramHelper();
+
+	private Map<EObject, String> idMap = new HashMap<EObject, String>();
+
+	private void initIdMap() {
+		idMap.clear();
+		for (int i = 0; i < eObjects.size(); i++) {
+			EObject eObject = eObjects.get(i);
+			idMap.put(eObject, String.valueOf(i + 1));
 		}
 	}
-	
+
 	protected String getDiagramText(int genFlags) {
+		initIdMap();
 		StringBuilder buffer = new StringBuilder();
 		for (EObject eObject : eObjects) {
+			appendObject(eObject, genFlags, buffer);
+		}
+		if (includes(genFlags, GEN_LINKS)) {
+			for (EObject eObject : eObjects) {
+				appendLinks(eObject, genFlags, buffer);
+			}
 		}
 		return buffer.toString();
 	}
 
-	protected void appendObject(EObject eObject, int genFlags, StringBuilder buffer) {
-		appendObject(eObject, genFlags, buffer);
+	private static String MANY_VALUE_START = "[", MANY_VALUE_END = "]";
+
+	private void appendObject(EObject eObject, int genFlags, StringBuilder buffer) {
+		EClass eClass = eObject.eClass();
+		String id = idMap.get(eObject);
+		appendObjectStart(id, "o" + id, getTypeName(eClass), null, buffer);
 		if (includes(genFlags, GEN_ATTRIBUTES)) {
+			for (EAttribute attr: eClass.getEAllAttributes()) {
+				Object value = eObject.eGet(attr);
+				String valueString = getValueString(value, attr);
+				appendAttribute(attr.getName(), valueString, buffer);
+			}
 		}
 		appendObjectEnd(buffer);
+	}
+
+	private String getValueString(Object value, EAttribute attr) {
+		String valueString = "?";
+		if (attr.isMany()) {
+			valueString = MANY_VALUE_START;
+			for (Object element : (Iterable<?>) value) {
+				if (! valueString.equals(MANY_VALUE_START)) {
+					valueString += ", ";
+				}
+				valueString += EcoreUtil.convertToString(attr.getEAttributeType(), element);
+			}
+			valueString += MANY_VALUE_END;
+		} else {
+			valueString = EcoreUtil.convertToString(attr.getEAttributeType(), value);					
+		}
+		return valueString;
+	}
+	
+	protected void appendLinks(EObject eObject, int genFlags, StringBuilder buffer) {
+		EClass eClass = eObject.eClass();
+		for (EReference ref: eClass.getEAllReferences()) {
+			Object value = eObject.eGet(ref);
+			if (ref.isContainer()) {
+				// ???
+			} else if (ref.isMany()) {
+				for (EObject element : (Iterable<? extends EObject>) value) {
+					appendLink(eObject, element, ref, buffer);
+				}
+			} else {
+				appendLink(eObject, (EObject) value, ref, buffer);
+			}
+		}
+	}
+
+	protected void appendLink(EObject eObject, EObject other, EReference ref, StringBuilder buffer) {
+		appendRelation("o" + idMap.get(eObject), ref.isContainment(), null, RELATION_LINE, null, "o" + idMap.get(other), false, ref.getName(), null, buffer);
 	}
 
 	protected String getTypeName(EClassifier type) {

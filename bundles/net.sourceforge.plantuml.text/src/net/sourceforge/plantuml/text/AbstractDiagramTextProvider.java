@@ -62,19 +62,6 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		return true;
 	}
 
-	protected void appendNameDeclaration(String name, StringBuilder buffer) {
-		String logicalName = getLogicalName(name);
-		if (name.equals(logicalName)) {
-			buffer.append(name);
-		} else {
-			buffer.append("\"");
-			buffer.append(name);
-			buffer.append("\"");
-			buffer.append(" as ");
-			buffer.append(logicalName);
-		}
-	}
-
 	protected void appendSkinParams(Map<String, String> skinParams, StringBuilder buffer) {
 		appendSkinParams(null, skinParams, buffer);
 	}

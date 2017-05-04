@@ -19,15 +19,19 @@ public abstract class AbstractObjectDiagramTextProvider extends AbstractDiagramT
 	
 	protected final static String SIMPLE_LINK = LINK_LINE, AGGREGATION_LINK = "<>" + LINK_LINE;
 	
-	protected void appendObjectStart(String name, String className, String link, StringBuilder buffer) {
-		appendObjectStart(name, className, null, link, buffer);
+	protected void appendObjectStart(String name, String id, String className, String link, StringBuilder buffer) {
+		appendObjectStart(name, id, className, null, link, buffer);
 	}
 
-	protected void appendObjectStart(String name, String className, String color, String link, StringBuilder buffer) {
+	protected void appendObjectStart(String name, String id, String className, String color, String link, StringBuilder buffer) {
 		buffer.append(OBJECT_TYPE);
 		buffer.append(" ");
-		appendNameDeclaration(name, buffer);
-		appendLink(link, false, buffer);
+		buffer.append("\"~#" + name + ": " + className + "\"");
+		if (id != null) {
+			buffer.append(" as " + id);
+		}
+//		appendNameDeclaration(name, buffer);
+//		appendLink(link, false, buffer);
 		if (color != null) {
 			buffer.append(" #");
 			buffer.append(color);
