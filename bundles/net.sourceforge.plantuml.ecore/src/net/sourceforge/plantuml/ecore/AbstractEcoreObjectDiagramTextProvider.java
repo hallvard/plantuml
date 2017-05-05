@@ -27,7 +27,7 @@ public abstract class AbstractEcoreObjectDiagramTextProvider extends AbstractObj
 	}
 
 	public boolean supportsSelection(ISelection selection) {
-		return selection instanceof IStructuredSelection && (! (((IStructuredSelection) selection).getFirstElement() instanceof EModelElement));
+		return selection instanceof IStructuredSelection && (! AbstractEcoreClassDiagramTextProvider.isEcoreClassDiagramObject(((IStructuredSelection) selection).getFirstElement()));
 	}
 
 	private List<EObject> eObjects = new ArrayList<EObject>();

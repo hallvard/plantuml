@@ -17,7 +17,7 @@ public class EcoreClassDiagramTextProvider extends AbstractEcoreClassDiagramText
 	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			Object sel = ((IStructuredSelection) selection).getFirstElement();
-			if (sel instanceof EPackage) {
+			if (AbstractEcoreClassDiagramTextProvider.isEcoreClassDiagramObject(sel) && sel instanceof EPackage) {
 				return getDiagramText((EPackage) sel);
 			}
 			return null;

@@ -3,15 +3,10 @@ package net.sourceforge.plantuml.ecore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider;
-
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -19,7 +14,6 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EModelElement;
-import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
@@ -28,9 +22,10 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+
+import net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider;
 
 public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClassDiagramTextProvider {
 
@@ -43,7 +38,14 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 	}
 
 	public boolean supportsSelection(ISelection selection) {
-		return selection instanceof IStructuredSelection && ((IStructuredSelection) selection).getFirstElement() instanceof EPackage;
+		if (selection instanceof IStructuredSelection) {
+			return isEcoreClassDiagramObject(((IStructuredSelection) selection).getFirstElement());
+		}
+		return false;
+	}
+	
+	public static boolean isEcoreClassDiagramObject(Object object) {
+		return object instanceof EModelElement;
 	}
 
 	private int maxResourceCount = 1, maxPackageCount = 1;
