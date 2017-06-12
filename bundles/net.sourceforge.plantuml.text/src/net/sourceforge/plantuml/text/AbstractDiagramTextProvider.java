@@ -146,8 +146,8 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		if (direction != null) {
 			int pos = relation.indexOf(RELATION_LINE);
 			if (pos >= 0) {
-				pos += RELATION_LINE.length() / 2;
-				relation.replace(RELATION_LINE, RELATION_LINE.substring(0, pos) + direction + RELATION_LINE.substring(pos));
+				pos = RELATION_LINE.length() / 2;
+				relation = relation.replace(RELATION_LINE, RELATION_LINE.substring(0, pos) + direction + RELATION_LINE.substring(pos));
 			}
 		}
 		buffer.append(relation);

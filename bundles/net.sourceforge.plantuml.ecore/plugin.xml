@@ -9,7 +9,9 @@
             providerClass="net.sourceforge.plantuml.ecore.EcoreClassDiagramTextProvider">
       </diagramTextProvider>
       <diagramTextProvider
-            providerClass="net.sourceforge.plantuml.ecore.EcoreObjectDiagramTextProvider">
+            providerClass="net.sourceforge.plantuml.ecore.EcoreObjectDiagramTextProvider"
+            priority="default"
+      >
       </diagramTextProvider>
    </extension>
 
