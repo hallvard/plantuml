@@ -9,8 +9,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.IActionBars;
 
 import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkSupport;
@@ -148,17 +147,13 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 
 	@Override
 	protected void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		IToolBarManager toolBarManager = bars.getToolBarManager();
-		toolBarManager.add(zoomInAction);
-		toolBarManager.add(zoomOutAction);
-		toolBarManager.add(fitCanvasAction);
-		toolBarManager.add(showOriginalAction);
-		toolBarManager.add(new Separator());
-		toolBarManager.add(spawnAction);
-		toolBarManager.add(pinToAction);
-		toolBarManager.add(toggleAction);
-		super.contributeToActionBars();
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		addZoomActions(toolBarManager);
+		addViewActions(toolBarManager);
+	}
+
+	protected void addZoomActions(IContributionManager toolBarManager) {
+		addActions(toolBarManager, zoomInAction, zoomOutAction, fitCanvasAction, showOriginalAction);
 	}
 
 	/**

@@ -19,6 +19,17 @@
             id="net.sourceforge.plantuml.jdt.ui.JdtPlantUmlView">
       </view>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="net.sourceforge.plantuml.jdt.ui.ProjectClassDiagramPreferencePage"
+            id="net.sourceforge.plantuml.jdt.ui.ProjectClassDiagramPreferencePage"
+            category="net.sourceforge.plantuml.preferences.about"
+            name="Java Project Class Diagram">
+      </page>
+   </extension>
+   
    <extension
          point="net.sourceforge.plantuml.eclipse.linkOpener">
       <linkOpener

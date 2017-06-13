@@ -25,8 +25,10 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		return false;
 	}
 
+	private int genFlags = GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_LINKS;
+
 	public void generateForType(IType type, StringBuilder result, Collection<IType> allTypes) {
-		generateForType(type, result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_LINKS , allTypes);
+		generateForType(type, result, genFlags, allTypes);
 	}
 
 	private boolean isInTypes(String typeName, Collection<IType> allTypes) {

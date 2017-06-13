@@ -4,6 +4,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -81,7 +83,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	protected void contributeToActionBars() {
 	}
 
-	protected IAction toggleAction, pinToAction, spawnAction;
+	private IAction toggleAction, pinToAction, spawnAction;
 
 	protected void makeActions() {
 		pinToAction = new Action() {
@@ -129,6 +131,19 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		toggleAction.setChecked(true);
 	}
 	
+	protected void addActions(IContributionManager manager, IAction... actions) {
+		if (! manager.isEmpty()) {
+			manager.add(new Separator());
+		}
+		for (IAction action : actions) {
+			manager.add(action);
+		}
+	}
+	
+	protected void addViewActions(IContributionManager toolBarManager) {
+		addActions(toolBarManager, spawnAction, pinToAction, toggleAction);
+	}
+
 	protected String getEditorInputId(IEditorInput editorInput) {
 		if (editorInput instanceof IStorageEditorInput) {
 			IPath path = null;

@@ -18,5 +18,8 @@ Import-Package: net.sourceforge.plantuml.eclipse.utils,
  org.eclipse.jdt.ui,
  org.eclipse.jface.viewers,
  org.eclipse.ui,
- org.eclipse.ui.texteditor
+ org.eclipse.ui.texteditor,
+ org.osgi.framework;version="1.8.0"
 Export-Package: net.sourceforge.plantuml.jdt
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: net.sourceforge.plantuml.jdt.Activator
