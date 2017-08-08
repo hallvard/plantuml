@@ -36,6 +36,12 @@ Use http://files.idi.ntnu.no/publish/plantuml/repository/ as the update site URL
 Notable features in recent releases, details are found in [../../releases].
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
 
+## [1.1.19](../../releases/tag/1.1.19)
+- Support for the newpage directive. Multi-page diagrams are rendered as numbered tabs ([issue #11](../../issues/11)).
+- Support generating packages for project class diagram, and a preference to turn on/off ([issue #18](../../issues/18)).
+- Object diagram generator, currently used as a default for Ecore model instances. To support overriding this behavior, e.g. so an Ecore model for state machines can be rendered as state diagrams, diagram text providers can now have a priority ([issue #33](../../issues/33)).
+- Refactored project layout, to conform to Eclipse conventions. Prepare for separating PlantUML library and Eclipse plugins update sites, so they can be released separately. The library plugin will probably change to same versioning as the jar.
+
 ## [1.1.18.8059](../../releases/tag/1.1.18.8059)
 - Support links to fully qualified java classes with java scheme links ([issue #31](../../issues/31)), e.g. java:java.lang.String. Add a fragment to navigate to a specific member. Default diagram generation from java source now uses this kind of link.
 - Fix problem with enums in project class diagrams, where associations where generated for the literals ([issue #30](../../issues/30)).
