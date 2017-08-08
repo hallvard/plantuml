@@ -2,6 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>net.sourceforge.plantuml.aggregator</artifactId>
+	<version>1.1.18-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	  <parent>
@@ -14,7 +15,7 @@
 	<modules>
 		<module>../net.sourceforge.plantuml.target</module>
 		<module>../../bundles/net.sourceforge.plantuml.lib</module>
-		
+		<module>../../features/net.sourceforge.plantuml.lib.feature</module>
 		<module>../../bundles/net.sourceforge.plantuml.eclipse.imagecontrol</module>
 		<module>../../bundles/net.sourceforge.plantuml.eclipse</module>
 		<module>../../tests/net.sourceforge.plantuml.eclipse.tests</module>
