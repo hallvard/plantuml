@@ -42,27 +42,7 @@ public class Diagram {
 	 */
 	private String textDiagram;
 
-	/**
-	 * Current image number (for textDiagram with newpage instruction)
-	 */
-	private int imageNumber;
-
-	/**
-	 * Diagram
-	 */
-	private ImageData imageData;
-
-	/**
-	 * Layout data for diagram elements
-	 */
-	private Collection<LinkData> links = null;
-
-	/**
-	 * Create a diagram
-	 * 
-	 */
-	public Diagram() {
-	}
+	private int imageCount;
 
 	public static IPath getActiveEditorPath() {
 		IWorkbenchPage activePage = WorkbenchUtil.getCurrentActiveWindows().getActivePage();
@@ -85,7 +65,7 @@ public class Diagram {
 	 * 
 	 * @return ImageData of the current textDiagram and imageNumber
 	 */
-	public ImageData getImage(IPath path) throws IOException {
+	public ImageData getImage(IPath path, int imageNum, Collection<LinkData> links) throws IOException {
 		if (textDiagram != null) {
 			// generate the image for textDiagram and imageNumber
 			if (path != null) {
@@ -94,11 +74,9 @@ public class Diagram {
 				FileSystem.getInstance().reset();
 			}
 			OptionFlags.getInstance().setQuiet(true);
-
-			links = new ArrayList<LinkData>();
-			imageData = getImage(textDiagram, imageNumber, links);
+			return getImage(textDiagram, imageNum, links);
 		}
-		return getImageData();
+		return null;
 	}
 
 	/**
@@ -113,13 +91,6 @@ public class Diagram {
 		}
 	}
 
-	/**
-	 * Get first ImageData for the textDiagram in parameter
-	 * 
-	 * @param textDiagram
-	 * 
-	 * @return ImageData
-	 */
 	public static ImageData getImage(String textDiagram) {
 		return getImage(textDiagram, 0, null);
 	}
@@ -128,12 +99,10 @@ public class Diagram {
 
 	private static ImageData getImage(String textDiagram, int imageNum, Collection<LinkData> links) {
 		setGraphvizPath();
-
 		ImageData imageData = null;
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-			// image generation.
+			// image generation
 			SourceStringReader reader = new SourceStringReader(textDiagram);
 			String desc = reader.generateImage(os, imageNum);
 			if (links != null) {
@@ -225,45 +194,25 @@ public class Diagram {
 		return null;
 	}
 
-	public String extractTextDiagram(String diagramText) {
+	private Pattern pattern = Pattern.compile("(?i)(?m)^\\W*newpage( .*)?$");
+
+	public void setTextDiagram(String diagramText) {
 		textDiagram = diagramText;
-		if (textDiagram == null) {
-			return null;
+		if (textDiagram != null) {
+			imageCount = 1;
+			// We must count the number of "newpage" instructions
+			Matcher matcherNewpage = pattern.matcher(diagramText);
+			while (matcherNewpage.find()) {
+				imageCount++;
+			}
 		}
-			
-		// We must count the number of "newpage xxx" between startuml and the
-		// cursor position, ie in part1
-		Matcher matcherNewpage = Pattern.compile("(?i)(?m)^\\W*newpage( .*)?$").matcher(diagramText);
-
-		imageNumber = 0;
-		while (matcherNewpage.find()) {
-			imageNumber++;
-		}
-		return textDiagram;
 	}
 
-	/**
-	 * @return {@link ImageData}
-	 */
-	public ImageData getImageData() {
-		return imageData;
-	}
-
-	public Collection<LinkData> getLinks() {
-		return links != null ? links : Collections.<LinkData>emptyList();
-	}
-	
-	/**
-	 * {@link String}
-	 */
 	public String getTextDiagram() {
 		return textDiagram;
 	}
 
-	/**
-	 * @return int
-	 */
-	public int getImageNumber() {
-		return imageNumber;
+	public int getImageCount() {
+		return imageCount;
 	}
 }

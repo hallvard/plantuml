@@ -34,8 +34,8 @@ import org.eclipse.swt.widgets.ScrollBar;
  * 
  */
 public class ImageControl extends Canvas {
-	private Image sourceImage; /* original image */
-	private Image screenImage; /* screen image */
+	private Image sourceImage; // original image
+	private Image screenImage; // screen image
 	private AffineTransform transform = new AffineTransform();
 	private Cursor panCursor;
 	private Cursor linkCursor, unsupportedLinkCursor;
@@ -55,12 +55,12 @@ public class ImageControl extends Canvas {
 	public ImageControl(final Composite parent, int style) {
 		super(parent, style | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_BACKGROUND);
 
-		addControlListener(new ControlAdapter() { /* resize listener. */
+		addControlListener(new ControlAdapter() { // resize listener
 			public void controlResized(ControlEvent event) {
 				syncScrollBars();
 			}
 		});
-		addPaintListener(new PaintListener() { /* paint listener. */
+		addPaintListener(new PaintListener() { // paint listener
 			public void paintControl(final PaintEvent event) {
 				paint(event.gc);
 			}
@@ -158,18 +158,15 @@ public class ImageControl extends Canvas {
 		}
 	}
 	
-	/**
-	 * Dispose the garbage here
-	 */
 	public void dispose() {
 		dispose(sourceImage);
 		dispose(screenImage);
 		dispose(panCursor);
 		dispose(linkCursor);
 		dispose(unsupportedLinkCursor);
+		super.dispose();
 	}
 
-	/* Paint function */
 	private void paint(GC gc) {
 		Rectangle clientRect = getClientArea(); // Canvas' painting area
 		if (sourceImage != null) {
@@ -227,7 +224,6 @@ public class ImageControl extends Canvas {
 		linkSupports.remove(linkSupport);
 	}
 
-	/* Initalize the scrollbar and register listeners. */
 	private void initScrollBars() {
 		ScrollBar horizontal = getHorizontalBar();
 		horizontal.setEnabled(false);
@@ -247,9 +243,9 @@ public class ImageControl extends Canvas {
 
 	/* Scroll horizontally */
 	private void scrollHorizontally(ScrollBar scrollBar) {
-		if (sourceImage == null)
+		if (sourceImage == null) {
 			return;
-
+		}
 		AffineTransform af = transform;
 		double tx = af.getTranslateX();
 		double select = -scrollBar.getSelection();
@@ -260,9 +256,9 @@ public class ImageControl extends Canvas {
 
 	/* Scroll vertically */
 	private void scrollVertically(ScrollBar scrollBar) {
-		if (sourceImage == null)
+		if (sourceImage == null) {
 			return;
-
+		}
 		AffineTransform af = transform;
 		double ty = af.getTranslateY();
 		double select = -scrollBar.getSelection();
@@ -277,53 +273,56 @@ public class ImageControl extends Canvas {
 	 * :<b> transform, image size, client area</b>.
 	 */
 	public void syncScrollBars() {
+		if (isDisposed()) {
+			return;
+		}
 		if (sourceImage == null) {
 			redraw();
 			return;
 		}
-
 		AffineTransform af = transform;
 		double sx = af.getScaleX(), sy = af.getScaleY();
 		double tx = af.getTranslateX(), ty = af.getTranslateY();
-		if (tx > 0)
+		if (tx > 0) {
 			tx = 0;
-		if (ty > 0)
+		}
+		if (ty > 0) {
 			ty = 0;
-
+		}
 		ScrollBar horizontal = getHorizontalBar();
 		horizontal.setIncrement((int) (getClientArea().width / 20));
 		horizontal.setPageIncrement(getClientArea().width);
-		Rectangle imageBound = sourceImage.getBounds();
-		int cw = getClientArea().width, ch = getClientArea().height;
-		if (imageBound.width * sx > cw) { /* image is wider than client area */
-			horizontal.setMaximum((int) (imageBound.width * sx));
+		Rectangle imageBounds = sourceImage.getBounds();
+		int caw = getClientArea().width, cah = getClientArea().height;
+		if (imageBounds.width * sx > caw) { // image is wider than client area
+			horizontal.setMaximum((int) (imageBounds.width * sx));
 			horizontal.setEnabled(true);
-			if (((int) -tx) > horizontal.getMaximum() - cw)
-				tx = -horizontal.getMaximum() + cw;
-		} else { /* image is narrower than client area */
+			if (((int) -tx) > horizontal.getMaximum() - caw)
+				tx = -horizontal.getMaximum() + caw;
+		} else { // image is narrower than client area
 			horizontal.setEnabled(false);
-			tx = (cw - imageBound.width * sx) / 2; // center if too small.
+			tx = (caw - imageBounds.width * sx) / 2; // center if too small.
 		}
 		horizontal.setSelection((int) (-tx));
-		horizontal.setThumb((int) (getClientArea().width));
+		horizontal.setThumb(caw);
 
 		ScrollBar vertical = getVerticalBar();
-		vertical.setIncrement((int) (getClientArea().height / 20));
-		vertical.setPageIncrement((int) (getClientArea().height));
-		if (imageBound.height
-				* sy > ch) { /* image is higher than client area */
-			vertical.setMaximum((int) (imageBound.height * sy));
+		vertical.setIncrement(cah / 20);
+		vertical.setPageIncrement(cah);
+		if (imageBounds.height * sy > cah) { // image is higher than client area
+			vertical.setMaximum((int) (imageBounds.height * sy));
 			vertical.setEnabled(true);
-			if (((int) -ty) > vertical.getMaximum() - ch)
-				ty = -vertical.getMaximum() + ch;
-		} else { /* image is less higher than client area */
+			if (((int) -ty) > vertical.getMaximum() - cah) {
+				ty = -vertical.getMaximum() + cah;
+			}
+		} else { // image is shorter than client area
 			vertical.setEnabled(false);
-			ty = (ch - imageBound.height * sy) / 2; // center if too small.
+			ty = (cah - imageBounds.height * sy) / 2; // center if too small.
 		}
 		vertical.setSelection((int) (-ty));
-		vertical.setThumb((int) (getClientArea().height));
+		vertical.setThumb(cah);
 
-		/* update transform. */
+		// update transform
 		af = AffineTransform.getScaleInstance(sx, sy);
 		af.preConcatenate(AffineTransform.getTranslateInstance(tx, ty));
 		transform = af;

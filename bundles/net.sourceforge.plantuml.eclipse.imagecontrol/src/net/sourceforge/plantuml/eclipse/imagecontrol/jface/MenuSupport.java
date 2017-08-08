@@ -13,8 +13,15 @@ import org.eclipse.swt.widgets.MenuItem;
 
 public class MenuSupport {
 
-	public MenuSupport(Control control) {
-		addMenuDetectListener(control);
+	public MenuSupport() {
+	}
+
+	public void addImageControl(Control control) {
+		control.addListener(SWT.MenuDetect, menuDetectListener);
+	}
+
+	public void removeImageControl(Control control) {
+		control.removeListener(SWT.MenuDetect, menuDetectListener);
 	}
 
 	//
@@ -29,26 +36,25 @@ public class MenuSupport {
 		menuActions.remove(action);
 	}
 	
-	protected void addMenuDetectListener(final Control control) {
-		control.addListener(SWT.MenuDetect, new Listener() {
-			public void handleEvent(Event event) {
-				Menu menu = control.getMenu();
-				if (menu != null) {
-					menu.dispose();
-				}
-				menu = new Menu(control.getDisplay().getFocusControl());
-				for (final Action action : menuActions) {
-					MenuItem item = new MenuItem(menu, SWT.PUSH);
-					item.setText(action.getText());
-					item.addListener(SWT.Selection, new Listener() {
-						@Override
-						public void handleEvent(Event event) {
-							action.run();
-						}
-					});					
-				}
-				control.setMenu(menu);
+	private Listener menuDetectListener = new Listener() {
+		public void handleEvent(Event event) {
+			Control control = (Control) event.widget;
+			Menu menu = control.getMenu();
+			if (menu != null) {
+				menu.dispose();
 			}
-		});
-	}
+			menu = new Menu(control.getDisplay().getFocusControl());
+			for (final Action action : menuActions) {
+				MenuItem item = new MenuItem(menu, SWT.PUSH);
+				item.setText(action.getText());
+				item.addListener(SWT.Selection, new Listener() {
+					@Override
+					public void handleEvent(Event event) {
+						action.run();
+					}
+				});					
+			}
+			control.setMenu(menu);
+		}
+	};
 }

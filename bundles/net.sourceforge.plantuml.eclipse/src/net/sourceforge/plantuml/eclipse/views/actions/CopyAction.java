@@ -29,7 +29,7 @@ public class CopyAction extends DiagramAction {
      */
     public void run() {
         Clipboard clipboard = new Clipboard(display);
-        clipboard.setContents(new Object[]{diagram.getImageData()}, new Transfer[]{ImageTransfer.getInstance()});
+        clipboard.setContents(new Object[]{getImage()}, new Transfer[]{ImageTransfer.getInstance()});
         clipboard.dispose();
     }
 }

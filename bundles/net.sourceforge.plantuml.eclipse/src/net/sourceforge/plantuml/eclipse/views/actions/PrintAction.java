@@ -9,8 +9,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.printing.PrintDialog;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
@@ -26,22 +25,22 @@ public class PrintAction extends DiagramAction {
     /**
      * 
      */
-    private final Composite composite;
+    private final Shell shell;
 
     /**
      * 
      * @param diagram Diagram
      * @param container Composite
      */
-    public PrintAction(Display display, Diagram diagram, Composite container) {
-        super(display, diagram);
-        this.composite = container;
+    public PrintAction(Shell shell, Diagram diagram) {
+        super(shell.getDisplay(), diagram);
+        this.shell = shell;
         setText(PlantumlConstants.PRINT_MENU);
     }
 
     @Override
     public void run() {
-        final PrintDialog pDialog = new PrintDialog(this.composite.getShell(), SWT.APPLICATION_MODAL);
+        final PrintDialog pDialog = new PrintDialog(shell, SWT.APPLICATION_MODAL);
         pDialog.setText("UML Printing.");
 
         pDialog.setScope(PrinterData.ALL_PAGES);
@@ -62,10 +61,10 @@ public class PrintAction extends DiagramAction {
                 final int verticalMargin = dpi.y / 4 + trim.y;
                 // We calculate the appropriate size of the image to be
                 // print (because I have some problem with memory)
-                int displayWidth = diagram.getImageData().width
-                        * coef;
-                int displayHeigth = diagram.getImageData().height
-                        * coef;
+                
+                ImageData image = getImage();
+                int displayWidth = image.width * coef;
+                int displayHeigth = image.height * coef;
 
                 final Rectangle pageSize = printer.getBounds();
                 int widthWithoutMargin = pageSize.width - 2 * horizontalMargin; 
@@ -90,7 +89,7 @@ public class PrintAction extends DiagramAction {
                     }
                 }
 
-                printImage(printer, horizontalMargin, verticalMargin,
+                printImage(image, printer, horizontalMargin, verticalMargin,
                         displayWidth, displayHeigth);
 
             }
@@ -115,12 +114,11 @@ public class PrintAction extends DiagramAction {
      * 
      * @throws Throwable
      */
-    private void printImage(Printer printer, int horizontalMargin,
+    private void printImage(ImageData iData, Printer printer, int horizontalMargin,
             int verticalMargin, int displayWidth, int displayHeigth)
             throws Throwable {
 
         final GC gc = new GC(printer);
-        final ImageData iData = diagram.getImageData();
         final Image printerImage = new Image(printer, iData);
 
         // use of the gc method to reduce outOMemoryError

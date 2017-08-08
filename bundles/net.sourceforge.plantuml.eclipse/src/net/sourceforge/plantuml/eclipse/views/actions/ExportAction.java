@@ -6,9 +6,8 @@ import java.io.IOException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -25,22 +24,17 @@ import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
  */
 public class ExportAction extends DiagramAction {
 
-	private final Composite composite;
+	private final Shell shell;
 
-    /**
-     * 
-     * @param diagram Diagram
-     * @param container Composite
-     */
-    public ExportAction(Display display, Diagram diagram, Composite container) {
-		super(display, diagram);
-        this.composite = container;
+    public ExportAction(Shell shell, Diagram diagram) {
+		super(shell.getDisplay(), diagram);
+        this.shell = shell;
         setText(PlantumlConstants.EXPORT_MENU);
     }
 
     @Override
     public void run() {
-        final FileDialog fDialog = new FileDialog(this.composite.getShell(), SWT.SAVE);
+        final FileDialog fDialog = new FileDialog(shell, SWT.SAVE);
         fDialog.setFilterExtensions(new String[] { "*.png", "*.svg", "*.jpg", "*.gif" });
         fDialog.open();
 
@@ -52,7 +46,7 @@ public class ExportAction extends DiagramAction {
             if ("svg".equals(ext)) {
                 createImageFileSvg(filePathName, diagram.getTextDiagram());
             } else {
-                createImageFile(filePathName, ext, diagram.getImageData());
+                createImageFile(filePathName, ext, getImage());
             }
         }
     }
