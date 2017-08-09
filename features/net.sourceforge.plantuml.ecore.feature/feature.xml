@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.ecore.feature"
       label="%featureName"
-      version="1.1.19"
+      version="1.1.19.qualifier"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
@@ -18,14 +18,14 @@
    </license>
 
    <requires>
-      <import feature="net.sourceforge.plantuml.feature" version="1.1.19"/>
+      <import feature="net.sourceforge.plantuml.feature" version="1.1.19.qualifier"/>
    </requires>
 
    <plugin
          id="net.sourceforge.plantuml.ecore"
          download-size="0"
          install-size="0"
-         version="1.1.19"
+         version="1.1.19.qualifier"
          unpack="false"/>
 
 </feature>
