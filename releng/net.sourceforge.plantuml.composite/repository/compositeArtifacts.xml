@@ -1,0 +1,15 @@
+<?compositeMetadataRepository version='1.0.0'?>
+<repository name='PlantUML composite site'
+	type='org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository'
+	version='1.0.0'>
+	<properties size='2'>
+	<!-- 
+		<property name='p2.timestamp' value='1421600341270' />
+	 -->
+		<property name='p2.atomic.composite.loading' value='true' />
+	</properties>
+	<children size='2'>
+			<child location='../plantuml.eclipse/repository' />
+			<child location='../plantuml.lib/repository' />
+	</children>
+</repository>
