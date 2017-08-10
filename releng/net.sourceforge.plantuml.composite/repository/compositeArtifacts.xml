@@ -13,10 +13,4 @@
 		<child location='../plantuml.lib/1.2017.15/repository' />
 		<child location='../plantuml.eclipse/1.1.19/repository' />
 	</children>
-	<!-- 
-	<children size='2'>
-			<child location='../../net.sourceforge.plantuml.repository/target/repository' />
-			<child location='../../net.sourceforge.plantuml.lib.repository/target/repository' />
-	</children>
-	 -->	
 </repository>
