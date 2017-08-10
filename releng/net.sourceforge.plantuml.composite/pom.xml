@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>net.sourceforge.plantuml</groupId>
 		<artifactId>net.sourceforge.plantuml.parent</artifactId>
-		<version>1.1.18-SNAPSHOT</version>
+		<version>1.1.19-SNAPSHOT</version>
 		<relativePath>../net.sourceforge.plantuml.parent</relativePath>
 	</parent>
 
@@ -58,8 +58,46 @@
 							</resources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>copy-plantuml.lib-files</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/plantuml.lib/1.2017.15/repository</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../net.sourceforge.plantuml.lib.repository/target/repository</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-plantuml.eclipse-files</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/plantuml.eclipse/1.1.19/repository</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../net.sourceforge.plantuml.repository/target/repository</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
+	
+	<modules>
+		<module>../net.sourceforge.plantuml.aggregator</module>
+		<module>../net.sourceforge.plantuml.lib.repository</module>
+	</modules>
+
 </project>
