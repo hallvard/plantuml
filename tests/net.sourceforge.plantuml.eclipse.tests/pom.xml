@@ -32,4 +32,5 @@
 			</plugin>
 		</plugins>
 	</build>
+	<version>1.1.19</version>
 </project>
