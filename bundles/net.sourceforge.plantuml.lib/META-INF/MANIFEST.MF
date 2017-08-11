@@ -6,5 +6,6 @@ Bundle-Version: 1.2017.15
 Bundle-Vendor: PlantUML Team
 Bundle-ClassPath: lib/plantuml-epl-1.2017.15.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: net.sourceforge.plantuml
+Export-Package: net.sourceforge.plantuml,
+ net.sourceforge.plantuml.core
 Bundle-ActivationPolicy: lazy

@@ -36,6 +36,9 @@ Use http://files.idi.ntnu.no/publish/plantuml/repository/ as the update site URL
 Notable features in recent releases, details are found in [../../releases].
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
 
+## [1.1.20]
+- ...
+
 ## [1.1.19](../../releases/tag/1.1.19)
 - Support for the newpage directive. Multi-page diagrams are rendered as numbered tabs ([issue #11](../../issues/11)).
 - Support generating packages for project class diagram, and a preference to turn on/off ([issue #18](../../issues/18)).

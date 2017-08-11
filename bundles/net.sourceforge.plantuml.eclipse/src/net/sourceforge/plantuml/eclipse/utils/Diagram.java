@@ -23,6 +23,7 @@ import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.eclipse.Activator;
 
 /**
@@ -102,17 +103,16 @@ public class Diagram {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			// image generation
 			SourceStringReader reader = new SourceStringReader(textDiagram);
-			String desc = reader.generateImage(os, imageNum);
+			DiagramDescription desc = reader.outputImage(os, imageNum);
 			if (links != null) {
 				String cMapData = reader.getCMapData(0, layoutFormatOption);
 				if (cMapData != null) {
 					parseImageMapString(cMapData, links);
 				}
 			}
-			os.flush();
 			os.close();
 
-			if (StringUtils.isNotEmpty(desc)) {
+			if (StringUtils.isNotEmpty(desc.getDescription())) {
 				InputStream is = new ByteArrayInputStream(os.toByteArray());
 				imageData = new ImageData(is);
 				is.close();
