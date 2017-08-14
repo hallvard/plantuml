@@ -7,7 +7,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Shell;
 
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -16,25 +15,23 @@ import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
+import net.sourceforge.plantuml.eclipse.views.DiagramImageControl;
 
 /**Manage the Export of the diagram.
  * 
  * @author durif_c
  * 
  */
-public class ExportAction extends DiagramAction {
+public class ExportAction extends DiagramImageAction {
 
-	private final Shell shell;
-
-    public ExportAction(Shell shell, Diagram diagram) {
-		super(shell.getDisplay(), diagram);
-        this.shell = shell;
+    public ExportAction(DiagramImageControl control, Diagram diagram) {
+		super(control, diagram);
         setText(PlantumlConstants.EXPORT_MENU);
     }
 
     @Override
     public void run() {
-        final FileDialog fDialog = new FileDialog(shell, SWT.SAVE);
+        final FileDialog fDialog = new FileDialog(getControl().getShell(), SWT.SAVE);
         fDialog.setFilterExtensions(new String[] { "*.png", "*.svg", "*.jpg", "*.gif" });
         fDialog.open();
 
@@ -66,9 +63,9 @@ public class ExportAction extends DiagramAction {
         try {
             fos = new FileOutputStream(filePathName);
     		SourceStringReader reader = new SourceStringReader(textDiagram);
-    		reader.generateImage(fos, new FileFormatOption(FileFormat.SVG));
+    		reader.outputImage(fos, new FileFormatOption(FileFormat.SVG));
         } catch (IOException e) {
-            WorkbenchUtil.errorBox("Error during file generation for printing.");
+            WorkbenchUtil.errorBox("Error during file generation for export.");
         } finally {
             if (fos != null) {
                 try {

@@ -3,24 +3,23 @@ package net.sourceforge.plantuml.eclipse.views.actions;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.ImageTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.widgets.Display;
 
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
+import net.sourceforge.plantuml.eclipse.views.DiagramImageControl;
 
 /**Manage the copy action.
  * 
  * @author durif_c
  * 
  */
-public class CopyAction extends DiagramAction {
+public class CopyAction extends DiagramImageAction {
 
     /**
      * 
      * @param diagram Diagram
      */
-    public CopyAction(Display display, Diagram diagram) {
-		super(display, diagram);
+    public CopyAction(DiagramImageControl control) {
+		super(control);
 		setText(PlantumlConstants.COPY_MENU);
 	}
 
@@ -28,7 +27,7 @@ public class CopyAction extends DiagramAction {
      * 
      */
     public void run() {
-        Clipboard clipboard = new Clipboard(display);
+        Clipboard clipboard = new Clipboard(getControl().getDisplay());
         clipboard.setContents(new Object[]{getImage()}, new Transfer[]{ImageTransfer.getInstance()});
         clipboard.dispose();
     }

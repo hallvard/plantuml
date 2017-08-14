@@ -159,11 +159,17 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 
 	private void addCanvasActions() {
 		Display display = composite.getDisplay();
-		menuSupport.addMenuAction(new CopyAction(display, diagram));
+		menuSupport.addMenuAction(new CopyAction(null) {
+			@Override public ImageControl getControl() { return getCurrentImageControl(); };
+		});
 		menuSupport.addMenuAction(new CopySourceAction(display, diagram));
 		menuSupport.addMenuAction(new CopyAsciiAction(display, diagram));
-		menuSupport.addMenuAction(new ExportAction(composite.getShell(), diagram));
-		menuSupport.addMenuAction(new PrintAction(composite.getShell(), diagram));
+		menuSupport.addMenuAction(new ExportAction(null, diagram) {
+			@Override public ImageControl getControl() { return getCurrentImageControl(); };
+		});
+		menuSupport.addMenuAction(new PrintAction(null) {
+			@Override public ImageControl getControl() { return getCurrentImageControl(); };
+		});
 	}
 
 	private IAction zoomInAction, zoomOutAction, fitCanvasAction, showOriginalAction;

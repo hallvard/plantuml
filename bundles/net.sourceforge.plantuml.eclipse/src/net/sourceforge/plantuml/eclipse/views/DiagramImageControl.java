@@ -21,6 +21,12 @@ public class DiagramImageControl extends ImageControl {
 		super(parent, style);
 	}
 
+	private ImageData imageData;
+	
+	public ImageData getImageData() {
+		return imageData;
+	}
+	
 	private Collection<LinkData> links = null;
 	
 	public Iterable<LinkData> getLinks() {
@@ -29,13 +35,15 @@ public class DiagramImageControl extends ImageControl {
 	
 	public void updateDiagramImage(IPath path, Diagram diagram, int imageNum) {
 		try {
-			links = new ArrayList<LinkData>();
+			this.imageData = null;
+			this.links = new ArrayList<LinkData>();
 			final ImageData imageData = diagram.getImage(path, imageNum, links);
 			if (imageData != null && (! isDisposed())) {
 				getDisplay().asyncExec(new Runnable() {
 					public void run() {
 						if (! isDisposed()) {
 							loadImage(imageData);
+							DiagramImageControl.this.imageData = imageData;
 						}
 					}
 				});

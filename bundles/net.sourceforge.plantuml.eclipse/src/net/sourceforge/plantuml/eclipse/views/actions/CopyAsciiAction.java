@@ -38,7 +38,7 @@ public class CopyAsciiAction extends DiagramAction {
 			String source = diagram.getTextDiagram();
 			SourceStringReader sourceStringReader = new SourceStringReader(source);
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			sourceStringReader.generateImage(os, new FileFormatOption(FileFormat.ATXT));
+			sourceStringReader.outputImage(os, new FileFormatOption(FileFormat.ATXT));
 			os.close();
 			s = new String(os.toByteArray());
 		} catch (Exception e) {

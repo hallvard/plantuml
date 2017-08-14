@@ -9,11 +9,11 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.printing.PrintDialog;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
-import org.eclipse.swt.widgets.Shell;
 
 import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
+import net.sourceforge.plantuml.eclipse.views.DiagramImageControl;
 
 /**
  * manage the print of the diagram image.
@@ -21,26 +21,16 @@ import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
  * @author durif_c
  * 
  */
-public class PrintAction extends DiagramAction {
-    /**
-     * 
-     */
-    private final Shell shell;
+public class PrintAction extends DiagramImageAction {
 
-    /**
-     * 
-     * @param diagram Diagram
-     * @param container Composite
-     */
-    public PrintAction(Shell shell, Diagram diagram) {
-        super(shell.getDisplay(), diagram);
-        this.shell = shell;
+    public PrintAction(DiagramImageControl control) {
+        super(control);
         setText(PlantumlConstants.PRINT_MENU);
     }
 
     @Override
     public void run() {
-        final PrintDialog pDialog = new PrintDialog(shell, SWT.APPLICATION_MODAL);
+        final PrintDialog pDialog = new PrintDialog(getControl().getShell(), SWT.APPLICATION_MODAL);
         pDialog.setText("UML Printing.");
 
         pDialog.setScope(PrinterData.ALL_PAGES);
