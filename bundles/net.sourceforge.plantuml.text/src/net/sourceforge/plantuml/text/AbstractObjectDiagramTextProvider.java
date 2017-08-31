@@ -1,5 +1,10 @@
 package net.sourceforge.plantuml.text;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
 public abstract class AbstractObjectDiagramTextProvider extends AbstractDiagramTextProvider {
 
 	public AbstractObjectDiagramTextProvider() {
@@ -51,10 +56,5 @@ public abstract class AbstractObjectDiagramTextProvider extends AbstractDiagramT
 		buffer.append(" = ");
 		buffer.append(value);
 		buffer.append("\n");
-	}
-
-	protected void appendLink(String object1, String name, boolean cont, String object2, StringBuilder buffer) {
-		String relation = SIMPLE_LINK;
-		appendRelation(object1, cont, null, relation, null, object2, false, null, name, buffer);
 	}
 }
