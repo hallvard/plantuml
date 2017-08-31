@@ -1,10 +1,5 @@
 package net.sourceforge.plantuml.text;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 public abstract class AbstractObjectDiagramTextProvider extends AbstractDiagramTextProvider {
 
 	public AbstractObjectDiagramTextProvider() {
