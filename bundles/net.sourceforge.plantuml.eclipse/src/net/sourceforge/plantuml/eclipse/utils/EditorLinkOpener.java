@@ -1,13 +1,16 @@
 package net.sourceforge.plantuml.eclipse.utils;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.ide.IDE;
 
 public abstract class EditorLinkOpener implements ILinkOpener {
 	
@@ -19,7 +22,18 @@ public abstract class EditorLinkOpener implements ILinkOpener {
 		return NO_SUPPORT;
 	}
 
-	protected abstract IPath getPath(LinkData link);
+	protected IPath getPath(LinkData link) {
+		try {
+			URI uri = new URI(link.href);
+			if (uri.getPath() != null) {
+				IPath path = new Path(uri.getPath());
+				return path;
+			}
+		} catch (URISyntaxException e) {
+			return new Path(link.href);
+		}
+		return null;
+	}
 
 	@Override
 	public void openLink(LinkData link) {
@@ -27,8 +41,7 @@ public abstract class EditorLinkOpener implements ILinkOpener {
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IPath path = getPath(link);
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-			IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-			page.openEditor(new FileEditorInput(file), desc.getId());
+			IDE.openEditor(page, file);
 		} catch (PartInitException e) {
 		}
 	}

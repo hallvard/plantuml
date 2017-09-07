@@ -4,11 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+
+import net.sourceforge.plantuml.eclipse.utils.MarkerLinkOpener;
+import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
 
 public class EcoreDiagramHelper {
 
@@ -71,5 +76,20 @@ public class EcoreDiagramHelper {
 	}
 	protected boolean shouldSuppress(ENamedElement element, String role) {
 		return shouldSuppress(element, element.getName(), role);
+	}
+	
+	//
+	
+	protected String getEObjectHyperlink(EObject eObject) {
+		URI uri = EcoreUtil.getURI(eObject);
+		if (uri.isPlatformResource()) {
+			String path = uri.path();
+			String prefix = "/resource";
+			if (path.startsWith(prefix)) {
+				path = path.substring(prefix.length());
+			}
+			return MarkerLinkOpener.createMarkerLink(EValidator.MARKER, path, EValidator.URI_ATTRIBUTE, URI.encodeQuery(uri.toString(), false));
+		}
+		return uri.toString();
 	}
 }

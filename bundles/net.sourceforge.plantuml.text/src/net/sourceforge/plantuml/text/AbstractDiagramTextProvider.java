@@ -167,4 +167,14 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		}
 		buffer.append("\n");
 	}
+	
+	protected void appendNameLink(String name, String link, StringBuilder buffer) {
+		if (link != null) {
+			buffer.append("url of ");
+			buffer.append(name);
+			buffer.append(" is ");
+			appendLink(link, false, buffer);
+			buffer.append("\n");
+		}
+	}
 }

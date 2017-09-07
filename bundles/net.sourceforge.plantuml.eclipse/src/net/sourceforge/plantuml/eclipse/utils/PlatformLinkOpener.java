@@ -24,17 +24,14 @@ public class PlatformLinkOpener extends EditorLinkOpener {
 		}
 		return NO_SUPPORT;
 	}
-
+	
 	@Override
 	protected IPath getPath(LinkData link) {
 		try {
 			URI uri = new URI(link.href);
 			if (uri.getPath() != null) {
 				IPath path = new Path(uri.getPath());
-				if ("platform".equals(uri.getScheme())) {
-					path = path.removeFirstSegments(1);
-				}
-				return path;
+				return path.removeFirstSegments(1);
 			}
 		} catch (URISyntaxException e) {
 			return new Path(link.href);

@@ -5,7 +5,7 @@ import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN
 import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_IMPLEMENTS;
 import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_MEMBERS;
 import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_MODIFIERS;
-import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_CLASS_LINKS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_CLASS_HYPERLINKS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -125,7 +125,7 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 		updateView();
 	}
 
-	private int genFlags = GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_LINKS;
+	private int genFlags = GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_HYPERLINKS;
 
 	public final static String[] ALL_PACKAGE_STYLES = { "Folder", "Rectangle", "Frame", "Cloud", "Database" };
 	

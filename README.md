@@ -37,7 +37,10 @@ Notable features in recent releases, details are found in [../../releases].
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
 
 ## [1.1.20]
-- ...
+- Fixes include bug ([issue #35](../../issues/35)) and copying, exporting and printing pages of multi-page diagrams.
+- Fixes problem with dangling Ecore objects ([issue #36](../../issues/36))
+- Fixes problem with object attribute values with newlines and braces ([issue #37](../../issues/37)) by truncating. Also truncates long attribute value strings, to make object boxes smaller.
+- Support for marker:/.../ hyperlinks to specific objects within a file, using the Marker API. Ecore object diagrams now use this kind of marker.
 
 ## [1.1.19](../../releases/tag/1.1.19)
 - Support for the newpage directive. Multi-page diagrams are rendered as numbered tabs ([issue #11](../../issues/11)).

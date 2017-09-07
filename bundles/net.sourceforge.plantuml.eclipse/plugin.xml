@@ -60,6 +60,9 @@
       <linkOpener
             linkOpenerClass="net.sourceforge.plantuml.eclipse.utils.PlatformLinkOpener">
       </linkOpener>
+      <linkOpener
+            linkOpenerClass="net.sourceforge.plantuml.eclipse.utils.MarkerLinkOpener">
+      </linkOpener>
    </extension>
 
 </plugin>

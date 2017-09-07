@@ -78,7 +78,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 				}
 			}
 		}
-		String result = classifiers.size() > 0 ? getDiagramText(GEN_MEMBERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS) : null;
+		String result = classifiers.size() > 0 ? getDiagramText(GEN_MEMBERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_HYPERLINKS) : null;
 		this.classifiers = null;
 		return result;
 	}
@@ -88,7 +88,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		if (! excludePackages.contains(pack.getNsURI())) {
 			init(pack);
 		}
-		String result = classifiers.size() > 0 ? getDiagramText(GEN_MEMBERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS) : null;
+		String result = classifiers.size() > 0 ? getDiagramText(GEN_MEMBERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_HYPERLINKS) : null;
 		this.classifiers = null;
 		return result;
 	}
@@ -181,7 +181,11 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 	
 	protected void appendClass(EClass eClass, int genFlags, StringBuilder buffer) {
 		String modifiers = eClass.isAbstract() && (! eClass.isInterface()) ? "abstract" : null;
-		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", eClass.getName(), getClassifierColor(eClass), buffer);
+		String link = null;
+		if (includes(genFlags, GEN_CLASS_HYPERLINKS)) {
+			link = diagramHelper.getEObjectHyperlink(eClass);
+		}
+		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", eClass.getName(), link, getClassifierColor(eClass), buffer);
 		if (includes(genFlags, GEN_MEMBERS)) {
 			for (EStructuralFeature feature : eClass.getEStructuralFeatures()) {
 				EClassifier eType = feature.getEType();

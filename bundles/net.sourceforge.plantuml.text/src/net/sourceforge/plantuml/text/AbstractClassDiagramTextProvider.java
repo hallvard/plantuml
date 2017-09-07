@@ -13,7 +13,7 @@ public abstract class AbstractClassDiagramTextProvider extends AbstractDiagramTe
 	
 	//
 
-	public static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_EXTENDS = 1<<2, GEN_IMPLEMENTS = 1<<3, GEN_ASSOCIATIONS = 1<<4, GEN_CLASS_LINKS = 1<<5;
+	public static int GEN_MODIFIERS = 1<<0, GEN_MEMBERS = 1<<1, GEN_EXTENDS = 1<<2, GEN_IMPLEMENTS = 1<<3, GEN_ASSOCIATIONS = 1<<4, GEN_CLASS_HYPERLINKS = 1<<5;
 	
 	protected final static String CLASS_TYPE = "class", INTERFACE_TYPE = "interface", ENUM_TYPE = "enum";
 

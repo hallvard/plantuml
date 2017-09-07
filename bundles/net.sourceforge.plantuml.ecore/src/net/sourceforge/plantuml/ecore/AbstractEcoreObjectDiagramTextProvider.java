@@ -50,7 +50,7 @@ public abstract class AbstractEcoreObjectDiagramTextProvider extends AbstractObj
 				eObjects.add((EObject) contained);
 			}
 		}
-		String result = eObjects.size() > 0 ? getDiagramText(GEN_ATTRIBUTES | GEN_LINKS) : null;
+		String result = eObjects.size() > 0 ? getDiagramText(GEN_ATTRIBUTES | GEN_LINKS | GEN_OBJECT_HYPERLINKS) : null;
 		return result;		
 	}
 	
@@ -99,9 +99,9 @@ public abstract class AbstractEcoreObjectDiagramTextProvider extends AbstractObj
 		return "o" + getId(eObject);
 	}
 	
-	private void appendObject(EObject eObject, int genFlags, StringBuilder buffer) {
+	protected void appendObject(EObject eObject, int genFlags, StringBuilder buffer) {
 		EClass eClass = eObject.eClass();
-		appendObjectStart(getOrCreateId(eObject), getName(eObject), getTypeName(eClass), null, buffer);
+		appendObjectStart(getOrCreateId(eObject), getName(eObject), getTypeName(eClass), buffer);
 		if (includes(genFlags, GEN_ATTRIBUTES)) {
 			for (EAttribute attr: eClass.getEAllAttributes()) {
 				Object value = eObject.eGet(attr);
@@ -110,13 +110,17 @@ public abstract class AbstractEcoreObjectDiagramTextProvider extends AbstractObj
 			}
 		}
 		appendObjectEnd(buffer);
+		if (includes(genFlags, GEN_OBJECT_HYPERLINKS)) {
+			String link = diagramHelper.getEObjectHyperlink(eObject);
+			appendNameLink(getName(eObject), link, buffer);
+		}
 	}
 	
 	protected int maxAttributeLength = 40, maxAttributeValueLenght = 25;
 	
 	protected String truncateString = "\u2026"; // ...
 	
-	private String getValueString(Object value, EAttribute attr) {
+	protected String getValueString(Object value, EAttribute attr) {
 		String valueString = "?";
 		if (attr.isMany()) {
 			valueString = MANY_VALUE_START;

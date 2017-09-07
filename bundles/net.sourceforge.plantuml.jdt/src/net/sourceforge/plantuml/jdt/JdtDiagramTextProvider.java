@@ -25,7 +25,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		return false;
 	}
 
-	private int genFlags = GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_LINKS;
+	private int genFlags = GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_HYPERLINKS;
 
 	public void generateForType(IType type, StringBuilder result, Collection<IType> allTypes) {
 		generateForType(type, result, genFlags, allTypes);
@@ -58,7 +58,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 	
 	private boolean useJavaLinks = true;
 	
-	protected String getLink(IType type) {
+	protected String getHyperlink(IType type) {
 		if (useJavaLinks) {
 			return JavaLinkOpener.JAVA_LINK_PREFIX + type.getFullyQualifiedName();
 		} else {
@@ -75,8 +75,8 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		result.append(getClassType(type));
 		result.append(" ");
 		appendNameDeclaration(type.getElementName(), result);
-		if (includes(genFlags, GEN_CLASS_LINKS)) {
-			appendLink(getLink(type), false, result);
+		if (includes(genFlags, GEN_CLASS_HYPERLINKS)) {
+			appendLink(getHyperlink(type), false, result);
 		}
 		result.append(" {\n");
 		try {
@@ -192,11 +192,11 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 	private void generateRelatedType(IType type, String className, String relation, String classType, StringBuilder result, int genFlags, String startLabel, String middleLabel, String endLabel) {
 		if (className != null && (! className.equals("Object"))) {
 			String link = null;
-			if (includes(genFlags, GEN_CLASS_LINKS)) {
+			if (includes(genFlags, GEN_CLASS_HYPERLINKS)) {
 				try {
 					IType relatedType = OpenTypeAction.findTypeInWorkspace(className, false);
 					if (relatedType != null) {
-						link = getLink(relatedType);
+						link = getHyperlink(relatedType);
 					}
 				} catch (CoreException e) {
 				}

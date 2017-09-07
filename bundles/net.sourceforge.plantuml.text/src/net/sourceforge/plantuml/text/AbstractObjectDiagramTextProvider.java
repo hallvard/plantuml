@@ -11,7 +11,7 @@ public abstract class AbstractObjectDiagramTextProvider extends AbstractDiagramT
 	
 	//
 
-	public static int GEN_ATTRIBUTES = 1<<0, GEN_LINKS = 1<<1;
+	public static int GEN_ATTRIBUTES = 1<<0, GEN_LINKS = 1<<1, GEN_OBJECT_HYPERLINKS = 1<<2;
 	
 	protected final static String OBJECT_TYPE = "object";
 
@@ -19,11 +19,11 @@ public abstract class AbstractObjectDiagramTextProvider extends AbstractDiagramT
 	
 	protected final static String SIMPLE_LINK = LINK_LINE, AGGREGATION_LINK = "<>" + LINK_LINE;
 	
-	protected void appendObjectStart(String name, String id, String className, String link, StringBuilder buffer) {
-		appendObjectStart(name, id, className, null, link, buffer);
+	protected void appendObjectStart(String name, String id, String className, StringBuilder buffer) {
+		appendObjectStart(name, id, className, null, buffer);
 	}
 
-	protected void appendObjectStart(String name, String id, String className, String color, String link, StringBuilder buffer) {
+	protected void appendObjectStart(String name, String id, String className, String color, StringBuilder buffer) {
 		buffer.append(OBJECT_TYPE);
 		buffer.append(" ");
 		buffer.append("\"~#" + name + ": " + className + "\"");
