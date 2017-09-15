@@ -3,7 +3,6 @@ package net.sourceforge.plantuml.text;
 public abstract class AbstractObjectDiagramTextProvider extends AbstractDiagramTextProvider {
 
 	public AbstractObjectDiagramTextProvider() {
-		
 	}
 	public AbstractObjectDiagramTextProvider(Class<?> editorType) {
 		super(editorType);

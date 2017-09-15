@@ -14,7 +14,6 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	private Class<?> editorType = null;
 
 	public AbstractDiagramTextProvider() {
-		
 	}
 	public AbstractDiagramTextProvider(Class<?> editorType) {
 		this();
@@ -51,6 +50,19 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	
 	protected abstract String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection);
 
+	private int indentLevel = 0;
+	private String indentString = "\t";
+
+	protected void indent(int d) {
+		indentLevel += d;
+	}
+	
+	protected void indent(StringBuilder buffer) {
+		for (int i = 0; i < indentLevel; i++) {
+			buffer.append(indentString);
+		}
+	}
+	
 	//
 	
 	protected static boolean includes(int flags, int... bits) {
