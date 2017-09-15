@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated osgi -->
+      <package
+            uri="platform:/plugin/no.hal.osgi.emf/model/osgi.ecore"
+            class="no.hal.osgi.OsgiPackage"
+            genModel="model/osgi.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated osgi -->
+      <parser
+            type="MF"
+            class="no.hal.osgi.util.OsgiResourceFactoryImpl"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated scr -->
+      <package
+            uri="http://www.osgi.org/xmlns/scr/v1.2.0"
+            class="org.osgi.scr.ScrPackage"
+            genModel="model/scr-1.2.0.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated scr -->
+      <parser
+            type="scr"
+            class="org.osgi.scr.util.ScrResourceFactoryImpl"/>
+   </extension>
+</plugin>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/no.hal.osgi.emf/src" modelPluginID="no.hal.osgi.emf"
+    modelName="Scr" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.xsd.ecore.importer" complianceLevel="6.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>scr.xsd</foreignModel>
+  <genPackages prefix="Scr" basePackage="org.osgi" resource="XML" disposableProviderFactory="true"
+      ecorePackage="scr-1.2.0.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="scr-1.2.0.ecore#//Cardinality">
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//Cardinality/OPTIONAL"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//Cardinality/OPTIONAL_MANY"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//Cardinality/MANDATORY"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//Cardinality/MANDATORY_MANY"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="scr-1.2.0.ecore#//ConfigurationPolicy">
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//ConfigurationPolicy/OPTIONAL"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//ConfigurationPolicy/REQUIRE"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//ConfigurationPolicy/IGNORE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="scr-1.2.0.ecore#//JavaTypes">
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//JavaTypes/STRING"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//JavaTypes/LONG"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//JavaTypes/DOUBLE"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//JavaTypes/FLOAT"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//JavaTypes/INTEGER"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//JavaTypes/BYTE"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//JavaTypes/CHARACTER"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//JavaTypes/BOOLEAN"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//JavaTypes/SHORT"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="scr-1.2.0.ecore#//Policy">
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//Policy/STATIC"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//Policy/DYNAMIC"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="scr-1.2.0.ecore#//PolicyOption">
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//PolicyOption/RELUCTANT"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.2.0.ecore#//PolicyOption/GREEDY"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="scr-1.2.0.ecore#//CardinalityObject"/>
+    <genDataTypes ecoreDataType="scr-1.2.0.ecore#//ConfigurationPolicyObject"/>
+    <genDataTypes ecoreDataType="scr-1.2.0.ecore#//JavaTypesObject"/>
+    <genDataTypes ecoreDataType="scr-1.2.0.ecore#//PolicyObject"/>
+    <genDataTypes ecoreDataType="scr-1.2.0.ecore#//PolicyOptionObject"/>
+    <genClasses ecoreClass="scr-1.2.0.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.2.0.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.2.0.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scr-1.2.0.ecore#//DocumentRoot/component"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//DocumentRoot/mustUnderstand"/>
+    </genClasses>
+    <genClasses ecoreClass="scr-1.2.0.ecore#//Component">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/group"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.2.0.ecore#//Component/property"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.2.0.ecore#//Component/properties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scr-1.2.0.ecore#//Component/service"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scr-1.2.0.ecore#//Component/reference"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scr-1.2.0.ecore#//Component/implementation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/any"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/activate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/configurationPid"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/configurationPolicy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/deactivate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/enabled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/factory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/immediate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/modified"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Component/anyAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="scr-1.2.0.ecore#//Implementation">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Implementation/any"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Implementation/class"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Implementation/anyAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="scr-1.2.0.ecore#//Properties">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Properties/any"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Properties/entry"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Properties/anyAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="scr-1.2.0.ecore#//Property">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Property/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Property/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Property/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Property/value1"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Property/anyAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="scr-1.2.0.ecore#//Provide">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Provide/any"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Provide/interface"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Provide/anyAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="scr-1.2.0.ecore#//Reference">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/any"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/bind"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/cardinality"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/interface"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/policy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/policyOption"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/unbind"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/updated"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Reference/anyAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="scr-1.2.0.ecore#//Service">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scr-1.2.0.ecore#//Service/provide"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Service/any"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Service/servicefactory"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.2.0.ecore#//Service/anyAttribute"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
