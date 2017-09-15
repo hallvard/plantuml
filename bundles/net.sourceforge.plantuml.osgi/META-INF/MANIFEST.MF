@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OSGi Manifest support
+Bundle-SymbolicName: net.sourceforge.plantuml.osgi;singleton:=true
+Bundle-Version: 1.1.20.qualifier
+Bundle-ClassPath: .
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: net.sourceforge.plantuml.eclipse;bundle-version="1.1.20",
+ no.hal.osgi.emf,
+ org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore.xmi;visibility:=reexport,
+ net.sourceforge.plantuml.text;bundle-version="1.1.20",
+ org.eclipse.ui;bundle-version="3.106.1",
+ org.eclipse.jface;bundle-version="3.10.2",
+ org.eclipse.pde.ui;bundle-version="3.8.100"
+Bundle-ActivationPolicy: lazy
