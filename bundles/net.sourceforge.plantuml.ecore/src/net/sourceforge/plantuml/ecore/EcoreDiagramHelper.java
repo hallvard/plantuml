@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import net.sourceforge.plantuml.eclipse.utils.MarkerLinkOpener;
-import net.sourceforge.plantuml.text.AbstractDiagramTextProvider;
 
 public class EcoreDiagramHelper {
 

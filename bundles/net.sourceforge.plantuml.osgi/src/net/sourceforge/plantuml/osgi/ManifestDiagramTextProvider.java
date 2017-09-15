@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -23,7 +22,6 @@ import no.hal.osgi.ExportedPackage;
 import no.hal.osgi.OsgiPackage;
 import no.hal.osgi.RequiredBundle;
 import no.hal.osgi.ServiceComponent;
-import no.hal.osgi.util.OsgiResourceImpl;
 
 public class ManifestDiagramTextProvider extends AbstractDiagramTextProvider {
 
