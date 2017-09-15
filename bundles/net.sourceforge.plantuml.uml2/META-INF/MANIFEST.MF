@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: UML2 PlantUML mapping
+Bundle-SymbolicName: net.sourceforge.plantuml.uml2; singleton:=true
+Bundle-Version: 1.1.20.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: net.sourceforge.plantuml.uml2
+Import-Package: net.sourceforge.plantuml.eclipse.utils,
+ net.sourceforge.plantuml.ecore,
+ net.sourceforge.plantuml.text,
+ net.sourceforge.plantuml.uml2,
+ org.eclipse.emf.common.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.util,
+ org.eclipse.jface.viewers,
+ org.eclipse.ui,
+ org.eclipse.uml2.uml
