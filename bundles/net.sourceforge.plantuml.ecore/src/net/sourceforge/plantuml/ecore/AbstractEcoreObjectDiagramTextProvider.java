@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
@@ -24,6 +25,9 @@ public abstract class AbstractEcoreObjectDiagramTextProvider extends AbstractObj
 
 	protected AbstractEcoreObjectDiagramTextProvider(Class<?> editorType) {
 		super(editorType);
+	}
+	protected AbstractEcoreObjectDiagramTextProvider() {
+		super(IEditingDomainProvider.class);
 	}
 
 	public boolean supportsSelection(ISelection selection) {

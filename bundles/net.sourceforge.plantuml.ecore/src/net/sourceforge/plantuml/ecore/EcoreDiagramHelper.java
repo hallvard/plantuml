@@ -80,7 +80,17 @@ public class EcoreDiagramHelper {
 	
 	//
 	
-	protected String getEObjectHyperlink(EObject eObject) {
+	public <T> T getAncestor(EObject eObject, Class<T> clazz) {
+		while (eObject != null) {
+			if (clazz.isInstance(eObject)) {
+				return (T) eObject;
+			}
+			eObject = eObject.eContainer();
+		}
+		return null;
+	}
+	
+	public String getEObjectHyperlink(EObject eObject) {
 		URI uri = EcoreUtil.getURI(eObject);
 		if (uri.isPlatformResource()) {
 			String path = uri.path();

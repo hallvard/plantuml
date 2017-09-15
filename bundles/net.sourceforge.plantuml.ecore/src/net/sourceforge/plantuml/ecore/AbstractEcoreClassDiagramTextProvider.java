@@ -22,8 +22,11 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 
 import net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider;
 
@@ -33,19 +36,51 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 
 	//
 
+	protected final EcoreDiagramHelper diagramHelper = new EcoreDiagramHelper();
+	
 	protected AbstractEcoreClassDiagramTextProvider(Class<?> editorType) {
 		super(editorType);
 	}
+	protected AbstractEcoreClassDiagramTextProvider() {
+		super(IEditingDomainProvider.class);
+	}
 
+	@Override
 	public boolean supportsSelection(ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
-			return isEcoreClassDiagramObject(((IStructuredSelection) selection).getFirstElement());
+			Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+			if (firstElement instanceof EObject) {
+				return supportsEObject((EObject) firstElement);
+			}
 		}
 		return false;
 	}
 	
+	protected boolean supportsEObject(EObject selection) {
+		return isEcoreClassDiagramObject(selection);
+	}
+	
+	protected EPackage getEPackage(EObject selection) {
+		return diagramHelper.getAncestor(selection, EPackage.class);
+	}
+	
 	public static boolean isEcoreClassDiagramObject(Object object) {
 		return object instanceof EModelElement;
+	}
+	
+	@Override
+	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
+		if (selection instanceof IStructuredSelection) {
+			Object sel = ((IStructuredSelection) selection).getFirstElement();
+			if (sel instanceof EObject && supportsEObject((EObject) sel)) {
+				EPackage ePack = getEPackage((EObject) sel);
+				if (ePack != null) {
+					return getDiagramText(getEPackage(ePack));
+				}
+			}
+			return null;
+		}
+		return getDiagramText(((IEditingDomainProvider) editorPart).getEditingDomain().getResourceSet());
 	}
 
 	private int maxResourceCount = 1, maxPackageCount = 1;
@@ -60,14 +95,12 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		outer: for (Resource resource : resourceSet.getResources()) {
 			EPackage pack = null;
 			for (EObject root : resource.getContents()) {
-				if (root instanceof EPackage) {
-					pack = (EPackage) root;
-					if (! excludePackages.contains(pack.getNsURI())) {
-						init(pack);
-						packageCount++;
-						if (packageCount == maxPackageCount) {
-							break outer;
-						}
+				pack = getEPackage(root);
+				if (! excludePackages.contains(pack.getNsURI())) {
+					init(pack);
+					packageCount++;
+					if (packageCount == maxPackageCount) {
+						break outer;
 					}
 				}
 			}
@@ -92,8 +125,6 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		this.classifiers = null;
 		return result;
 	}
-	
-	private EcoreDiagramHelper diagramHelper = new EcoreDiagramHelper();
 
 	private void init(EPackage pack) {
 		addClassifiers(pack);
