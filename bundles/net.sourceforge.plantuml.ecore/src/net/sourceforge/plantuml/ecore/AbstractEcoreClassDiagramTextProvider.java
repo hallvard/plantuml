@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -222,7 +223,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 				EClassifier eType = feature.getEType();
 				if (feature instanceof EAttribute) {
 					if (! (diagramHelper.shouldSuppress(feature, null) || (eType != null && diagramHelper.shouldSuppress(eType, "attribute")))) {
-						appendAttribute(null, null, getTypeName(eType, "?"), feature.getName(), buffer);
+						appendAttribute(null, null, getTypedName(feature, "?"), feature.getName(), buffer);
 					}
 				}
 			}
@@ -237,11 +238,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 						}
 						parameters.add(paramString);
 					}
-					String typeName = getTypeName(eType, "void");
-					if (op.isMany() && eType != null) {
-						typeName += "[]";
-					}
-					appendOperation(null, null, typeName, op.getName(), parameters, buffer);
+					appendOperation(null, null, getTypedName(op, "void"), op.getName(), parameters, buffer);
 				}
 			}
 		}
@@ -264,6 +261,15 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		appendClassEnd(buffer);
 	}
 
+	protected String getTypedName(ETypedElement typed, String def) {
+		EClassifier eType = typed.getEType();
+		String typeName = getTypeName(eType, def);
+		if (typed.isMany()) {
+			typeName += "[]";
+		}
+		return getSimpleName(typeName);
+	}
+	
 	protected String getTypeName(EClassifier type, String def) {
 		String typeName = null;
 		if (type != null) {
