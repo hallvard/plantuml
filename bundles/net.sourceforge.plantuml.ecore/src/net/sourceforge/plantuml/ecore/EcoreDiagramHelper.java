@@ -76,7 +76,7 @@ public class EcoreDiagramHelper {
 	protected boolean shouldSuppress(ENamedElement element, String role) {
 		return shouldSuppress(element, element.getName(), role);
 	}
-	
+
 	//
 	
 	public <T> T getAncestor(EObject eObject, Class<T> clazz) {

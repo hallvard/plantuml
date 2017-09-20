@@ -220,25 +220,28 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		if (includes(genFlags, GEN_MEMBERS)) {
 			for (EStructuralFeature feature : eClass.getEStructuralFeatures()) {
 				EClassifier eType = feature.getEType();
-				if (eType != null && feature instanceof EAttribute) {
-					if (! (diagramHelper.shouldSuppress(feature, null) || diagramHelper.shouldSuppress(eType, "attribute"))) {
-						appendAttribute(null, null, getTypeName(eType), feature.getName(), buffer);
+				if (feature instanceof EAttribute) {
+					if (! (diagramHelper.shouldSuppress(feature, null) || (eType != null && diagramHelper.shouldSuppress(eType, "attribute")))) {
+						appendAttribute(null, null, getTypeName(eType, "?"), feature.getName(), buffer);
 					}
 				}
 			}
 			for (EOperation op : eClass.getEOperations()) {
-				if (op.getEType() != null) {
-					if (! (diagramHelper.shouldSuppress(op, null) || diagramHelper.shouldSuppress(op.getEType(), "operation"))) {
-						Collection<String> parameters = new ArrayList<String>();
-						for (EParameter parameter : op.getEParameters()) {
-							String paramString = parameter.getName();
-							if (parameter.getEType() != null) {
-								paramString = parameter.getEType().getName() + " " + paramString;
-							}
-							parameters.add(paramString);
+				EClassifier eType = op.getEType();
+				if (! (diagramHelper.shouldSuppress(op, null) || (eType != null && diagramHelper.shouldSuppress(eType, "operation")))) {
+					Collection<String> parameters = new ArrayList<String>();
+					for (EParameter parameter : op.getEParameters()) {
+						String paramString = parameter.getName();
+						if (parameter.getEType() != null) {
+							paramString = parameter.getEType().getName() + " " + paramString;
 						}
-						appendOperation(null, null, getTypeName(op.getEType()), op.getName(), parameters, buffer);
+						parameters.add(paramString);
 					}
+					String typeName = getTypeName(eType, "void");
+					if (op.isMany() && eType != null) {
+						typeName += "[]";
+					}
+					appendOperation(null, null, typeName, op.getName(), parameters, buffer);
 				}
 			}
 		}
@@ -261,7 +264,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		appendClassEnd(buffer);
 	}
 
-	protected String getTypeName(EClassifier type) {
+	protected String getTypeName(EClassifier type, String def) {
 		String typeName = null;
 		if (type != null) {
 			if (type instanceof EDataType) {
@@ -270,6 +273,8 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 			if (typeName == null) {
 				typeName = type.getName();
 			}
+		} else {
+			typeName = def;
 		}
 		return getSimpleName(typeName);
 	}

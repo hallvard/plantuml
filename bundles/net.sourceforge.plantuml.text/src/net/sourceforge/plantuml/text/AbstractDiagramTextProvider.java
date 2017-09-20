@@ -119,7 +119,7 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	}
 
 	protected String getSimpleName(String name) {
-		int pos = name != null ? name.lastIndexOf('.') : -1;
+		int pos = (name != null ? name.lastIndexOf('.') : -1);
 		return (pos >= 0 ? name.substring(pos + 1) : name);
 	}
 	
