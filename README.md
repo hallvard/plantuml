@@ -41,6 +41,7 @@ Note that the version numbers are a bit special, since they include the version 
 - Fixes problem with dangling Ecore objects ([issue #36](../../issues/36))
 - Fixes problem with object attribute values with newlines and braces ([issue #37](../../issues/37)) by truncating. Also truncates long attribute value strings, to make object boxes smaller.
 - Support for marker:/.../ hyperlinks to specific objects within a file, using the Marker API. Ecore object diagrams now use this kind of marker.
+- Fixes problem with missing void operation ([issue #40](../../issues/40)). Also appends "[]" to many-valued types.
 
 ## [1.1.19](../../releases/tag/1.1.19)
 - Support for the newpage directive. Multi-page diagrams are rendered as numbered tabs ([issue #11](../../issues/11)).
