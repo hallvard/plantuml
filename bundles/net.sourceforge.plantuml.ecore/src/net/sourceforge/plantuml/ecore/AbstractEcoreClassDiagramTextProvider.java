@@ -70,7 +70,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 	}
 	
 	@Override
-	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
+	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes) {
 		if (selection instanceof IStructuredSelection) {
 			Object sel = ((IStructuredSelection) selection).getFirstElement();
 			if (sel instanceof EObject && supportsEObject((EObject) sel)) {

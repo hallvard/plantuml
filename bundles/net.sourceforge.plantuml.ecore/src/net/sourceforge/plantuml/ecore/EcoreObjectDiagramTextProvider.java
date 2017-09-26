@@ -1,6 +1,9 @@
 package net.sourceforge.plantuml.ecore;
 
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -14,10 +17,11 @@ public class EcoreObjectDiagramTextProvider extends AbstractEcoreObjectDiagramTe
 	}
 
 	@Override
-	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
+	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes) {
 		if (selection instanceof IStructuredSelection) {
 			Object sel = ((IStructuredSelection) selection).getFirstElement();
 			if (sel instanceof EObject && (! AbstractEcoreClassDiagramTextProvider.isEcoreClassDiagramObject(sel))) {
+				markerAttributes.put("eObjectUri", EcoreUtil.getURI((EObject) sel).toString());
 				return getDiagramText((EObject) sel);
 			}
 			return null;

@@ -21,6 +21,12 @@ public class DiagramImageControl extends ImageControl {
 		super(parent, style);
 	}
 
+	private IPath path;
+	
+	public IPath getSourcePath() {
+		return path;
+	}
+	
 	private ImageData imageData;
 	
 	public ImageData getImageData() {
@@ -33,8 +39,9 @@ public class DiagramImageControl extends ImageControl {
 		return links;
 	}
 	
-	public void updateDiagramImage(IPath path, Diagram diagram, int imageNum) {
+	public void updateDiagramImage(final IPath path, Diagram diagram, int imageNum) {
 		try {
+			this.path = null;
 			this.imageData = null;
 			this.links = new ArrayList<LinkData>();
 			final ImageData imageData = diagram.getImage(path, imageNum, links);
@@ -43,6 +50,7 @@ public class DiagramImageControl extends ImageControl {
 					public void run() {
 						if (! isDisposed()) {
 							loadImage(imageData);
+							DiagramImageControl.this.path = path;
 							DiagramImageControl.this.imageData = imageData;
 						}
 					}

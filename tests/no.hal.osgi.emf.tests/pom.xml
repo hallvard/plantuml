@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>no.hal.osgi.emf.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
+
+	  <parent>
+	  	<groupId>net.sourceforge.plantuml</groupId>
+	  	<artifactId>net.sourceforge.plantuml.parent</artifactId>
+	  	<version>1.1.20-SNAPSHOT</version>
+	  	<relativePath>../../releng/net.sourceforge.plantuml.parent</relativePath>
+	  </parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+		        <version>${tycho-version}</version>
+				<configuration>
+					<skipTests>${skip-ui-tests}</skipTests>
+					<providerHint>junit4</providerHint>
+		          	<useUIHarness>true</useUIHarness>
+		          	<argLine>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</argLine>
+		          	<dependencies>
+    					<dependency>
+      						<artifactId>org.eclipse.e4.rcp</artifactId>
+      						<type>eclipse-feature</type>
+    					</dependency>
+  					</dependencies>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

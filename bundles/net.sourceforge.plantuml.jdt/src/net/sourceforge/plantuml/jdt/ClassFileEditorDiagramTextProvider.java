@@ -1,5 +1,7 @@
 package net.sourceforge.plantuml.jdt;
 
+import java.util.Map;
+
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.JavaModelException;
@@ -16,7 +18,7 @@ public class ClassFileEditorDiagramTextProvider extends JdtDiagramTextProvider {
 	}
 	
 	@Override
-	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection ignore) {
+	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection ignore, Map<String, Object> ignore2) {
 		if (editorInput instanceof IClassFileEditorInput) {
 			IClassFile classFile = ((IClassFileEditorInput) editorInput).getClassFile();
 			try {

@@ -52,7 +52,7 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 	private JdtDiagramTextProvider jdtDiagramTextProvider = new JdtDiagramTextProvider() {
 		
 		@Override
-		protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
+		protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes) {
 			return null;
 		}
 	};
@@ -121,7 +121,6 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 
 	protected void setRootSet(Collection<IJavaElement> col) {
 		this.rootSet = new ArrayList<IJavaElement>(col);
-		System.out.println(this.rootSet);
 		updateView();
 	}
 
@@ -167,7 +166,7 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 			generateTypes(allTypes, result);
 		}
 		result.append("\n" + PlantumlConstants.END_UML);
-		updateDiagramText(result.toString());
+		updateDiagramText(result.toString(), null, null);
 	}
 
 	private void generatePackage(String packageName, Collection<IType> types, StringBuilder result) {

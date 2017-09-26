@@ -12,10 +12,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IPathEditorInput;
-import org.eclipse.ui.IWorkbenchPage;
 
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -42,20 +38,6 @@ public class Diagram {
 	private String textDiagram;
 
 	private int imageCount;
-
-	public static IPath getActiveEditorPath() {
-		IWorkbenchPage activePage = WorkbenchUtil.getCurrentActiveWindows().getActivePage();
-		if (activePage != null) {
-			IEditorPart part = activePage.getActiveEditor();
-			if (part != null) {
-				IEditorInput input = part.getEditorInput();
-				if (input instanceof IPathEditorInput) {
-					return ((IPathEditorInput) input).getPath();
-				}
-			}
-		}
-		return null;
-	}
 
 	/**
 	 * Generate the DiagramImage for textDiagram and imageNumber. Use

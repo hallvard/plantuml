@@ -2,6 +2,7 @@ package net.sourceforge.plantuml.jdt;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -22,7 +23,7 @@ public class JavaEditorDiagramTextProvider extends JdtDiagramTextProvider {
 	}
 	
 	@Override
-	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection ignore) {
+	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection ignore, Map<String, Object> ignore2) {
 		if (editorInput instanceof IFileEditorInput) {
 			IFile file = ((IFileEditorInput) editorInput).getFile();
 			if (! "java".equals(file.getFileExtension())) {

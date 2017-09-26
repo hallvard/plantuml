@@ -1,5 +1,8 @@
 package net.sourceforge.plantuml.eclipse.views;
 
+import java.util.Map;
+
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -16,7 +19,7 @@ public class DiagramSourceView extends AbstractDiagramSourceView {
 	}
 
 	@Override
-	protected void updateDiagramText(String text) {
+	protected void updateDiagramText(String text, IPath original, Map<String, Object> markerAttributes) {
 		if (diagramTextView != null && (! diagramTextView.isDisposed())) {
 			diagramTextView.setText(text == null ? "" : text);
 		}

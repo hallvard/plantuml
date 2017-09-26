@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -19,6 +22,7 @@ import org.osgi.framework.BundleContext;
 
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlUtil;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -40,6 +44,8 @@ public class Activator extends AbstractUIPlugin {
         // Empty constructor
     }
 
+    private IResourceChangeListener resourceListener;
+    
     /*
      * (non-Javadoc)
      * 
@@ -48,6 +54,10 @@ public class Activator extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
+        resourceListener = PlantumlUtil.createResourceListener();
+        if (resourceListener != null) {
+        	ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceListener, IResourceChangeEvent.POST_BUILD);
+        }
     }
 
     /*
@@ -56,6 +66,9 @@ public class Activator extends AbstractUIPlugin {
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
      */
     public void stop(BundleContext context) throws Exception {
+        if (resourceListener != null) {
+        	ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceListener);
+        }
         plugin = null;
         super.stop(context);
     }

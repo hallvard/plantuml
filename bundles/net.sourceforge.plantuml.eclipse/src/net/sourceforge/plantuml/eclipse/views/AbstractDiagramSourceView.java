@@ -1,5 +1,8 @@
 package net.sourceforge.plantuml.eclipse.views;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
@@ -12,6 +15,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPathEditorInput;
@@ -28,6 +32,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
+import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider2;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 
 public abstract class AbstractDiagramSourceView extends ViewPart {
@@ -71,7 +76,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 					if (pinnedTo != null || initialDiagramSource == null) {
 						updateDiagramText(true, pinnedTo, null);
 					} else if (initialDiagramSource != null) {
-						updateDiagramText(initialDiagramSource);
+						updateDiagramText(initialDiagramSource, null, null);
 					}
 				}
 			});
@@ -197,7 +202,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		getSite().getPage().removePostSelectionListener(diagramTextChangedListener);
 	}
 	
-	protected abstract void updateDiagramText(String text);
+	protected abstract void updateDiagramText(String text, IPath path, Map<String, Object> markerAttributes);
 	public abstract String getDiagramText();
 
 	private IPartListener partListener = new IPartListener() {
@@ -251,35 +256,46 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		IEditorPart activeEditor = (part instanceof IEditorPart ? (IEditorPart) part : (isLinkedToActiveEditor() ? getSite().getPage().getActiveEditor() : null));
 		if (force || activeEditor != currentEditor) {
 			if (activeEditor == null || acceptEditor(activeEditor)) {
+				IPath path = null;
 				handleEditorChange(activeEditor);
 				if (activeEditor != null) {
+					if (activeEditor.getEditorInput() instanceof IFileEditorInput) {
+						path = ((IFileEditorInput) activeEditor.getEditorInput()).getFile().getFullPath();
+					}
 					if (selection == null) {
 						ISelectionProvider selectionProvider = activeEditor.getSite().getSelectionProvider();
 						if (selectionProvider != null) {
 							selection = selectionProvider.getSelection();
 						}
 					}
-					if (updateDiagramText(activeEditor, selection)) {
+					if (updateDiagramText(activeEditor, selection, path)) {
 						return;
 					}
-					if (selection != null && updateDiagramText(activeEditor, null)) {
+					if (selection != null && updateDiagramText(activeEditor, null, path)) {
 						return;
 					}
 				}
-				updateDiagramText(null);
+				updateDiagramText((String) null, (IPath) null, (Map<String, Object>) null);
 			}
 		}
 	}
 	
-	private boolean updateDiagramText(IEditorPart activeEditor, ISelection selection) {
+	private boolean updateDiagramText(IEditorPart activeEditor, ISelection selection, IPath path) {
 		if (activeEditor != null) {
 			DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders();
+			Map<String, Object> markerAttributes = new HashMap<String, Object>();
 			for (int i = 0; i < diagramTextProviders.length; i++) {
 				DiagramTextProvider diagramTextProvider = diagramTextProviders[i];
 				if (diagramTextProvider.supportsEditor(activeEditor) && (selection == null || diagramTextProvider.supportsSelection(selection))) {
-					String diagramText = diagramTextProvider.getDiagramText(activeEditor, selection);
+					String diagramText = null;
+					if (diagramTextProvider instanceof DiagramTextProvider2) {
+						markerAttributes.clear();
+						diagramText = ((DiagramTextProvider2) diagramTextProvider).getDiagramText(activeEditor, selection, markerAttributes);
+					} else {
+						diagramText = diagramTextProvider.getDiagramText(activeEditor, selection);
+					}
 					if (diagramText != null) {
-						updateDiagramText(diagramText);
+						updateDiagramText(diagramText, path, markerAttributes);
 						return true;
 					}
 				}

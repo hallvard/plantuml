@@ -1,6 +1,7 @@
 package net.sourceforge.plantuml.osgi;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
@@ -43,7 +44,7 @@ public class OsgiComponentDiagramTextProvider extends AbstractDiagramTextProvide
 	}
 
 	@Override
-	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection) {
+	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes) {
 		if (editorInput instanceof IPathEditorInput) {
 			IPath path = ((IPathEditorInput) editorInput).getPath();
 			URI uri = URI.createFileURI(path.toString());

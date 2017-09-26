@@ -10,7 +10,6 @@ import org.eclipse.swt.printing.PrintDialog;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
 
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 import net.sourceforge.plantuml.eclipse.views.DiagramImageControl;

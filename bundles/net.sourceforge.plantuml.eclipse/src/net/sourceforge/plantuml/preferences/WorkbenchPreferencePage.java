@@ -27,16 +27,15 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class WorkbenchPreferencePage extends PreferencePage implements
-		IWorkbenchPreferencePage {
+public class WorkbenchPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
-	Label authorLabel;
-	Link plantumlLink;
+	private Label authorLabel;
+	private Link plantumlLink;
 	
-	Group graphvizGroup;
-	Label graphvizPathText;
-	FileFieldEditor graphvizPath;
-	Label testDotLabel;	
+	private Group graphvizGroup;
+	private Label graphvizPathText;
+	private FileFieldEditor graphvizPath;
+	private Label testDotLabel;	
 
 	public WorkbenchPreferencePage() {
 		super();

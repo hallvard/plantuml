@@ -2,7 +2,10 @@ package net.sourceforge.plantuml.eclipse.views;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -32,11 +35,13 @@ import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.LinkData;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlUtil;
 import net.sourceforge.plantuml.eclipse.views.actions.CopyAction;
 import net.sourceforge.plantuml.eclipse.views.actions.CopyAsciiAction;
 import net.sourceforge.plantuml.eclipse.views.actions.CopySourceAction;
 import net.sourceforge.plantuml.eclipse.views.actions.ExportAction;
 import net.sourceforge.plantuml.eclipse.views.actions.PrintAction;
+import net.sourceforge.plantuml.eclipse.views.actions.SaveAction;
 
 /**
  * 
@@ -154,7 +159,6 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	 */
 	private void addListeners() {
 		addCanvasActions();
-
 	}
 
 	private void addCanvasActions() {
@@ -164,6 +168,9 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 		});
 		menuSupport.addMenuAction(new CopySourceAction(display, diagram));
 		menuSupport.addMenuAction(new CopyAsciiAction(display, diagram));
+		menuSupport.addMenuAction(new SaveAction(null, diagram) {
+			@Override public ImageControl getControl() { return getCurrentImageControl(); };
+		});
 		menuSupport.addMenuAction(new ExportAction(null, diagram) {
 			@Override public ImageControl getControl() { return getCurrentImageControl(); };
 		});
@@ -240,27 +247,34 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	}
 	
 	@Override
-	protected void updateDiagramText(final String textDiagram) {
+	protected void updateDiagramText(final String textDiagram, final IPath original, final Map<String, Object> markerAttributes) {
 		if (textDiagram != null && (! textDiagram.equals(lastTextDiagram))) {
 			diagram.setTextDiagram(textDiagram);
 			lastTextDiagram = textDiagram;
 			createImageControls(diagram.getImageCount());
-			final IPath path = Diagram.getActiveEditorPath();
 			Job job = new Job("Generate diagram") {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					if (! composite.isDisposed()) {
-						for (int i = 0; i < imageControls.length; i++) {
-							if (imageControls.length > i && imageControls[i] != null && (! imageControls[i].isDisposed())) {
-								imageControls[i].updateDiagramImage(path, diagram, i);
-							}
+					for (int i = 0; i < imageControls.length; i++) {
+						if (imageControls.length > i && imageControls[i] != null && (! imageControls[i].isDisposed())) {
+							imageControls[i].updateDiagramImage(original, diagram, i);
 						}
+					}
+					if (! composite.isDisposed()) {
 						composite.getDisplay().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-								composite.layout();
+								if (! composite.isDisposed()) {
+									composite.layout();
+								}
 							}
 						});
+					}
+					if (original != null) {
+						IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(original);
+						if (file != null && file.exists()) {
+							PlantumlUtil.updateMarker(file, textDiagram, null, true, markerAttributes);
+						}
 					}
 					return Status.OK_STATUS;
 				}

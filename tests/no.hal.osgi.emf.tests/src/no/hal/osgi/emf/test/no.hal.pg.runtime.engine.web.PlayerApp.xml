@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" name="no.hal.pg.runtime.engine.web.PlayerApp">
+   <implementation class="no.hal.pg.runtime.engine.http.EngineAppComponent"/>
+   <service>
+      <provide interface="no.hal.pg.runtime.engine.http.IEngineApp"/>
+   </service>
+   <property name="IEngineApp.name" type="String" value="PlayerApp"/>
+   <property name="EngineAppComponent.eClass" type="String" value="platform:/plugin/no.hal.pg.runtime/model/pg-runtime.ecore#Player"/>
+   <property name="IEngineApp.displayName" type="String" value="Player app"/>
+
+   <property name="EngineAppComponent.main" type="String" value="/web/PlayerApp.html"></property>
+   <property name="EngineAppComponent.resourceNames" type="String" value="/web"></property>
+   <property name="EngineAppComponent.aliasPathFormat" type="String" value="/web"/>
+</scr:component>

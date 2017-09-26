@@ -24,6 +24,7 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		this.editorType = editorType;
 	}
 
+	@Override
 	public boolean supportsEditor(IEditorPart editorPart) {
 		if (editorType != null && (! (editorType.isInstance(editorPart)))) {
 			return false;
@@ -32,8 +33,12 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	}
 	
 	public String getDiagramText(IEditorPart editorPart, ISelection selection) {
+		return getDiagramText(editorPart, selection, null);
+	}
+	
+	public String getDiagramText(IEditorPart editorPart, ISelection selection, Map<String, Object> markerAttributes) {
 		if (supportsEditor(editorPart) && (selection == null || supportsSelection(selection))) {
-			String diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection);
+			String diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection, markerAttributes);
 			if (diagramText != null) {
 				diagramText = diagramText.trim();
 				if (! diagramText.startsWith(PlantumlConstants.START_UML)) {
@@ -45,10 +50,10 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 			}
 			return diagramText;
 		}
-		return null;
+		return null;		
 	}
-	
-	protected abstract String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection);
+
+	protected abstract String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes);
 
 	private int indentLevel = 0;
 	private String indentString = "\t";
