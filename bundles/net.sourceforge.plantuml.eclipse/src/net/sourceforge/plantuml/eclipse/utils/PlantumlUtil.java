@@ -2,6 +2,7 @@ package net.sourceforge.plantuml.eclipse.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.StringBufferInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -137,7 +138,9 @@ public class PlantumlUtil {
     	if (file != null && (create || file.exists())) {
             String ext = targetPath.getFileExtension();
 			if ("svg".equals(ext)) {
-			    createImageFileSvg(file, textDiagram);
+			    createSvgFile(file, textDiagram);
+			} else if ("puml".equals(ext) || "plantuml".equals(ext)) {
+				saveImage(file, textDiagram.getBytes());
 			} else {
 			    createImageFile(file, ext, image);
 			}
@@ -170,7 +173,7 @@ public class PlantumlUtil {
 		file.setDerived(true, progressMonitor);
 	}
 	
-	private static void createImageFileSvg(IFile file, String textDiagram) throws Exception {
+	private static void createSvgFile(IFile file, String textDiagram) throws Exception {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(32768);
 		SourceStringReader reader = new SourceStringReader(textDiagram);
 		reader.outputImage(outputStream, new FileFormatOption(FileFormat.SVG));

@@ -20,7 +20,6 @@ public class SaveAction extends DiagramImageAction {
     @Override
     public void run() {
         final SaveAsDialog fileDialog = new SaveAsDialog(getControl().getShell());
-//        fileDialog.setFilterExtensions(new String[] { "*.png", "*.svg", "*.jpg", "*.gif" });
         if (fileDialog.open() == Dialog.OK) {
 	        IPath path = fileDialog.getResult();
 	        if (path != null) {
