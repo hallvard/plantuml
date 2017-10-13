@@ -29,6 +29,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
+import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider2;
 import net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider;
 
 public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClassDiagramTextProvider {

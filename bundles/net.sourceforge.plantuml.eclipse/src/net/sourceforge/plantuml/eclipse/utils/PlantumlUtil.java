@@ -134,8 +134,8 @@ public class PlantumlUtil {
 	}
 
 	public static void saveDiagramImage(IPath sourcePath, String textDiagram, ImageData image, IPath targetPath, boolean create) throws Exception {
-    	IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(targetPath);
-    	if (file != null && (create || file.exists())) {
+	    	IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(targetPath);
+	    	if (file != null && (create || file.exists())) {
             String ext = targetPath.getFileExtension();
 			if ("svg".equals(ext)) {
 			    createSvgFile(file, textDiagram);
@@ -150,7 +150,7 @@ public class PlantumlUtil {
 					updateMarker(sourceFile, textDiagram, targetPath, false, null);
 				}
 			}
-    	}
+	    	}
 	}
 
 	private static void createImageFile(IFile file, String format, ImageData imageData) throws Exception {

@@ -94,7 +94,7 @@ public class Diagram {
 			}
 			os.close();
 
-			if (StringUtils.isNotEmpty(desc.getDescription())) {
+			if (desc != null && StringUtils.isNotEmpty(desc.getDescription())) {
 				InputStream is = new ByteArrayInputStream(os.toByteArray());
 				imageData = new ImageData(is);
 				is.close();

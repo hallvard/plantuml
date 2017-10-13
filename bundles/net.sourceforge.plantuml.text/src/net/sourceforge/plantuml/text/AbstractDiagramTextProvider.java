@@ -39,20 +39,24 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	public String getDiagramText(IEditorPart editorPart, ISelection selection, Map<String, Object> markerAttributes) {
 		if (supportsEditor(editorPart) && (selection == null || supportsSelection(selection))) {
 			String diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection, markerAttributes);
-			if (diagramText != null) {
-				diagramText = diagramText.trim();
-				if (! diagramText.startsWith(PlantumlConstants.START_UML)) {
-					diagramText = PlantumlConstants.START_UML + "\n" + diagramText;
-				}
-				if (! diagramText.endsWith(PlantumlConstants.END_UML)) {
-					diagramText = diagramText + "\n" + PlantumlConstants.END_UML;
-				}
-			}
-			return diagramText;
+			return ensureDiagramText(diagramText);
 		}
 		return null;		
 	}
 
+	public String ensureDiagramText(String diagramText) {
+		if (diagramText != null) {
+			diagramText = diagramText.trim();
+			if (! diagramText.startsWith(PlantumlConstants.START_UML)) {
+				diagramText = PlantumlConstants.START_UML + "\n" + diagramText;
+			}
+			if (! diagramText.endsWith(PlantumlConstants.END_UML)) {
+				diagramText = diagramText + "\n" + PlantumlConstants.END_UML;
+			}
+		}
+		return diagramText;
+	}
+	
 	protected abstract String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes);
 
 	private int indentLevel = 0;
