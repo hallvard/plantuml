@@ -414,7 +414,10 @@ public class ImageControl extends Canvas {
 	 */
 	public void resetZoom() {
 		if (sourceImage != null) {
+			double tx = transform.getTranslateX();
+			double ty = transform.getTranslateY();
 			transform = new AffineTransform();
+			transform.setToTranslation(tx, ty);
 			syncScrollBars();
 		}
 	}
