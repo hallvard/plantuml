@@ -1,11 +1,11 @@
 package net.sourceforge.plantuml.jdt.ui;
 
 import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_ASSOCIATIONS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_CLASS_HYPERLINKS;
 import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_EXTENDS;
 import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_IMPLEMENTS;
 import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_MEMBERS;
 import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_MODIFIERS;
-import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_CLASS_HYPERLINKS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +18,8 @@ import java.util.Map;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IParent;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -48,17 +50,18 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 	public boolean isLinkedToActiveEditor() {
 		return false;
 	}
-	
-	private JdtDiagramTextProvider jdtDiagramTextProvider = new JdtDiagramTextProvider() {
-		
+
+	private final JdtDiagramTextProvider jdtDiagramTextProvider = new JdtDiagramTextProvider() {
+
 		@Override
-		protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes) {
+		protected String getDiagramText(final IEditorPart editorPart, final IEditorInput editorInput,
+				final ISelection selection, final Map<String, Object> markerAttributes) {
 			return null;
 		}
 	};
-	
+
 	private Collection<IJavaElement> rootSet = new ArrayList<IJavaElement>();
-	
+
 	private IPreferenceStore preferenceStore;
 
 	@Override
@@ -68,90 +71,95 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 			preferenceStore = null;
 		}
 	}
-	
-	public void createPartControl(Composite parent) {
+
+	@Override
+	public void createPartControl(final Composite parent) {
 		preferenceStore = Activator.getDefault().getPreferenceStore();
 		preferenceStore.addPropertyChangeListener(this);
 
 		super.createPartControl(parent);
-		
-		DropTarget dropTarget = new DropTarget(parent, DND.DROP_DEFAULT | DND.DROP_COPY);
-		final Transfer[] transfers = {
-				LocalSelectionTransfer.getTransfer()
-//				, FileTransfer.getInstance()
-//				, ResourceTransfer.getInstance()
+
+		final DropTarget dropTarget = new DropTarget(parent, DND.DROP_DEFAULT | DND.DROP_COPY);
+		final Transfer[] transfers = { LocalSelectionTransfer.getTransfer()
+				// , FileTransfer.getInstance()
+				// , ResourceTransfer.getInstance()
 		};
 		dropTarget.setTransfer(transfers);
 		dropTarget.addDropListener(new DropTargetAdapter() {
-			
+
 			@Override
-			public void dragEnter(DropTargetEvent event) {
+			public void dragEnter(final DropTargetEvent event) {
 				if (event.detail == DND.DROP_DEFAULT) {
 					event.detail = DND.DROP_COPY;
 				}
 			}
 
 			@Override
-			public void drop(DropTargetEvent event) {
+			public void drop(final DropTargetEvent event) {
 				Collection<IJavaElement> rootSet = null;
 				if (LocalSelectionTransfer.getTransfer().isSupportedType(event.currentDataType)) {
-					ISelection data = LocalSelectionTransfer.getTransfer().getSelection();
+					final ISelection data = LocalSelectionTransfer.getTransfer().getSelection();
 					if (data instanceof IStructuredSelection) {
-						Iterator<?> elements = ((IStructuredSelection) data).iterator();
+						final Iterator<?> elements = ((IStructuredSelection) data).iterator();
 						while (elements.hasNext()) {
-							Object next = elements.next();
-							Object javaElement = Platform.getAdapterManager().getAdapter(next, IJavaElement.class);
+							final Object next = elements.next();
+							final Object javaElement = Platform.getAdapterManager().getAdapter(next,
+									IJavaElement.class);
 							if (javaElement != null) {
 								if (rootSet == null) {
 									rootSet = new ArrayList<IJavaElement>();
 								}
-								if (! rootSet.contains(javaElement)) {
+								if (!rootSet.contains(javaElement)) {
 									rootSet.add((IJavaElement) javaElement);
 								}
 							}
 						}
 					}
 				}
-				if (rootSet != null && (! rootSet.isEmpty())) {
+				if (rootSet != null && (!rootSet.isEmpty())) {
 					setRootSet(rootSet);
 				}
 			}
 		});
 	}
 
-	protected void setRootSet(Collection<IJavaElement> col) {
+	protected void setRootSet(final Collection<IJavaElement> col) {
 		this.rootSet = new ArrayList<IJavaElement>(col);
 		updateView();
 	}
 
-	private int genFlags = GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS | GEN_CLASS_HYPERLINKS;
+	private final int genFlags = GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS
+			| GEN_CLASS_HYPERLINKS;
 
 	public final static String[] ALL_PACKAGE_STYLES = { "Folder", "Rectangle", "Frame", "Cloud", "Database" };
-	
-	private String packageStyle = null; 
-	private String packageColor = null;  // #DDDDDD
+
+	private String packageStyle = null;
+	private final String packageColor = null; // #DDDDDD
 
 	@Override
 	protected void contributeToActionBars() {
-		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		final IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		addZoomActions(toolBarManager);
 	}
 
 	private void updateView() {
-		boolean generatePackages = (preferenceStore != null && preferenceStore.getBoolean(ProjectClassDiagramPreferencePage.GENERATE_PACKAGES_KEY));
-		packageStyle = (preferenceStore != null ? preferenceStore.getString(ProjectClassDiagramPreferencePage.PACKAGE_STYLE_KEY) : null);
+		final boolean generatePackages = (preferenceStore != null
+				&& preferenceStore.getBoolean(ProjectClassDiagramPreferencePage.GENERATE_PACKAGES_KEY));
+		packageStyle = (preferenceStore != null
+				? preferenceStore.getString(ProjectClassDiagramPreferencePage.PACKAGE_STYLE_KEY)
+						: null);
 		if (packageStyle == null || packageStyle.length() == 0) {
 			packageStyle = ALL_PACKAGE_STYLES[0];
 		}
 
-		StringBuilder result = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
 		result.append(PlantumlConstants.START_UML + "\n");
-		Collection<IType> allTypes = new HashSet<IType>();
+		final Collection<IType> allTypes = new HashSet<IType>();
 		addTypes(this.rootSet, allTypes);
 		if (generatePackages) {
-			Map<String, Collection<IType>> packageTypes = new HashMap<String, Collection<IType>>();
-			for (IType type : allTypes) {
-				String packageName = type.getPackageFragment().getElementName();
+			final Map<String, Collection<IType>> packageTypes = new HashMap<String, Collection<IType>>();
+			for (final IType type : allTypes) {
+				final String packageName = type.getPackageFragment().getElementName();
 				Collection<IType> types = packageTypes.get(packageName);
 				if (types == null) {
 					types = new ArrayList<IType>();
@@ -159,7 +167,7 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 				}
 				types.add(type);
 			}
-			for (Map.Entry<String, Collection<IType>> packageTypesEntry : packageTypes.entrySet()) {
+			for (final Map.Entry<String, Collection<IType>> packageTypesEntry : packageTypes.entrySet()) {
 				generatePackage(packageTypesEntry.getKey(), packageTypesEntry.getValue(), result);
 			}
 		} else {
@@ -169,7 +177,7 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 		updateDiagramText(result.toString(), null, null);
 	}
 
-	private void generatePackage(String packageName, Collection<IType> types, StringBuilder result) {
+	private void generatePackage(final String packageName, final Collection<IType> types, final StringBuilder result) {
 		result.append("package ");
 		result.append(packageName);
 		if (packageStyle != null) {
@@ -186,27 +194,37 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 		result.append("\n}\n");
 	}
 
-	private void generateTypes(Collection<IType> types, StringBuilder result) {
-		for (IType type : types) {
+	private void generateTypes(final Collection<IType> types, final StringBuilder result) {
+		for (final IType type : types) {
 			jdtDiagramTextProvider.generateForType(type, result, genFlags, types);
 		}
 	}
 
-	private void addTypes(Iterable<IJavaElement> elements, Collection<IType> result) {
-		for (IJavaElement javaElement : elements) {
+	private void addTypes(final Iterable<IJavaElement> elements, final Collection<IType> result) {
+		for (final IJavaElement javaElement : elements) {
 			if (javaElement instanceof ICompilationUnit) {
-				IType[] types = null;
 				try {
-					types = ((ICompilationUnit) javaElement).getTypes();
-				} catch (JavaModelException e) {
+					result.addAll(Arrays.asList(((ICompilationUnit) javaElement).getTypes()));
+				} catch (final JavaModelException e) {
 				}
-				for (int i = 0; types != null && i < types.length; i++) {
-					result.add(types[i]);
+			} else if (javaElement instanceof IPackageFragment) {
+				final Collection<IJavaElement> compilationUnits = new ArrayList<IJavaElement>();
+				try {
+					for (final IJavaElement packageFragment : ((IPackageFragmentRoot) javaElement.getParent()).getChildren()) {
+						if (packageFragment != javaElement && javaElement.getPath().isPrefixOf(packageFragment.getPath())) {
+							try {
+								compilationUnits.addAll(Arrays.asList(((IPackageFragment) packageFragment).getChildren()));
+							} catch (final JavaModelException e) {
+							}
+						}
+					}
+				} catch (final Exception e) {
 				}
-			} else if (javaElement instanceof IParent && (! javaElement.getElementName().endsWith(".jar"))) {
+				addTypes(compilationUnits, result);
+			} else if (javaElement instanceof IParent && (!javaElement.getElementName().endsWith(".jar"))) {
 				try {
 					addTypes(Arrays.asList(((IParent) javaElement).getChildren()), result);
-				} catch (JavaModelException e) {
+				} catch (final JavaModelException e) {
 				}
 			}
 		}
@@ -215,7 +233,7 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 	//
 
 	@Override
-	public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+	public void propertyChange(final PropertyChangeEvent propertyChangeEvent) {
 		updateView();
 	}
 }
