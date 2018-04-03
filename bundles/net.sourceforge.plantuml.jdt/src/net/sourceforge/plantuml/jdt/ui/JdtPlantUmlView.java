@@ -210,9 +210,15 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 			} else if (javaElement instanceof IPackageFragment) {
 				final Collection<IJavaElement> compilationUnits = new ArrayList<IJavaElement>();
 				try {
+					// add immediate compilation units
+					compilationUnits.addAll(Arrays.asList(((IPackageFragment) javaElement).getChildren()));
+				} catch (final JavaModelException e1) {
+				}
+				try {
 					for (final IJavaElement packageFragment : ((IPackageFragmentRoot) javaElement.getParent()).getChildren()) {
 						if (packageFragment != javaElement && javaElement.getPath().isPrefixOf(packageFragment.getPath())) {
 							try {
+								// add compilation units of sub-package fragment
 								compilationUnits.addAll(Arrays.asList(((IPackageFragment) packageFragment).getChildren()));
 							} catch (final JavaModelException e) {
 							}
