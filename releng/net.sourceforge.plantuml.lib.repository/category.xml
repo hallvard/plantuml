@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/net.sourceforge.plantuml.lib.feature_1.2017.15.jar" id="net.sourceforge.plantuml.lib.feature" version="1.2017.15">
+   <feature url="features/net.sourceforge.plantuml.lib.feature_1.2018.3.jar" id="net.sourceforge.plantuml.lib.feature" version="1.2018.3">
       <category name="net.sourceforge.plantuml.lib.feature"/>
    </feature>
    <category-def name="net.sourceforge.plantuml.lib.feature" label="PlantUML Library"/>
