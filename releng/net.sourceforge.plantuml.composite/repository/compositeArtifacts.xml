@@ -11,6 +11,6 @@
 	</properties>
 	<children size='2'>
 		<child location='../plantuml.lib/1.2017.15/repository' />
-		<child location='../plantuml.eclipse/1.1.20-SNAPSHOT/repository' />
+		<child location='../plantuml.eclipse/1.1.20/repository' />
 	</children>
 </repository>

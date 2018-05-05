@@ -1,63 +1,79 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.sourceforge.plantuml</groupId>
-	<artifactId>net.sourceforge.plantuml.parent</artifactId>
-	<version>1.1.20-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>net.sourceforge.plantuml maven parent project</name>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.sourceforge.plantuml</groupId>
+    <artifactId>net.sourceforge.plantuml.parent</artifactId>
+    <version>1.1.20-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>net.sourceforge.plantuml maven parent project</name>
 
-	<properties>
-		<tycho-maven-plugin-version>1.0.0</tycho-maven-plugin-version>
-		<tycho-version>1.0.0</tycho-version>
-		<xtextVersion>2.9.1</xtextVersion>
-		<xtend-maven-plugin-version>2.9.1</xtend-maven-plugin-version>
-		
-		<skip-ui-tests>true</skip-ui-tests>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <antrun-version>1.8</antrun-version>
+        <tycho-maven-plugin-version>1.0.0</tycho-maven-plugin-version>
+        <tycho-version>1.0.0</tycho-version>
+        <xtextVersion>2.9.1</xtextVersion>
+        <xtend-maven-plugin-version>2.9.1</xtend-maven-plugin-version>
+        <skip-ui-tests>true</skip-ui-tests>
 
-	</properties>
+        <!-- Create signed artifacts                                                                                 -->
+        <!--                                                                                                         -->
+        <!-- Example CLI usage: $ STOREPASS=secret mvn clean deploy site-deploy                                      -->
+        <sign.storepass>${env.STOREPASS}</sign.storepass>
+        <sign.keypass>>${env.KEYPASS}</sign.keypass><!-- Private key password, if different from storepass -->
+        <sign.keystore>${user.home}/codesigning/keystore.p12</sign.keystore><!-- Change this to your preferred location -->
+        <sign.storetype>PKCS12</sign.storetype>
+        <sign.alias>plantuml-eclipse</sign.alias><!-- Name of key pair -->
+        <sign.sigfile>PLANTUML-ECLIPSE</sign.sigfile><!-- Prefix for files generated in META-INF -->
+        <sign.tsa>http://sha256timestamp.ws.symantec.com/sha256/timestamp</sign.tsa><!-- Optional timestamping service -->
+    </properties>
 
-	<repositories>
+    <repositories>
 		<!-- <repository> <id>eclipse-luna</id> <layout>p2</layout> <url>http://download.eclipse.org/releases/luna</url> 
 			</repository> <repository> <id>eclipse-mars</id> <layout>p2</layout> <url>http://download.eclipse.org/releases/mars</url> 
 			</repository> -->
-	</repositories>
+    </repositories>
 
 
-	<build>
-	    <pluginManagement>
-	      <plugins>
-	        <plugin>
-	          <groupId>org.eclipse.tycho</groupId>
-	          <artifactId>tycho-versions-plugin</artifactId>
-	          <version>${tycho-version}</version>
-	        </plugin>
-	      </plugins>
-	    </pluginManagement>
-		<plugins>
-	      <plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<pomDependencies>consider</pomDependencies>
-					<executionEnvironment>JavaSE-1.7</executionEnvironment>
-					<target>
-						<artifact>
-							<groupId>net.sourceforge.plantuml</groupId>
-							<artifactId>net.sourceforge.plantuml.target</artifactId>
-							<version>1.1.20-SNAPSHOT</version>
-						</artifact>
-					</target>
-					<filters>
-						<filter>
-							<type>eclipse-plugin</type>
-							<id>org.eclipse.jdt.core</id>
-							<restrictTo>
-								<version>3.10.2.v20150120-1634</version>
-							</restrictTo>
-						</filter>
-					</filters>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-versions-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${antrun-version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <pomDependencies>consider</pomDependencies>
+                    <executionEnvironment>JavaSE-1.7</executionEnvironment>
+                    <target>
+                        <artifact>
+                            <groupId>net.sourceforge.plantuml</groupId>
+                            <artifactId>net.sourceforge.plantuml.target</artifactId>
+                            <version>1.1.20-SNAPSHOT</version>
+                        </artifact>
+                    </target>
+                    <filters>
+                        <filter>
+                            <type>eclipse-plugin</type>
+                            <id>org.eclipse.jdt.core</id>
+                            <restrictTo>
+                                <version>3.10.2.v20150120-1634</version>
+                            </restrictTo>
+                        </filter>
+                    </filters>
 					<!-- 
 					<environments>
 						<environment>
@@ -87,15 +103,62 @@
 						</environment>
 					</environments>
 					 -->
-				</configuration>
-			</plugin>
+                </configuration>
+            </plugin>
 
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho-maven-plugin-version}</version>
-				<extensions>true</extensions>
-			</plugin>
-		</plugins>
-	</build>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-jars</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <target name="sign-jars" xmlns:if="ant:if" xmlns:unless="ant:unless">
+                                <condition property="sign.skip-reason" value="Keystore file does not exist">
+                                    <not>
+                                        <resourceexists>
+                                            <file file="${sign.keystore}"/>
+                                        </resourceexists>
+                                    </not>
+                                </condition>
+                                <condition property="sign.skip-reason"
+                                    value="No keystore password has been set">
+                                    <matches pattern="(?s)^(\$\{.*|\s*)$" string="${sign.storepass}"/>
+                                </condition>
+                                <condition property="sign.skip-reason"
+                                    value="Only applies to features and plugins">
+                                    <not>
+                                        <matches pattern="feature|plugin" string="${project.packaging}"/>
+                                    </not>
+                                </condition>
+                                <echo unless:set="sign.skip-reason" level="info"
+                                    message="Signing jar files in ${basedir}"/>
+                                <echo if:set="sign.skip-reason" level="info" message="Skipped: ${sign.skip-reason}"/>
+                                <signjar unless:set="sign.skip-reason" alias="${sign.alias}" strict="true"
+                                    keystore="${sign.keystore}" storetype="${sign.storetype}" sigfile="${sign.sigfile}"
+                                    tsaurl="${sign.tsa}" storepass="${sign.storepass}" keypass="${sign.keypass}"
+                                    lazy="true">
+                                    <path>
+                                        <fileset dir="${basedir}" includes="**/*.jar"/>
+                                    </path>
+                                </signjar>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <version>${tycho-maven-plugin-version}</version>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
