@@ -137,14 +137,14 @@
                                     </not>
                                 </condition>
                                 <echo unless:set="sign.skip-reason" level="info"
-                                    message="Signing jar files in ${basedir}"/>
+                                    message="Signing jar files in ${project.build.directory}"/>
                                 <echo if:set="sign.skip-reason" level="info" message="Skipped: ${sign.skip-reason}"/>
                                 <signjar unless:set="sign.skip-reason" alias="${sign.alias}" strict="true"
                                     keystore="${sign.keystore}" storetype="${sign.storetype}" sigfile="${sign.sigfile}"
                                     tsaurl="${sign.tsa}" storepass="${sign.storepass}" keypass="${sign.keypass}"
                                     lazy="true">
                                     <path>
-                                        <fileset dir="${basedir}" includes="**/*.jar"/>
+                                        <fileset dir="${project.build.directory}" includes="**/*.jar"/>
                                     </path>
                                 </signjar>
                             </target>
