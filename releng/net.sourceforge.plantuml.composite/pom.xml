@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>net.sourceforge.plantuml</groupId>
 		<artifactId>net.sourceforge.plantuml.parent</artifactId>
-		<version>1.1.20-SNAPSHOT</version>
+		<version>1.1.20</version>
 		<relativePath>../net.sourceforge.plantuml.parent</relativePath>
 	</parent>
 
@@ -20,7 +20,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>target/repository</directory>
+							<directory>target</directory>
 							<followSymlinks>false</followSymlinks>
 						</fileset>
 					</filesets>
@@ -49,7 +49,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/repository</outputDirectory>
+							<outputDirectory>${basedir}/target</outputDirectory>
 							<resources>
 								<resource>
 									<directory>repository</directory>
@@ -65,7 +65,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/plantuml.lib/1.2017.15/repository</outputDirectory>
+							<outputDirectory>${basedir}/target/plantuml.lib/1.2018.9</outputDirectory>
 							<resources>
 								<resource>
 									<directory>../net.sourceforge.plantuml.lib.repository/target/repository</directory>
@@ -81,7 +81,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/plantuml.eclipse/1.1.19/repository</outputDirectory>
+							<outputDirectory>${basedir}/target/plantuml.eclipse/1.1.20</outputDirectory>
 							<resources>
 								<resource>
 									<directory>../net.sourceforge.plantuml.repository/target/repository</directory>

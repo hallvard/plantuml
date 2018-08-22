@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Luna runtime" sequenceNumber="207">
+<?pde version="3.8"?><target name="Luna runtime" sequenceNumber="208">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="org.eclipse.platform.feature.group" version="4.4.2.v20150204-1700"/>
-<unit id="org.eclipse.jdt.feature.group" version="3.10.1.v20150204-1700"/>
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.10.2.v20150123-0452"/>
+<unit id="org.eclipse.jdt.feature.group" version="3.10.1.v20150204-1700"/>
 <unit id="org.eclipse.pde.feature.group" version="3.10.0.v20140606-1215"/>
-<unit id="org.eclipse.xtext.sdk.feature.group" version="2.7.3.v201411190455"/>
+<unit id="org.eclipse.platform.feature.group" version="4.4.2.v20150204-1700"/>
 <unit id="org.eclipse.uml2.feature.group" version="5.0.2.v20150202-0947"/>
+<unit id="org.eclipse.xtext.sdk.feature.group" version="2.7.3.v201411190455"/>
+<repository location="http://download.eclipse.org/releases/luna"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="org.eclipse.cdt.feature.group" version="8.6.0.201502131403"/>
 <repository location="http://download.eclipse.org/releases/luna"/>
 </location>
 </locations>

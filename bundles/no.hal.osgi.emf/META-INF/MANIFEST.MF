@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: no.hal.osgi.emf;singleton:=true
-Bundle-Version: 1.1.20.qualifier
+Bundle-Version: 1.1.20
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

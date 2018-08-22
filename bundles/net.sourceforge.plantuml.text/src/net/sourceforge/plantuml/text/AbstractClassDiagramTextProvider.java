@@ -25,20 +25,24 @@ public abstract class AbstractClassDiagramTextProvider extends AbstractDiagramTe
 		appendClassStart(modifiers, classType, name, link, null, buffer);
 	}
 
-	protected void appendNameDeclaration(String name, final StringBuilder buffer) {
-		if (name == null) {
-			name = "?";
-		}
-		final String logicalName = getLogicalName(name);
-		if (name.equals(logicalName)) {
-			buffer.append(name);
-		} else {
+	protected void appendNameDeclaration(final String label, final String logicalName, final StringBuilder buffer) {
+		final boolean as = (logicalName != null && (! logicalName.equals(label)));
+		if (as) {
 			buffer.append("\"");
-			buffer.append(name);
+		}
+		buffer.append(label);
+		if (as) {
 			buffer.append("\"");
 			buffer.append(" as ");
 			buffer.append(logicalName);
 		}
+	}
+
+	protected void appendNameDeclaration(String name, final StringBuilder buffer) {
+		if (name == null) {
+			name = "?";
+		}
+		appendNameDeclaration(name, getLogicalName(name), buffer);
 	}
 
 	protected void appendClassStart(final String modifiers, final String classType, final String name, final String link, final String color, final StringBuilder buffer) {

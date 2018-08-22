@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OSGi Manifest support
 Bundle-SymbolicName: net.sourceforge.plantuml.osgi;singleton:=true
-Bundle-Version: 1.1.20.qualifier
+Bundle-Version: 1.1.20
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: net.sourceforge.plantuml.eclipse;bundle-version="1.1.20",

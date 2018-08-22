@@ -97,7 +97,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 							if (includes(genFlags, GEN_MODIFIERS) && (! Flags.isInterface(type.getFlags()))) {
 								body.append(getMemberModifiers(field));
 							}
-							body.append(getTypeName(field.getTypeSignature()));
+							body.append(getTypeName(field.getTypeSignature(), true));
 							body.append(" ");
 						}
 						body.append(field.getElementName());
@@ -111,7 +111,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 					}
 					// don't show the return type for constructors
 					if (! method.isConstructor()) {
-						body.append(getTypeName(method.getReturnType()));
+						body.append(getTypeName(method.getReturnType(), true));
 						body.append(" ");
 					}
 					body.append(method.getElementName());
@@ -123,7 +123,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 						if (body.charAt(body.length() - 1) != '(') {
 							body.append(", ");
 						}
-						body.append(getTypeName(parameterTypes[i]));
+						body.append(getTypeName(parameterTypes[i], true));
 						if (parameterNames != null) {
 							body.append(" ");
 							body.append(parameterNames[i]);
@@ -143,12 +143,12 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		}
 		try {
 			if (includes(genFlags, GEN_EXTENDS)) {
-				generateRelatedType(type, getTypeName(type.getSuperclassTypeSignature()), EXTENDS_RELATION, (type.isInterface() ? INTERFACE_TYPE : null), result, genFlags);
+				generateRelatedType(type, getTypeName(type.getSuperclassTypeSignature(), true), EXTENDS_RELATION, (type.isInterface() ? INTERFACE_TYPE : null), result, genFlags);
 			}
 			if (includes(genFlags, GEN_IMPLEMENTS)) {
 				final String[] interfaceSignatures = type.getSuperInterfaceTypeSignatures();
 				for (int i = 0; i < interfaceSignatures.length; i++) {
-					generateRelatedType(type, getTypeName(interfaceSignatures[i]), (type.isInterface() ? EXTENDS_RELATION : IMPLEMENTS_RELATION), INTERFACE_TYPE, result, genFlags);
+					generateRelatedType(type, getTypeName(interfaceSignatures[i], true), (type.isInterface() ? EXTENDS_RELATION : IMPLEMENTS_RELATION), INTERFACE_TYPE, result, genFlags);
 				}
 			}
 		} catch (final JavaModelException e) {
@@ -184,7 +184,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 	}
 
 	protected Assoc generateAssociation(final IType type, final IField field) throws JavaModelException {
-		final String fieldSignature = field.getTypeSignature(), fieldTypeName = getTypeName(fieldSignature);
+		final String fieldSignature = field.getTypeSignature(), fieldTypeName = getTypeName(fieldSignature, true);
 		Assoc assoc = null;
 		if (fieldTypeName.endsWith("[]")) {
 			assoc = new Assoc();
@@ -196,7 +196,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 			if (resolvedFieldType != null && resolvedFieldType.length > 0 && typeArguments != null && typeArguments.length == 1 && isMultiAssociationClassName(Signature.toQualifiedName(resolvedFieldType[0]))) {
 				assoc = new Assoc();
 				assoc.multi = true;
-				assoc.targetName = getTypeName(typeArguments[0]);
+				assoc.targetName = getTypeName(typeArguments[0], true);
 			} else {
 				assoc = new Assoc();
 				assoc.multi = false;
@@ -232,8 +232,17 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		}
 	}
 
-	private String getTypeName(final String signature) {
-		return signature != null ? Signature.toString(signature).replace("java.lang.", "") : null;
+	protected String getTypeName(String signature, final boolean includeTypeParameters) {
+		if (signature != null) {
+			if (! includeTypeParameters) {
+				final int pos = signature.indexOf('<');
+				if (pos > 0) {
+					signature = signature.substring(0,  pos);
+				}
+			}
+			return Signature.toString(signature).replace("java.lang.", "");
+		}
+		return null;
 	}
 
 	private String getMemberModifiers(final IMember member) {

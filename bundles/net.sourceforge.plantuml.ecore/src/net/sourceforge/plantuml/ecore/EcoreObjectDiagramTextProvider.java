@@ -17,11 +17,13 @@ public class EcoreObjectDiagramTextProvider extends AbstractEcoreObjectDiagramTe
 	}
 
 	@Override
-	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes) {
+	protected String getDiagramText(final IEditorPart editorPart, final IEditorInput editorInput, final ISelection selection, final Map<String, Object> markerAttributes) {
 		if (selection instanceof IStructuredSelection) {
-			Object sel = ((IStructuredSelection) selection).getFirstElement();
+			final Object sel = ((IStructuredSelection) selection).getFirstElement();
 			if (sel instanceof EObject && (! AbstractEcoreClassDiagramTextProvider.isEcoreClassDiagramObject(sel))) {
-				markerAttributes.put("eObjectUri", EcoreUtil.getURI((EObject) sel).toString());
+				if (markerAttributes != null) {
+					markerAttributes.put("eObjectUri", EcoreUtil.getURI((EObject) sel).toString());
+				}
 				return getDiagramText((EObject) sel);
 			}
 			return null;
