@@ -6,6 +6,6 @@ Bundle-Version: 1.2018.9
 Bundle-Vendor: PlantUML Team
 Bundle-ClassPath: lib/plantuml-epl-1.2018.9.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: net.sourceforge.plantuml,
- net.sourceforge.plantuml.core
+Export-Package: net.sourceforge.plantuml;version="1.2018.9",
+ net.sourceforge.plantuml.core;version="1.2018.9"
 Bundle-ActivationPolicy: lazy
