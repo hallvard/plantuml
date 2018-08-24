@@ -21,7 +21,7 @@ This repo uses the [EPL license](net.sourceforge.plantuml.feature/epl-v10.html).
 
 # Installation
 
-Use http://files.idi.ntnu.no/publish/plantuml/repository/ as the update site URL, in the Help > Install New Software... dialog.
+We use github pages @ http://hallvard.github.io/plantuml as the update site URL, in the Help > Install New Software... dialog.
 
 # Main plugins
 - net.sourceforge.plantuml.lib - plantuml.jar packaged as a bundle
@@ -36,13 +36,14 @@ Use http://files.idi.ntnu.no/publish/plantuml/repository/ as the update site URL
 Notable features in recent releases, details are found in [../../releases].
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
 
-## [1.1.20]
+## [1.1.20](../../releases/tag/1.1.20)
 - Fixes include bug ([issue #35](../../issues/35)) and copying, exporting and printing pages of multi-page diagrams.
 - Fixes problem with dangling Ecore objects ([issue #36](../../issues/36))
 - Fixes problem with object attribute values with newlines and braces ([issue #37](../../issues/37)) by truncating. Also truncates long attribute value strings, to make object boxes smaller.
 - Support for marker:/.../ hyperlinks to specific objects within a file, using the Marker API. Ecore object diagrams now use this kind of marker.
 - Fixes problem with missing void operation ([issue #40](../../issues/40)). Also appends "[]" to many-valued types.
 - Save action, for exporting image or puml file into workspace, and auto-save feature, for automatically updating saved files when the source changes ([issue #41](../../issues/41)).
+- Updated to use PlantUML library version 1.2018.9
 
 ## [1.1.19](../../releases/tag/1.1.19)
 - Support for the newpage directive. Multi-page diagrams are rendered as numbered tabs ([issue #11](../../issues/11)).
