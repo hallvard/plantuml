@@ -36,6 +36,8 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 Notable features in recent releases, details are found in [../../releases].
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
 
+## [1.1.21 snapshot]
+
 ## [1.1.20](../../releases/tag/1.1.20)
 - Fixes include bug ([issue #35](../../issues/35)) and copying, exporting and printing pages of multi-page diagrams.
 - Fixes problem with dangling Ecore objects ([issue #36](../../issues/36))
