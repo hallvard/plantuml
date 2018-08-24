@@ -39,6 +39,7 @@ public class ImageControl extends Canvas {
 	private AffineTransform transform = new AffineTransform();
 	private Cursor panCursor;
 	private Cursor linkCursor, unsupportedLinkCursor;
+	private double prevTx, prevTy;
 
 	public ImageControl(final Composite parent) {
 		this(parent, SWT.NULL);
@@ -414,7 +415,10 @@ public class ImageControl extends Canvas {
 	 */
 	public void resetZoom() {
 		if (sourceImage != null) {
+			if(getHorizontalBar().isEnabled())prevTx = transform.getTranslateX();
+			if(getVerticalBar().isEnabled())prevTy = transform.getTranslateY();
 			transform = new AffineTransform();
+			transform.setToTranslation(prevTx, prevTy);
 			syncScrollBars();
 		}
 	}
