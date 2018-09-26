@@ -55,7 +55,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":net.sourceforge.plantuml.eclipse.views.DiagramTextProvider"/>
+                  <meta.attribute kind="java" basedOn=":net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider"/>
                </appInfo>
             </annotation>
          </attribute>

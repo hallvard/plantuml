@@ -14,8 +14,7 @@ Export-Package: no.hal.osgi,
  org.osgi.scr,
  org.osgi.scr.impl,
  org.osgi.scr.util
-Require-Bundle: org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
  org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.emf.ecore.xmi;visibility:=reexport,
- no.hal.osgi.emf;visibility:=reexport
+ org.eclipse.emf.ecore.xmi;visibility:=reexport
 Bundle-ActivationPolicy: lazy
