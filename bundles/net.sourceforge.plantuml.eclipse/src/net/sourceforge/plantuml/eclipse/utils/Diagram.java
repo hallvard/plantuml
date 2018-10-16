@@ -24,14 +24,14 @@ import net.sourceforge.plantuml.eclipse.Activator;
 
 /**
  * Definition of a Diagram Object.
- * 
+ *
  * @author durif_c
  */
 public class Diagram {
 
 	/**
 	 * Script used to display the diagram (including
-	 * 
+	 *
 	 * @startuml and
 	 * @enduml)
 	 */
@@ -43,10 +43,10 @@ public class Diagram {
 	 * Generate the DiagramImage for textDiagram and imageNumber. Use
 	 * extractTextDiagram(int cursorPosition, String contents) to set
 	 * textDiagram and imageNumber
-	 * 
+	 *
 	 * @return ImageData of the current textDiagram and imageNumber
 	 */
-	public ImageData getImage(IPath path, int imageNum, Collection<LinkData> links) throws IOException {
+	public ImageData getImage(final IPath path, final int imageNum, final Collection<LinkData> links) throws IOException {
 		if (textDiagram != null) {
 			// generate the image for textDiagram and imageNumber
 			if (path != null) {
@@ -65,29 +65,29 @@ public class Diagram {
 	 * filled
 	 */
 	private static void setGraphvizPath() {
-		IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
-		String dotPath = prefStore.getString(PlantumlConstants.GRAPHVIZ_PATH);
+		final IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
+		final String dotPath = prefStore.getString(PlantumlConstants.GRAPHVIZ_PATH);
 		if (dotPath != null && (! "".equals(dotPath))) {
 			System.setProperty("GRAPHVIZ_DOT", dotPath);
 		}
 	}
 
-	public static ImageData getImage(String textDiagram) {
+	public static ImageData getImage(final String textDiagram) {
 		return getImage(textDiagram, 0, null);
 	}
 
 	private static FileFormatOption layoutFormatOption = new FileFormatOption(FileFormat.PNG);
 
-	private static ImageData getImage(String textDiagram, int imageNum, Collection<LinkData> links) {
+	private static ImageData getImage(final String textDiagram, final int imageNum, final Collection<LinkData> links) {
 		setGraphvizPath();
 		ImageData imageData = null;
 		try {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			final ByteArrayOutputStream os = new ByteArrayOutputStream();
 			// image generation
-			SourceStringReader reader = new SourceStringReader(textDiagram);
-			DiagramDescription desc = reader.outputImage(os, imageNum);
+			final SourceStringReader reader = new SourceStringReader(textDiagram);
+			final DiagramDescription desc = reader.outputImage(os, imageNum);
 			if (links != null) {
-				String cMapData = reader.getCMapData(0, layoutFormatOption);
+				final String cMapData = reader.getCMapData(0, layoutFormatOption);
 				if (cMapData != null) {
 					parseImageMapString(cMapData, links);
 				}
@@ -95,38 +95,38 @@ public class Diagram {
 			os.close();
 
 			if (desc != null && StringUtils.isNotEmpty(desc.getDescription())) {
-				InputStream is = new ByteArrayInputStream(os.toByteArray());
+				final InputStream is = new ByteArrayInputStream(os.toByteArray());
 				imageData = new ImageData(is);
 				is.close();
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			WorkbenchUtil.errorBox("Error during image generation.", e);
 		}
 		return imageData;
 	}
 
-	private static void parseImageMapString(String cMapData, Collection<LinkData> links) {
-		String[] areaElements = cMapData.split(Pattern.quote("<area "));
-		for (String areaElement : areaElements) {
-//			int pos = areaElement.indexOf('>');
-//			if (pos >= 0) {
-//				areaElement = areaElement.substring(0, pos);
-//				if (areaElement.endsWith("/")) {
-//					areaElement = areaElement.substring(0, areaElement.length() - 1);
-//				}
-//			}
-			LinkData link = new LinkData();
+	private static void parseImageMapString(final String cMapData, final Collection<LinkData> links) {
+		final String[] areaElements = cMapData.split(Pattern.quote("<area "));
+		for (final String areaElement : areaElements) {
+			//			int pos = areaElement.indexOf('>');
+			//			if (pos >= 0) {
+			//				areaElement = areaElement.substring(0, pos);
+			//				if (areaElement.endsWith("/")) {
+			//					areaElement = areaElement.substring(0, areaElement.length() - 1);
+			//				}
+			//			}
+			final LinkData link = new LinkData();
 			link.href = getAttributeValue(areaElement, "href");
 			link.title = getAttributeValue(areaElement, "title");
 			link.altText = getAttributeValue(areaElement, "alt");
-			String coords = getAttributeValue(areaElement, "coords");
+			final String coords = getAttributeValue(areaElement, "coords");
 			if (coords != null) {
-				String[] ints = coords.split(",");
+				final String[] ints = coords.split(",");
 				if (ints.length == 4) {
 					try {
-						int x1 = Integer.valueOf(ints[0]), y1 = Integer.valueOf(ints[1]), x2 = Integer.valueOf(ints[2]), y2 = Integer.valueOf(ints[3]);
+						final int x1 = Integer.valueOf(ints[0]), y1 = Integer.valueOf(ints[1]), x2 = Integer.valueOf(ints[2]), y2 = Integer.valueOf(ints[3]);
 						link.rect = new Rectangle(x1, y1, x2 - x1, y2 - y1);
-					} catch (NumberFormatException e) {
+					} catch (final NumberFormatException e) {
 					}
 				}
 			}
@@ -159,14 +159,14 @@ public class Diagram {
 		<area shape="rect" id="id8" href="http://plantuml.com/sequence" title="http://plantuml.com/sequence" alt="" coords="222,5,248,257"/>
 		</map>
 	 */
-	
-	private static String getAttributeValue(String element, String attributeName) {
-		String prefix = attributeName + "=\"";
+
+	private static String getAttributeValue(final String element, final String attributeName) {
+		final String prefix = attributeName + "=\"";
 		int start = element.indexOf(prefix);
 		if (start >= 0) {
 			start += prefix.length();
-			String suffix = "\"";
-			int end = element.indexOf(suffix, start);
+			final String suffix = "\"";
+			final int end = element.indexOf(suffix, start);
 			if (end > start) {
 				return element.substring(start, end);
 			}
@@ -174,14 +174,14 @@ public class Diagram {
 		return null;
 	}
 
-	private Pattern pattern = Pattern.compile("(?i)(?m)^\\W*newpage( .*)?$");
+	private final Pattern pattern = Pattern.compile("(?i)(?m)^\\W*newpage( .*)?$");
 
-	public void setTextDiagram(String diagramText) {
+	public void setTextDiagram(final String diagramText) {
 		textDiagram = diagramText;
 		if (textDiagram != null) {
 			imageCount = 1;
 			// We must count the number of "newpage" instructions
-			Matcher matcherNewpage = pattern.matcher(diagramText);
+			final Matcher matcherNewpage = pattern.matcher(diagramText);
 			while (matcherNewpage.find()) {
 				imageCount++;
 			}
