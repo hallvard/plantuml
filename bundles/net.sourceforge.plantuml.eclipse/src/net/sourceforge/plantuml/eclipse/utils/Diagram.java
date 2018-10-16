@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -51,9 +52,9 @@ public class Diagram {
 		if (textDiagram != null) {
 			// generate the image for textDiagram and imageNumber
 			if (path != null) {
-				final IPath workspaceaPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-				final IPath absolutePath = workspaceaPath.append(path);
-				FileSystem.getInstance().setCurrentDir(absolutePath.toFile().getAbsoluteFile().getParentFile());
+				// find the real file, which may be linked and thus is not located under the root itself
+				final IResource member = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+				FileSystem.getInstance().setCurrentDir(member.getLocation().toFile().getAbsoluteFile().getParentFile());
 			} else {
 				FileSystem.getInstance().reset();
 			}
