@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.ImageData;
@@ -50,7 +51,9 @@ public class Diagram {
 		if (textDiagram != null) {
 			// generate the image for textDiagram and imageNumber
 			if (path != null) {
-				FileSystem.getInstance().setCurrentDir(path.toFile().getAbsoluteFile().getParentFile());
+				final IPath workspaceaPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+				final IPath absolutePath = workspaceaPath.append(path);
+				FileSystem.getInstance().setCurrentDir(absolutePath.toFile().getAbsoluteFile().getParentFile());
 			} else {
 				FileSystem.getInstance().reset();
 			}
