@@ -22,20 +22,20 @@ import net.sourceforge.plantuml.ecore.AbstractEcoreClassDiagramTextProvider;
 public class Uml2ClassDiagramTextProvider extends AbstractEcoreClassDiagramTextProvider {
 
 	@Override
-	protected boolean supportsEObject(EObject selection) {
+	protected boolean supportsEObject(final EObject selection) {
 		return selection.eClass().getEPackage() == UMLPackage.eINSTANCE;
 	}
 
 	@Override
-	protected EPackage getEPackage(EObject eObject) {
-		org.eclipse.uml2.uml.Package umlPack = diagramHelper.getAncestor(eObject, org.eclipse.uml2.uml.Package.class);
+	protected EPackage getEPackage(final EObject eObject) {
+		final org.eclipse.uml2.uml.Package umlPack = diagramHelper.getAncestor(eObject, org.eclipse.uml2.uml.Package.class);
 		uml2EcoreMapping.clear();
-		return getEPackage(umlPack);
+		return (umlPack != null ? getEPackage(umlPack) : null);
 	}
 
-	private Map<NamedElement, ENamedElement> uml2EcoreMapping = new HashMap<NamedElement, ENamedElement>();
-	
-	protected ENamedElement getENamedElement(NamedElement namedElement, EClass eClass) {
+	private final Map<NamedElement, ENamedElement> uml2EcoreMapping = new HashMap<NamedElement, ENamedElement>();
+
+	protected ENamedElement getENamedElement(final NamedElement namedElement, final EClass eClass) {
 		ENamedElement eNamedElement = uml2EcoreMapping.get(namedElement);
 		if (eNamedElement == null) {
 			eNamedElement = (ENamedElement) EcoreUtil.create(eClass);
@@ -44,12 +44,12 @@ public class Uml2ClassDiagramTextProvider extends AbstractEcoreClassDiagramTextP
 		eNamedElement.setName(namedElement.getName());
 		return eNamedElement;
 	}
-	
-	protected EPackage getEPackage(org.eclipse.uml2.uml.Package umlPack) {
-		EPackage ePack = (EPackage) getENamedElement(umlPack, EcorePackage.eINSTANCE.getEPackage());
-		for (NamedElement member : umlPack.getMembers()) {
+
+	protected EPackage getEPackage(final org.eclipse.uml2.uml.Package umlPack) {
+		final EPackage ePack = (EPackage) getENamedElement(umlPack, EcorePackage.eINSTANCE.getEPackage());
+		for (final NamedElement member : umlPack.getMembers()) {
 			if (member instanceof org.eclipse.uml2.uml.Class) {
-				EClass eClass = getEClass((org.eclipse.uml2.uml.Class) member);
+				final EClass eClass = getEClass((org.eclipse.uml2.uml.Class) member);
 				if (eClass != null) {
 					ePack.getEClassifiers().add(eClass);
 				}
@@ -58,12 +58,12 @@ public class Uml2ClassDiagramTextProvider extends AbstractEcoreClassDiagramTextP
 		return ePack;
 	}
 
-	private EClass getEClass(Class umlClass) {
-		EClass eClass = (EClass) getENamedElement(umlClass, EcorePackage.eINSTANCE.getEClass());
+	private EClass getEClass(final Class umlClass) {
+		final EClass eClass = (EClass) getENamedElement(umlClass, EcorePackage.eINSTANCE.getEClass());
 		eClass.getEStructuralFeatures().clear();
-		for (NamedElement member : umlClass.getMembers()) {
+		for (final NamedElement member : umlClass.getMembers()) {
 			if (member instanceof Property) {
-				EAttribute attr = getEAttribute((Property) member);
+				final EAttribute attr = getEAttribute((Property) member);
 				if (attr != null) {
 					eClass.getEStructuralFeatures().add(attr);
 				}
@@ -72,9 +72,9 @@ public class Uml2ClassDiagramTextProvider extends AbstractEcoreClassDiagramTextP
 		return eClass;
 	}
 
-	private EAttribute getEAttribute(Property prop) {
-		EAttribute attr = (EAttribute) getENamedElement(prop, EcorePackage.eINSTANCE.getEAttribute());
-		EDataType type = EcoreFactory.eINSTANCE.createEDataType();
+	private EAttribute getEAttribute(final Property prop) {
+		final EAttribute attr = (EAttribute) getENamedElement(prop, EcorePackage.eINSTANCE.getEAttribute());
+		final EDataType type = EcoreFactory.eINSTANCE.createEDataType();
 		type.setName(prop.getType().getName());
 		attr.setEType(type);
 		return attr;
