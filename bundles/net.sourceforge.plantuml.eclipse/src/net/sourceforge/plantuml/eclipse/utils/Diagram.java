@@ -2,6 +2,7 @@ package net.sourceforge.plantuml.eclipse.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -54,7 +55,8 @@ public class Diagram {
 			if (path != null) {
 				// find the real file, which may be linked and thus is not located under the root itself
 				final IResource member = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-				FileSystem.getInstance().setCurrentDir(member.getLocation().toFile().getAbsoluteFile().getParentFile());
+				File dirPath = member.getLocation().toFile().getAbsoluteFile().getParentFile();
+				FileSystem.getInstance().setCurrentDir(dirPath);
 			} else {
 				FileSystem.getInstance().reset();
 			}
