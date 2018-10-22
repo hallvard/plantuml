@@ -33,7 +33,7 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 
 # Releases
 
-Notable features in recent releases, details are found in [../../releases].
+Notable features in recent releases, details are found in [releases](../../releases).
 
 ## [1.1.21](../../releases/tag/1.1.21)
 - Fixes include bug ([issue #73](../../issues/73)).
