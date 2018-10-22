@@ -10,4 +10,40 @@
 	  	<version>1.1.21</version>
 	  	<relativePath>../releng/net.sourceforge.plantuml.parent</relativePath>
 	  </parent>
+
+	<profiles>
+		<profile>
+			<id>sign</id>
+			<activation>
+				<property>
+					<name>jarsigner.alias</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>1.4</version>
+						<configuration>
+							<storetype>pkcs12</storetype>
+							<tsa>http://timestamp.digicert.com</tsa>
+							<keypass>${jarsigner.keypass}</keypass>
+							<storepass>${jarsigner.keypass}</storepass>
+						</configuration>
+						<executions>
+							<execution>
+								<id>sign</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+						<!-- See http://maven.apache.org/plugins/maven-jarsigner-plugin/sign-mojo.html -->
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
