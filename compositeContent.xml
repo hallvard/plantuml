@@ -5,12 +5,14 @@
 	version='1.0.0'>
 	<properties size='1'>
 	<!-- 
-		<property name='p2.timestamp' value='1421600341270' />
+		<property name='p2.timestamp' value='1540207921360' />
 		<property name='p2.atomic.composite.loading' value='true' />
 	 -->
 	</properties>
-	<children size='2'>
+	<children size='4'>
 		<child location='plantuml.lib/1.2018.9' />
+		<child location='plantuml.lib/1.2018.12' />
 		<child location='plantuml.eclipse/1.1.20' />
+		<child location='plantuml.eclipse/1.1.21' />
 	</children>
 </repository>
