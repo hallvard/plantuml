@@ -15,33 +15,34 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 
 	public AbstractDiagramTextProvider() {
 	}
-	public AbstractDiagramTextProvider(Class<?> editorType) {
+	public AbstractDiagramTextProvider(final Class<?> editorType) {
 		this();
 		setEditorType(editorType);
 	}
 
-	public void setEditorType(Class<?> editorType) {
+	public void setEditorType(final Class<?> editorType) {
 		this.editorType = editorType;
 	}
 
 	@Override
-	public boolean supportsEditor(IEditorPart editorPart) {
+	public boolean supportsEditor(final IEditorPart editorPart) {
 		if (editorType != null && (! (editorType.isInstance(editorPart)))) {
 			return false;
 		}
 		return true;
 	}
-	
-	public String getDiagramText(IEditorPart editorPart, ISelection selection) {
+
+	@Override
+	public String getDiagramText(final IEditorPart editorPart, final ISelection selection) {
 		return getDiagramText(editorPart, selection, null);
 	}
-	
-	public String getDiagramText(IEditorPart editorPart, ISelection selection, Map<String, Object> markerAttributes) {
+
+	public String getDiagramText(final IEditorPart editorPart, final ISelection selection, final Map<String, Object> markerAttributes) {
 		if (supportsEditor(editorPart) && (selection == null || supportsSelection(selection))) {
-			String diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection, markerAttributes);
+			final String diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection, markerAttributes);
 			return ensureDiagramText(diagramText);
 		}
-		return null;		
+		return null;
 	}
 
 	public String ensureDiagramText(String diagramText) {
@@ -56,25 +57,25 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		}
 		return diagramText;
 	}
-	
+
 	protected abstract String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes);
 
 	private int indentLevel = 0;
-	private String indentString = "\t";
+	private final String indentString = "\t";
 
-	protected void indent(int d) {
+	protected void indent(final int d) {
 		indentLevel += d;
 	}
-	
-	protected void indent(StringBuilder buffer) {
+
+	protected void indent(final StringBuilder buffer) {
 		for (int i = 0; i < indentLevel; i++) {
 			buffer.append(indentString);
 		}
 	}
-	
+
 	//
-	
-	protected static boolean includes(int flags, int... bits) {
+
+	protected static boolean includes(final int flags, final int... bits) {
 		for (int i = 0; i < bits.length; i++) {
 			if ((flags & bits[i]) == 0) {
 				return false;
@@ -83,11 +84,11 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		return true;
 	}
 
-	protected void appendSkinParams(Map<String, String> skinParams, StringBuilder buffer) {
+	protected void appendSkinParams(final Map<String, String> skinParams, final StringBuilder buffer) {
 		appendSkinParams(null, skinParams, buffer);
 	}
 
-	protected void appendSkinParams(String qualifier, Map<String, String> skinParams, StringBuilder buffer) {
+	protected void appendSkinParams(final String qualifier, final Map<String, String> skinParams, final StringBuilder buffer) {
 		if (qualifier != null) {
 			buffer.append("skinparam");
 			buffer.append(" ");
@@ -113,29 +114,29 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		}
 	}
 
-	protected void appendLink(String link, boolean isMember, StringBuilder result) {
+	protected void appendLink(final String link, final boolean isMember, final StringBuilder result) {
 		if (link != null) {
 			result.append(" [[");
 			if (isMember) {
-				result.append("[");				
+				result.append("[");
 			}
 			result.append(link);
 			if (isMember) {
-				result.append("]");				
+				result.append("]");
 			}
 			result.append("]]");
 		}
 	}
 
-	protected String getSimpleName(String name) {
-		int pos = (name != null ? name.lastIndexOf('.') : -1);
+	protected String getSimpleName(final String name) {
+		final int pos = (name != null ? name.lastIndexOf('.') : -1);
 		return (pos >= 0 ? name.substring(pos + 1) : name);
 	}
-	
-	protected String getLogicalName(String name) {
+
+	protected String getLogicalName(final String name) {
 		StringBuilder builder = null;
 		for (int i = 0; i < name.length(); i++) {
-			char c = name.charAt(i);
+			final char c = name.charAt(i);
 			if (i == 0 ? Character.isJavaIdentifierStart(c) : Character.isJavaIdentifierPart(c)) {
 				if (builder != null) {
 					builder.append(c);
@@ -152,7 +153,7 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 
 	protected final static String RELATION_LINE = "--";
 
-	protected void appendRelation(String start, boolean cont1, String startLabel, String relation, String direction, String end, boolean cont2, String endLabel, String label, StringBuilder buffer) {
+	protected void appendRelation(final String start, final boolean cont1, final String startLabel, String relation, final String direction, final String end, final boolean cont2, final String endLabel, final String label, final StringBuilder buffer) {
 		buffer.append(getLogicalName(start));
 		if (startLabel != null) {
 			buffer.append(" \"");
@@ -188,8 +189,8 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		}
 		buffer.append("\n");
 	}
-	
-	protected void appendNameLink(String name, String link, StringBuilder buffer) {
+
+	protected void appendNameLink(final String name, final String link, final StringBuilder buffer) {
 		if (link != null) {
 			buffer.append("url of ");
 			buffer.append(name);
