@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Luna runtime" sequenceNumber="208">
+<?pde version="3.8"?><target name="Photon 2018-12 runtime" sequenceNumber="208">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.10.2.v20150123-0452"/>
-<unit id="org.eclipse.jdt.feature.group" version="3.10.1.v20150204-1700"/>
-<unit id="org.eclipse.pde.feature.group" version="3.10.0.v20140606-1215"/>
-<unit id="org.eclipse.platform.feature.group" version="4.4.2.v20150204-1700"/>
-<unit id="org.eclipse.uml2.feature.group" version="5.0.2.v20150202-0947"/>
-<unit id="org.eclipse.xtext.sdk.feature.group" version="2.7.3.v201411190455"/>
-<repository location="http://download.eclipse.org/releases/luna"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.16.0.v20181206-1055"/>
+<unit id="org.eclipse.jdt.feature.group" version="3.16.0.v20181206-1038"/>
+<unit id="org.eclipse.pde.feature.group" version="3.13.300.v20181206-0815"/>
+<unit id="org.eclipse.platform.feature.group" version="4.10.0.v20181206-0815"/>
+<unit id="org.eclipse.uml2.feature.group" version="5.5.0.v20181203-1331"/>
+<unit id="org.eclipse.xtext.sdk.feature.group" version="2.16.0.v20181203-1555"/>
+<repository location="http://download.eclipse.org/releases/2018-12"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="org.eclipse.cdt.feature.group" version="8.6.0.201502131403"/>
-<repository location="http://download.eclipse.org/releases/luna"/>
+<unit id="org.eclipse.cdt.feature.group" version="9.6.0.201812111211"/>
+<repository location="http://download.eclipse.org/releases/2018-12"/>
 </location>
 </locations>
 <environment>
