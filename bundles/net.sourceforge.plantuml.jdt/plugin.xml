@@ -6,7 +6,10 @@
          point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
       
       <diagramTextProvider providerClass="net.sourceforge.plantuml.jdt.JavaEditorDiagramTextProvider"/>
-      <diagramTextProvider providerClass="net.sourceforge.plantuml.jdt.ClassFileEditorDiagramTextProvider"/>
+      <!--
+      Removed, since it uses internal/restricted API and crashes in Photon 2018-12 release
+       <diagramTextProvider providerClass="net.sourceforge.plantuml.jdt.ClassFileEditorDiagramTextProvider"/>
+       -->
    </extension>
 
    <extension

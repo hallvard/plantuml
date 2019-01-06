@@ -1,6 +1,7 @@
 package net.sourceforge.plantuml.eclipse.views;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
@@ -8,11 +9,13 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -31,6 +34,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import net.sourceforge.plantuml.eclipse.Activator;
+import net.sourceforge.plantuml.eclipse.utils.DiagramTextIteratorProvider;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider2;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
@@ -65,12 +69,19 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		return isLinkedToActiveEditor() && toggleAction == null || toggleAction.isChecked();
 	}
 
+	private Control parent;
+
+	protected void asyncExec(final Runnable runnable) {
+		parent.getDisplay().asyncExec(runnable);
+	}
+
 	@Override
 	public void createPartControl(final Composite parent) {
+		this.parent = parent;
 		if (isLinkedToActiveEditor()) {
 			registerListeners();
 			// without this it deadlocked during startup
-			parent.getDisplay().asyncExec(new Runnable() {
+			asyncExec(new Runnable() {
 				@Override
 				public void run() {
 					if (pinnedTo != null || initialDiagramSource == null) {
@@ -260,6 +271,38 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		if (currentEditor != null) {
 			currentEditor.addPropertyListener(diagramTextChangedListener);
 		}
+	}
+
+	protected void addEditorSelectionActions(final IMenuManager menu) {
+		final DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders();
+		final IEditorPart editor = (pinnedTo != null ? pinnedTo : getSite().getPage().getActiveEditor());
+		final ISelectionProvider selectionProvider = editor.getSite().getSelectionProvider();
+		if (selectionProvider != null) {
+			for (final DiagramTextProvider diagramTextProvider : diagramTextProviders) {
+				if (diagramTextProvider instanceof DiagramTextIteratorProvider && diagramTextProvider.supportsEditor(editor)) {
+					final Iterator<ISelection> selections = ((DiagramTextIteratorProvider) diagramTextProvider).getDiagramText(editor);
+					while (selections.hasNext()) {
+						final ISelection selection = selections.next();
+						menu.add(createEditorSelectionAction(editor, selectionProvider, selection));
+					}
+				}
+			}
+		}
+	}
+
+	private Action createEditorSelectionAction(final IEditorPart editor, final ISelectionProvider selectionProvider, final ISelection selection) {
+		return new Action(selection.toString()) {
+			@Override
+			public void run() {
+				asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						diagramTextChangedListener.diagramChanged(editor, selection);
+						selectionProvider.setSelection(selection);
+					}
+				});
+			}
+		};
 	}
 
 	protected void updateDiagramText(final boolean force, final IWorkbenchPart part, ISelection selection) {
