@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Plantuml Plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.eclipse.imagecontrol
-Bundle-Version: 1.1.21
+Bundle-Version: 1.1.22.qualifier
 Bundle-Vendor: PlantUML Team
 Require-Bundle: org.eclipse.jface;bundle-version="3.10.2";resolution:=optional
 Bundle-ActivationPolicy: lazy

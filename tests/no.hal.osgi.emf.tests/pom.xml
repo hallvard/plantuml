@@ -7,7 +7,7 @@
 	  <parent>
 	  	<groupId>net.sourceforge.plantuml</groupId>
 	  	<artifactId>net.sourceforge.plantuml.parent</artifactId>
-	  	<version>1.1.21</version>
+	  	<version>1.1.22-SNAPSHOT</version>
 	  	<relativePath>../../releng/net.sourceforge.plantuml.parent</relativePath>
 	  </parent>
 
