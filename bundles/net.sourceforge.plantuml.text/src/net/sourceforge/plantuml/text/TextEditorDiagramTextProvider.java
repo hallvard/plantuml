@@ -50,21 +50,32 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider i
 		return (lines != null ? getDiagramText(lines) : null);
 	}
 
+	// allows to override prefix
+	protected String getEntPlantUml() {
+		return PlantumlConstants.END_UML;
+	}
+
+	// allows to override suffix
+	protected String getStartPlantUml() {
+		return PlantumlConstants.START_UML;
+	}
+
 	protected StringBuilder getDiagramTextLines(final IEditorPart editorPart, final IEditorInput editorInput, final ISelection selection, final Map<String, Object> markerAttributes) {
 		final ITextEditor textEditor = (ITextEditor) editorPart;
 		final IDocument document = textEditor.getDocumentProvider().getDocument(editorInput);
 		final int selectionStart = ((ITextSelection) (selection != null ? selection : textEditor.getSelectionProvider().getSelection())).getOffset();
 		final FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
 		try {
-			IRegion start = finder.find(selectionStart, PlantumlConstants.START_UML, true, true, (! startIsRegexp), startIsRegexp);
-			IRegion end = finder.find(selectionStart, PlantumlConstants.END_UML, true, true, (! endIsRegexp), endIsRegexp);
+			final String startPlantUml = getStartPlantUml(), entPlantUml = getEntPlantUml();
+			IRegion start = finder.find(selectionStart, startPlantUml, true, true, (! startIsRegexp), startIsRegexp);
+			IRegion end = finder.find(selectionStart, entPlantUml, true, true, (! endIsRegexp), endIsRegexp);
 			if (start == null || (end != null && end.getOffset() < start.getOffset())) {
 				// use a slightly larger selection offset, in case the cursor is within startuml
-				start = finder.find(Math.min(selectionStart + PlantumlConstants.START_UML.length(), document.getLength()), PlantumlConstants.START_UML, false, true, (! startIsRegexp), startIsRegexp);
+				start = finder.find(Math.min(selectionStart + startPlantUml.length(), document.getLength()), startPlantUml, false, true, (! startIsRegexp), startIsRegexp);
 			}
 			if (start != null) {
 				final int startOffset = start.getOffset(), startLine = document.getLineOfOffset(startOffset);
-				end = finder.find(startOffset, PlantumlConstants.END_UML, true, true, (! endIsRegexp), endIsRegexp);
+				end = finder.find(startOffset, entPlantUml, true, true, (! endIsRegexp), endIsRegexp);
 				if (end != null) {
 					final int endOffset = end.getOffset() + end.getLength();
 					//					String linePrefix = document.get(startLinePos, startOffset - startLinePos).trim();
@@ -91,8 +102,9 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider i
 	}
 
 	protected String getDiagramText(final StringBuilder lines) {
-		int start = Math.max(lines.indexOf(PlantumlConstants.START_UML), 0);
-		final int end = Math.min(lines.lastIndexOf(PlantumlConstants.END_UML) + PlantumlConstants.END_UML.length(), lines.length());
+		final String startPlantUml = getStartPlantUml(), entPlantUml = getEntPlantUml();
+		int start = Math.max(lines.indexOf(startPlantUml), 0);
+		final int end = Math.min(lines.lastIndexOf(entPlantUml) + entPlantUml.length(), lines.length());
 		final String linePrefix = lines.substring(0, start).trim();
 		final StringBuilder result = new StringBuilder(lines.length());
 		while (start < end) {
@@ -113,7 +125,7 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider i
 		return result.toString().trim();
 	}
 
-	private final Collection<String> supportedExtensions = new ArrayList<String>(Arrays.asList("txt", "puml", "plantuml"));
+	private final Collection<String> supportedExtensions = new ArrayList<String>(Arrays.asList("txt", "text", "puml", "plantuml"));
 
 	@Override
 	public boolean supportsPath(final IPath path) {
@@ -133,7 +145,7 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider i
 					final String nextLine = scanner.nextLine();
 					if (builder == null) {
 						if (startOffset <= nextLine.length()) {
-							if (nextLine.indexOf(PlantumlConstants.START_UML, startOffset) >= 0) {
+							if (nextLine.indexOf(getStartPlantUml(), startOffset) >= 0) {
 								builder = new StringBuilder();
 							}
 							startOffset = 0;
@@ -144,7 +156,7 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider i
 					if (builder != null) {
 						builder.append(nextLine);
 						builder.append(newline);
-						if (nextLine.contains(PlantumlConstants.END_UML)) {
+						if (nextLine.contains(getEntPlantUml())) {
 							break;
 						}
 					}
@@ -170,8 +182,8 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider i
 		final Collection<ISelection> selections = new ArrayList<ISelection>();
 		try {
 			while (true) {
-				final IRegion start = finder.find(selectionStart, PlantumlConstants.START_UML, true, true, (! startIsRegexp), startIsRegexp);
-				final IRegion end = finder.find(selectionStart, PlantumlConstants.END_UML, true, true, (! endIsRegexp), endIsRegexp);
+				final IRegion start = finder.find(selectionStart, getStartPlantUml(), true, true, (! startIsRegexp), startIsRegexp);
+				final IRegion end = finder.find(selectionStart, getEntPlantUml(), true, true, (! endIsRegexp), endIsRegexp);
 				if (start == null || end == null) {
 					break;
 				}
