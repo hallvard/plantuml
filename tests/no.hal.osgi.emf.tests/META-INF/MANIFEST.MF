@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OSGi EMF tests
 Bundle-SymbolicName: no.hal.osgi.emf.tests
-Bundle-Version: 1.1.22
+Bundle-Version: 1.1.23.qualifier
 Bundle-Vendor: PlantUML Team
 Require-Bundle: org.junit,
  org.eclipse.emf.ecore,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.emf.common,
- no.hal.osgi.emf;bundle-version="1.1.22"
+ no.hal.osgi.emf;bundle-version="1.1.23.qualifier"
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
