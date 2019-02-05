@@ -33,7 +33,13 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 
 # Releases
 
-Notable features in recent releases, details are found in [releases](../../releases).
+Notable features in recent releases, details are found in [../../releases].
+Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
+
+## [1.1.22](../../releases/tag/1.1.22)
+- Fixes bug ([issue #77](../../issues/77)) concerning incompatibilit with Photon 2018.12.
+- The view menu now lists the (explicit) diagrams in a file, so you can select and view it, without navigating inside the file. See ([issue #61](../../issues/61))
+- Updated to use PlantUML library version 1.2019.0, which fixes another include bug.
 
 ## [1.1.21](../../releases/tag/1.1.21)
 - Fixes include bug ([issue #73](../../issues/73)).
