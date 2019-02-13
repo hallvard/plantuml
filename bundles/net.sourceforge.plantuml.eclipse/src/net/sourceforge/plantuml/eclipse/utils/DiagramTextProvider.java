@@ -1,7 +1,7 @@
 package net.sourceforge.plantuml.eclipse.utils;
 
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * Functionality for generating diagrams from contents of active editors,
@@ -13,10 +13,10 @@ public interface DiagramTextProvider {
 
 	/**
 	 * Tells if the specified editor (or its input) is supported
-	 * @param editorPart
+	 * @param workbenchPart
 	 * @return true if the specified editor (or its input) is supported, false otherwise
 	 */
-	public boolean supportsEditor(IEditorPart editorPart);
+	public boolean supportsPart(IWorkbenchPart workbenchPart);
 
 	/**
 	 * Tells whether the specified editor selection is supported
@@ -27,9 +27,9 @@ public interface DiagramTextProvider {
 
 	/**
 	 * Computes the diagram text for the specific editor part and selection
-	 * @param editorPart
+	 * @param workbenchPart
 	 * @param selection
 	 * @return the corresponding diagram text
 	 */
-	public String getDiagramText(IEditorPart editorPart, ISelection selection);
+	public String getDiagramText(IWorkbenchPart workbenchPart, ISelection selection);
 }

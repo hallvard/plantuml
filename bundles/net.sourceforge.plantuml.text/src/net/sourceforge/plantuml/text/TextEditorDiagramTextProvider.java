@@ -21,6 +21,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextIteratorProvider;
@@ -174,9 +175,9 @@ public class TextEditorDiagramTextProvider extends AbstractDiagramTextProvider i
 	// DiagramTextIteratorProvider
 
 	@Override
-	public Iterator<ISelection> getDiagramText(final IEditorPart editorPart) {
+	public Iterator<ISelection> getDiagramText(final IWorkbenchPart editorPart) {
 		final ITextEditor textEditor = (ITextEditor) editorPart;
-		final IDocument document = textEditor.getDocumentProvider().getDocument(editorPart.getEditorInput());
+		final IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
 		final FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
 		int selectionStart = 0;
 		final Collection<ISelection> selections = new ArrayList<ISelection>();

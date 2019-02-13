@@ -3,7 +3,7 @@ package net.sourceforge.plantuml.eclipse.utils;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * Used for generating editor selections, from editor contents
@@ -13,10 +13,10 @@ import org.eclipse.ui.IEditorPart;
 public interface DiagramTextIteratorProvider extends DiagramTextProvider {
 
 	/**
-	 * Computes an iterator of editor selections suitable for
-	 * getDiagramText(IEditorPart, ISelection)
-	 * @param editorPart
-	 * @return an iterator of editor selections
+	 * Computes an iterator of workbench part selections suitable for
+	 * getDiagramText(IWorkbenchPart, ISelection)
+	 * @param workbenchPart
+	 * @return an iterator of workbench part selections
 	 */
-	public Iterator<ISelection> getDiagramText(IEditorPart editorPart);
+	public Iterator<ISelection> getDiagramText(IWorkbenchPart workbenchPart);
 }

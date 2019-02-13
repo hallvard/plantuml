@@ -5,6 +5,7 @@ import java.util.Map;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
@@ -25,20 +26,21 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	}
 
 	@Override
-	public boolean supportsEditor(final IEditorPart editorPart) {
-		if (editorType != null && (! (editorType.isInstance(editorPart)))) {
+	public boolean supportsPart(final IWorkbenchPart workbenchPart) {
+		if (editorType != null && (! (editorType.isInstance(workbenchPart)))) {
 			return false;
 		}
 		return true;
 	}
 
 	@Override
-	public String getDiagramText(final IEditorPart editorPart, final ISelection selection) {
-		return getDiagramText(editorPart, selection, null);
+	public String getDiagramText(final IWorkbenchPart workbenchPart, final ISelection selection) {
+		return getDiagramText(workbenchPart, selection, null);
 	}
 
-	public String getDiagramText(final IEditorPart editorPart, final ISelection selection, final Map<String, Object> markerAttributes) {
-		if (supportsEditor(editorPart) && (selection == null || supportsSelection(selection))) {
+	public String getDiagramText(final IWorkbenchPart workbenchPart, final ISelection selection, final Map<String, Object> markerAttributes) {
+		if (supportsPart(workbenchPart) && (selection == null || supportsSelection(selection))) {
+			IEditorPart editorPart = (IEditorPart) workbenchPart;
 			final String diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection, markerAttributes);
 			return ensureDiagramText(diagramText);
 		}

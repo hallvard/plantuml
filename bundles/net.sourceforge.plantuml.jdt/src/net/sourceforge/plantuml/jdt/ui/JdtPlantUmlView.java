@@ -47,7 +47,7 @@ import net.sourceforge.plantuml.jdt.JdtDiagramTextProvider;
 public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeListener {
 
 	@Override
-	public boolean isLinkedToActiveEditor() {
+	public boolean isLinkedToActivePart() {
 		return false;
 	}
 

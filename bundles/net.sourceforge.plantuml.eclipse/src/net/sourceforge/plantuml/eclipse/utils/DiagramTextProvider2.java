@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * Extends DiagramTextProvider with support for generating diagrams from file contents.
@@ -22,14 +22,14 @@ public interface DiagramTextProvider2 extends DiagramTextProvider {
 	public boolean supportsPath(IPath path);
 
 	/**
-	 * Generates the diagram from an editor and its selection,
+	 * Generates the diagram from a workbench part and its selection,
 	 * also considering marker attributes which store info about the previously generated diagram.
-	 * @param editorPart
+	 * @param workbenchPart
 	 * @param selection
 	 * @param markerAttributes
 	 * @return the corresponding diagram text
 	 */
-	public String getDiagramText(IEditorPart editorPart, ISelection selection, Map<String, Object> markerAttributes);
+	public String getDiagramText(IWorkbenchPart workbenchPart, ISelection selection, Map<String, Object> markerAttributes);
 
 	/**
 	 * Generates the diagram from the file contents

@@ -26,6 +26,7 @@ import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IURIEditorInput;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -61,12 +62,12 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		}
 	}
 
-	public boolean isLinkedToActiveEditor() {
+	public boolean isLinkedToActivePart() {
 		return true;
 	}
 
 	public boolean isLinkingActive() {
-		return isLinkedToActiveEditor() && toggleAction == null || toggleAction.isChecked();
+		return isLinkedToActivePart() && toggleAction == null || toggleAction.isChecked();
 	}
 
 	private Control parent;
@@ -78,14 +79,14 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 		this.parent = parent;
-		if (isLinkedToActiveEditor()) {
+		if (isLinkedToActivePart()) {
 			registerListeners();
 			// without this it deadlocked during startup
 			asyncExec(new Runnable() {
 				@Override
 				public void run() {
 					if (pinnedTo != null || initialDiagramSource == null) {
-						updateDiagramText(true, pinnedTo, null);
+						updateDiagramText(pinnedTo, null);
 					} else if (initialDiagramSource != null) {
 						updateDiagramText(initialDiagramSource, null, null);
 					}
@@ -105,15 +106,15 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		pinToAction = new Action() {
 			@Override
 			public boolean isEnabled() {
-				return isLinkedToActiveEditor();
+				return isLinkedToActivePart();
 			}
 			@Override
 			public void run() {
-				pinnedTo = (isChecked() ? currentEditor : null);
+				pinnedTo = (isChecked() && currentPart instanceof IEditorPart ? (IEditorPart)currentPart : null);
 				if (pinnedTo != null) {
 					setToolTipText("Pinned to " + getEditorInputId(pinnedTo.getEditorInput()));
 				} else {
-					updateDiagramText(true, null, null);
+					updateDiagramText(null, null);
 					setToolTipText(PlantumlConstants.PIN_TO_BUTTON);
 				}
 			}
@@ -141,7 +142,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 			@Override
 			public void run() {
 				if (isChecked()) {
-					updateDiagramText(true, null, null);
+					updateDiagramText(null, null);
 				}
 			}
 		};
@@ -209,8 +210,8 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 	@Override
 	public void dispose() {
-		if (currentEditor != null) {
-			currentEditor.removePropertyListener(diagramTextChangedListener);
+		if (currentPart != null) {
+			currentPart.removePropertyListener(diagramTextChangedListener);
 		}
 		getSite().getPage().removePartListener(partListener);
 		getSite().getPage().removePostSelectionListener(diagramTextChangedListener);
@@ -224,17 +225,22 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		public void partActivated(final IWorkbenchPart part) {
 			updateDiagramText(part);
 		}
+		
 		protected void updateDiagramText(final IWorkbenchPart part) {
 			if (isLinkingActive()) {
-				AbstractDiagramSourceView.this.updateDiagramText(false, part, null);
+				AbstractDiagramSourceView.this.updateDiagramText(part, null);
 			}
 		}
+		
 		@Override
 		public void partOpened(final IWorkbenchPart part) {}
+		
 		@Override
 		public void partDeactivated(final IWorkbenchPart part) {}
+		
 		@Override
 		public void partClosed(final IWorkbenchPart part) {}
+		
 		@Override
 		public void partBroughtToTop(final IWorkbenchPart part) {}
 	};
@@ -243,43 +249,48 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 		@Override
 		public void propertyChanged(final Object source, final int propId) {
-			if (source == currentEditor && propId == IEditorPart.PROP_DIRTY && (! currentEditor.isDirty())) {
-				diagramChanged(currentEditor, null);
+			if (currentPart instanceof IEditorPart) {
+				IEditorPart currentEditor = (IEditorPart) currentPart;
+				if (source == currentEditor && propId == IEditorPart.PROP_DIRTY && (! currentEditor.isDirty())) {
+					diagramChanged(currentPart, null);
+				}
 			}
 		}
 		@Override
 		public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-			if (part == currentEditor) {
-				diagramChanged(currentEditor, selection);
+			if (part != currentPart) {
+				handlePartChange(part);
 			}
+			diagramChanged(currentPart, selection);
 		}
-		protected void diagramChanged(final IEditorPart editor, final ISelection selection) {
+
+		protected void diagramChanged(final IWorkbenchPart part, final ISelection selection) {
 			if (isLinkingActive()) {
-				updateDiagramText(true, editor, selection);
+				updateDiagramText(part, selection);
 			}
 		}
 	}
 
 	private final DiagramTextChangedListener diagramTextChangedListener = new DiagramTextChangedListener();
-	private IEditorPart currentEditor;
+	private IWorkbenchPart currentPart;
 
-	private void handleEditorChange(final IEditorPart editor) {
-		if (currentEditor != null) {
-			currentEditor.removePropertyListener(diagramTextChangedListener);
+	private void handlePartChange(final IWorkbenchPart part) {
+		if (currentPart != null) {
+			currentPart.removePropertyListener(diagramTextChangedListener);
 		}
-		currentEditor = editor;
-		if (currentEditor != null) {
-			currentEditor.addPropertyListener(diagramTextChangedListener);
+		currentPart = part;
+		if (currentPart != null) {
+			currentPart.addPropertyListener(diagramTextChangedListener);
 		}
 	}
 
 	protected void addEditorSelectionActions(final IMenuManager menu) {
 		final DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders();
-		final IEditorPart editor = (pinnedTo != null ? pinnedTo : getSite().getPage().getActiveEditor());
+		final IWorkbenchPart editor = (pinnedTo != null ? pinnedTo : getSite().getPage().getActivePart());
 		final ISelectionProvider selectionProvider = editor.getSite().getSelectionProvider();
 		if (selectionProvider != null) {
 			for (final DiagramTextProvider diagramTextProvider : diagramTextProviders) {
-				if (diagramTextProvider instanceof DiagramTextIteratorProvider && diagramTextProvider.supportsEditor(editor)) {
+				if (diagramTextProvider instanceof DiagramTextIteratorProvider && diagramTextProvider.supportsPart(editor)) {
 					final Iterator<ISelection> selections = ((DiagramTextIteratorProvider) diagramTextProvider).getDiagramText(editor);
 					while (selections.hasNext()) {
 						final ISelection selection = selections.next();
@@ -290,14 +301,14 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		}
 	}
 
-	private Action createEditorSelectionAction(final IEditorPart editor, final ISelectionProvider selectionProvider, final ISelection selection) {
+	private Action createEditorSelectionAction(final IWorkbenchPart part, final ISelectionProvider selectionProvider, final ISelection selection) {
 		return new Action(selection.toString()) {
 			@Override
 			public void run() {
 				asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						diagramTextChangedListener.diagramChanged(editor, selection);
+						diagramTextChangedListener.diagramChanged(part, selection);
 						selectionProvider.setSelection(selection);
 					}
 				});
@@ -305,12 +316,14 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		};
 	}
 
-	protected void updateDiagramText(final boolean force, final IWorkbenchPart part, ISelection selection) {
-		final IEditorPart activeEditor = (part instanceof IEditorPart ? (IEditorPart) part : (isLinkedToActiveEditor() ? getSite().getPage().getActiveEditor() : null));
-		if (force || activeEditor != currentEditor) {
-			if (activeEditor == null || acceptEditor(activeEditor)) {
+	protected void updateDiagramText(final IWorkbenchPart part, ISelection selection) {
+		if (part != currentPart) {
+			handlePartChange(part);
+		}
+		if (part instanceof IEditorPart) {
+			IEditorPart activeEditor = (IEditorPart) part;
+			if (acceptEditor(activeEditor)) {
 				IPath path = null;
-				handleEditorChange(activeEditor);
 				if (activeEditor != null) {
 					if (activeEditor.getEditorInput() instanceof IFileEditorInput) {
 						path = ((IFileEditorInput) activeEditor.getEditorInput()).getFile().getFullPath();
@@ -330,22 +343,32 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 				}
 				updateDiagramText((String) null, (IPath) null, (Map<String, Object>) null);
 			}
+		} else if (part instanceof IViewPart && part != this) {
+			if (selection == null) {
+				final ISelectionProvider selectionProvider = part.getSite().getSelectionProvider();
+				if (selectionProvider != null) {
+					selection = selectionProvider.getSelection();
+				}
+			}
+			if (selection != null) {
+				updateDiagramText(part, selection, null);
+			}
 		}
 	}
 
-	private boolean updateDiagramText(final IEditorPart activeEditor, final ISelection selection, final IPath path) {
-		if (activeEditor != null) {
+	private boolean updateDiagramText(final IWorkbenchPart activePart, final ISelection selection, final IPath path) {
+		if (activePart != null) {
 			final DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders();
 			final Map<String, Object> markerAttributes = new HashMap<String, Object>();
 			for (int i = 0; i < diagramTextProviders.length; i++) {
 				final DiagramTextProvider diagramTextProvider = diagramTextProviders[i];
-				if (diagramTextProvider.supportsEditor(activeEditor) && (selection == null || diagramTextProvider.supportsSelection(selection))) {
+				if (diagramTextProvider.supportsPart(activePart) && (selection == null || diagramTextProvider.supportsSelection(selection))) {
 					String diagramText = null;
 					if (diagramTextProvider instanceof DiagramTextProvider2) {
 						markerAttributes.clear();
-						diagramText = ((DiagramTextProvider2) diagramTextProvider).getDiagramText(activeEditor, selection, markerAttributes);
+						diagramText = ((DiagramTextProvider2) diagramTextProvider).getDiagramText(activePart, selection, markerAttributes);
 					} else {
-						diagramText = diagramTextProvider.getDiagramText(activeEditor, selection);
+						diagramText = diagramTextProvider.getDiagramText(activePart, selection);
 					}
 					if (diagramText != null) {
 						updateDiagramText(diagramText, path, markerAttributes);

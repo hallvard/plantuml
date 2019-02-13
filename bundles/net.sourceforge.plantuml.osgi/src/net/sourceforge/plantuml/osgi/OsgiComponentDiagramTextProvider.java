@@ -13,6 +13,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPathEditorInput;
+import org.eclipse.ui.IWorkbenchPart;
 import org.osgi.scr.Component;
 import org.osgi.scr.DocumentRoot;
 import org.osgi.scr.Provide;
@@ -33,11 +34,14 @@ public class OsgiComponentDiagramTextProvider extends AbstractDiagramTextProvide
 	}
 	
 	@Override
-	public boolean supportsEditor(IEditorPart editorPart) {
-		if (editorPart.getEditorInput() instanceof IPathEditorInput) {
-			IPathEditorInput editorInput = (IPathEditorInput) editorPart.getEditorInput();
-			if ("xml".equals(editorInput.getPath().getFileExtension())) {
-				return true;
+	public boolean supportsPart(IWorkbenchPart part) {
+		if (part instanceof IEditorPart) {
+			IEditorPart editorPart = (IEditorPart) part;	
+			if (editorPart.getEditorInput() instanceof IPathEditorInput) {
+				IPathEditorInput editorInput = (IPathEditorInput) editorPart.getEditorInput();
+				if ("xml".equals(editorInput.getPath().getFileExtension())) {
+					return true;
+				}
 			}
 		}
 		return false;
