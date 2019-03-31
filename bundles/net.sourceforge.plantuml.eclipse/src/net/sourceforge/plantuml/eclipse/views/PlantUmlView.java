@@ -1,7 +1,9 @@
 package net.sourceforge.plantuml.eclipse.views;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -11,6 +13,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.IMenuListener;
@@ -257,17 +260,22 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 
 		final IMenuManager menu = getViewSite().getActionBars().getMenuManager();
 		menu.addMenuListener(new IMenuListener() {
+			private List<ActionContributionItem> actions = new ArrayList<ActionContributionItem>();
+			
 			@Override
 			public void menuAboutToShow(final IMenuManager menu) {
-				addEditorSelectionActions(menu);
+				for (ActionContributionItem action : actions) {
+					menu.remove(action);
+				}
+				actions = addEditorSelectionActions(menu);
 			}
 		});
-		menu.setRemoveAllWhenShown(true);
+		//menu.setRemoveAllWhenShown(true);
 	}
 
 	@Override
-	protected void addEditorSelectionActions(final IMenuManager menu) {
-		super.addEditorSelectionActions(menu);
+	protected List<ActionContributionItem> addEditorSelectionActions(final IMenuManager menu) {
+		return super.addEditorSelectionActions(menu);
 	}
 
 	protected void addZoomActions(final IContributionManager toolBarManager) {

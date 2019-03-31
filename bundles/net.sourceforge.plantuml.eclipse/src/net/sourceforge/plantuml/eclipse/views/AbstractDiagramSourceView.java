@@ -1,12 +1,15 @@
 package net.sourceforge.plantuml.eclipse.views;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.IMenuManager;
@@ -273,7 +276,8 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		}
 	}
 
-	protected void addEditorSelectionActions(final IMenuManager menu) {
+	protected List<ActionContributionItem> addEditorSelectionActions(final IMenuManager menu) {
+		List<ActionContributionItem> actions = new ArrayList<ActionContributionItem>();
 		final DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders();
 		final IEditorPart editor = (pinnedTo != null ? pinnedTo : getSite().getPage().getActiveEditor());
 		final ISelectionProvider selectionProvider = editor.getSite().getSelectionProvider();
@@ -283,11 +287,14 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 					final Iterator<ISelection> selections = ((DiagramTextIteratorProvider) diagramTextProvider).getDiagramText(editor);
 					while (selections.hasNext()) {
 						final ISelection selection = selections.next();
-						menu.add(createEditorSelectionAction(editor, selectionProvider, selection));
+						final ActionContributionItem action = new ActionContributionItem(createEditorSelectionAction(editor, selectionProvider, selection));
+						menu.add(action);
+						actions.add(action);
 					}
 				}
 			}
 		}
+		return actions;
 	}
 
 	private Action createEditorSelectionAction(final IEditorPart editor, final ISelectionProvider selectionProvider, final ISelection selection) {
