@@ -6,7 +6,10 @@
          point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
 
       <diagramTextProvider
-            providerClass="net.sourceforge.plantuml.xcore.XcoreDiagramTextProvider">
+            id="net.sourceforge.plantuml.xcore.XcoreDiagramTextProvider"
+            providerClass="net.sourceforge.plantuml.xcore.XcoreDiagramTextProvider"
+            label="Class diagrams generated from xcore models"
+            >
       </diagramTextProvider>
    </extension>
 

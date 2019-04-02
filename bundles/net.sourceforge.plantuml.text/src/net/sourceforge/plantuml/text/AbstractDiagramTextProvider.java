@@ -5,28 +5,45 @@ import java.util.Map;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
 
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 
 public abstract class AbstractDiagramTextProvider implements DiagramTextProvider {
 
-	private Class<?> editorType = null;
+	private Class<?> partType = null;
 
 	public AbstractDiagramTextProvider() {
 	}
-	public AbstractDiagramTextProvider(final Class<?> editorType) {
-		this();
-		setEditorType(editorType);
+
+	public AbstractDiagramTextProvider(final Class<?> partType) {
+		if (IViewPart.class.isAssignableFrom(partType)) {
+			setViewType(partType);
+		} else {
+			setEditorType(partType);
+		}
 	}
 
 	public void setEditorType(final Class<?> editorType) {
-		this.editorType = editorType;
+		this.partType = editorType;
+	}
+
+	public void setViewType(final Class<?> viewType) {
+		this.partType = viewType;
 	}
 
 	@Override
 	public boolean supportsEditor(final IEditorPart editorPart) {
-		if (editorType != null && (! (editorType.isInstance(editorPart)))) {
+		if (partType != null && (! (partType.isInstance(editorPart)))) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean supportsView(final IViewPart viewPart) {
+		if (partType != null && (! (partType.isInstance(viewPart)))) {
 			return false;
 		}
 		return true;
@@ -58,7 +75,9 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		return diagramText;
 	}
 
-	protected abstract String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection selection, Map<String, Object> markerAttributes);
+	protected String getDiagramText(final IEditorPart editorPart, final IEditorInput editorInput, final ISelection selection, final Map<String, Object> markerAttributes) {
+		return null;
+	}
 
 	private int indentLevel = 0;
 	private final String indentString = "\t";

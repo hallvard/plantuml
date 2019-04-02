@@ -6,7 +6,10 @@
          point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
 
       <diagramTextProvider
-            providerClass="net.sourceforge.plantuml.uml2.Uml2ClassDiagramTextProvider">
+            id="net.sourceforge.plantuml.uml2.Uml2ClassDiagramTextProvider"
+            providerClass="net.sourceforge.plantuml.uml2.Uml2ClassDiagramTextProvider"
+            label="Class diagrams generated from UML2 models"
+            >
       </diagramTextProvider>
    </extension>
 

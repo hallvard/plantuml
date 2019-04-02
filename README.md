@@ -36,6 +36,13 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 Notable features in recent releases, details are found in [../../releases].
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
 
+## [1.1.23](../../releases/tag/1.1.23)
+- Support for generating diagrams for views, e.g. Java element selected in Package Explorer ([issue #84](../../issues/84)).
+- Support for generating diagrams from console output.
+- Preference page for enabling/disabling diagram providers.
+- Avoid generating diagram (image) when PlantUml view is hidden. 
+- Moved list of diagram into sub-menu of view menu, handles [issue #87](../../issues/87))
+
 ## [1.1.22](../../releases/tag/1.1.22)
 - Fixes bug ([issue #77](../../issues/77)) concerning incompatibilit with Photon 2018.12.
 - The view menu now lists the (explicit) diagrams in a file, so you can select and view it, without navigating inside the file. See ([issue #61](../../issues/61))

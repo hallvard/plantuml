@@ -4,10 +4,10 @@ Bundle-Name: Plantuml Plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.eclipse.imagecontrol
 Bundle-Version: 1.1.23.qualifier
 Bundle-Vendor: PlantUML Team
-Require-Bundle: org.eclipse.jface;bundle-version="3.10.2";resolution:=optional
+Require-Bundle: org.eclipse.jface;bundle-version="3.10.2"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.jface.action,
  org.eclipse.jface.resource,
  org.eclipse.swt,

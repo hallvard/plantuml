@@ -19,28 +19,25 @@ import net.sourceforge.plantuml.jdt.Activator;
 public class ProjectClassDiagramPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public final static String
-		GENERATE_PACKAGES_KEY 	= "generatePackages",
-		PACKAGE_STYLE_KEY 		= "packageStyle"
-		;
+	GENERATE_PACKAGES_KEY 	= "generatePackages",
+	PACKAGE_STYLE_KEY 		= "packageStyle"
+	;
 
 	private Button generatePackagesButton;
 	private Combo packageStyleSelector;
-	
-	public ProjectClassDiagramPreferencePage() {
-		super();
-	}
 
-	public void init(IWorkbench workbench) {
+	@Override
+	public void init(final IWorkbench workbench) {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 	}
 
 	@Override
-	protected Control createContents(Composite parent) {
-		Composite panel = new Composite(parent, SWT.NONE);
+	protected Control createContents(final Composite parent) {
+		final Composite panel = new Composite(parent, SWT.NONE);
 		panel.setLayout(new GridLayout(1, false));
-		IPreferenceStore preferenceStore = getPreferenceStore();
-		
-		Group packageGenerationGroup = new Group(panel, SWT.NONE);
+		final IPreferenceStore preferenceStore = getPreferenceStore();
+
+		final Group packageGenerationGroup = new Group(panel, SWT.NONE);
 		packageGenerationGroup.setText("Package generation");
 		packageGenerationGroup.setLayout(new GridLayout(2, false));
 
@@ -48,8 +45,8 @@ public class ProjectClassDiagramPreferencePage extends PreferencePage implements
 		generatePackagesButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		generatePackagesButton.setText("Generate packages");
 		generatePackagesButton.setSelection(preferenceStore.getBoolean(GENERATE_PACKAGES_KEY));
-		
-		Label packageStyleLabel = new Label(packageGenerationGroup, SWT.NONE);
+
+		final Label packageStyleLabel = new Label(packageGenerationGroup, SWT.NONE);
 		packageStyleLabel.setText("Style: ");
 		packageStyleSelector = new Combo(packageGenerationGroup, SWT.READ_ONLY);
 		packageStyleSelector.setItems(JdtPlantUmlView.ALL_PACKAGE_STYLES);
@@ -69,6 +66,7 @@ public class ProjectClassDiagramPreferencePage extends PreferencePage implements
 	/**
 	 * Called when user clicks Restore Defaults
 	 */
+	@Override
 	protected void performDefaults() {
 		// Reset the fields to the defaults
 		generatePackagesButton.setSelection(false);
@@ -77,12 +75,13 @@ public class ProjectClassDiagramPreferencePage extends PreferencePage implements
 
 	/**
 	 * Called when user clicks Apply or OK
-	 * 
+	 *
 	 * @return boolean
 	 */
+	@Override
 	public boolean performOk() {
 		// Get the preference store
-		IPreferenceStore preferenceStore = getPreferenceStore();
+		final IPreferenceStore preferenceStore = getPreferenceStore();
 		preferenceStore.setValue(GENERATE_PACKAGES_KEY, generatePackagesButton.getSelection());
 		preferenceStore.setValue(PACKAGE_STYLE_KEY, JdtPlantUmlView.ALL_PACKAGE_STYLES[packageStyleSelector.getSelectionIndex()]);
 

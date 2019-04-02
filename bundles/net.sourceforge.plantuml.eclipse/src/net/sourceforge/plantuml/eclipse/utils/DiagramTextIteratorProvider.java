@@ -18,5 +18,5 @@ public interface DiagramTextIteratorProvider extends DiagramTextProvider {
 	 * @param editorPart
 	 * @return an iterator of editor selections
 	 */
-	public Iterator<ISelection> getDiagramText(IEditorPart editorPart);
+	public Iterator<ISelection> getDiagramText(final IEditorPart editorPart);
 }

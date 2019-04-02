@@ -43,7 +43,7 @@ public abstract class AbstractEcoreClassDiagramTextProvider extends AbstractClas
 		super(editorType);
 	}
 	protected AbstractEcoreClassDiagramTextProvider() {
-		super(IEditingDomainProvider.class);
+		this(IEditingDomainProvider.class);
 	}
 
 	@Override

@@ -1,9 +1,7 @@
 package net.sourceforge.plantuml.eclipse.views;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -13,12 +11,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -259,23 +259,18 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 		addViewActions(toolBarManager);
 
 		final IMenuManager menu = getViewSite().getActionBars().getMenuManager();
-		menu.addMenuListener(new IMenuListener() {
-			private List<ActionContributionItem> actions = new ArrayList<ActionContributionItem>();
-			
+		final MenuManager editorSelectionActionMenu = new MenuManager("Diagrams");
+		editorSelectionActionMenu.add(new Action() {}); // will be removed, needed for the submenu to actually show
+		editorSelectionActionMenu.setRemoveAllWhenShown(true);
+		editorSelectionActionMenu.addMenuListener(new IMenuListener() {
 			@Override
 			public void menuAboutToShow(final IMenuManager menu) {
-				for (ActionContributionItem action : actions) {
-					menu.remove(action);
+				for (final ActionContributionItem actionContributionItem : getEditorSelectionActions(menu)) {
+					menu.add(actionContributionItem);
 				}
-				actions = addEditorSelectionActions(menu);
 			}
 		});
-		//menu.setRemoveAllWhenShown(true);
-	}
-
-	@Override
-	protected List<ActionContributionItem> addEditorSelectionActions(final IMenuManager menu) {
-		return super.addEditorSelectionActions(menu);
+		menu.add(editorSelectionActionMenu);
 	}
 
 	protected void addZoomActions(final IContributionManager toolBarManager) {
@@ -295,49 +290,71 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 
 	private Diagram diagram;
 
-	private String lastTextDiagram = null;
+	private DiagramData lastDiagramData = null;
 
 	@Override
 	public String getDiagramText() {
-		return diagram.getTextDiagram();
+		return diagram != null ? diagram.getTextDiagram() : null;
+	}
+
+	private static class DiagramData {
+		String diagramText;
+		IPath original;
+		Map<String, Object> markerAttributes;
 	}
 
 	@Override
-	protected void updateDiagramText(final String textDiagram, final IPath original,
-			final Map<String, Object> markerAttributes) {
-		if (textDiagram != null && (! textDiagram.equals(lastTextDiagram))) {
-			diagram.setTextDiagram(textDiagram);
-			lastTextDiagram = textDiagram;
-			createImageControls(diagram.getImageCount());
-			final Job job = new Job("Generate diagram") {
-				@Override
-				protected IStatus run(final IProgressMonitor monitor) {
-					for (int i = 0; i < imageControls.length; i++) {
-						if (imageControls.length > i && imageControls[i] != null && (!imageControls[i].isDisposed())) {
-							imageControls[i].updateDiagramImage(original, diagram, i);
-						}
-					}
-					if (!composite.isDisposed()) {
-						composite.getDisplay().asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								if (!composite.isDisposed()) {
-									composite.layout();
-								}
-							}
-						});
-					}
-					if (original != null) {
-						final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(original);
-						if (file != null && file.exists()) {
-							PlantumlUtil.updateMarker(file, textDiagram, null, true, markerAttributes);
-						}
-					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.schedule();
+	protected void updateDiagramText(final String textDiagram, final IPath original, final Map<String, Object> markerAttributes) {
+		if (textDiagram != null && (lastDiagramData == null || (! textDiagram.equals(lastDiagramData.diagramText)))) {
+			lastDiagramData = new DiagramData();
+			lastDiagramData.diagramText = textDiagram;
+			lastDiagramData.original = original;
+			lastDiagramData.markerAttributes = markerAttributes;
+			if (isVisible()) {
+				updateDiagram(lastDiagramData);
+			}
 		}
+	}
+
+	@Override
+	public void setVisible(final boolean visible) {
+		super.setVisible(visible);
+		if (visible && lastDiagramData != null) {
+			updateDiagram(lastDiagramData);
+		}
+	}
+
+	private void updateDiagram(final DiagramData diagramData) {
+		diagram.setTextDiagram(diagramData.diagramText);
+		createImageControls(diagram.getImageCount());
+		final Job job = new Job("Generate diagram") {
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				for (int i = 0; i < imageControls.length; i++) {
+					if (imageControls.length > i && imageControls[i] != null && (!imageControls[i].isDisposed())) {
+						imageControls[i].updateDiagramImage(diagramData.original, diagram, i);
+					}
+				}
+				if (! composite.isDisposed()) {
+					composite.getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							if (!composite.isDisposed()) {
+								composite.layout();
+							}
+						}
+					});
+				}
+				if (diagramData.original != null) {
+					final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(diagramData.original);
+					if (file != null && file.exists()) {
+						PlantumlUtil.updateMarker(file, diagramData.diagramText, null, true, diagramData.markerAttributes);
+					}
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
 	}
 
 	private Collection<ILinkOpener> linkOpeners = null;

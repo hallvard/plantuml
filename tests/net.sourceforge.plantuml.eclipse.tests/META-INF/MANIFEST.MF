@@ -13,5 +13,5 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.3.1",
  org.eclipse.ui.editors;bundle-version="3.8.200",
  org.eclipse.ui.ide;bundle-version="3.10.2"
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: net.sourceforge.plantuml.eclipse.test.util

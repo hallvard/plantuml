@@ -1,9 +1,11 @@
 package net.sourceforge.plantuml.eclipse;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -23,100 +26,143 @@ import org.osgi.framework.BundleContext;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlUtil;
+import net.sourceforge.plantuml.preferences.DiagramTextProvidersPreferencePage;
 
 /**
  * The activator class controls the plug-in life cycle
- * 
+ *
  * @author durif_c
  */
 public class Activator extends AbstractUIPlugin {
 
-    // The plug-in ID
-    public static final String PLUGIN_ID = "net.sourceforge.plantuml.eclipse";
+	// The plug-in ID
+	public static final String PLUGIN_ID = "net.sourceforge.plantuml.eclipse";
 
-    // The shared instance
-    private static Activator plugin;
+	// The shared instance
+	private static Activator plugin;
 
-    /**
-     * The constructor
-     */
-    public Activator() {
-        // Empty constructor
-    }
+	/**
+	 * The constructor
+	 */
+	public Activator() {
+		// Empty constructor
+	}
 
-    private IResourceChangeListener resourceListener;
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start(BundleContext context) throws Exception {
-        super.start(context);
-        plugin = this;
-        resourceListener = PlantumlUtil.createResourceListener();
-        if (resourceListener != null) {
-        	ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceListener, IResourceChangeEvent.POST_BUILD);
-        }
-    }
+	private IResourceChangeListener resourceListener;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop(BundleContext context) throws Exception {
-        if (resourceListener != null) {
-        	ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceListener);
-        }
-        plugin = null;
-        super.stop(context);
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 */
+	@Override
+	public void start(final BundleContext context) throws Exception {
+		super.start(context);
+		plugin = this;
+		resourceListener = PlantumlUtil.createResourceListener();
+		if (resourceListener != null) {
+			ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceListener, IResourceChangeEvent.POST_BUILD);
+		}
+	}
 
-    /**
-     * Returns the shared instance
-     * 
-     * @return the shared instance
-     */
-    public static Activator getDefault() {
-        return plugin;
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 */
+	@Override
+	public void stop(final BundleContext context) throws Exception {
+		if (resourceListener != null) {
+			ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceListener);
+		}
+		plugin = null;
+		super.stop(context);
+	}
 
-    /**
-     * Returns an image descriptor for the image file at the given plug-in
-     * relative path
-     * 
-     * @param path
-     *            the path
-     * @return the image descriptor
-     */
-    public static ImageDescriptor getImageDescriptor(String path) {
-        return imageDescriptorFromPlugin(PLUGIN_ID, path);
-    }
-    
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static Activator getDefault() {
+		return plugin;
+	}
+
+	/**
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path
+	 *
+	 * @param path
+	 *            the path
+	 * @return the image descriptor
+	 */
+	public static ImageDescriptor getImageDescriptor(final String path) {
+		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+
 	private List<DiagramTextProvider> diagramTextProviders;
-	
-	public DiagramTextProvider[] getDiagramTextProviders() {
+
+	private static class DiagramTextProviderInfo {
+		String id, label;
+	}
+
+	private Map<DiagramTextProvider, DiagramTextProviderInfo> diagramTextProviderInfo;
+
+	public boolean isEnabled(final DiagramTextProvider diagramTextProvider) {
+		final IPreferenceStore preferenceStore = getPreferenceStore();
+		final String id = getDiagramTextProviderId(diagramTextProvider);
+		return ! preferenceStore.getBoolean(DiagramTextProvidersPreferencePage.getDiagramTextProviderDisablementKey(id));
+	}
+
+	public DiagramTextProvider[] getDiagramTextProviders(final Boolean enabled) {
 		if (diagramTextProviders == null) {
 			diagramTextProviders = new ArrayList<DiagramTextProvider>();
+			diagramTextProviderInfo = new HashMap<DiagramTextProvider, DiagramTextProviderInfo>();
 			processDiagramTextProviders();
+		}
+		Collection<DiagramTextProvider> diagramTextProviders = this.diagramTextProviders;
+		if (enabled != null) {
+			diagramTextProviders = new ArrayList<>(diagramTextProviders);
+			final Iterator<DiagramTextProvider> it = diagramTextProviders.iterator();
+			while (it.hasNext()) {
+				if (enabled != isEnabled(it.next())) {
+					it.remove();
+				}
+			}
 		}
 		return diagramTextProviders.toArray(new DiagramTextProvider[diagramTextProviders.size()]);
 	}
 
-	public int DEFAULT_PRIORITY = 0, NORMAL_PRIORITY = 5, CUSTOM_PRIORITY = 10; 
+	public String getDiagramTextProviderId(final DiagramTextProvider diagramTextProvider) {
+		if (diagramTextProviderInfo != null) {
+			final DiagramTextProviderInfo info = diagramTextProviderInfo.get(diagramTextProvider);
+			final String id = info != null ? info.id : null;
+			return id != null ? id : diagramTextProvider.getClass().getName();
+		}
+		return null;
+	}
+
+	public String getDiagramTextProviderLabel(final DiagramTextProvider diagramTextProvider) {
+		if (diagramTextProviderInfo != null) {
+			final DiagramTextProviderInfo info = diagramTextProviderInfo.get(diagramTextProvider);
+			return info != null ? info.label : null;
+		}
+		return null;
+	}
+
+	public int DEFAULT_PRIORITY = 0, NORMAL_PRIORITY = 5, CUSTOM_PRIORITY = 10;
 
 	private void processDiagramTextProviders() {
-		IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint(getBundle().getSymbolicName() + ".diagramTextProvider");
-		IExtension[] extensions = ep.getExtensions();
+		final IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint(getBundle().getSymbolicName() + ".diagramTextProvider");
+		final IExtension[] extensions = ep.getExtensions();
 		final Map<DiagramTextProvider, Integer> diagramTextProviders = new HashMap<DiagramTextProvider, Integer>();
 		for (int i = 0; i < extensions.length; i++) {
-			for (IConfigurationElement ces: extensions[i].getConfigurationElements()) {
-				String name = ces.getName();
+			for (final IConfigurationElement ces: extensions[i].getConfigurationElements()) {
+				final String name = ces.getName();
 				if ("diagramTextProvider".equals(name)) {
 					try {
-						DiagramTextProvider diagramTextProvider = (DiagramTextProvider) ces.createExecutableExtension("providerClass");
-						String priorityValue = ces.getAttribute("priority");
+						final DiagramTextProvider diagramTextProvider = (DiagramTextProvider) ces.createExecutableExtension("providerClass");
+						final String priorityValue = ces.getAttribute("priority");
 						int priority = NORMAL_PRIORITY;
 						if ("custom".equals(priorityValue)) {
 							priority = CUSTOM_PRIORITY;
@@ -127,12 +173,16 @@ public class Activator extends AbstractUIPlugin {
 						} else {
 							try {
 								priority = Integer.valueOf(priorityValue);
-							} catch (NumberFormatException e) {
+							} catch (final NumberFormatException e) {
 							}
 						}
 						diagramTextProviders.put(diagramTextProvider, priority);
-					} catch (InvalidRegistryObjectException e) {
-					} catch (CoreException e) {
+						final DiagramTextProviderInfo info = new DiagramTextProviderInfo();
+						info.id = ces.getAttribute("id", null);
+						info.label = ces.getAttribute("label", null);
+						this.diagramTextProviderInfo.put(diagramTextProvider, info);
+					} catch (final InvalidRegistryObjectException e) {
+					} catch (final CoreException e) {
 					}
 				}
 			}
@@ -140,14 +190,14 @@ public class Activator extends AbstractUIPlugin {
 		this.diagramTextProviders.addAll(diagramTextProviders.keySet());
 		Collections.sort(this.diagramTextProviders, new Comparator<DiagramTextProvider>() {
 			@Override
-			public int compare(DiagramTextProvider dtp2, DiagramTextProvider dtp1) {
+			public int compare(final DiagramTextProvider dtp2, final DiagramTextProvider dtp1) {
 				return diagramTextProviders.get(dtp1) - diagramTextProviders.get(dtp2);
 			}
 		});
 	}
-	
+
 	private List<ILinkOpener> linkOpeners;
-	
+
 	public ILinkOpener[] getLinkOpeners() {
 		if (linkOpeners == null) {
 			linkOpeners = new ArrayList<ILinkOpener>();
@@ -155,23 +205,23 @@ public class Activator extends AbstractUIPlugin {
 		}
 		return linkOpeners.toArray(new ILinkOpener[linkOpeners.size()]);
 	}
-	
+
 	private void processLinkOpeners() {
-		IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint(getBundle().getSymbolicName() + ".linkOpener");
-		IExtension[] extensions = ep.getExtensions();
+		final IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint(getBundle().getSymbolicName() + ".linkOpener");
+		final IExtension[] extensions = ep.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
-			for (IConfigurationElement ces: extensions[i].getConfigurationElements()) {
-				String name = ces.getName();
+			for (final IConfigurationElement ces: extensions[i].getConfigurationElements()) {
+				final String name = ces.getName();
 				if ("linkOpener".equals(name)) {
 					try {
-						ILinkOpener linkOpener = (ILinkOpener) ces.createExecutableExtension("linkOpenerClass");
+						final ILinkOpener linkOpener = (ILinkOpener) ces.createExecutableExtension("linkOpenerClass");
 						linkOpeners.add(linkOpener);
-					} catch (InvalidRegistryObjectException e) {
-					} catch (CoreException e) {
+					} catch (final InvalidRegistryObjectException e) {
+					} catch (final CoreException e) {
 					}
 				}
 			}
 		}
-		
+
 	}
 }

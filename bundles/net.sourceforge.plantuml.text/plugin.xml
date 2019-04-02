@@ -5,7 +5,17 @@
    <extension
          point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
       <diagramTextProvider
-            providerClass="net.sourceforge.plantuml.text.TextEditorDiagramTextProvider">
+            id="net.sourceforge.plantuml.text.TextEditorDiagramTextProvider"
+            providerClass="net.sourceforge.plantuml.text.TextEditorDiagramTextProvider"
+            label="Diagrams in text editor"
+            >
+      </diagramTextProvider>
+
+      <diagramTextProvider
+            id="net.sourceforge.plantuml.text.console.ConsoleViewDiagramTextProvider"
+            providerClass="net.sourceforge.plantuml.text.console.ConsoleViewDiagramTextProvider"
+            label="Diagrams in text console"
+            >
       </diagramTextProvider>
    </extension>
 

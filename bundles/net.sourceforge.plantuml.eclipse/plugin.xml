@@ -4,9 +4,15 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="net.sourceforge.plantuml.preferences.WorkbenchPreferencePage"
             id="net.sourceforge.plantuml.preferences.about"
+            class="net.sourceforge.plantuml.preferences.WorkbenchPreferencePage"
             name="PlantUML">
+      </page>
+      <page
+            id="net.sourceforge.plantuml.preferences.DiagramTextProvidersPreferencePage"
+            class="net.sourceforge.plantuml.preferences.DiagramTextProvidersPreferencePage"
+            category="net.sourceforge.plantuml.preferences.about"
+            name="Diagram text providers">
       </page>
    </extension>
 

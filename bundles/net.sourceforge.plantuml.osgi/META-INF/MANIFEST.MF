@@ -4,7 +4,7 @@ Bundle-Name: OSGi Manifest support
 Bundle-SymbolicName: net.sourceforge.plantuml.osgi;singleton:=true
 Bundle-Version: 1.1.23.qualifier
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: net.sourceforge.plantuml.eclipse;bundle-version="1.1.23.qualifier",
  no.hal.osgi.emf,
  org.eclipse.core.runtime,
