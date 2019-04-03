@@ -41,7 +41,8 @@ Note that the version numbers are a bit special, since they include the version 
 - Support for generating diagrams from console output.
 - Preference page for enabling/disabling diagram providers.
 - Avoid generating diagram (image) when PlantUml view is hidden. 
-- Moved list of diagram into sub-menu of view menu, handles [issue #87](../../issues/87))
+- Moved list of diagram into sub-menu of view menu, handles [issue #87](../../issues/87)).
+- Now requires Java 1.8.
 
 ## [1.1.22](../../releases/tag/1.1.22)
 - Fixes bug ([issue #77](../../issues/77)) concerning incompatibilit with Photon 2018.12.
