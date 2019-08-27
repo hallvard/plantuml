@@ -116,6 +116,8 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 						}
 					}
 				}
+				// note the view is visible, otherwise the diagram won't be shown
+				setVisible(true);
 				if (rootSet != null && (!rootSet.isEmpty())) {
 					setRootSet(rootSet);
 				}
