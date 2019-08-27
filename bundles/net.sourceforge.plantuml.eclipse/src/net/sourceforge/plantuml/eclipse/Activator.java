@@ -178,8 +178,8 @@ public class Activator extends AbstractUIPlugin {
 						}
 						diagramTextProviders.put(diagramTextProvider, priority);
 						final DiagramTextProviderInfo info = new DiagramTextProviderInfo();
-						info.id = ces.getAttribute("id", null);
-						info.label = ces.getAttribute("label", null);
+						info.id = ces.getAttribute("id");
+						info.label = ces.getAttribute("label");
 						this.diagramTextProviderInfo.put(diagramTextProvider, info);
 					} catch (final InvalidRegistryObjectException e) {
 					} catch (final CoreException e) {
@@ -222,6 +222,5 @@ public class Activator extends AbstractUIPlugin {
 				}
 			}
 		}
-
 	}
 }
