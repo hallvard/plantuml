@@ -41,20 +41,38 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		return false;
 	}
 
+	public enum AssociationCardinality{
+		SINGLE("1"), OPTIONAL("0..1"), MULTIPLE("*"), UNKNOWN(null);
+
+		public final String label;
+
+		private AssociationCardinality(String indicator) {
+			this.label = indicator;
+		}
+
+	};
 	private static class Assoc {
 		String name;
 		String targetName;
-		boolean multi;
+		AssociationCardinality cardinality = AssociationCardinality.UNKNOWN;
+
 	}
 
 	private final Collection<String> multiAssociationClassNames = new ArrayList<String>(Arrays.asList("java.util.Collection", "java.util.List", "java.util.Set"));
+	private final Collection<String> optionalAssociationClassNames = new ArrayList<String>(Arrays.asList("java.util.Optional"));
 
 	public void addMultiAssociationClassName(final String className) {
 		multiAssociationClassNames.add(className);
 	}
 
-	public boolean isMultiAssociationClassName(final String className) {
-		return multiAssociationClassNames.contains(className);
+	public void addOptionalAssociationClassName(final String className) {
+		optionalAssociationClassNames.add(className);
+	}
+
+	protected AssociationCardinality guessAssociationCardinality(final String className) {
+		return multiAssociationClassNames.contains(className) ? AssociationCardinality.MULTIPLE :
+			optionalAssociationClassNames.contains(className) ? AssociationCardinality.OPTIONAL :
+			AssociationCardinality.UNKNOWN;
 	}
 
 	private final boolean useJavaLinks = true;
@@ -147,7 +165,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		result.append("}\n");
 		if (includes(genFlags, GEN_ASSOCIATIONS) && associations != null) {
 			for (final Assoc assoc : associations) {
-				generateRelatedType(type, assoc.targetName, ASSOCIATION_RELATION, null, result, genFlags, null, assoc.name, assoc.multi ? "*" : "1");
+				generateRelatedType(type, assoc.targetName, ASSOCIATION_RELATION, null, result, genFlags, null, assoc.name, assoc.cardinality.label);
 			}
 		}
 		try {
@@ -208,23 +226,20 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 
 	protected Assoc generateAssociation(final IType type, final String fieldSignature) throws JavaModelException {
 		final String fieldTypeName = getTypeName(fieldSignature, true);
-		Assoc assoc = null;
+		final Assoc assoc =  new Assoc();
 		if (fieldTypeName.endsWith("[]")) {
-			assoc = new Assoc();
 			assoc.targetName = fieldTypeName.substring(0, fieldTypeName.length() - 2);
-			assoc.multi = true;
+			assoc.cardinality = AssociationCardinality.MULTIPLE;
 		} else {
+			assoc.targetName = fieldTypeName;
 			final String[][] resolvedFieldType = type.resolveType(fieldTypeName);
 			final String[] typeArguments = Signature.getTypeArguments(fieldSignature);
-			if (resolvedFieldType != null && resolvedFieldType.length > 0 && typeArguments != null && typeArguments.length == 1 && isMultiAssociationClassName(Signature.toQualifiedName(resolvedFieldType[0]))) {
-				assoc = new Assoc();
-				assoc.multi = true;
+			if (resolvedFieldType != null && resolvedFieldType.length > 0 && typeArguments != null && typeArguments.length == 1) {
 				assoc.targetName = getTypeName(typeArguments[0], true);
-			} else {
-				assoc = new Assoc();
-				assoc.multi = false;
-				assoc.targetName = fieldTypeName;
+				assoc.cardinality = guessAssociationCardinality(Signature.toQualifiedName(resolvedFieldType[0]));
 			}
+			else
+				assoc.cardinality = AssociationCardinality.SINGLE;
 		}
 		return assoc;
 	}
