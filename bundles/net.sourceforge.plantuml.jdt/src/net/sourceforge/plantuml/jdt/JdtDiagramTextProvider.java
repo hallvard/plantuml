@@ -3,18 +3,21 @@ package net.sourceforge.plantuml.jdt;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
-import org.eclipse.jdt.internal.debug.ui.actions.OpenTypeAction;
 import org.eclipse.jface.viewers.ISelection;
 
 import net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider;
@@ -49,30 +52,61 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		private AssociationCardinality(String indicator) {
 			this.label = indicator;
 		}
-
 	};
+
 	private static class Assoc {
 		String name;
 		String targetName;
-		AssociationCardinality cardinality = AssociationCardinality.UNKNOWN;
-
+		String cardinalityLabel;
 	}
 
-	private final Collection<String> multiAssociationClassNames = new ArrayList<String>(Arrays.asList("java.util.Collection", "java.util.List", "java.util.Set"));
-	private final Collection<String> optionalAssociationClassNames = new ArrayList<String>(Arrays.asList("java.util.Optional"));
+	private final Collection<String> multiAssociationClassNames = new HashSet<String>(Arrays.asList("java.util.Collection", "java.util.List", "java.util.Set"));
 
 	public void addMultiAssociationClassName(final String className) {
 		multiAssociationClassNames.add(className);
 	}
 
+	private final Collection<String> optionalAssociationClassNames = new HashSet<String>(Arrays.asList(Optional.class.getName()));
+
 	public void addOptionalAssociationClassName(final String className) {
 		optionalAssociationClassNames.add(className);
 	}
 
-	protected AssociationCardinality guessAssociationCardinality(final String className) {
-		return multiAssociationClassNames.contains(className) ? AssociationCardinality.MULTIPLE :
-			optionalAssociationClassNames.contains(className) ? AssociationCardinality.OPTIONAL :
-			AssociationCardinality.UNKNOWN;
+	protected AssociationCardinality guessAssociationCardinality(IType type) {
+		if (type == null)
+			return AssociationCardinality.UNKNOWN;
+		else if (isSubtypeOf(type, optionalAssociationClassNames))
+			return AssociationCardinality.OPTIONAL;
+		else if (isSubtypeOf(type, multiAssociationClassNames))
+			return AssociationCardinality.MULTIPLE;
+		return AssociationCardinality.UNKNOWN;
+	}
+
+	private boolean isSubtypeOf(IType type, Collection<String> superInterfaces){
+		if(type == null)
+			return false;
+		String fullyQualifiedName = type.getFullyQualifiedName();
+		if (superInterfaces.contains(fullyQualifiedName))
+			return true;
+		else try {
+			String[] superInterfaceNames = type.getSuperInterfaceNames();
+			if (Stream.of(superInterfaceNames).anyMatch(superInterfaces::contains))
+				return true;
+			IJavaProject javaProject = type.getJavaProject();
+			return Stream.of(superInterfaceNames)
+					.map(name -> findType(name, javaProject))
+					.anyMatch(superType -> isSubtypeOf(superType, superInterfaces));  
+		} catch (JavaModelException e) {
+		}
+		return false;
+	}
+
+	private IType findType(String name, IJavaProject javaProject) {
+		try {
+			return javaProject.findType(name);
+		} catch (JavaModelException e) {
+			return null;
+		}
 	}
 
 	private final boolean useJavaLinks = true;
@@ -106,7 +140,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 					if (includes(genFlags, GEN_ASSOCIATIONS) && acceptAssociation(type, field)) {
 						assoc = generateAssociation(type, field);
 					}
-					if (assoc != null && isInTypes(assoc.targetName, allTypes) && associations != null) {
+					if (associations != null && assoc != null && isInTypes(assoc.targetName, allTypes)) {
 						assoc.name = field.getElementName();
 						associations.add(assoc);
 					} else {
@@ -122,12 +156,13 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 						body.append("\n");
 					}
 				}
+
 				for (final IMethod method : type.getMethods()) {
 					Assoc assoc = null;
 					if (includes(genFlags, GEN_ASSOCIATIONS) && acceptAssociation(type, method)) {
 						assoc = generateAssociation(type, method);
 					}
-					if (assoc != null && isInTypes(assoc.targetName, allTypes) && associations != null) {
+					if (associations != null && assoc != null && isInTypes(assoc.targetName, allTypes)) {
 						assoc.name = method.getElementName() + "()";
 						associations.add(assoc);
 					} else {
@@ -165,7 +200,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		result.append("}\n");
 		if (includes(genFlags, GEN_ASSOCIATIONS) && associations != null) {
 			for (final Assoc assoc : associations) {
-				generateRelatedType(type, assoc.targetName, ASSOCIATION_RELATION, null, result, genFlags, null, assoc.name, assoc.cardinality.label);
+				generateRelatedType(type, assoc.targetName, ASSOCIATION_RELATION, null, result, genFlags, null, assoc.name, assoc.cardinalityLabel);
 			}
 		}
 		try {
@@ -229,17 +264,19 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		final Assoc assoc =  new Assoc();
 		if (fieldTypeName.endsWith("[]")) {
 			assoc.targetName = fieldTypeName.substring(0, fieldTypeName.length() - 2);
-			assoc.cardinality = AssociationCardinality.MULTIPLE;
+			assoc.cardinalityLabel = AssociationCardinality.MULTIPLE.label;
 		} else {
 			assoc.targetName = fieldTypeName;
 			final String[][] resolvedFieldType = type.resolveType(fieldTypeName);
 			final String[] typeArguments = Signature.getTypeArguments(fieldSignature);
 			if (resolvedFieldType != null && resolvedFieldType.length > 0 && typeArguments != null && typeArguments.length == 1) {
 				assoc.targetName = getTypeName(typeArguments[0], true);
-				assoc.cardinality = guessAssociationCardinality(Signature.toQualifiedName(resolvedFieldType[0]));
+				String className = Signature.toQualifiedName(resolvedFieldType[0]);
+				String label = guessAssociationCardinality(type.getJavaProject().findType(className)).label;
+				assoc.cardinalityLabel = label != null ? label : fieldTypeName;
 			}
 			else
-				assoc.cardinality = AssociationCardinality.SINGLE;
+				assoc.cardinalityLabel = AssociationCardinality.SINGLE.label;
 		}
 		return assoc;
 	}
@@ -252,7 +289,7 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 			String link = null;
 			if (includes(genFlags, GEN_CLASS_HYPERLINKS)) {
 				try {
-					final IType relatedType = OpenTypeAction.findTypeInWorkspace(className, false);
+					final IType relatedType = type.getJavaProject().findType(className);
 					if (relatedType != null) {
 						link = getHyperlink(relatedType);
 					}
