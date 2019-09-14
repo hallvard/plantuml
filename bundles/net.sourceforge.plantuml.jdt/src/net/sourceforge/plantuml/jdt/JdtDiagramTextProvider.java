@@ -105,31 +105,40 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 					}
 				}
 				for (final IMethod method : type.getMethods()) {
-					body.append("\t");
-					if (includes(genFlags, GEN_MODIFIERS) && (! Flags.isInterface(type.getFlags()))) {
-						body.append(getMemberModifiers(method));
+					Assoc assoc = null;
+					if (includes(genFlags, GEN_ASSOCIATIONS) && acceptAssociation(type, method)) {
+						assoc = generateAssociation(type, method);
 					}
-					// don't show the return type for constructors
-					if (! method.isConstructor()) {
-						body.append(getTypeName(method.getReturnType(), true));
-						body.append(" ");
-					}
-					body.append(method.getElementName());
-					body.append("(");
-					final String[] parameterTypes = method.getParameterTypes();
-					String[] parameterNames = null;
-					parameterNames = method.getParameterNames();
-					for (int i = 0; i < method.getNumberOfParameters(); i++) {
-						if (body.charAt(body.length() - 1) != '(') {
-							body.append(", ");
+					if (assoc != null && isInTypes(assoc.targetName, allTypes) && associations != null) {
+						assoc.name = method.getElementName() + "()";
+						associations.add(assoc);
+					} else {
+						body.append("\t");
+						if (includes(genFlags, GEN_MODIFIERS) && (! Flags.isInterface(type.getFlags()))) {
+							body.append(getMemberModifiers(method));
 						}
-						body.append(getTypeName(parameterTypes[i], true));
-						if (parameterNames != null) {
+						// don't show the return type for constructors
+						if (! method.isConstructor()) {
+							body.append(getTypeName(method.getReturnType(), true));
 							body.append(" ");
-							body.append(parameterNames[i]);
 						}
+						body.append(method.getElementName());
+						body.append("(");
+						final String[] parameterTypes = method.getParameterTypes();
+						String[] parameterNames = null;
+						parameterNames = method.getParameterNames();
+						for (int i = 0; i < method.getNumberOfParameters(); i++) {
+							if (body.charAt(body.length() - 1) != '(') {
+								body.append(", ");
+							}
+							body.append(getTypeName(parameterTypes[i], true));
+							if (parameterNames != null) {
+								body.append(" ");
+								body.append(parameterNames[i]);
+							}
+						}
+						body.append(")\n");
 					}
-					body.append(")\n");
 				}
 			}
 			result.append(body);
@@ -174,9 +183,9 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 		return typeName;
 	}
 
-	protected boolean acceptAssociation(final IType type, final IField field) {
+	protected boolean acceptAssociation(final IType type, final IMember member) {
 		try {
-			final int flags = field.getFlags();
+			final int flags = member.getFlags();
 			return (! Flags.isEnum(flags)) && (! Flags.isStatic(flags));
 		} catch (final JavaModelException e) {
 		}
@@ -184,7 +193,21 @@ public abstract class JdtDiagramTextProvider extends AbstractClassDiagramTextPro
 	}
 
 	protected Assoc generateAssociation(final IType type, final IField field) throws JavaModelException {
-		final String fieldSignature = field.getTypeSignature(), fieldTypeName = getTypeName(fieldSignature, true);
+		final String fieldSignature = field.getTypeSignature();
+		return generateAssociation(type, fieldSignature);
+	}
+
+	protected Assoc generateAssociation(final IType type, final IMethod method) throws JavaModelException {
+		if (method.getNumberOfParameters() == 0) {
+			final String fieldSignature = method.getReturnType();
+			return generateAssociation(type, fieldSignature);
+		}
+		else
+			return null;
+	}
+
+	protected Assoc generateAssociation(final IType type, final String fieldSignature) throws JavaModelException {
+		final String fieldTypeName = getTypeName(fieldSignature, true);
 		Assoc assoc = null;
 		if (fieldTypeName.endsWith("[]")) {
 			assoc = new Assoc();
