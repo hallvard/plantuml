@@ -7,7 +7,7 @@
 	  <parent>
 	  	<groupId>net.sourceforge.plantuml</groupId>
 	  	<artifactId>net.sourceforge.plantuml.parent</artifactId>
-	  	<version>1.1.23</version>
+	  	<version>1.1.24-SNAPSHOT</version>
 	  	<relativePath>../net.sourceforge.plantuml.parent</relativePath>
 	  </parent>
 
@@ -15,6 +15,8 @@
 		<module>../net.sourceforge.plantuml.target</module>
 		<module>../../bundles/net.sourceforge.plantuml.lib</module>
 		<module>../../features/net.sourceforge.plantuml.lib.feature</module>
+		<module>../../bundles/net.sourceforge.plantuml.lib.jlatexmath</module>
+		<module>../../features/net.sourceforge.plantuml.lib.jlatexmath.feature</module>
 		<module>../net.sourceforge.plantuml.lib.repository</module>
 	</modules>
 </project>
