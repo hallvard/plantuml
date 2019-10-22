@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="net.sourceforge.plantuml.lib.jlatexmath.feature"
+      label="%featureName"
+      version="1.0.7"
+      provider-name="PlantUML Team">
+
+   <description url="http://plantuml.sourceforge.net/">
+      %description
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <plugin
+         id="net.sourceforge.plantuml.lib.jlatexmath"
+         download-size="0"
+         install-size="0"
+         version="1.0.7"/>
+
+</feature>
