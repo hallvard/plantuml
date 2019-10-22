@@ -19,10 +19,11 @@ public class EcoreDiagramHelper {
 	public static String PLANTUML_ANNOTATION_KEY = "net.sourceforge.plantuml";
 	public static String PLANTUML_SKINPARAMS_ANNOTATION_KEY = PLANTUML_ANNOTATION_KEY + "/skinparams";
 
-	protected Map<String, String> getSkinParams(EModelElement element, Map<String, String> map) {
-		for (EAnnotation annotation : element.getEAnnotations()) {
-			if (annotation.getSource().startsWith(PLANTUML_SKINPARAMS_ANNOTATION_KEY)) {
-				String key = annotation.getSource().substring(PLANTUML_SKINPARAMS_ANNOTATION_KEY.length());
+	protected Map<String, String> getSkinParams(final EModelElement element, Map<String, String> map) {
+		for (final EAnnotation annotation : element.getEAnnotations()) {
+			final String source = annotation.getSource();
+			if (source != null && source.startsWith(PLANTUML_SKINPARAMS_ANNOTATION_KEY)) {
+				final String key = source.substring(PLANTUML_SKINPARAMS_ANNOTATION_KEY.length());
 				String qualifier = null;
 				if (key.startsWith("/")) {
 					qualifier = key.substring(1);
@@ -32,15 +33,15 @@ public class EcoreDiagramHelper {
 		}
 		return map;
 	}
-	
-	protected Map<String, String> getSkinParams(String qualifier, EAnnotation annotation, Map<String, String> map) {
+
+	protected Map<String, String> getSkinParams(final String qualifier, final EAnnotation annotation, Map<String, String> map) {
 		if (annotation != null) {
-			EMap<String, String> eMap = annotation.getDetails();
+			final EMap<String, String> eMap = annotation.getDetails();
 			if (eMap.size() > 0) {
 				if (map == null) {
 					map = new HashMap<String, String>();
 				}
-				for (String key : eMap.keySet()) {
+				for (final String key : eMap.keySet()) {
 					map.put((qualifier != null ? qualifier : "") + key, eMap.get(key));
 				}
 			}
@@ -48,9 +49,9 @@ public class EcoreDiagramHelper {
 		return map;
 	}
 
-	protected String getAnnotation(EObject element, String key, boolean checkContainers, String def) {
+	protected String getAnnotation(EObject element, final String key, final boolean checkContainers, final String def) {
 		while (element instanceof EModelElement) {
-			String value = EcoreUtil.getAnnotation((EModelElement) element, PLANTUML_ANNOTATION_KEY, key);
+			final String value = EcoreUtil.getAnnotation((EModelElement) element, PLANTUML_ANNOTATION_KEY, key);
 			if (value != null) {
 				return value;
 			}
@@ -61,11 +62,11 @@ public class EcoreDiagramHelper {
 		}
 		return def;
 	}
-	protected boolean checkAnnotation(EObject element, String key, boolean checkContainers) {
+	protected boolean checkAnnotation(final EObject element, final String key, final boolean checkContainers) {
 		return "true".equals(getAnnotation(element, key, checkContainers, null));
 	}
-	
-	protected boolean shouldSuppress(EModelElement element, String name, String role) {
+
+	protected boolean shouldSuppress(final EModelElement element, final String name, final String role) {
 		String key = "suppress", containerKey = key + name;
 		if (role != null) {
 			key = key + "As" + role;
@@ -73,13 +74,13 @@ public class EcoreDiagramHelper {
 		}
 		return checkAnnotation(element, key, false) || checkAnnotation(element.eContainer(), containerKey, true);
 	}
-	protected boolean shouldSuppress(ENamedElement element, String role) {
+	protected boolean shouldSuppress(final ENamedElement element, final String role) {
 		return shouldSuppress(element, element.getName(), role);
 	}
 
 	//
-	
-	public <T> T getAncestor(EObject eObject, Class<T> clazz) {
+
+	public <T> T getAncestor(EObject eObject, final Class<T> clazz) {
 		while (eObject != null) {
 			if (clazz.isInstance(eObject)) {
 				return (T) eObject;
@@ -88,12 +89,12 @@ public class EcoreDiagramHelper {
 		}
 		return null;
 	}
-	
-	public String getEObjectHyperlink(EObject eObject) {
-		URI uri = EcoreUtil.getURI(eObject);
+
+	public String getEObjectHyperlink(final EObject eObject) {
+		final URI uri = EcoreUtil.getURI(eObject);
 		if (uri.isPlatformResource()) {
 			String path = uri.path();
-			String prefix = "/resource";
+			final String prefix = "/resource";
 			if (path.startsWith(prefix)) {
 				path = path.substring(prefix.length());
 			}
