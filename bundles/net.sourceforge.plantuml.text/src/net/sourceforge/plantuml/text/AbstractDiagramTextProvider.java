@@ -18,7 +18,8 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	}
 
 	public AbstractDiagramTextProvider(final Class<?> partType) {
-		if (IViewPart.class.isAssignableFrom(partType)) {
+		if (partType == null);
+		else if (IViewPart.class.isAssignableFrom(partType)) {
 			setViewType(partType);
 		} else {
 			setEditorType(partType);
@@ -62,14 +63,22 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 		return null;
 	}
 
+	protected String getStartPlantUml() {
+		return PlantumlConstants.START_UML;
+	}
+
+	protected String getEndPlantUml() {
+		return PlantumlConstants.END_UML;
+	}
+
 	public String ensureDiagramText(String diagramText) {
 		if (diagramText != null) {
 			diagramText = diagramText.trim();
-			if (! diagramText.startsWith(PlantumlConstants.START_UML)) {
-				diagramText = PlantumlConstants.START_UML + "\n" + diagramText;
+			if (! diagramText.startsWith(getStartPlantUml())) {
+				diagramText = getStartPlantUml() + "\n" + diagramText;
 			}
-			if (! diagramText.endsWith(PlantumlConstants.END_UML)) {
-				diagramText = diagramText + "\n" + PlantumlConstants.END_UML;
+			if (! diagramText.endsWith(getEndPlantUml())) {
+				diagramText = diagramText + "\n" + getEndPlantUml();
 			}
 		}
 		return diagramText;

@@ -429,6 +429,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 	private boolean updateDiagramText(final IWorkbenchPart activePart, final ISelection selection, final IPath path) {
 		if (activePart != null) {
+			// TODO: do this in a Job
 			final DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders(true);
 			final Map<String, Object> markerAttributes = new HashMap<String, Object>();
 			for (int i = 0; i < diagramTextProviders.length; i++) {

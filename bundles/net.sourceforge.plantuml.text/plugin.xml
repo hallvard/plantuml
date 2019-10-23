@@ -4,12 +4,15 @@
 
    <extension
          point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
+         
+      <!--
       <diagramTextProvider
             id="net.sourceforge.plantuml.text.TextEditorDiagramTextProvider"
             providerClass="net.sourceforge.plantuml.text.TextEditorDiagramTextProvider"
             label="Diagrams in text editor"
             >
       </diagramTextProvider>
+	  -->
 
       <diagramTextProvider
             id="net.sourceforge.plantuml.text.console.ConsoleViewDiagramTextProvider"
@@ -17,6 +20,70 @@
             label="Diagrams in text console"
             >
       </diagramTextProvider>
+   </extension>
+
+   <extension
+         point="net.sourceforge.plantuml.eclipse.textDiagramProvider">
+
+      <textDiagramProvider
+            id="net.sourceforge.plantuml.text.plantumlDiagramProvider"
+            label="PlantUML diagrams in text editor"
+			diagramPrefix="@startuml"
+			diagramSuffix="@enduml"
+			fileExtensions="txt,text,puml,plantuml"
+            >
+      </textDiagramProvider>
+
+      <textDiagramProvider
+            id="net.sourceforge.plantuml.text.mindmapDiagramProvider"
+            label="Mind map diagrams in text editor"
+			diagramPrefix="@startmindmap"
+			diagramSuffix="@endmindmap"
+            >
+      </textDiagramProvider>
+
+      <textDiagramProvider
+            id="net.sourceforge.plantuml.text.saltDiagramProvider"
+            label="Salt (widget) diagrams in text editor"
+			diagramPrefix="@startsalt"
+			diagramSuffix="@endsalt"
+            >
+      </textDiagramProvider>
+
+      <textDiagramProvider
+            id="net.sourceforge.plantuml.text.wbsDiagramProvider"
+            label="Work breakdown structure diagrams in text editor"
+			diagramPrefix="@startwbs"
+			diagramSuffix="@endwbs"
+            >
+      </textDiagramProvider>
+
+      <textDiagramProvider
+            id="net.sourceforge.plantuml.text.ganttDiagramProvider"
+            label="Gantt diagrams in text editor"
+			diagramPrefix="@startgantt"
+			diagramSuffix="@endgantt"
+            >
+      </textDiagramProvider>
+
+      <textDiagramProvider
+            id="net.sourceforge.plantuml.text.mdDiagramProvider"
+            label="PlantUML diagrams in markdown editor"
+			diagramPrefix="```puml"
+			diagramSuffix="```"
+			fileExtensions="md"
+            >
+      </textDiagramProvider>
+
+      <textDiagramProvider
+            id="net.sourceforge.plantuml.text.asciidocDiagramProvider"
+            label="PlantUML diagrams in asciidoc editor"
+			diagramPrefix="[plantuml"
+			diagramPrefixRegex="[plantuml(?.*)]\n\.\.\.\."
+			diagramSuffix="...."
+			fileExtensions="adoc,asciidoc"
+            >
+      </textDiagramProvider>
    </extension>
 
 </plugin>

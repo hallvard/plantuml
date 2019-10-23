@@ -35,5 +35,6 @@ Import-Package: net.sourceforge.plantuml.eclipse.imagecontrol,
  org.eclipse.ui.part,
  org.eclipse.ui.plugin,
  org.osgi.framework;version="1.8.0"
-Export-Package: net.sourceforge.plantuml.eclipse.utils,
+Export-Package: net.sourceforge.plantuml.eclipse,
+ net.sourceforge.plantuml.eclipse.utils,
  net.sourceforge.plantuml.eclipse.views

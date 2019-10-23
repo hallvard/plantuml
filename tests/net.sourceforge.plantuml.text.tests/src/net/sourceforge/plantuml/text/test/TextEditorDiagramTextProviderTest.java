@@ -8,11 +8,11 @@ import net.sourceforge.plantuml.text.TextEditorDiagramTextProvider;
 
 public class TextEditorDiagramTextProviderTest {
 
-	private TextEditorDiagramTextProvider diagramTextProvider = new TextEditorDiagramTextProvider();
+	private final TextEditorDiagramTextProvider diagramTextProvider = new TextEditorDiagramTextProvider(PlantumlConstants.START_UML, PlantumlConstants.END_UML);
 
-	private String toto = PlantumlConstants.START_UML + "\ntoto\n" + PlantumlConstants.END_UML;
-	
-	private String getDiagramText(String s) {
+	private final String toto = PlantumlConstants.START_UML + "\ntoto\n" + PlantumlConstants.END_UML;
+
+	private String getDiagramText(final String s) {
 		return diagramTextProvider.getDiagramText(s);
 	}
 
@@ -30,7 +30,7 @@ public class TextEditorDiagramTextProviderTest {
 	public void testWithSimplePrefix() {
 		AbstractDiagramTextTest.assertDiagramText(toto, getDiagramText(" * " + PlantumlConstants.START_UML + "\n * toto\n * " + PlantumlConstants.END_UML + "\n"));
 	}
-	
+
 	@Test
 	public void testWithMixedWhitespacePrefix() {
 		AbstractDiagramTextTest.assertDiagramText(toto, getDiagramText("  *\t" + PlantumlConstants.START_UML + "\n\t*\ttoto\n * " + PlantumlConstants.END_UML + "\n"));

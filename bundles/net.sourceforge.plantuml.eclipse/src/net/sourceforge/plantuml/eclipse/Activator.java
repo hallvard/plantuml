@@ -2,7 +2,6 @@ package net.sourceforge.plantuml.eclipse;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,7 +32,7 @@ import net.sourceforge.plantuml.preferences.DiagramTextProvidersPreferencePage;
  *
  * @author durif_c
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractUIPlugin implements DiagramTextProviderRegistry {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "net.sourceforge.plantuml.eclipse";
@@ -100,13 +99,9 @@ public class Activator extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-	private List<DiagramTextProvider> diagramTextProviders;
+	private List<DiagramTextProvider> diagramTextProviders = null;
 
-	private static class DiagramTextProviderInfo {
-		String id, label;
-	}
-
-	private Map<DiagramTextProvider, DiagramTextProviderInfo> diagramTextProviderInfo;
+	private Map<DiagramTextProvider, DiagramTextProviderInfo> diagramTextProviderInfo = null;
 
 	public boolean isEnabled(final DiagramTextProvider diagramTextProvider) {
 		final IPreferenceStore preferenceStore = getPreferenceStore();
@@ -114,11 +109,24 @@ public class Activator extends AbstractUIPlugin {
 		return ! preferenceStore.getBoolean(DiagramTextProvidersPreferencePage.getDiagramTextProviderDisablementKey(id));
 	}
 
+	private final Collection<DiagramTextProviderProcessor> diagramTextProviderProcessors = new ArrayList<>();
+
+	public void addDiagramTextProviderProcessor(final DiagramTextProviderProcessor diagramTextProviderProcessor) {
+		if (diagramTextProviders == null) {
+			diagramTextProviderProcessors.add(diagramTextProviderProcessor);
+		} else {
+			diagramTextProviderProcessor.processDiagramTextProviders(this);
+		}
+	}
+
 	public DiagramTextProvider[] getDiagramTextProviders(final Boolean enabled) {
 		if (diagramTextProviders == null) {
 			diagramTextProviders = new ArrayList<DiagramTextProvider>();
 			diagramTextProviderInfo = new HashMap<DiagramTextProvider, DiagramTextProviderInfo>();
 			processDiagramTextProviders();
+			for (final DiagramTextProviderProcessor diagramTextProviderProcessor : diagramTextProviderProcessors) {
+				diagramTextProviderProcessor.processDiagramTextProviders(this);
+			}
 		}
 		Collection<DiagramTextProvider> diagramTextProviders = this.diagramTextProviders;
 		if (enabled != null) {
@@ -150,12 +158,11 @@ public class Activator extends AbstractUIPlugin {
 		return null;
 	}
 
-	public int DEFAULT_PRIORITY = 0, NORMAL_PRIORITY = 5, CUSTOM_PRIORITY = 10;
+	public final static int DEFAULT_PRIORITY = 0, NORMAL_PRIORITY = 5, CUSTOM_PRIORITY = 10;
 
 	private void processDiagramTextProviders() {
 		final IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint(getBundle().getSymbolicName() + ".diagramTextProvider");
 		final IExtension[] extensions = ep.getExtensions();
-		final Map<DiagramTextProvider, Integer> diagramTextProviders = new HashMap<DiagramTextProvider, Integer>();
 		for (int i = 0; i < extensions.length; i++) {
 			for (final IConfigurationElement ces: extensions[i].getConfigurationElements()) {
 				final String name = ces.getName();
@@ -176,24 +183,37 @@ public class Activator extends AbstractUIPlugin {
 							} catch (final NumberFormatException e) {
 							}
 						}
-						diagramTextProviders.put(diagramTextProvider, priority);
 						final DiagramTextProviderInfo info = new DiagramTextProviderInfo();
 						info.id = ces.getAttribute("id");
 						info.label = ces.getAttribute("label");
-						this.diagramTextProviderInfo.put(diagramTextProvider, info);
+						info.priority = priority;
+						registerDiagramTextProvider(diagramTextProvider, info);
 					} catch (final InvalidRegistryObjectException e) {
 					} catch (final CoreException e) {
 					}
 				}
 			}
 		}
-		this.diagramTextProviders.addAll(diagramTextProviders.keySet());
-		Collections.sort(this.diagramTextProviders, new Comparator<DiagramTextProvider>() {
-			@Override
-			public int compare(final DiagramTextProvider dtp2, final DiagramTextProvider dtp1) {
-				return diagramTextProviders.get(dtp1) - diagramTextProviders.get(dtp2);
+	}
+
+	private final Comparator<DiagramTextProvider> priorityComparator = new Comparator<DiagramTextProvider>() {
+		@Override
+		public int compare(final DiagramTextProvider dtp2, final DiagramTextProvider dtp1) {
+			return Activator.this.diagramTextProviderInfo.get(dtp1).priority - Activator.this.diagramTextProviderInfo.get(dtp2).priority;
+		}
+	};
+
+	@Override
+	public void registerDiagramTextProvider(final DiagramTextProvider diagramTextProvider, final DiagramTextProviderInfo info) {
+		this.diagramTextProviderInfo.put(diagramTextProvider, info);
+		int pos = 0;
+		while (pos < diagramTextProviders.size()) {
+			if (priorityComparator.compare(diagramTextProvider, diagramTextProviders.get(pos)) < 0) {
+				break;
 			}
-		});
+			pos++;
+		}
+		this.diagramTextProviders.add(pos, diagramTextProvider);
 	}
 
 	private List<ILinkOpener> linkOpeners;
