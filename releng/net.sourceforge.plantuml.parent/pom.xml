@@ -8,8 +8,8 @@
 	<name>net.sourceforge.plantuml maven parent project</name>
 
 	<properties>
-		<tycho-maven-plugin-version>1.3.0</tycho-maven-plugin-version>
-		<tycho-version>1.3.0</tycho-version>
+		<tycho-maven-plugin-version>1.5.0</tycho-maven-plugin-version>
+		<tycho-version>1.5.0</tycho-version>
 		<xtextVersion>2.9.1</xtextVersion>
 		<xtend-maven-plugin-version>2.9.1</xtend-maven-plugin-version>
 		
@@ -18,12 +18,24 @@
 	</properties>
 
 	<repositories>
-		<!-- <repository> <id>eclipse-luna</id> <layout>p2</layout> <url>http://download.eclipse.org/releases/luna</url> 
-			</repository> <repository> <id>eclipse-mars</id> <layout>p2</layout> <url>http://download.eclipse.org/releases/mars</url> 
-			</repository> -->
+		<repository>
+			<id>eclipse-luna</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/luna</url> 
+		</repository>
 	</repositories>
 
 	<profiles>
+   		<profile>
+     		<id>latest</id>
+     		<repositories>
+       			<repository>
+         			<id>latest</id>
+					<layout>p2</layout>
+         			<url>http://download.eclipse.org/releases/2019-09</url>
+       			</repository>
+     		</repositories>
+   		</profile>
 		<profile>
 			<id>sign</id>
 			<activation>
@@ -70,57 +82,57 @@
 	    </pluginManagement>
 		<plugins>
 	      <plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<pomDependencies>consider</pomDependencies>
-					<executionEnvironment>JavaSE-1.8</executionEnvironment>
-					<target>
-						<artifact>
-							<groupId>net.sourceforge.plantuml</groupId>
-							<artifactId>net.sourceforge.plantuml.target</artifactId>
-							<version>1.1.23</version>
-						</artifact>
-					</target>
-					<filters>
-						<filter>
-							<type>eclipse-plugin</type>
-							<id>org.eclipse.jdt.core</id>
-							<restrictTo>
-								<version>3.10.2.v20150120-1634</version>
-							</restrictTo>
-						</filter>
-					</filters>
-					<!-- 
-					<environments>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-					 -->
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>target-platform-configuration</artifactId>
+			<version>${tycho-version}</version>
+			<configuration>
+				<pomDependencies>consider</pomDependencies>
+				<executionEnvironment>JavaSE-1.8</executionEnvironment>
+				<target>
+					<artifact>
+						<groupId>net.sourceforge.plantuml</groupId>
+						<artifactId>net.sourceforge.plantuml.target</artifactId>
+						<version>1.1.24-SNAPSHOT</version>
+					</artifact>
+				</target>
+				<filters>
+					<filter>
+						<type>eclipse-plugin</type>
+						<id>org.eclipse.jdt.core</id>
+						<restrictTo>
+							<version>3.10.2.v20150120-1634</version>
+						</restrictTo>
+					</filter>
+				</filters>
+				<!-- 
+				<environments>
+					<environment>
+						<os>linux</os>
+						<ws>gtk</ws>
+						<arch>x86</arch>
+					</environment>
+					<environment>
+						<os>linux</os>
+						<ws>gtk</ws>
+						<arch>x86_64</arch>
+					</environment>
+					<environment>
+						<os>win32</os>
+						<ws>win32</ws>
+						<arch>x86</arch>
+					</environment>
+					<environment>
+						<os>win32</os>
+						<ws>win32</ws>
+						<arch>x86_64</arch>
+					</environment>
+					<environment>
+						<os>macosx</os>
+						<ws>cocoa</ws>
+						<arch>x86_64</arch>
+					</environment>
+				</environments>
+				 -->
 				</configuration>
 			</plugin>
 
