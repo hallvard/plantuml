@@ -42,13 +42,20 @@ public abstract class AbstractTextDiagramProvider extends AbstractDiagramTextPro
 		return PlantumlConstants.END_UML;
 	}
 
-	protected final TextDiagramHelper textDiagramHelper = new TextDiagramHelper(getStartPlantUml(), getStartPlantUmlRegex(), getEndPlantUml(), getEndPlantUmlRegex());
+	private TextDiagramHelper textDiagramHelper = null;
+
+	public TextDiagramHelper getTextDiagramHelper() {
+		if (textDiagramHelper == null) {
+			textDiagramHelper = new TextDiagramHelper(getStartPlantUml(), getStartPlantUmlRegex(), getEndPlantUml(), getEndPlantUmlRegex());
+		}
+		return textDiagramHelper;
+	}
 
 	protected StringBuilder getDiagramTextLines(final IEditorPart editorPart, final IEditorInput editorInput, final ISelection selection, final Map<String, Object> markerAttributes) {
 		final ITextEditor textEditor = (ITextEditor) editorPart;
 		final IDocument document = textEditor.getDocumentProvider().getDocument(editorInput);
 		final int selectionStart = ((ITextSelection) (selection != null ? selection : textEditor.getSelectionProvider().getSelection())).getOffset();
-		return textDiagramHelper.getDiagramTextLines(document, selectionStart, markerAttributes);
+		return getTextDiagramHelper().getDiagramTextLines(document, selectionStart, markerAttributes);
 	}
 
 	public String getDiagramText(final CharSequence lines) {
@@ -56,14 +63,14 @@ public abstract class AbstractTextDiagramProvider extends AbstractDiagramTextPro
 	}
 
 	protected String getDiagramText(final StringBuilder lines) {
-		return textDiagramHelper.getDiagramText(lines);
+		return getTextDiagramHelper().getDiagramText(lines);
 	}
 
 	@Override
 	public String getDiagramText(final IPath path) {
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 		if (file != null && file.exists()) {
-			return textDiagramHelper.getDiagramText(file);
+			return getTextDiagramHelper().getDiagramText(file);
 		}
 		return null;
 	}
@@ -73,6 +80,6 @@ public abstract class AbstractTextDiagramProvider extends AbstractDiagramTextPro
 	@Override
 	public Iterator<ISelection> getDiagramText(final IEditorPart editorPart) {
 		final IDocument document = ((ITextEditor) editorPart).getDocumentProvider().getDocument(editorPart.getEditorInput());
-		return textDiagramHelper.getDiagramText(document);
+		return getTextDiagramHelper().getDiagramText(document);
 	}
 }

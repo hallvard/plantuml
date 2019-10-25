@@ -58,7 +58,7 @@ public abstract class AbstractDiagramTextProvider implements DiagramTextProvider
 	public String getDiagramText(final IEditorPart editorPart, final ISelection selection, final Map<String, Object> markerAttributes) {
 		if (supportsEditor(editorPart) && (selection == null || supportsSelection(selection))) {
 			final String diagramText = getDiagramText(editorPart, editorPart.getEditorInput(), selection, markerAttributes);
-			return ensureDiagramText(diagramText);
+			return diagramText; // ensureDiagramText(diagramText);
 		}
 		return null;
 	}

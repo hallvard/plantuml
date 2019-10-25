@@ -69,7 +69,7 @@
       <textDiagramProvider
             id="net.sourceforge.plantuml.text.mdDiagramProvider"
             label="PlantUML diagrams in markdown editor"
-			diagramPrefix="```puml"
+			diagramPrefix="```plantuml"
 			diagramSuffix="```"
 			fileExtensions="md"
             >
@@ -79,7 +79,7 @@
             id="net.sourceforge.plantuml.text.asciidocDiagramProvider"
             label="PlantUML diagrams in asciidoc editor"
 			diagramPrefix="[plantuml"
-			diagramPrefixRegex="[plantuml(?.*)]\n\.\.\.\."
+			diagramPrefixRegex="\[plantuml(.*)\]\n\.\.\.\."
 			diagramSuffix="...."
 			fileExtensions="adoc,asciidoc"
             >

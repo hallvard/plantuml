@@ -38,11 +38,14 @@ Note that the version numbers are a bit special, since they include the version 
 
 ## [1.1.24.qualifier](../../releases/tag/1.1.24.qualifier)
 - Support for generating diagrams for views, e.g. Java element selected in Package Explorer ([issue #84](../../issues/84)).
-- Support for generating diagrams from console output.
+- Support for generating diagrams from console output ([issue #91](../../issues/91)).
+- Support for diagrams in more text formats, including markdown.
 - Preference page for enabling/disabling diagram providers.
 - Avoid generating diagram (image) when PlantUml view is hidden. 
 - Moved list of diagram into sub-menu of view menu, handles [issue #87](../../issues/87).
 - Now requires Java 1.8.
+- Updated to use PlantUML library version 1.2019.11 (which includes support for mindmaps).
+- Fixed bugs ([issue #93](../../issues/93) and ([issue #95](../../issues/95))
 
 ## [1.1.22](../../releases/tag/1.1.22)
 - Fixes bug ([issue #77](../../issues/77)) concerning incompatibilit with Photon 2018.12.

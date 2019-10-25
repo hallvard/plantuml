@@ -306,11 +306,11 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	@Override
 	protected void updateDiagramText(final String textDiagram, final IPath original, final Map<String, Object> markerAttributes) {
 		if (textDiagram != null && (lastDiagramData == null || (! textDiagram.equals(lastDiagramData.diagramText)))) {
-			lastDiagramData = new DiagramData();
-			lastDiagramData.diagramText = textDiagram;
-			lastDiagramData.original = original;
-			lastDiagramData.markerAttributes = markerAttributes;
 			if (isVisible()) {
+				lastDiagramData = new DiagramData();
+				lastDiagramData.diagramText = textDiagram;
+				lastDiagramData.original = original;
+				lastDiagramData.markerAttributes = markerAttributes;
 				updateDiagram(lastDiagramData);
 			}
 		}

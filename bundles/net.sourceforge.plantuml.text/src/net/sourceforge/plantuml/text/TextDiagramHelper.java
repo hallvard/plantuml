@@ -36,16 +36,18 @@ public class TextDiagramHelper {
 		final boolean includeStart = prefix.startsWith("@"), includeEnd = suffix.startsWith("@");
 		final FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
 		try {
-			IRegion start = finder.find(selectionStart, prefixRegex, true, true, false, true);
-			IRegion end = finder.find(selectionStart, suffixRegex, true, true, false, true);
-			if (start == null || (end != null && end.getOffset() < start.getOffset())) {
+			// search backward and forward start and end
+			IRegion start = finder.find(selectionStart, prefixRegex, false, true, false, true);
+			// if not start or end is before start, we must search backward
+			if (start == null) {
 				// use a slightly larger selection offset, in case the cursor is within startuml
-				start = finder.find(Math.min(selectionStart + prefix.length(), document.getLength()), prefixRegex, false, true, false, true);
+				final int altSelectionStart = Math.min(selectionStart + prefix.length(), document.getLength());
+				start = finder.find(altSelectionStart, prefixRegex, false, true, false, true);
 			}
 			if (start != null) {
-				final int startOffset = start.getOffset(), startLine = document.getLineOfOffset(startOffset);
-				end = finder.find(startOffset, suffixRegex, true, true, false, true);
-				if (end != null) {
+				final int startOffset = start.getOffset(), startLine = document.getLineOfOffset(startOffset + (includeStart ? 0 : start.getLength()));
+				final IRegion end = finder.find(startOffset + start.getLength(), suffixRegex, true, true, false, true);
+				if (end != null && end.getOffset() >= selectionStart) {
 					final int endOffset = end.getOffset() + end.getLength();
 					//					String linePrefix = document.get(startLinePos, startOffset - startLinePos).trim();
 					final StringBuilder result = new StringBuilder();
@@ -74,7 +76,7 @@ public class TextDiagramHelper {
 		final int prefixPos = lines.indexOf(prefix);
 		int start = Math.max(prefixPos, 0);
 		final int suffixPos = lines.lastIndexOf(suffix);
-		final int end = Math.min(suffixPos + suffix.length(), lines.length());
+		final int end = (suffixPos < 0 ? lines.length() : Math.min(suffixPos + suffix.length(), lines.length()));
 		final String linePrefix = lines.substring(0, start).trim();
 		final StringBuilder result = new StringBuilder(lines.length());
 		if (prefixPos < 0) {

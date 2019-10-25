@@ -443,6 +443,8 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 						diagramText = getDiagramText(diagramTextProvider, activePart, selection);
 					}
 					if (diagramText != null) {
+						// default to @startuml ... @enduml diagram
+						diagramText = ensureDiagram(diagramText);
 						updateDiagramText(diagramText, path, markerAttributes);
 						return true;
 					}
@@ -450,5 +452,12 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 			}
 		}
 		return false;
+	}
+
+	protected String ensureDiagram(String diagramText) {
+		if (! diagramText.startsWith("@")) {
+			diagramText = PlantumlConstants.START_UML + "\n" + diagramText + "\n" + PlantumlConstants.END_UML;
+		}
+		return diagramText;
 	}
 }
