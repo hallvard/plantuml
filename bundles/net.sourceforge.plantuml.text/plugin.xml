@@ -22,8 +22,9 @@
       </diagramTextProvider>
    </extension>
 
+   <extension-point id="textDiagramProvider" name="Text diagram provider" schema="schema/textDiagramProvider.exsd"/>
    <extension
-         point="net.sourceforge.plantuml.eclipse.textDiagramProvider">
+         point="net.sourceforge.plantuml.text.textDiagramProvider">
 
       <textDiagramProvider
             id="net.sourceforge.plantuml.text.plantumlDiagramProvider"

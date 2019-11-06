@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	<extension point="net.sourceforge.plantuml.eclipse.tests.testProject">
+		<testProject
+			projectName="javaeditortest"
+			natures="org.eclipse.jdt.core.javanature"
+			projectConfigurer="net.sourceforge.plantuml.jdt.test.JavaProjectConfigurer"
+			/>
+	</extension>
+
+	<extension point="net.sourceforge.plantuml.eclipse.tests.testFile">
+		<testFile
+			sourceFileUri="platform:/plugin/net.sourceforge.plantuml.jdt.tests/src/net/sourceforge/plantuml/jdt/test/ClassWithoutMembers.java"
+			targetPath="/javaeditortest/src/net/sourceforge/plantuml/jdt/test"
+			/>
+	</extension>
+</plugin>

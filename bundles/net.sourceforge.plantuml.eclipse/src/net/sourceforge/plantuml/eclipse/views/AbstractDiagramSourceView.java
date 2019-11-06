@@ -266,7 +266,9 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 		@Override
 		public void partActivated(final IWorkbenchPartReference partRef) {
-			updateDiagramText(partRef.getPart(true));
+			if (! isThisView(partRef)) {
+				updateDiagramText(partRef.getPart(true));
+			}
 		}
 
 		@Override
@@ -379,6 +381,13 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 				});
 			}
 		};
+	}
+
+	/**
+	 * Updates the diagram text from the current part (if linked to it) and the current selection.
+	 */
+	public void updateDiagramText() {
+		updateDiagramText(true, null, null);
 	}
 
 	protected void updateDiagramText(final boolean force, final IWorkbenchPart part, ISelection selection) {

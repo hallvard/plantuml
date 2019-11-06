@@ -43,8 +43,7 @@ public class Activator extends Plugin implements DiagramTextProviderProcessor {
 
 	@Override
 	public void processDiagramTextProviders(final DiagramTextProviderRegistry registry) {
-		final net.sourceforge.plantuml.eclipse.Activator plantumlActivator = net.sourceforge.plantuml.eclipse.Activator.getDefault();
-		final IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint(plantumlActivator.getBundle().getSymbolicName() + ".textDiagramProvider");
+		final IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint("net.sourceforge.plantuml.text.textDiagramProvider");
 		final IExtension[] extensions = ep.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
 			for (final IConfigurationElement ces: extensions[i].getConfigurationElements()) {
@@ -54,7 +53,7 @@ public class Activator extends Plugin implements DiagramTextProviderProcessor {
 						final String diagramPrefix = ces.getAttribute("diagramPrefix");
 						final String diagramSuffix = ces.getAttribute("diagramSuffix");
 						final String fileExtensionsString = ces.getAttribute("fileExtensions");
-						final String[] fileExtensions = (fileExtensionsString != null ? fileExtensionsString.split("[, ]+") : new String[0]);
+						final String[] fileExtensions = (fileExtensionsString != null ? fileExtensionsString.split("[, ]") : new String[0]);
 						final TextEditorDiagramTextProvider textDiagramProvider = new TextEditorDiagramTextProvider(
 								diagramPrefix, diagramSuffix,
 								fileExtensions

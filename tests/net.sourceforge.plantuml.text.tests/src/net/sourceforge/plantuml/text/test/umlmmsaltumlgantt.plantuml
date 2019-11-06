@@ -1,0 +1,27 @@
+@startuml
+class "Bar"
+@enduml
+
+@startmindmap
+* Debian
+** Ubuntu
+*** Linux Mint
+*** Kubuntu
+@endmindmap
+
+@startsalt
+{
+  Login    | "MyName   "
+  Password | "****     "
+  [Cancel] | [  OK   ]
+}
+@endsalt
+
+@startgantt
+[Prototype design] lasts 15 days
+[Test prototype] lasts 10 days
+@endgantt
+
+@startuml
+class "Foo"
+@enduml

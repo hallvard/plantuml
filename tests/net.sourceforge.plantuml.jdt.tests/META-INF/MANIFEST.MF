@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Plantuml Java Support Test
-Bundle-SymbolicName: net.sourceforge.plantuml.jdt.tests
+Bundle-SymbolicName: net.sourceforge.plantuml.jdt.tests;singleton:=true
 Bundle-Version: 1.1.24.qualifier
 Bundle-Vendor: PlantUML Team
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.3.1",

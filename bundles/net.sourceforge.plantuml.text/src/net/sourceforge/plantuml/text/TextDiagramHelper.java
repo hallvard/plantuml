@@ -41,8 +41,12 @@ public class TextDiagramHelper {
 			// if not start or end is before start, we must search backward
 			if (start == null) {
 				// use a slightly larger selection offset, in case the cursor is within startuml
-				final int altSelectionStart = Math.min(selectionStart + prefix.length(), document.getLength());
+				int altSelectionStart = Math.min(selectionStart + prefix.length(), document.getLength());
 				start = finder.find(altSelectionStart, prefixRegex, false, true, false, true);
+				if (start == null) {
+					altSelectionStart = Math.min(selectionStart + prefixRegex.length(), document.getLength());
+					start = finder.find(altSelectionStart, prefixRegex, false, true, false, true);
+				}
 			}
 			if (start != null) {
 				final int startOffset = start.getOffset(), startLine = document.getLineOfOffset(startOffset + (includeStart ? 0 : start.getLength()));

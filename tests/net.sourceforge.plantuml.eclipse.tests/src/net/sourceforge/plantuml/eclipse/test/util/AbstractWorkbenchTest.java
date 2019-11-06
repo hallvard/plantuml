@@ -2,11 +2,9 @@ package net.sourceforge.plantuml.eclipse.test.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
-import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -19,12 +17,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -39,89 +37,43 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
-import net.sourceforge.plantuml.eclipse.views.PlantUmlView;
+import net.sourceforge.plantuml.eclipse.views.AbstractDiagramSourceView;
 
 public abstract class AbstractWorkbenchTest {
 
+	protected WorkspaceHelper workspaceHelper = new WorkspaceHelper();
+
 	protected IWorkspaceRoot root() {
-		return ResourcesPlugin.getWorkspace().getRoot();
+		return workspaceHelper.root();
 	}
 
-	protected IProject createProject(String name, String... natures) throws CoreException, InvocationTargetException, InterruptedException {
-		IProject project = root().getProject(name);
-		createProject(project);
-		addNatures(project, natures);			
-		return project;
+	protected boolean projectExists(final String name) {
+		return workspaceHelper.projectExists(name);
 	}
 
-	protected IProject createProject(IProject project) throws CoreException {
-		if (!project.exists())
-			project.create(getDefaultMonitor());
-		project.open(getDefaultMonitor());
-		return project;
+	protected IProject createProject(final String name, final String... natures) throws CoreException, InvocationTargetException, InterruptedException {
+		return workspaceHelper.createProject(name, natures);
 	}
 
-	protected void addNatures(IProject project, String... natures) throws CoreException {
-		IProjectDescription description = project.getDescription();
-		String[] existingNatures = description.getNatureIds();
-
-		// Add the nature
-		String[] newNatures = new String[existingNatures.length + natures.length];
-		System.arraycopy(existingNatures, 0, newNatures, 0, existingNatures.length);
-		System.arraycopy(natures, 0, newNatures, existingNatures.length, natures.length);
-		description.setNatureIds(newNatures);
-		project.setDescription(description, null);
-	}
-	
-	protected void addBuilder(IProject project, String builderId) throws CoreException {
-		IProjectDescription description = project.getDescription();
-		ICommand[] specs = description.getBuildSpec();
-		ICommand command = description.newCommand();
-		command.setBuilderName(builderId);
-		// Add the nature
-		ICommand[] specsModified = new ICommand[specs.length + 1];
-		System.arraycopy(specs, 0, specsModified, 0, specs.length);
-		specsModified[specs.length] = command;
-		description.setBuildSpec(specsModified);
-		project.setDescription(description, getDefaultMonitor());
+	protected IProject createProject(final IProject project) throws CoreException {
+		return workspaceHelper.createProject(project);
 	}
 
-	protected void removeNature(IProject project, String nature)
+	protected void addNatures(final IProject project, final String... natures) throws CoreException {
+		workspaceHelper.addNatures(project, natures);
+	}
+
+	protected void addBuilder(final IProject project, final String builderId) throws CoreException {
+		workspaceHelper.addBuilder(project, builderId);
+	}
+
+	protected void removeNature(final IProject project, final String nature)
 			throws CoreException {
-		IProjectDescription description = project.getDescription();
-		String[] natures = description.getNatureIds();
-
-		for (int i = 0; i < natures.length; ++i) {
-			if (nature.equals(natures[i])) {
-				// Remove the nature
-				String[] newNatures = new String[natures.length - 1];
-				System.arraycopy(natures, 0, newNatures, 0, i);
-				System.arraycopy(natures, i + 1, newNatures, i, natures.length
-						- i - 1);
-				description.setNatureIds(newNatures);
-				project.setDescription(description, null);
-				return;
-			}
-		}
-
+		workspaceHelper.removeNature(project, nature);
 	}
-	
-	protected void removeBuilder(IProject project, String builderId) throws CoreException {
-		IProjectDescription description = project.getDescription();
-		ICommand[] builderSpecs = description.getBuildSpec();
 
-		for (int i = 0; i < builderSpecs.length; ++i) {
-			if (builderId.equals(builderSpecs[i].getBuilderName())) {
-				// Remove the builder
-				ICommand[] modifiedSpecs = new ICommand[builderSpecs.length - 1];
-				System.arraycopy(builderSpecs, 0, modifiedSpecs, 0, i);
-				System.arraycopy(builderSpecs, i + 1, modifiedSpecs, i, builderSpecs.length - i - 1);
-				description.setBuildSpec(modifiedSpecs);
-				project.setDescription(description, null);
-				return;
-			}
-		}
-
+	protected void removeBuilder(final IProject project, final String builderId) throws CoreException {
+		workspaceHelper.removeBuilder(project, builderId);
 	}
 
 	protected void setReference(final IProject from, final IProject to)
@@ -130,13 +82,13 @@ public abstract class AbstractWorkbenchTest {
 		new WorkspaceModifyOperation() {
 
 			@Override
-			protected void execute(IProgressMonitor monitor)
+			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException,
 					InterruptedException {
-				IProjectDescription projectDescription = from.getDescription();
-				IProject[] projects = projectDescription
+				final IProjectDescription projectDescription = from.getDescription();
+				final IProject[] projects = projectDescription
 						.getReferencedProjects();
-				IProject[] newProjects = new IProject[projects.length + 1];
+				final IProject[] newProjects = new IProject[projects.length + 1];
 				System.arraycopy(projects, 0, newProjects, 0, projects.length);
 				newProjects[projects.length] = to;
 				projectDescription.setReferencedProjects(newProjects);
@@ -144,23 +96,23 @@ public abstract class AbstractWorkbenchTest {
 			}
 		}.run(getDefaultMonitor());
 	}
-	
+
 	protected void removeReference(final IProject from, final IProject to)
-	throws CoreException, InvocationTargetException,
-	InterruptedException {
-		new WorkspaceModifyOperation() {
-			
-			@Override
-			protected void execute(IProgressMonitor monitor)
 			throws CoreException, InvocationTargetException,
 			InterruptedException {
-				IProjectDescription projectDescription = from.getDescription();
-				IProject[] projects = projectDescription
-				.getReferencedProjects();
+		new WorkspaceModifyOperation() {
+
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException,
+					InterruptedException {
+				final IProjectDescription projectDescription = from.getDescription();
+				final IProject[] projects = projectDescription
+						.getReferencedProjects();
 				for (int i = 0; i < projects.length; ++i) {
 					if (to.equals(projects[i])) {
 						// Remove the nature
-						IProject[] newProjects = new IProject[projects.length - 1];
+						final IProject[] newProjects = new IProject[projects.length - 1];
 						System.arraycopy(projects, 0, newProjects, 0, i);
 						System.arraycopy(projects, i + 1, newProjects, i, projects.length
 								- i - 1);
@@ -173,100 +125,52 @@ public abstract class AbstractWorkbenchTest {
 		}.run(getDefaultMonitor());
 	}
 
-	protected IFolder createFolder(IResource resource, String relativePath) throws InvocationTargetException, InterruptedException {
-		return createFolder(resource.getFullPath().append(relativePath));
+	protected IFolder createFolder(final IResource resource, final String relativePath) throws InvocationTargetException, InterruptedException {
+		return workspaceHelper.createFolder(resource, relativePath);
 	}
-	protected IFolder createFolder(String wsRelativePath) throws InvocationTargetException, InterruptedException {
-		return createFolder(new Path(wsRelativePath));
+	protected IFolder createFolder(final String wsRelativePath) throws InvocationTargetException, InterruptedException {
+		return workspaceHelper.createFolder(wsRelativePath);
 	}
-	protected IFolder createFolder(IPath wsRelativePath) throws InvocationTargetException, InterruptedException {
-		final IFolder folder = root().getFolder(wsRelativePath);
-		new WorkspaceModifyOperation() {
-
-			@Override
-			protected void execute(IProgressMonitor monitor)
-					throws CoreException, InvocationTargetException,
-					InterruptedException {
-				create(folder.getParent());
-				folder.delete(true, getDefaultMonitor());
-				folder.create(true, true, getDefaultMonitor());
-			}
-
-		}.run(getDefaultMonitor());
-		return folder;
+	protected IFolder createFolder(final IPath wsRelativePath) throws InvocationTargetException, InterruptedException {
+		return workspaceHelper.createFolder(wsRelativePath);
 	}
 
-	protected IFile createFile(IResource resource, String relativePath, String s) throws CoreException, InvocationTargetException, InterruptedException {
-		return createFile(resource.getFullPath().append(relativePath), s);
+	protected IFile createFile(final IResource resource, final String relativePath, final String s) throws CoreException, InvocationTargetException, InterruptedException {
+		return workspaceHelper.createFile(resource, relativePath, s);
 	}
-	protected IFile createFile(String wsRelativePath, String s) throws CoreException, InvocationTargetException, InterruptedException {
-		return createFile(new Path(wsRelativePath), s);
+	protected IFile createFile(final String wsRelativePath, final String s) throws CoreException, InvocationTargetException, InterruptedException {
+		return workspaceHelper.createFile(wsRelativePath, s);
 	}
-	protected IFile createFile(IPath wsRelativePath, String s) throws CoreException, InvocationTargetException, InterruptedException {
-		return createFile(wsRelativePath, new StringBufferInputStream(s));
+	protected IFile createFile(final IPath wsRelativePath, final String s) throws CoreException, InvocationTargetException, InterruptedException {
+		return workspaceHelper.createFile(wsRelativePath, s);
 	}
 
-	protected IFile createFile(IPath wsRelativePath, final InputStream contents)
+	protected IFile createFile(final IPath wsRelativePath, final InputStream contents)
 			throws CoreException, InvocationTargetException,
 			InterruptedException {
-		final IFile file = root().getFile(wsRelativePath);
-		new WorkspaceModifyOperation() {
-
-			@Override
-			protected void execute(IProgressMonitor monitor)
-					throws CoreException, InvocationTargetException,
-					InterruptedException {
-				create(file.getParent());
-				file.delete(true, getDefaultMonitor());
-				file.create(contents, true, getDefaultMonitor());
-			}
-
-		}.run(getDefaultMonitor());
-		return file;
+		return workspaceHelper.createFile(wsRelativePath, contents);
 	}
 
-	protected InputStream getPluginTestFileContents(String pluginProject, String path) throws IOException {
+	protected InputStream getPluginTestFileContents(final String pluginProject, String path) throws IOException {
 		if (! path.startsWith("/")) {
 			path = "/" + path;
 		}
-		URL url = new URL("platform:/plugin/" + pluginProject + path);
+		final URL url = new URL("platform:/plugin/" + pluginProject + path);
 		return url.openStream();
 	}
-	
-	protected IResource file(String path) {
-		return root().findMember(new Path(path));
-	}
-	
-	private void create(final IContainer container)
-			throws CoreException, InvocationTargetException,
-			InterruptedException {
-		new WorkspaceModifyOperation() {
 
-			@Override
-			protected void execute(IProgressMonitor monitor)
-					throws CoreException, InvocationTargetException,
-					InterruptedException {
-				if (!container.exists()) {
-					create(container.getParent());
-					if (container instanceof IFolder) {
-						((IFolder) container).create(true, true, getDefaultMonitor());
-					} else {
-						IProject iProject = (IProject) container;
-						createProject(iProject);
-					}
-				}
-			}
-		}.run(getDefaultMonitor());
+	protected IResource file(final String path) {
+		return root().findMember(new Path(path));
 	}
 
 	protected IProgressMonitor getDefaultMonitor() {
-		return new NullProgressMonitor();
+		return workspaceHelper.getDefaultMonitor();
 	}
 
 	protected void fullBuild() throws CoreException {
 		ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD, getDefaultMonitor());
 	}
-	
+
 	protected void cleanBuild() throws CoreException {
 		ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.CLEAN_BUILD, getDefaultMonitor());
 	}
@@ -279,7 +183,7 @@ public abstract class AbstractWorkbenchTest {
 	protected void waitForAutoBuild() {
 		reallyWaitForAutoBuild();
 	}
-	
+
 	/**
 	 * A test that really should test the mechanism including the delay
 	 * after the resource change event, could wait for the auto build.
@@ -291,22 +195,22 @@ public abstract class AbstractWorkbenchTest {
 				Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD,
 						null);
 				wasInterrupted = false;
-			} catch (OperationCanceledException e) {
+			} catch (final OperationCanceledException e) {
 				e.printStackTrace();
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				wasInterrupted = true;
 			}
 		} while (wasInterrupted);
 	}
-	
+
 	protected void waitForBuild() {
 		waitForBuild(null);
 	}
-	
-	protected void waitForBuild(IProgressMonitor monitor) {
+
+	protected void waitForBuild(final IProgressMonitor monitor) {
 		try {
 			ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			throw new OperationCanceledException(e.getMessage());
 		}
 	}
@@ -314,24 +218,24 @@ public abstract class AbstractWorkbenchTest {
 	protected void cleanWorkspace() throws CoreException {
 		try {
 			new WorkspaceModifyOperation() {
-	
+
 				@Override
-				protected void execute(IProgressMonitor monitor)
+				protected void execute(final IProgressMonitor monitor)
 						throws CoreException, InvocationTargetException,
 						InterruptedException {
-					IProject[] visibleProjects = root().getProjects();
+					final IProject[] visibleProjects = root().getProjects();
 					deleteProjects(visibleProjects);
-					IProject[] hiddenProjects = root().getProjects(IContainer.INCLUDE_HIDDEN);
+					final IProject[] hiddenProjects = root().getProjects(IContainer.INCLUDE_HIDDEN);
 					deleteProjects(hiddenProjects);
 				}
 			}.run(getDefaultMonitor());
-		} catch(Exception e) {
+		} catch(final Exception e) {
 			throw new RuntimeException();
 		}
 	}
 
-	protected void deleteProjects(IProject[] projects) throws CoreException {
-		for (IProject iProject : projects) {
+	protected void deleteProjects(final IProject[] projects) throws CoreException {
+		for (final IProject iProject : projects) {
 			if (iProject.exists()) {
 				iProject.delete(true,true, getDefaultMonitor());
 			}
@@ -342,32 +246,32 @@ public abstract class AbstractWorkbenchTest {
 	public void setUp() throws Exception {
 		closeWelcomePage();
 		closeEditors();
-//		cleanWorkspace();
+		//		cleanWorkspace();
 		waitForBuild();
 	}
-	
+
 	@After
 	public void tearDown() throws Exception {
 		closeEditors();
-//		cleanWorkspace();
+		//		cleanWorkspace();
 		waitForBuild();
 	}
-	
+
 	protected void closeEditors() {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
 	}
 
 	protected void closeWelcomePage() throws InterruptedException {
-		IIntroPart intro = PlatformUI.getWorkbench().getIntroManager().getIntro();
+		final IIntroPart intro = PlatformUI.getWorkbench().getIntroManager().getIntro();
 		if (intro != null) {
 			PlatformUI.getWorkbench().getIntroManager().closeIntro(intro);
 		}
 	}
 
-	protected void sleep(long i) throws InterruptedException {
-		Display displ = Display.getCurrent();
+	protected void sleep(final long i) throws InterruptedException {
+		final Display displ = Display.getCurrent();
 		if (displ != null) {
-			long timeToGo = System.currentTimeMillis() + i;
+			final long timeToGo = System.currentTimeMillis() + i;
 			while (System.currentTimeMillis() < timeToGo) {
 				if (!displ.readAndDispatch()) {
 					displ.sleep();
@@ -381,7 +285,7 @@ public abstract class AbstractWorkbenchTest {
 	}
 
 	//
-	
+
 	protected IWorkbenchPage getActivePage() {
 		return getWorkbenchWindow().getActivePage();
 	}
@@ -393,43 +297,56 @@ public abstract class AbstractWorkbenchTest {
 	protected IWorkbench getWorkbench() {
 		return PlatformUI.getWorkbench();
 	}
-	
-	protected <T extends IViewPart> T openView(String viewId, Class<T> clazz) throws Exception {
-		IViewPart view = openView(viewId);
+
+	protected <T extends IViewPart> T openView(final String viewId, final Class<T> clazz) throws Exception {
+		final IViewPart view = openView(viewId);
 		if (clazz != null && (! clazz.isInstance(view))) {
 			Assert.fail("Couldn't open view of class:" + clazz);
 		}
 		return (T) view;
 	}
-	protected IViewPart openView(String viewId) throws PartInitException {
-		IViewPart view = getActivePage().showView(viewId);
+	protected IViewPart openView(final String viewId) throws PartInitException {
+		final IViewPart view = getActivePage().showView(viewId);
 		if (view == null) {
 			Assert.fail("Couldn't open view with id:" + viewId);
 		}
 		return view;
 	}
-	
-	protected PlantUmlView openPlantUMLView() throws Exception {
-		return openView("net.sourceforge.plantuml.eclipse.views.PlantUmlView", PlantUmlView.class);
+
+	protected AbstractDiagramSourceView openDiagramView(final boolean source) throws Exception {
+		final String viewId = (source ? "net.sourceforge.plantuml.eclipse.views.DiagramSourceView" : "net.sourceforge.plantuml.eclipse.views.PlantUmlView");
+		return openView(viewId, AbstractDiagramSourceView.class);
 	}
 
-	protected <T extends IEditorPart> T openEditor(IFile file, String editorId, Class<T> clazz) throws Exception {
-		IEditorPart editor = openEditor(file, editorId);
+	protected AbstractDiagramSourceView openPlantUMLView() throws Exception {
+		return openDiagramView(false);
+	}
+
+	protected <T extends IEditorPart> T openEditor(final IFile file, final String editorId, final Class<T> clazz) throws Exception {
+		final IEditorPart editor = openEditor(file, editorId);
 		if (clazz != null && (! clazz.isInstance(editor))) {
 			Assert.fail("Couldn't open editor of class:" + clazz);
 		}
 		return (T) editor;
 	}
 
-	protected IEditorPart openEditor(IFile file, String editorId) throws PartInitException {
+	protected IEditorPart openEditor(final IEditorInput editorInput, String editorId) throws PartInitException {
 		if (editorId == null) {
-			IEditorDescriptor desc = getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-			editorId = desc.getId();
+			final IEditorDescriptor desc = getWorkbench().getEditorRegistry().getDefaultEditor(editorInput.getName());
+			if (desc != null) {
+				editorId = desc.getId();
+			} else {
+				editorId = "org.eclipse.ui.DefaultTextEditor";
+			}
 		}
-		IEditorPart editor = getActivePage().openEditor(new FileEditorInput(file), editorId);
+		final IEditorPart editor = getActivePage().openEditor(editorInput, editorId);
 		if (editor == null) {
 			Assert.fail("Couldn't open editor with id:" + editorId);
 		}
 		return editor;
+	}
+
+	protected IEditorPart openEditor(final IFile file, final String editorId) throws PartInitException {
+		return openEditor(new FileEditorInput(file), editorId);
 	}
 }
