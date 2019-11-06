@@ -15,6 +15,11 @@
       	providerClass="net.sourceforge.plantuml.jdt.JavaViewDiagramTextProvider"
       	label="Class diagrams generated from Java element"
       	/>
+      <diagramTextProvider
+      	id="net.sourceforge.plantuml.jdt.JavaDebugViewDiagramTextProvider"
+      	providerClass="net.sourceforge.plantuml.jdt.JavaDebugViewDiagramTextProvider"
+      	label="Object diagrams generated from debug element"
+      	/>
       <!--
       Removed, since it uses internal/restricted API and crashes in Photon 2018-12 release
        <diagramTextProvider providerClass="net.sourceforge.plantuml.jdt.ClassFileEditorDiagramTextProvider"/>
