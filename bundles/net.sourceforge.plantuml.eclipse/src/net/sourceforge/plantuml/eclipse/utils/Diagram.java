@@ -55,7 +55,7 @@ public class Diagram {
 			if (path != null) {
 				// find the real file, which may be linked and thus is not located under the root itself
 				final IResource member = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-				File dirPath = member.getLocation().toFile().getAbsoluteFile().getParentFile();
+				final File dirPath = member.getLocation().toFile().getAbsoluteFile().getParentFile();
 				FileSystem.getInstance().setCurrentDir(dirPath);
 			} else {
 				FileSystem.getInstance().reset();
@@ -87,8 +87,7 @@ public class Diagram {
 	private static ImageData getImage(final String textDiagram, final int imageNum, final Collection<LinkData> links) {
 		setGraphvizPath();
 		ImageData imageData = null;
-		try {
-			final ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			// image generation
 			final SourceStringReader reader = new SourceStringReader(textDiagram);
 			final DiagramDescription desc = reader.outputImage(os, imageNum);
@@ -98,12 +97,10 @@ public class Diagram {
 					parseImageMapString(cMapData, links);
 				}
 			}
-			os.close();
-
 			if (desc != null && StringUtils.isNotEmpty(desc.getDescription())) {
-				final InputStream is = new ByteArrayInputStream(os.toByteArray());
-				imageData = new ImageData(is);
-				is.close();
+				try (InputStream is = new ByteArrayInputStream(os.toByteArray())) {
+					imageData = new ImageData(is);
+				}
 			}
 		} catch (final IOException e) {
 			WorkbenchUtil.errorBox("Error during image generation.", e);
