@@ -13,9 +13,11 @@
 		<child location='plantuml.lib/1.2018.9' />
 		<child location='plantuml.lib/1.2018.12' />
 		<child location='plantuml.lib/1.2019.0' />
+		<child location='plantuml.lib/1.2019.11' />
 		<child location='plantuml.eclipse/1.1.20' />
 		<child location='plantuml.eclipse/1.1.21' />
 		<child location='plantuml.eclipse/1.1.22' />
 		<child location='plantuml.eclipse/1.1.23' />
+		<child location='plantuml.eclipse/1.1.24' />
 	</children>
 </repository>
