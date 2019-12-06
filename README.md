@@ -37,15 +37,17 @@ Notable features in recent releases, details are found in [releases](https://git
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
 
 ## [1.1.24](https://github.com/hallvard/plantuml/releases/tag/1.1.24)
-- Support for generating diagrams for views, e.g. Java element selected in Package Explorer ([issue #84](https://github.com/hallvard/plantuml/issues/84)).
-- Support for generating diagrams from console output.
 - Support for diagrams in more text formats, including markdown ([issue #65](https://github.com/hallvard/plantuml/issues/65) and [issue #91](https://github.com/hallvard/plantuml/issues/91)).
-- Preference page for enabling/disabling diagram providers.
-- Avoid generating diagram (image) when PlantUml view is hidden. 
-- Moved list of diagram into sub-menu of view menu, handles [issue #87](https://github.com/hallvard/plantuml/issues/87).
 - Support for jlatexmath in separately installable feature ([issue #72](https://github.com/hallvard/plantuml/issues/72))
 - Fixed bugs ([issue #93](https://github.com/hallvard/plantuml/issues/93) and ([issue #95](https://github.com/hallvard/plantuml/issues/95))
 - Updated to use PlantUML library version 1.2019.11 (which includes support for mindmaps).
+
+## [1.1.23](https://github.com/hallvard/plantuml/releases/tag/1.1.23)
+- Support for generating diagrams for views, e.g. Java element selected in Package Explorer ([issue #84](https://github.com/hallvard/plantuml/issues/84)).
+- Support for generating diagrams from console output.
+- Preference page for enabling/disabling diagram providers.
+- Avoid generating diagram (image) when PlantUml view is hidden. 
+- Moved list of diagram into sub-menu of view menu, handles [issue #87](https://github.com/hallvard/plantuml/issues/87).
 - Now requires Java 1.8.
 
 ## [1.1.22](https://github.com/hallvard/plantuml/releases/tag/1.1.22)
