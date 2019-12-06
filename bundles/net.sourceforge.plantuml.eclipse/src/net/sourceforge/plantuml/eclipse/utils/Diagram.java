@@ -97,6 +97,7 @@ public class Diagram {
 					parseImageMapString(cMapData, links);
 				}
 			}
+			os.flush();
 			if (desc != null && StringUtils.isNotEmpty(desc.getDescription())) {
 				try (InputStream is = new ByteArrayInputStream(os.toByteArray())) {
 					imageData = new ImageData(is);
