@@ -257,6 +257,10 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		return isPlantUmlView(partRef.getId());
 	}
 
+	protected boolean isThisView(final IWorkbenchPartReference partRef) {
+		return partRef.getId().equals(getSite().getId());
+	}
+
 	private class PartListener implements IPartListener2 {
 
 		protected void updateDiagramText(final IWorkbenchPart part) {
@@ -277,7 +281,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 		@Override
 		public void partVisible(final IWorkbenchPartReference partRef) {
-			if (isPlantUmlView(partRef)) {
+			if (isThisView(partRef)) {
 				setVisible(true);
 			}
 		}
@@ -290,7 +294,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 		@Override
 		public void partHidden(final IWorkbenchPartReference partRef) {
-			if (isPlantUmlView(partRef)) {
+			if (isThisView(partRef)) {
 				setVisible(false);
 			}
 		}
