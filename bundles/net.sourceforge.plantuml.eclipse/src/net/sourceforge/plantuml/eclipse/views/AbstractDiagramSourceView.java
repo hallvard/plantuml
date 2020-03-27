@@ -347,6 +347,9 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	private IWorkbenchPart currentPart;
 
 	private void handlePartChange(final IWorkbenchPart part) {
+		if (part.equals(this)) {
+			return;
+		}
 		if (currentPart != null) {
 			currentPart.removePropertyListener(diagramTextChangedListener);
 		}
@@ -390,9 +393,17 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 			}
 		};
 	}
+	
+	/**
+	 * Updates the diagram text using the part that was last used by PlantUML.
+	 * That makes it possible to programmatically update the current diagram.
+	 */
+	public void updateDiagramTextFromCurrentPart() {
+		updateDiagramText(true, currentPart, null);
+	}
 
 	/**
-	 * Updates the diagram text from the current part (if linked to it) and the current selection.
+	 * Updates the diagram text from the part that is currently active in the IDE (if linked to it) and the current selection.
 	 */
 	public void updateDiagramText() {
 		updateDiagramText(true, null, null);
