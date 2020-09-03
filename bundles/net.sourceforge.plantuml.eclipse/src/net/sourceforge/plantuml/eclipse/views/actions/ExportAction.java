@@ -12,10 +12,10 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.StringUtils;
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 import net.sourceforge.plantuml.eclipse.views.DiagramImageControl;
+import net.sourceforge.plantuml.util.DiagramData;
 
 /**Manage the Export of the diagram.
  * 
@@ -24,7 +24,7 @@ import net.sourceforge.plantuml.eclipse.views.DiagramImageControl;
  */
 public class ExportAction extends DiagramImageAction {
 
-    public ExportAction(DiagramImageControl control, Diagram diagram) {
+    public ExportAction(DiagramImageControl control, DiagramData diagram) {
 		super(control, diagram);
         setText(PlantumlConstants.EXPORT_MENU);
     }

@@ -36,7 +36,6 @@ import net.sourceforge.plantuml.eclipse.imagecontrol.jface.MenuSupport;
 import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ZoomAction;
 import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ZoomFitAction;
 import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ZoomResetAction;
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.LinkData;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
@@ -47,6 +46,7 @@ import net.sourceforge.plantuml.eclipse.views.actions.CopySourceAction;
 import net.sourceforge.plantuml.eclipse.views.actions.ExportAction;
 import net.sourceforge.plantuml.eclipse.views.actions.PrintAction;
 import net.sourceforge.plantuml.eclipse.views.actions.SaveAction;
+import net.sourceforge.plantuml.util.DiagramData;
 
 /**
  *
@@ -80,7 +80,6 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 		menuSupport = new MenuSupport();
 		composite = parent;
 		createImageControls(0);
-		diagram = new Diagram();
 		addListeners();
 		super.createPartControl(parent);
 	}
@@ -181,15 +180,15 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 				return getCurrentImageControl();
 			};
 		});
-		menuSupport.addMenuAction(new CopySourceAction(display, diagram));
-		menuSupport.addMenuAction(new CopyAsciiAction(display, diagram));
-		menuSupport.addMenuAction(new SaveAction(null, diagram) {
+		menuSupport.addMenuAction(new CopySourceAction(display, diagramData));
+		menuSupport.addMenuAction(new CopyAsciiAction(display, diagramData));
+		menuSupport.addMenuAction(new SaveAction(null, diagramData) {
 			@Override
 			public ImageControl getControl() {
 				return getCurrentImageControl();
 			};
 		});
-		menuSupport.addMenuAction(new ExportAction(null, diagram) {
+		menuSupport.addMenuAction(new ExportAction(null, diagramData) {
 			@Override
 			public ImageControl getControl() {
 				return getCurrentImageControl();
@@ -288,67 +287,55 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 
 	//
 
-	private Diagram diagram;
-
-	private DiagramData lastDiagramData = null;
+	private DiagramData diagramData = null;
 
 	@Override
 	public String getDiagramText() {
-		return diagram != null ? diagram.getTextDiagram() : null;
-	}
-
-	private static class DiagramData {
-		String diagramText;
-		IPath original;
-		Map<String, Object> markerAttributes;
+		return diagramData != null ? diagramData.getTextDiagram() : null;
 	}
 
 	@Override
 	protected void updateDiagramText(final String textDiagram, final IPath original, final Map<String, Object> markerAttributes) {
-		if (textDiagram != null && (lastDiagramData == null || (! textDiagram.equals(lastDiagramData.diagramText)))) {
-			if (isVisible()) {
-				lastDiagramData = new DiagramData();
-				lastDiagramData.diagramText = textDiagram;
-				lastDiagramData.original = original;
-				lastDiagramData.markerAttributes = markerAttributes;
-				updateDiagram(lastDiagramData);
-			}
+		if (isVisible() && textDiagram != null && (diagramData == null || (! textDiagram.equals(diagramData.getTextDiagram())))) {
+			diagramData = new DiagramData(textDiagram);
+			diagramData.setOriginal(original);
+			diagramData.setMarkerAttributes(markerAttributes);
+			updateDiagram();
 		}
 	}
 
 	@Override
 	public void setVisible(final boolean visible) {
 		super.setVisible(visible);
-		if (visible && lastDiagramData != null) {
-			updateDiagram(lastDiagramData);
+		if (visible && diagramData != null) {
+			updateDiagram();
 		}
 	}
 
-	private void updateDiagram(final DiagramData diagramData) {
-		diagram.setTextDiagram(diagramData.diagramText);
-		createImageControls(diagram.getImageCount());
+	private void updateDiagram() {
+		createImageControls(diagramData.getImageCount());
 		final Job job = new Job("Generate diagram") {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 				for (int i = 0; i < imageControls.length; i++) {
 					if (imageControls.length > i && imageControls[i] != null && (!imageControls[i].isDisposed())) {
-						imageControls[i].updateDiagramImage(diagramData.original, diagram, i);
+						imageControls[i].updateDiagramImage(diagramData, i);
 					}
 				}
 				if (! composite.isDisposed()) {
 					composite.getDisplay().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							if (!composite.isDisposed()) {
+							if (! composite.isDisposed()) {
 								composite.layout();
 							}
 						}
 					});
 				}
-				if (diagramData.original != null) {
-					final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(diagramData.original);
+				if (diagramData.getOriginal() != null) {
+					final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(diagramData.getOriginal());
 					if (file != null && file.exists()) {
-						PlantumlUtil.updateMarker(file, diagramData.diagramText, null, true, diagramData.markerAttributes);
+						PlantumlUtil.updateMarker(file, diagramData.getTextDiagram(), null, true, diagramData.getMarkerAttributes());
 					}
 				}
 				return Status.OK_STATUS;

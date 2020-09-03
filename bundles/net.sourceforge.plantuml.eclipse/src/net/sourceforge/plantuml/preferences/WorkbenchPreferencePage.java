@@ -1,11 +1,5 @@
 package net.sourceforge.plantuml.preferences;
 
-import net.sourceforge.plantuml.OptionFlags;
-import net.sourceforge.plantuml.eclipse.Activator;
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
-import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
-import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
-
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
@@ -27,31 +21,38 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import net.sourceforge.plantuml.OptionFlags;
+import net.sourceforge.plantuml.eclipse.Activator;
+import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
+import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
+import net.sourceforge.plantuml.util.DiagramData;
+
 public class WorkbenchPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	private Label authorLabel;
 	private Link plantumlLink;
-	
+
 	private Group graphvizGroup;
 	private Label graphvizPathText;
 	private FileFieldEditor graphvizPath;
-	private Label testDotLabel;	
+	private Label testDotLabel;
 
 	public WorkbenchPreferencePage() {
 		super();
 	}
 
-	public void init(IWorkbench workbench) {
+	@Override
+	public void init(final IWorkbench workbench) {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 	}
 
 	@Override
-	protected Control createContents(Composite parent) {
-		Composite pnl = new Composite(parent, SWT.NONE);
+	protected Control createContents(final Composite parent) {
+		final Composite pnl = new Composite(parent, SWT.NONE);
 		pnl.setLayout(new GridLayout(1, false));
 
 		// author image
-		GridData authorsGridData = new GridData();
+		final GridData authorsGridData = new GridData();
 		authorsGridData.horizontalAlignment = GridData.CENTER;
 		authorsGridData.horizontalSpan = 3;
 		authorLabel = new Label(pnl, SWT.BORDER);
@@ -59,14 +60,14 @@ public class WorkbenchPreferencePage extends PreferencePage implements IWorkbenc
 
 		// generate images
 		ImageData authorsImg = null;
-		ImageData testDotImg = null;		
+		ImageData testDotImg = null;
 		try {
-			authorsImg = Diagram.getImage(PlantumlConstants.AUTHORS_DIAGRAM);			
-			testDotImg = Diagram.getImage(PlantumlConstants.TEST_DOT_DIAGRAM);
-		} catch (StackOverflowError e) {
+			authorsImg = new DiagramData(PlantumlConstants.AUTHORS_DIAGRAM).getImage();
+			testDotImg = new DiagramData(PlantumlConstants.TEST_DOT_DIAGRAM).getImage();
+		} catch (final StackOverflowError e) {
 			WorkbenchUtil.errorBox("Error during preferences loading.", e);
 		}
-		
+
 		if (authorsImg != null) {
 			authorLabel.setImage(new Image(pnl.getDisplay(), authorsImg));
 		}
@@ -76,22 +77,22 @@ public class WorkbenchPreferencePage extends PreferencePage implements IWorkbenc
 		plantumlLink.setText("Visit the <a>PlantUML Website</a>.");
 		plantumlLink.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Program.launch("http://plantuml.com");				
-			}			
+			public void widgetSelected(final SelectionEvent e) {
+				Program.launch("http://plantuml.com");
+			}
 		});
-		
+
 		// Graphviz path group
 		graphvizGroup = new Group(pnl, SWT.NONE);
 		graphvizGroup.setText(PlantumlConstants.GRAPHVIZ_PATH_GROUP_LABEL);
-		GridData groupGridData = new GridData();
+		final GridData groupGridData = new GridData();
 		groupGridData.horizontalAlignment = SWT.FILL;
 		groupGridData.grabExcessHorizontalSpace = true;
 		graphvizGroup.setLayoutData(groupGridData);
-		
+
 		// Graphviz path selection
 		graphvizPathText = new Label(graphvizGroup, SWT.NONE);
-		GridData labelGridData = new GridData();
+		final GridData labelGridData = new GridData();
 		labelGridData.horizontalSpan = 3;
 		graphvizPathText.setLayoutData(labelGridData);
 		graphvizPathText.setText(PlantumlConstants.GRAPHVIZ_PATH_TEXT_LABEL);
@@ -101,7 +102,7 @@ public class WorkbenchPreferencePage extends PreferencePage implements IWorkbenc
 				PlantumlConstants.GRAPHVIZ_PATH));
 
 		// test dot image
-		GridData testDotGridData = new GridData();
+		final GridData testDotGridData = new GridData();
 		testDotGridData.horizontalAlignment = GridData.CENTER;
 		testDotGridData.horizontalSpan = 3;
 		testDotLabel = new Label(graphvizGroup, SWT.NONE);
@@ -109,30 +110,31 @@ public class WorkbenchPreferencePage extends PreferencePage implements IWorkbenc
 		if (testDotImg != null) {
 			testDotLabel.setImage(new Image(graphvizGroup.getDisplay(), testDotImg));
 		}
-		
+
 		// listen for change of Graphviz path to reload testDotImg
 		graphvizPath.setPropertyChangeListener(new IPropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent event) {
+			@Override
+			public void propertyChange(final PropertyChangeEvent event) {
 				ImageData testDotImg = null;
 				OptionFlags.getInstance().setDotExecutable(graphvizPath.getStringValue());
-				try {		
-					testDotImg = Diagram.getImage(PlantumlConstants.TEST_DOT_DIAGRAM);
-				} catch (StackOverflowError e) {
+				try {
+					testDotImg = new DiagramData(PlantumlConstants.TEST_DOT_DIAGRAM).getImage();
+				} catch (final StackOverflowError e) {
 					WorkbenchUtil.errorBox("Error during preferences loading.", e);
 				}
 				if (testDotImg != null) {
 					testDotLabel.setImage(new Image(graphvizGroup.getDisplay(),
 							testDotImg));
 				}
-			}			
+			}
 		});
-		
 		return pnl;
 	}
 
 	/**
 	 * Called when user clicks Restore Defaults
 	 */
+	@Override
 	protected void performDefaults() {
 		// Reset the fields to the defaults
 		graphvizPath.setStringValue("");
@@ -140,12 +142,13 @@ public class WorkbenchPreferencePage extends PreferencePage implements IWorkbenc
 
 	/**
 	 * Called when user clicks Apply or OK
-	 * 
+	 *
 	 * @return boolean
 	 */
+	@Override
 	public boolean performOk() {
 		// Get the preference store
-		IPreferenceStore preferenceStore = getPreferenceStore();
+		final IPreferenceStore preferenceStore = getPreferenceStore();
 
 		// Set the values from the fields
 		if (graphvizPath != null)

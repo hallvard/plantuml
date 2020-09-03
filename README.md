@@ -25,7 +25,9 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 
 # Main plugins
 - net.sourceforge.plantuml.lib - plantuml.jar packaged as a bundle
+- net.sourceforge.plantuml.lib.jlatexmath - fragment to the lib bundle that adds the jlatexmath lib
 - net.sourceforge.plantuml.eclipse - core Eclipse integration, including the extension point for providing diagrams
+- net.sourceforge.plantuml.eclipse.imagecontrol - the control for viewing the generated images
 - net.sourceforge.plantuml.text - diagrams based on explicit DSL code, with support for editors based on the standard Eclipse text editor
 - net.sourceforge.plantuml.jdt - diagrams based on the Eclipse Java model, with support for Java and Class File editors
 - net.sourceforge.plantuml.ecore - diagrams based on Ecore models, with support for most Ecore editors
@@ -37,6 +39,8 @@ Notable features in recent releases, details are found in [releases](https://git
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
 
 ## Planned for 1.1.25
+- Association is generated when type is Optional and for methods with a specific signature. (thanks to [dpolivaev](https://github.com/dpolivaev))
+- Source features ([issue #104](https://github.com/hallvard/plantuml/issues/104))
 
 ## [1.1.24](https://github.com/hallvard/plantuml/releases/tag/1.1.24)
 - Support for diagrams in more text formats, including markdown ([issue #65](https://github.com/hallvard/plantuml/issues/65) and [issue #91](https://github.com/hallvard/plantuml/issues/91)).

@@ -4,14 +4,14 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.graphics.ImageData;
 
 import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ImageControlAction;
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.views.DiagramImageControl;
+import net.sourceforge.plantuml.util.DiagramData;
 
 public abstract class DiagramImageAction extends ImageControlAction {
 
-	protected final Diagram diagram;
+	protected final DiagramData diagram;
 	
-	public DiagramImageAction(DiagramImageControl control, Diagram diagram) {
+	public DiagramImageAction(DiagramImageControl control, DiagramData diagram) {
 		super(control);
 		this.diagram = diagram;
 	}

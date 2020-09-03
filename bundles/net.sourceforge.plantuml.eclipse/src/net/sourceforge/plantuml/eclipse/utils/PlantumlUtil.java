@@ -25,6 +25,7 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.eclipse.Activator;
+import net.sourceforge.plantuml.util.DiagramData;
 
 public class PlantumlUtil {
 
@@ -88,8 +89,6 @@ public class PlantumlUtil {
 			}
 		}
 
-		private Diagram diagram;
-
 		@Override
 		public boolean visit(final IResourceDelta delta) throws CoreException {
 			if (delta.getKind() != IResourceDelta.CHANGED || (delta.getFlags() & IResourceDelta.CONTENT) == 0) {
@@ -110,13 +109,10 @@ public class PlantumlUtil {
 									final String textDiagram = diagramTextProvider2.getDiagramText(path);
 									//									System.out.println("Diagram for " + path + ": " + textDiagram);
 									if (textDiagram != null) {
-										if (diagram == null) {
-											diagram = new Diagram();
-										}
-										diagram.setTextDiagram(textDiagram);
+										final DiagramData diagram = new DiagramData(textDiagram);
+										diagram.setOriginal(path);
 										try {
-											final ImageData image = diagram.getImage(path, 0, null);
-											saveDiagramImage(path, textDiagram, image, new Path(target.toString()), false);
+											saveDiagramImage(path, textDiagram, diagram.getImage(), new Path(target.toString()), false);
 										} catch (final Exception e) {
 											System.err.println(e);
 										}

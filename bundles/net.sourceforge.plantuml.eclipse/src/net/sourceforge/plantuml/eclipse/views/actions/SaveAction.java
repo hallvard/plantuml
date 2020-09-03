@@ -4,15 +4,15 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlUtil;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 import net.sourceforge.plantuml.eclipse.views.DiagramImageControl;
+import net.sourceforge.plantuml.util.DiagramData;
 
 public class SaveAction extends DiagramImageAction {
 
-    public SaveAction(DiagramImageControl control, Diagram diagram) {
+    public SaveAction(DiagramImageControl control, DiagramData diagram) {
 		super(control, diagram);
         setText(PlantumlConstants.SAVE_MENU);
     }

@@ -8,7 +8,7 @@ Bundle-Vendor: PlantUML Team
 Require-Bundle: org.eclipse.ui.ide;bundle-version="3.10.2",
  org.eclipse.ui;bundle-version="3.106.1",
  org.eclipse.core.resources;bundle-version="3.9.1",
- net.sourceforge.plantuml.lib;bundle-version="1.2019.11"
+ net.sourceforge.plantuml.lib;bundle-version="1.2020.16"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

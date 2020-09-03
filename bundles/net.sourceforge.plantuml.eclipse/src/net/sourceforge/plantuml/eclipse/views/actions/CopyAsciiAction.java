@@ -10,8 +10,8 @@ import org.eclipse.swt.widgets.Display;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
+import net.sourceforge.plantuml.util.DiagramData;
 
 /**
  * Manage the copy action.
@@ -26,7 +26,7 @@ public class CopyAsciiAction extends DiagramAction {
 	 * @param diagram
 	 *            Diagram
 	 */
-	public CopyAsciiAction(Display display, Diagram diagram) {
+	public CopyAsciiAction(Display display, DiagramData diagram) {
 		super(display, diagram);
 		setText(PlantumlConstants.COPY_ASCII_MENU);
 	}

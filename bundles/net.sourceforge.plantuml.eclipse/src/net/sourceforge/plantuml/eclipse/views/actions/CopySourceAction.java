@@ -5,8 +5,8 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Display;
 
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
+import net.sourceforge.plantuml.util.DiagramData;
 
 /**Manage the copy action.
  * 
@@ -19,7 +19,7 @@ public class CopySourceAction extends DiagramAction {
      * 
      * @param diagram Diagram
      */
-    public CopySourceAction(Display display, Diagram diagram) {
+    public CopySourceAction(Display display, DiagramData diagram) {
 		super(display, diagram);
 		setText(PlantumlConstants.COPY_SOURCE_MENU);
 	}

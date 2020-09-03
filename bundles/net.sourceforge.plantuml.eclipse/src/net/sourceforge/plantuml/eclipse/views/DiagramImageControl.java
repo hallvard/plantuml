@@ -8,49 +8,50 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
 
 import net.sourceforge.plantuml.eclipse.imagecontrol.ImageControl;
-import net.sourceforge.plantuml.eclipse.utils.Diagram;
 import net.sourceforge.plantuml.eclipse.utils.LinkData;
+import net.sourceforge.plantuml.util.DiagramData;
 
 public class DiagramImageControl extends ImageControl {
 
-	public DiagramImageControl(Composite parent) {
+	public DiagramImageControl(final Composite parent) {
 		super(parent);
 	}
-	
-	public DiagramImageControl(Composite parent, int style) {
+
+	public DiagramImageControl(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
-	private IPath path;
-	
+	private DiagramData diagram;
+
 	public IPath getSourcePath() {
-		return path;
+		return diagram.getOriginal();
 	}
-	
+
 	private ImageData imageData;
-	
+
 	public ImageData getImageData() {
 		return imageData;
 	}
-	
+
 	private Collection<LinkData> links = null;
-	
+
 	public Iterable<LinkData> getLinks() {
 		return links;
 	}
-	
-	public void updateDiagramImage(final IPath path, Diagram diagram, int imageNum) {
+
+	public void updateDiagramImage(final DiagramData diagram, final int imageNum) {
 		try {
-			this.path = null;
+			this.diagram = diagram;
 			this.imageData = null;
 			this.links = new ArrayList<LinkData>();
-			final ImageData imageData = diagram.getImage(path, imageNum, links);
+			final ImageData imageData = diagram.getImage(imageNum, links);
+			System.out.println("Got image data for control");
 			if (imageData != null && (! isDisposed())) {
 				getDisplay().asyncExec(new Runnable() {
+					@Override
 					public void run() {
 						if (! isDisposed()) {
 							loadImage(imageData);
-							DiagramImageControl.this.path = path;
 							DiagramImageControl.this.imageData = imageData;
 						}
 					}
@@ -59,6 +60,7 @@ public class DiagramImageControl extends ImageControl {
 		} catch (final Throwable e) {
 			if (! isDisposed()) {
 				getDisplay().asyncExec(new Runnable() {
+					@Override
 					public void run() {
 						if (! isDisposed()) {
 							showErrorMessage(e);
