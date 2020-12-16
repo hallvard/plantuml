@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -26,6 +27,7 @@ import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.util.DiagramData;
+import net.sourceforge.plantuml.util.DiagramImageData;
 
 public class PlantumlUtil {
 
@@ -128,12 +130,31 @@ public class PlantumlUtil {
 		}
 	}
 
+	public static void saveDiagramImage(final DiagramImageData diagramImageData, final IPath path, final boolean b) throws Exception {
+		final Function<Integer, String> fileNameProvider = PlantumlUtil.getImageFileNameProvider(path.lastSegment());
+		final DiagramData diagram = diagramImageData.getDiagram();
+		if (fileNameProvider != null) {
+			final IPath folderPath = path.removeLastSegments(1);
+			final int imageCount = diagram.getImageCount();
+			for (int i = 0; i < imageCount; i++) {
+				final IPath imagePath = folderPath.append(fileNameProvider.apply(i));
+				saveDiagramImage(diagramImageData.getSourcePath(), diagram.getTextDiagram(), i, diagram.getImage(i, null), imagePath, true);
+			}
+		} else {
+			saveDiagramImage(diagramImageData.getSourcePath(), diagram.getTextDiagram(), diagramImageData.getImageNum(), diagramImageData.getImage(), path, true);
+		}
+	}
+
 	public static void saveDiagramImage(final IPath sourcePath, final String textDiagram, final ImageData image, final IPath targetPath, final boolean create) throws Exception {
+		saveDiagramImage(sourcePath, textDiagram, 0, image, targetPath, create);
+	}
+
+	public static void saveDiagramImage(final IPath sourcePath, final String textDiagram, final int imageNum, final ImageData image, final IPath targetPath, final boolean create) throws Exception {
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(targetPath);
 		if (file != null && (create || file.exists())) {
 			final String ext = targetPath.getFileExtension();
 			if ("svg".equals(ext)) {
-				createSvgFile(file, textDiagram);
+				createSvgFile(file, textDiagram, imageNum);
 			} else if ("puml".equals(ext) || "plantuml".equals(ext)) {
 				saveImage(file, textDiagram.getBytes());
 			} else {
@@ -168,10 +189,22 @@ public class PlantumlUtil {
 		file.setDerived(true, progressMonitor);
 	}
 
-	private static void createSvgFile(final IFile file, final String textDiagram) throws Exception {
+	private static void createSvgFile(final IFile file, final String textDiagram, final int imageNum) throws Exception {
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream(32768);
 		final SourceStringReader reader = new SourceStringReader(textDiagram);
-		reader.outputImage(outputStream, new FileFormatOption(FileFormat.SVG));
+		reader.outputImage(outputStream, imageNum, new FileFormatOption(FileFormat.SVG));
 		saveImage(file, outputStream.toByteArray());
+	}
+
+	public static Function<Integer, String> getImageFileNameProvider(final String filePathName) {
+		final String imageNumMarker = "{}";
+		final int pos = filePathName.indexOf(imageNumMarker);
+		if (pos < 0) {
+			return null;
+		} else {
+			final String filePathNamePrefix = filePathName.substring(0, pos);
+			final String filePathNameSuffix = filePathName.substring(pos + imageNumMarker.length());
+			return imageNum -> filePathNamePrefix + (imageNum + 1) + filePathNameSuffix;
+		}
 	}
 }

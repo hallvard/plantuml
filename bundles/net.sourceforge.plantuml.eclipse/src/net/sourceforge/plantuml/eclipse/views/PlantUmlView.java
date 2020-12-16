@@ -178,7 +178,7 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 			@Override
 			public ImageControl getControl() {
 				return getCurrentImageControl();
-			};
+			}
 		});
 		menuSupport.addMenuAction(new CopySourceAction(display, diagramData));
 		menuSupport.addMenuAction(new CopyAsciiAction(display, diagramData));
@@ -186,19 +186,19 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 			@Override
 			public ImageControl getControl() {
 				return getCurrentImageControl();
-			};
+			}
 		});
 		menuSupport.addMenuAction(new ExportAction(null, diagramData) {
 			@Override
 			public ImageControl getControl() {
 				return getCurrentImageControl();
-			};
+			}
 		});
 		menuSupport.addMenuAction(new PrintAction(null) {
 			@Override
 			public ImageControl getControl() {
 				return getCurrentImageControl();
-			};
+			}
 		});
 	}
 
@@ -357,7 +357,7 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	public Object getLink(final int x, final int y) {
 		final DiagramImageControl imageControl = getCurrentImageControl();
 		if (imageControl != null) {
-			for (final LinkData linkData : imageControl.getLinks()) {
+			for (final LinkData linkData : imageControl.getDiagramImageData().getLinks()) {
 				if (linkData.rect != null && linkData.rect.contains(x, y)) {
 					return linkData.title != null ? linkData.title : linkData.href;
 				}
@@ -370,7 +370,7 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 	public void openLink(final Object href) {
 		final DiagramImageControl imageControl = getCurrentImageControl();
 		if (imageControl != null) {
-			for (final LinkData linkData : getCurrentImageControl().getLinks()) {
+			for (final LinkData linkData : imageControl.getDiagramImageData().getLinks()) {
 				// don't use equals, we want the same linkData instances as above
 				if (linkData.title == href || linkData.href == href) {
 					final ILinkOpener linkOpener = findBestLinkOpener(linkData, ILinkOpener.DEFAULT_SUPPORT);

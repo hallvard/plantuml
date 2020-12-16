@@ -1,15 +1,11 @@
 package net.sourceforge.plantuml.eclipse.views;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
 
 import net.sourceforge.plantuml.eclipse.imagecontrol.ImageControl;
-import net.sourceforge.plantuml.eclipse.utils.LinkData;
 import net.sourceforge.plantuml.util.DiagramData;
+import net.sourceforge.plantuml.util.DiagramImageData;
 
 public class DiagramImageControl extends ImageControl {
 
@@ -21,38 +17,22 @@ public class DiagramImageControl extends ImageControl {
 		super(parent, style);
 	}
 
-	private DiagramData diagram;
+	private DiagramImageData diagramImageData;
 
-	public IPath getSourcePath() {
-		return diagram.getOriginal();
-	}
-
-	private ImageData imageData;
-
-	public ImageData getImageData() {
-		return imageData;
-	}
-
-	private Collection<LinkData> links = null;
-
-	public Iterable<LinkData> getLinks() {
-		return links;
+	public DiagramImageData getDiagramImageData() {
+		return diagramImageData;
 	}
 
 	public void updateDiagramImage(final DiagramData diagram, final int imageNum) {
+		this.diagramImageData = new DiagramImageData(diagram, imageNum, null);
 		try {
-			this.diagram = diagram;
-			this.imageData = null;
-			this.links = new ArrayList<LinkData>();
-			final ImageData imageData = diagram.getImage(imageNum, links);
-			System.out.println("Got image data for control");
+			final ImageData imageData = diagramImageData.getImage();
 			if (imageData != null && (! isDisposed())) {
 				getDisplay().asyncExec(new Runnable() {
 					@Override
 					public void run() {
 						if (! isDisposed()) {
 							loadImage(imageData);
-							DiagramImageControl.this.imageData = imageData;
 						}
 					}
 				});
