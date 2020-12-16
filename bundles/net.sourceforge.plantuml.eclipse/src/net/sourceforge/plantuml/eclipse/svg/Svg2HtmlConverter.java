@@ -1,8 +1,6 @@
-package net.sourceforge.plantuml.util;
+package net.sourceforge.plantuml.eclipse.svg;
 
-public class Svg2HtmlConverter {
+public interface Svg2HtmlConverter {
 
-	public String convert2Html(final String svg) {
-		return "<html><body>" + svg + "</body></html>";
-	}
+	public String convert2Html(final String svg);
 }

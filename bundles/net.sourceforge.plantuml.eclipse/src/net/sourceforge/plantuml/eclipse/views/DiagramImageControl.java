@@ -45,7 +45,6 @@ public class DiagramImageControl extends ImageControl {
 			this.imageData = null;
 			this.links = new ArrayList<LinkData>();
 			final ImageData imageData = diagram.getImage(imageNum, links);
-			System.out.println("Got image data for control");
 			if (imageData != null && (! isDisposed())) {
 				getDisplay().asyncExec(new Runnable() {
 					@Override

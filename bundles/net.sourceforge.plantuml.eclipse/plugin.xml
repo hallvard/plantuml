@@ -44,7 +44,7 @@
             name="PlantUML Svg"
             icon="icons/p5.gif"
             category="net.sourceforge.plantuml.eclipse"
-            class="net.sourceforge.plantuml.eclipse.views.PlantUmlSvgView"
+            class="net.sourceforge.plantuml.eclipse.svg.PlantUmlSvgView"
             id="net.sourceforge.plantuml.eclipse.views.PlantUmlSvgView"
             allowMultiple="true"
             >

@@ -16,22 +16,22 @@ import net.sourceforge.plantuml.eclipse.utils.LinkData;
 public class JavaLinkOpener implements ILinkOpener {
 
 	public final static String JAVA_LINK_PREFIX = "java:";
-	
+
 	@Override
-	public int supportsLink(LinkData link) {
+	public int supportsLink(final LinkData link) {
 		try {
-			URI uri = new URI(link.href);
+			final URI uri = new URI(link.href);
 			if ("java".equals(uri.getScheme()) && getJavaElement(link) != null) {
 				return CUSTOM_SUPPORT;
 			}
-		} catch (URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 		}
 		return NO_SUPPORT;
 	}
 
-	protected IJavaElement getJavaElement(LinkData link) {
+	protected IJavaElement getJavaElement(final LinkData link) {
 		try {
-			URI uri = new URI(link.href);
+			final URI uri = new URI(link.href);
 			String className = uri.getPath();
 			if (className != null) {
 				if (className.startsWith("/")) {
@@ -40,28 +40,28 @@ public class JavaLinkOpener implements ILinkOpener {
 			} else {
 				className = uri.getSchemeSpecificPart();
 			}
-			IType type = OpenTypeAction.findTypeInWorkspace(className, false);
-			String fragment = uri.getFragment();
+			final IType type = OpenTypeAction.findTypeInWorkspace(className, false);
+			final String fragment = uri.getFragment();
 			if (fragment != null) {
-				for (IJavaElement child : type.getChildren()) {
+				for (final IJavaElement child : type.getChildren()) {
 					if (fragment.equals(child.getElementName())) {
 						return child;
 					}
 				}
 			}
 			return type;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return null;
 		}
 	}
 
 	@Override
-	public void openLink(LinkData link) {
+	public void openLink(final LinkData link) {
 		try {
-			IJavaElement javaElement = getJavaElement(link);
+			final IJavaElement javaElement = getJavaElement(link);
 			JavaUI.openInEditor(javaElement);
-		} catch (PartInitException e) {
-		} catch (JavaModelException e) {
+		} catch (final PartInitException e) {
+		} catch (final JavaModelException e) {
 		}
 	}
 }
