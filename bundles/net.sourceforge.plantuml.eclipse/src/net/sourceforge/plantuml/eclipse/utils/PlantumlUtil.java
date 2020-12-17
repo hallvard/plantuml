@@ -196,8 +196,9 @@ public class PlantumlUtil {
 		saveImage(file, outputStream.toByteArray());
 	}
 
+	private final static String imageNumMarker = "#";
+
 	public static Function<Integer, String> getImageFileNameProvider(final String filePathName) {
-		final String imageNumMarker = "{}";
 		final int pos = filePathName.indexOf(imageNumMarker);
 		if (pos < 0) {
 			return null;

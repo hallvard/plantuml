@@ -35,6 +35,10 @@ public class DiagramImageData {
 		this(diagram, 0);
 	}
 
+	public DiagramImageData withImageNum(final int imageNum) {
+		return new DiagramImageData(diagram, imageNum);
+	}
+
 	public DiagramData getDiagram() {
 		return diagram;
 	}
