@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -16,8 +17,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
 
-import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -118,7 +119,7 @@ public class DiagramData {
 		}
 	}
 
-	private static FileFormatOption layoutFormatOption = new FileFormatOption(FileFormat.PNG);
+	private static FileFormatOption imageFileFormatOption = new FileFormatOption(FileFormat.PNG);
 
 	private static ImageData getImage(final String textDiagram, final int imageNum, final Collection<LinkData> links) {
 		setGraphvizPath();
@@ -126,9 +127,9 @@ public class DiagramData {
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			// image generation
 			final SourceStringReader reader = new SourceStringReader(textDiagram);
-			final DiagramDescription desc = reader.outputImage(os, imageNum);
+			final DiagramDescription desc = reader.outputImage(os, imageNum, imageFileFormatOption);
 			if (links != null) {
-				final String cMapData = reader.getCMapData(0, layoutFormatOption);
+				final String cMapData = reader.getCMapData(0, imageFileFormatOption);
 				if (cMapData != null) {
 					parseImageMapString(cMapData, links);
 				}
@@ -210,6 +211,24 @@ public class DiagramData {
 			if (end > start) {
 				return element.substring(start, end);
 			}
+		}
+		return null;
+	}
+
+	private static FileFormatOption svgFileFormatOption = new FileFormatOption(FileFormat.SVG);
+
+	public String getSvg(final int imageNum) {
+		setGraphvizPath();
+		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+			// image generation
+			final SourceStringReader reader = new SourceStringReader(textDiagram);
+			final DiagramDescription desc = reader.outputImage(os, imageNum, svgFileFormatOption);
+			os.flush();
+			if (desc != null && StringUtils.isNotEmpty(desc.getDescription())) {
+				return new String(os.toByteArray(), StandardCharsets.UTF_8);
+			}
+		} catch (final IOException e) {
+			WorkbenchUtil.errorBox("Error during image generation.", e);
 		}
 		return null;
 	}

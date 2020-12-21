@@ -1,16 +1,6 @@
 package net.sourceforge.plantuml.eclipse.views;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -29,24 +19,20 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
-import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkSupport;
 import net.sourceforge.plantuml.eclipse.imagecontrol.ImageControl;
 import net.sourceforge.plantuml.eclipse.imagecontrol.jface.MenuSupport;
 import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ZoomAction;
 import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ZoomFitAction;
 import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ZoomResetAction;
-import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.LinkData;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
-import net.sourceforge.plantuml.eclipse.utils.PlantumlUtil;
 import net.sourceforge.plantuml.eclipse.views.actions.CopyAction;
 import net.sourceforge.plantuml.eclipse.views.actions.CopyAsciiAction;
 import net.sourceforge.plantuml.eclipse.views.actions.CopySourceAction;
 import net.sourceforge.plantuml.eclipse.views.actions.ExportAction;
 import net.sourceforge.plantuml.eclipse.views.actions.PrintAction;
 import net.sourceforge.plantuml.eclipse.views.actions.SaveAction;
-import net.sourceforge.plantuml.util.DiagramData;
 
 /**
  *
@@ -67,21 +53,17 @@ import net.sourceforge.plantuml.util.DiagramData;
  * @author durif_c
  */
 
-public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupport {
+public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 
-	private Composite composite;
 	private DiagramImageControl[] imageControls;
 	private TabFolder tabFolder = null;
 	private MenuSupport menuSupport;
 
 	@Override
-	public void createPartControl(final Composite parent) {
-		// Display of the view.
-		menuSupport = new MenuSupport();
-		composite = parent;
+	protected void createDiagramControl(final Composite parent) {
 		createImageControls(0);
+		menuSupport = new MenuSupport();
 		addListeners();
-		super.createPartControl(parent);
 	}
 
 	private final Listener mouseWheelListener = new Listener() {
@@ -287,70 +269,19 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 
 	//
 
-	private DiagramData diagramData = null;
-
 	@Override
-	public String getDiagramText() {
-		return diagramData != null ? diagramData.getTextDiagram() : null;
-	}
-
-	@Override
-	protected void updateDiagramText(final String textDiagram, final IPath original, final Map<String, Object> markerAttributes) {
-		if (isVisible() && textDiagram != null && (diagramData == null || (! textDiagram.equals(diagramData.getTextDiagram())))) {
-			diagramData = new DiagramData(textDiagram);
-			diagramData.setOriginal(original);
-			diagramData.setMarkerAttributes(markerAttributes);
-			updateDiagram();
-		}
-	}
-
-	@Override
-	public void setVisible(final boolean visible) {
-		super.setVisible(visible);
-		if (visible && diagramData != null) {
-			updateDiagram();
-		}
-	}
-
-	private void updateDiagram() {
-		createImageControls(diagramData.getImageCount());
-		final Job job = new Job("Generate diagram") {
-			@Override
-			protected IStatus run(final IProgressMonitor monitor) {
-				for (int i = 0; i < imageControls.length; i++) {
-					if (imageControls.length > i && imageControls[i] != null && (!imageControls[i].isDisposed())) {
-						imageControls[i].updateDiagramImage(diagramData, i);
-					}
-				}
-				if (! composite.isDisposed()) {
-					composite.getDisplay().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							if (! composite.isDisposed()) {
-								composite.layout();
-							}
-						}
-					});
-				}
-				if (diagramData.getOriginal() != null) {
-					final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(diagramData.getOriginal());
-					if (file != null && file.exists()) {
-						PlantumlUtil.updateMarker(file, diagramData.getTextDiagram(), null, true, diagramData.getMarkerAttributes());
-					}
-				}
-				return Status.OK_STATUS;
+	protected void updateDiagram(final IProgressMonitor monitor) {
+		for (int i = 0; i < imageControls.length; i++) {
+			if (imageControls.length > i && imageControls[i] != null && (!imageControls[i].isDisposed())) {
+				imageControls[i].updateDiagramImage(diagramData, i);
 			}
-		};
-		job.schedule();
+		}
 	}
 
-	private Collection<ILinkOpener> linkOpeners = null;
-
-	private Collection<ILinkOpener> getLinkOpeners() {
-		if (linkOpeners == null) {
-			linkOpeners = Arrays.asList(Activator.getDefault().getLinkOpeners());
-		}
-		return linkOpeners;
+	@Override
+	protected void updateDiagram() {
+		createImageControls(diagramData.getImageCount());
+		super.updateDiagram();
 	}
 
 	@Override
@@ -373,30 +304,11 @@ public class PlantUmlView extends AbstractDiagramSourceView implements ILinkSupp
 			for (final LinkData linkData : imageControl.getDiagramImageData().getLinks()) {
 				// don't use equals, we want the same linkData instances as above
 				if (linkData.title == href || linkData.href == href) {
-					final ILinkOpener linkOpener = findBestLinkOpener(linkData, ILinkOpener.DEFAULT_SUPPORT);
-					if (linkOpener != null) {
-						linkOpener.openLink(linkData);
+					if (openLink(linkData)) {
 						return;
 					}
 				}
 			}
 		}
-	}
-
-	private ILinkOpener findBestLinkOpener(final LinkData link, final int minSupport) {
-		int bestSupport = ILinkOpener.NO_SUPPORT;
-		ILinkOpener best = null;
-		for (final ILinkOpener linkOpener : getLinkOpeners()) {
-			int support = ILinkOpener.NO_SUPPORT;
-			try {
-				support = linkOpener.supportsLink(link);
-			} catch (final Exception e) {
-			}
-			if (support >= bestSupport) {
-				bestSupport = support;
-				best = linkOpener;
-			}
-		}
-		return (bestSupport >= minSupport ? best : null);
 	}
 }
