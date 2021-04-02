@@ -63,7 +63,9 @@ public class TextDiagramHelper {
 							result.append("\n");
 						}
 					}
-					markerAttributes.put(IMarker.CHAR_START, start.getOffset());
+					if (markerAttributes != null) {
+						markerAttributes.put(IMarker.CHAR_START, start.getOffset());
+					}
 					return result;
 				}
 			}

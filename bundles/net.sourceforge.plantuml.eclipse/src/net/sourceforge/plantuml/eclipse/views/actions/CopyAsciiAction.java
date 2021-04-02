@@ -1,6 +1,7 @@
 package net.sourceforge.plantuml.eclipse.views.actions;
 
 import java.io.ByteArrayOutputStream;
+import java.util.function.Supplier;
 
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -11,23 +12,23 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
-import net.sourceforge.plantuml.util.DiagramData;
+import net.sourceforge.plantuml.util.DiagramImageData;
 
 /**
  * Manage the copy action.
- * 
+ *
  * @author durif_c
- * 
+ *
  */
-public class CopyAsciiAction extends DiagramAction {
+public class CopyAsciiAction extends DiagramImageAction<Display> {
 
 	/**
-	 * 
+	 *
 	 * @param diagram
 	 *            Diagram
 	 */
-	public CopyAsciiAction(Display display, DiagramData diagram) {
-		super(display, diagram);
+	public CopyAsciiAction(final Supplier<DiagramImageData> diagramImageDataSupplier, final Display display) {
+		super( diagramImageDataSupplier, display);
 		setText(PlantumlConstants.COPY_ASCII_MENU);
 	}
 
@@ -35,18 +36,19 @@ public class CopyAsciiAction extends DiagramAction {
 	public void run() {
 		String s = "empty";
 		try {
-			String source = diagram.getTextDiagram();
-			SourceStringReader sourceStringReader = new SourceStringReader(source);
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			sourceStringReader.outputImage(os, new FileFormatOption(FileFormat.ATXT));
+			final DiagramImageData diagramImageData = getDiagramImageData();
+			final String source = diagramImageData.getDiagram().getTextDiagram();
+			final SourceStringReader sourceStringReader = new SourceStringReader(source);
+			final ByteArrayOutputStream os = new ByteArrayOutputStream();
+			sourceStringReader.outputImage(os, diagramImageData.getImageNum(), new FileFormatOption(FileFormat.ATXT));
 			os.close();
 			s = new String(os.toByteArray());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			s = e.toString();
 		}
-        Clipboard clipboard = new Clipboard(display);
-        clipboard.setContents(new Object[]{s}, new Transfer[]{TextTransfer.getInstance()});
-        clipboard.dispose();
+		final Clipboard clipboard = new Clipboard(getContext());
+		clipboard.setContents(new Object[]{s}, new Transfer[]{TextTransfer.getInstance()});
+		clipboard.dispose();
 	}
 }

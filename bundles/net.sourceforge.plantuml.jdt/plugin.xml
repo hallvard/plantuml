@@ -3,21 +3,21 @@
 <plugin>
 
    <extension
-         point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
+         point="net.sourceforge.plantuml.eclipse.diagramIntentProvider">
       
-      <diagramTextProvider
-      	id="net.sourceforge.plantuml.jdt.JavaEditorDiagramTextProvider"
-      	providerClass="net.sourceforge.plantuml.jdt.JavaEditorDiagramTextProvider"
+      <diagramIntentProvider
+      	id="net.sourceforge.plantuml.jdt.JavaEditorDiagramIntentProvider"
+      	providerClass="net.sourceforge.plantuml.jdt.JavaEditorDiagramIntentProvider"
       	label="Class diagrams generated from Java code"
       	/>
-      <diagramTextProvider
-      	id="net.sourceforge.plantuml.jdt.JavaViewDiagramTextProvider"
-      	providerClass="net.sourceforge.plantuml.jdt.JavaViewDiagramTextProvider"
+      <diagramIntentProvider
+      	id="net.sourceforge.plantuml.jdt.JavaViewDiagramIntentProvider"
+      	providerClass="net.sourceforge.plantuml.jdt.JavaViewDiagramIntentProvider"
       	label="Class diagrams generated from Java element"
       	/>
       <!--
       Removed, since it uses internal/restricted API and crashes in Photon 2018-12 release
-       <diagramTextProvider providerClass="net.sourceforge.plantuml.jdt.ClassFileEditorDiagramTextProvider"/>
+       <diagramIntentProvider providerClass="net.sourceforge.plantuml.jdt.ClassFileEditorDiagramIntentProvider"/>
        -->
    </extension>
 

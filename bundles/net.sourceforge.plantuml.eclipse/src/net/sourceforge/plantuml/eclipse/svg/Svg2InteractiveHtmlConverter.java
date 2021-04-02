@@ -6,6 +6,12 @@ public class Svg2InteractiveHtmlConverter extends SimpleSvg2HtmlConverter {
 		super("<html>\n" +
 				"  <head>\n" +
 				"    <script src=\"https://ariutta.github.io/svg-pan-zoom/dist/svg-pan-zoom.min.js\"></script>\n" +
+				"    <style type=\"text/css\" media=\"screen\">\n" +
+				"      svg {\n" +
+				"        display:block; border:1px; position:absolute;\n" +
+				"        width:100%; height:100%;\n" +
+				"      }\n" +
+				"    </style>\n" +
 				"  </head>\n" +
 				"  <body>\n",
 				"\n    <script>\n" +

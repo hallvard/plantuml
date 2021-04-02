@@ -31,15 +31,20 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 - net.sourceforge.plantuml.text - diagrams based on explicit DSL code, with support for editors based on the standard Eclipse text editor
 - net.sourceforge.plantuml.jdt - diagrams based on the Eclipse Java model, with support for Java and Class File editors
 - net.sourceforge.plantuml.ecore - diagrams based on Ecore models, with support for most Ecore editors
-- net.sourceforge.plantuml.xcore - diagrams based on Xcore models, with support for the Xtext editor
+- net.sourceforge.plantuml.osgi - component diagrams based on OSGi meta-data
+(- net.sourceforge.plantuml.xcore - diagrams based on Xcore models, with support for the Xtext editor)
 
 # Releases
 
 Notable features in recent releases, details are found in [releases](https://github.com/hallvard/plantuml/releases).
 Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
 
-## Planned for 1.1.25
+## [1.1.25](https://github.com/hallvard/plantuml/releases/tag/1.1.25)
+- Updated to use PlantUML library version 1.2021.3 (see [changes](https://plantuml.com/changes)).
+- Added new extension point that supports generating several alternative diagrams for the same content ([issue #109](https://github.com/hallvard/plantuml/issues/109)) and delays the computation of the diagram so it can run on a non-UI thread ([issue #82](https://github.com/hallvard/plantuml/issues/82)). Uses of old extension point should still work, but should be updated to use new one.
+- Experimental PlantUML SVG view that handles zooming better ([issue #116](https://github.com/hallvard/plantuml/issues/116))
 - Association is generated when type is Optional and for methods with a specific signature. (thanks to [dpolivaev](https://github.com/dpolivaev))
+- Changes generated diagrams to use `name : type` UML format for attributes instead of java style `type name` ([issue #115](https://github.com/hallvard/plantuml/issues/115))
 - Source features ([issue #104](https://github.com/hallvard/plantuml/issues/104))
 
 ## [1.1.24](https://github.com/hallvard/plantuml/releases/tag/1.1.24)

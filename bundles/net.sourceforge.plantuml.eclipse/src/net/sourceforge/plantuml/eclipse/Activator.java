@@ -25,14 +25,16 @@ import org.osgi.framework.BundleContext;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlUtil;
-import net.sourceforge.plantuml.preferences.DiagramTextProvidersPreferencePage;
+import net.sourceforge.plantuml.preferences.DiagramIntentProvidersPreferencePage;
+import net.sourceforge.plantuml.util.DiagramIntentProvider;
+import net.sourceforge.plantuml.util.DiagramTextIntentProvider;
 
 /**
  * The activator class controls the plug-in life cycle
  *
  * @author durif_c
  */
-public class Activator extends AbstractUIPlugin implements DiagramTextProviderRegistry {
+public class Activator extends AbstractUIPlugin implements DiagramIntentProviderRegistry {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "net.sourceforge.plantuml.eclipse";
@@ -99,66 +101,75 @@ public class Activator extends AbstractUIPlugin implements DiagramTextProviderRe
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-	private List<DiagramTextProvider> diagramTextProviders = null;
+	private List<DiagramIntentProvider> diagramIntentProviders = null;
 
-	private Map<DiagramTextProvider, DiagramTextProviderInfo> diagramTextProviderInfo = null;
+	private Map<DiagramIntentProvider, DiagramIntentProviderInfo> diagramIntentProviderInfo = null;
 
-	public boolean isEnabled(final DiagramTextProvider diagramTextProvider) {
+	public boolean isEnabled(final DiagramIntentProvider diagramIntentProvider) {
 		final IPreferenceStore preferenceStore = getPreferenceStore();
-		final String id = getDiagramTextProviderId(diagramTextProvider);
-		return ! preferenceStore.getBoolean(DiagramTextProvidersPreferencePage.getDiagramTextProviderDisablementKey(id));
+		final String id = getDiagramIntentProviderId(diagramIntentProvider);
+		return ! preferenceStore.getBoolean(DiagramIntentProvidersPreferencePage.getDiagramTextProviderDisablementKey(id));
 	}
 
 	private final Collection<DiagramTextProviderProcessor> diagramTextProviderProcessors = new ArrayList<>();
 
 	public void addDiagramTextProviderProcessor(final DiagramTextProviderProcessor diagramTextProviderProcessor) {
-		if (diagramTextProviders == null) {
+		if (diagramIntentProviders == null) {
 			diagramTextProviderProcessors.add(diagramTextProviderProcessor);
 		} else {
-			diagramTextProviderProcessor.processDiagramTextProviders(this);
+			diagramTextProviderProcessor.processDiagramIntentProviders(this);
 		}
 	}
 
-	public DiagramTextProvider[] getDiagramTextProviders(final Boolean enabled) {
-		if (diagramTextProviders == null) {
-			diagramTextProviders = new ArrayList<DiagramTextProvider>();
-			diagramTextProviderInfo = new HashMap<DiagramTextProvider, DiagramTextProviderInfo>();
+	public DiagramIntentProvider[] getDiagramIntentProviders(final Boolean enabled) {
+		if (diagramIntentProviders == null) {
+			diagramIntentProviders = new ArrayList<DiagramIntentProvider>();
+			diagramIntentProviderInfo = new HashMap<DiagramIntentProvider, DiagramIntentProviderInfo>();
 			processDiagramTextProviders();
 			for (final DiagramTextProviderProcessor diagramTextProviderProcessor : diagramTextProviderProcessors) {
-				diagramTextProviderProcessor.processDiagramTextProviders(this);
+				diagramTextProviderProcessor.processDiagramIntentProviders(this);
 			}
+			processDiagramIntentProviders();
 		}
-		Collection<DiagramTextProvider> diagramTextProviders = this.diagramTextProviders;
+		Collection<DiagramIntentProvider> diagramIntentProviders = this.diagramIntentProviders;
 		if (enabled != null) {
-			diagramTextProviders = new ArrayList<>(diagramTextProviders);
-			final Iterator<DiagramTextProvider> it = diagramTextProviders.iterator();
+			diagramIntentProviders = new ArrayList<>(diagramIntentProviders);
+			final Iterator<DiagramIntentProvider> it = diagramIntentProviders.iterator();
 			while (it.hasNext()) {
 				if (enabled != isEnabled(it.next())) {
 					it.remove();
 				}
 			}
 		}
-		return diagramTextProviders.toArray(new DiagramTextProvider[diagramTextProviders.size()]);
+		return diagramIntentProviders.toArray(new DiagramIntentProvider[diagramIntentProviders.size()]);
 	}
 
-	public String getDiagramTextProviderId(final DiagramTextProvider diagramTextProvider) {
-		if (diagramTextProviderInfo != null) {
-			final DiagramTextProviderInfo info = diagramTextProviderInfo.get(diagramTextProvider);
+	public String getDiagramIntentProviderId(final DiagramIntentProvider diagramIntentProvider) {
+		if (diagramIntentProviderInfo != null) {
+			final DiagramIntentProviderInfo info = diagramIntentProviderInfo.get(diagramIntentProvider);
 			final String id = info != null ? info.id : null;
-			return id != null ? id : diagramTextProvider.getClass().getName();
+			return id != null ? id : diagramIntentProvider.getClass().getName();
 		}
 		return null;
 	}
 
-	public String getDiagramTextProviderLabel(final DiagramTextProvider diagramTextProvider) {
-		if (diagramTextProviderInfo != null) {
-			final DiagramTextProviderInfo info = diagramTextProviderInfo.get(diagramTextProvider);
+	public String getDiagramIntentProviderLabel(final DiagramIntentProvider diagramIntentProvider) {
+		if (diagramIntentProviderInfo != null) {
+			final DiagramIntentProviderInfo info = diagramIntentProviderInfo.get(diagramIntentProvider);
 			return info != null ? info.label : null;
 		}
 		return null;
 	}
 
 	public final static int DEFAULT_PRIORITY = 0, NORMAL_PRIORITY = 5, CUSTOM_PRIORITY = 10;
+
+	public int getDiagramIntentProviderPriority(final DiagramIntentProvider diagramIntentProvider) {
+		if (diagramIntentProviderInfo != null) {
+			final DiagramIntentProviderInfo info = diagramIntentProviderInfo.get(diagramIntentProvider);
+			return info != null ? info.priority : NORMAL_PRIORITY;
+		}
+		return NORMAL_PRIORITY;
+	}
 
 	private void processDiagramTextProviders() {
 		final IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint(getBundle().getSymbolicName() + ".diagramTextProvider");
@@ -169,25 +180,8 @@ public class Activator extends AbstractUIPlugin implements DiagramTextProviderRe
 				if ("diagramTextProvider".equals(name)) {
 					try {
 						final DiagramTextProvider diagramTextProvider = (DiagramTextProvider) ces.createExecutableExtension("providerClass");
-						final String priorityValue = ces.getAttribute("priority");
-						int priority = NORMAL_PRIORITY;
-						if ("custom".equals(priorityValue)) {
-							priority = CUSTOM_PRIORITY;
-						} else if ("normal".equals(priorityValue)) {
-							priority = NORMAL_PRIORITY;
-						} else if ("default".equals(priorityValue)) {
-							priority = DEFAULT_PRIORITY;
-						} else {
-							try {
-								priority = Integer.valueOf(priorityValue);
-							} catch (final NumberFormatException e) {
-							}
-						}
-						final DiagramTextProviderInfo info = new DiagramTextProviderInfo();
-						info.id = ces.getAttribute("id");
-						info.label = ces.getAttribute("label");
-						info.priority = priority;
-						registerDiagramTextProvider(diagramTextProvider, info);
+						final DiagramIntentProviderInfo info = getProviderInfo(ces);
+						registerDiagramIntentProvider(new DiagramTextIntentProvider(diagramTextProvider), info);
 					} catch (final InvalidRegistryObjectException e) {
 					} catch (final CoreException e) {
 					}
@@ -196,24 +190,66 @@ public class Activator extends AbstractUIPlugin implements DiagramTextProviderRe
 		}
 	}
 
-	private final Comparator<DiagramTextProvider> priorityComparator = new Comparator<DiagramTextProvider>() {
+	private void processDiagramIntentProviders() {
+		final IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint(getBundle().getSymbolicName() + ".diagramIntentProvider");
+		final IExtension[] extensions = ep.getExtensions();
+		for (int i = 0; i < extensions.length; i++) {
+			for (final IConfigurationElement ces: extensions[i].getConfigurationElements()) {
+				final String name = ces.getName();
+				if ("diagramIntentProvider".equals(name)) {
+					try {
+						final DiagramIntentProvider diagramIntentProvider = (DiagramIntentProvider) ces.createExecutableExtension("providerClass");
+						final DiagramIntentProviderInfo info = getProviderInfo(ces);
+						registerDiagramIntentProvider(diagramIntentProvider, info);
+					} catch (final InvalidRegistryObjectException e) {
+					} catch (final CoreException e) {
+						System.err.println(e);
+					}
+				}
+			}
+		}
+	}
+
+	private DiagramIntentProviderInfo getProviderInfo(final IConfigurationElement ces) {
+		final String priorityValue = ces.getAttribute("priority");
+		int priority = NORMAL_PRIORITY;
+		if ("custom".equals(priorityValue)) {
+			priority = CUSTOM_PRIORITY;
+		} else if ("normal".equals(priorityValue)) {
+			priority = NORMAL_PRIORITY;
+		} else if ("default".equals(priorityValue)) {
+			priority = DEFAULT_PRIORITY;
+		} else {
+			try {
+				priority = Integer.valueOf(priorityValue);
+			} catch (final NumberFormatException e) {
+			}
+		}
+		final DiagramIntentProviderInfo info = new DiagramIntentProviderInfo();
+		info.id = ces.getAttribute("id");
+		info.label = ces.getAttribute("label");
+		info.priority = priority;
+		return info;
+	}
+
+	private final Comparator<DiagramIntentProvider> priorityComparator = new Comparator<DiagramIntentProvider>() {
 		@Override
-		public int compare(final DiagramTextProvider dtp2, final DiagramTextProvider dtp1) {
-			return Activator.this.diagramTextProviderInfo.get(dtp1).priority - Activator.this.diagramTextProviderInfo.get(dtp2).priority;
+		public int compare(final DiagramIntentProvider dtp2, final DiagramIntentProvider dtp1) {
+			return Activator.this.diagramIntentProviderInfo.get(dtp1).priority - Activator.this.diagramIntentProviderInfo.get(dtp2).priority;
 		}
 	};
 
 	@Override
-	public void registerDiagramTextProvider(final DiagramTextProvider diagramTextProvider, final DiagramTextProviderInfo info) {
-		this.diagramTextProviderInfo.put(diagramTextProvider, info);
+	public void registerDiagramIntentProvider(final DiagramIntentProvider diagramIntentProvider, final DiagramIntentProviderInfo info) {
+		this.diagramIntentProviderInfo.put(diagramIntentProvider, info);
 		int pos = 0;
-		while (pos < diagramTextProviders.size()) {
-			if (priorityComparator.compare(diagramTextProvider, diagramTextProviders.get(pos)) < 0) {
+		while (pos < diagramIntentProviders.size()) {
+			if (priorityComparator.compare(diagramIntentProvider, diagramIntentProviders.get(pos)) < 0) {
 				break;
 			}
 			pos++;
 		}
-		this.diagramTextProviders.add(pos, diagramTextProvider);
+		this.diagramIntentProviders.add(pos, diagramIntentProvider);
 	}
 
 	private List<ILinkOpener> linkOpeners;

@@ -8,8 +8,8 @@
 	<name>net.sourceforge.plantuml maven parent project</name>
 
 	<properties>
-		<tycho-maven-plugin-version>1.6.0</tycho-maven-plugin-version>
-		<tycho-version>1.6.0</tycho-version>
+		<tycho-maven-plugin-version>2.2.0</tycho-maven-plugin-version>
+		<tycho-version>2.2.0</tycho-version>
 		<!-- <xtextVersion>2.9.1</xtextVersion> <xtend-maven-plugin-version>2.9.1</xtend-maven-plugin-version> -->
 		<skip-ui-tests>true</skip-ui-tests>
 	</properties>
@@ -29,7 +29,7 @@
 				<repository>
 					<id>latest</id>
 					<layout>p2</layout>
-					<url>http://download.eclipse.org/releases/2020-06</url>
+					<url>http://download.eclipse.org/releases/2021-03</url>
 				</repository>
 			</repositories>
 		</profile>

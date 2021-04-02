@@ -3,22 +3,22 @@
 <plugin>
 
    <extension
-         point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
+         point="net.sourceforge.plantuml.eclipse.diagramIntentProvider">
 
-      <diagramTextProvider
-	    id="net.sourceforge.plantuml.ecore.EcoreClassDiagramTextProvider"
-	    providerClass="net.sourceforge.plantuml.ecore.EcoreClassDiagramTextProvider"
+      <diagramIntentProvider
+	    id="net.sourceforge.plantuml.ecore.EcoreClassDiagramIntentProvider"
+	    providerClass="net.sourceforge.plantuml.ecore.EcoreClassDiagramIntentProvider"
       	label="Class diagrams generated from ecore models"
 	    >
-      </diagramTextProvider>
+      </diagramIntentProvider>
 
-      <diagramTextProvider
-          id="net.sourceforge.plantuml.ecore.EcoreObjectDiagramTextProvider"
-          providerClass="net.sourceforge.plantuml.ecore.EcoreObjectDiagramTextProvider"
+      <diagramIntentProvider
+          id="net.sourceforge.plantuml.ecore.EcoreObjectDiagramIntentProvider"
+          providerClass="net.sourceforge.plantuml.ecore.EcoreObjectDiagramIntentProvider"
           priority="default"
 	      label="Object diagrams generated from ecore model instances"
       >
-      </diagramTextProvider>
+      </diagramIntentProvider>
    </extension>
 
 </plugin>

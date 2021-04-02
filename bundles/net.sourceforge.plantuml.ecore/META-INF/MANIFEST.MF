@@ -7,6 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: net.sourceforge.plantuml.ecore
 Import-Package: net.sourceforge.plantuml.eclipse.utils,
  net.sourceforge.plantuml.text,
+ net.sourceforge.plantuml.util,
  org.eclipse.core.runtime;version="3.4.0",
  org.eclipse.emf.common.util,
  org.eclipse.emf.ecore,

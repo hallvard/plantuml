@@ -1,11 +1,11 @@
 package net.sourceforge.plantuml.jdt.ui;
 
-import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_ASSOCIATIONS;
-import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_CLASS_HYPERLINKS;
-import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_EXTENDS;
-import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_IMPLEMENTS;
-import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_MEMBERS;
-import static net.sourceforge.plantuml.text.AbstractClassDiagramTextProvider.GEN_MODIFIERS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramIntent.GEN_ASSOCIATIONS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramIntent.GEN_CLASS_HYPERLINKS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramIntent.GEN_EXTENDS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramIntent.GEN_IMPLEMENTS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramIntent.GEN_MEMBERS;
+import static net.sourceforge.plantuml.text.AbstractClassDiagramIntent.GEN_MODIFIERS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,13 +36,12 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.views.PlantUmlView;
 import net.sourceforge.plantuml.jdt.Activator;
-import net.sourceforge.plantuml.jdt.JdtDiagramTextProvider;
+import net.sourceforge.plantuml.jdt.JdtDiagramIntent;
+import net.sourceforge.plantuml.util.SimpleDiagramIntent;
 
 public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeListener {
 
@@ -50,15 +49,6 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 	public boolean isLinkedToActivePart() {
 		return false;
 	}
-
-	private final JdtDiagramTextProvider jdtDiagramTextProvider = new JdtDiagramTextProvider() {
-
-		@Override
-		protected String getDiagramText(final IEditorPart editorPart, final IEditorInput editorInput,
-				final ISelection selection, final Map<String, Object> markerAttributes) {
-			return null;
-		}
-	};
 
 	private Collection<IJavaElement> rootSet = new ArrayList<IJavaElement>();
 
@@ -176,7 +166,7 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 			generateTypes(allTypes, result);
 		}
 		result.append("\n" + PlantumlConstants.END_UML);
-		updateDiagramText(result.toString(), null, null);
+		updateDiagramText(new SimpleDiagramIntent(result.toString()));
 	}
 
 	private void generatePackage(final String packageName, final Collection<IType> types, final StringBuilder result) {
@@ -197,8 +187,9 @@ public class JdtPlantUmlView extends PlantUmlView implements IPropertyChangeList
 	}
 
 	private void generateTypes(final Collection<IType> types, final StringBuilder result) {
+		final JdtDiagramIntent jdtDiagramIntent = new JdtDiagramIntent(types);
 		for (final IType type : types) {
-			jdtDiagramTextProvider.generateForType(type, result, genFlags, types);
+			jdtDiagramIntent.generateForType(type, result, genFlags, types);
 		}
 	}
 

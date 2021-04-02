@@ -23,7 +23,9 @@
 		<module>../../tests/net.sourceforge.plantuml.jdt.tests</module>
 
 		<module>../../bundles/net.sourceforge.plantuml.ecore</module>
+		<!-- 
 		<module>../../bundles/net.sourceforge.plantuml.uml2</module>
+		 -->
 
 		<module>../../bundles/no.hal.osgi.emf</module>
 		<module>../../tests/no.hal.osgi.emf.tests</module>

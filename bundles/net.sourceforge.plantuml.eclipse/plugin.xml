@@ -10,7 +10,7 @@
       </page>
       <page
             id="net.sourceforge.plantuml.preferences.DiagramTextProvidersPreferencePage"
-            class="net.sourceforge.plantuml.preferences.DiagramTextProvidersPreferencePage"
+            class="net.sourceforge.plantuml.preferences.DiagramIntentProvidersPreferencePage"
             category="net.sourceforge.plantuml.preferences.about"
             name="Diagram text providers">
       </page>
@@ -76,6 +76,7 @@
    	</extension>
 
    <extension-point id="diagramTextProvider" name="Diagram Text Provider" schema="schema/diagramTextProvider.exsd"/>
+   <extension-point id="diagramIntentProvider" name="Diagram Intent Provider" schema="schema/diagramIntentProvider.exsd"/>
    <extension-point id="linkOpener" name="Link Opener" schema="schema/linkOpener.exsd"/>
    <extension
          point="net.sourceforge.plantuml.eclipse.linkOpener">

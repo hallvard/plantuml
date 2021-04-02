@@ -4,7 +4,6 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
 
 import net.sourceforge.plantuml.eclipse.imagecontrol.ImageControl;
-import net.sourceforge.plantuml.util.DiagramData;
 import net.sourceforge.plantuml.util.DiagramImageData;
 
 public class DiagramImageControl extends ImageControl {
@@ -23,30 +22,16 @@ public class DiagramImageControl extends ImageControl {
 		return diagramImageData;
 	}
 
-	public void updateDiagramImage(final DiagramData diagram, final int imageNum) {
-		this.diagramImageData = new DiagramImageData(diagram, imageNum, null);
+	public void updateDiagramImage(final DiagramImageData diagramImageData) {
+		this.diagramImageData = diagramImageData;
 		try {
 			final ImageData imageData = diagramImageData.getImage();
 			if (imageData != null && (! isDisposed())) {
-				getDisplay().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if (! isDisposed()) {
-							loadImage(imageData);
-						}
-					}
-				});
+				loadImage(imageData);
 			}
 		} catch (final Throwable e) {
 			if (! isDisposed()) {
-				getDisplay().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if (! isDisposed()) {
-							showErrorMessage(e);
-						}
-					}
-				});
+				showErrorMessage(e);
 			}
 		}
 	}

@@ -4,15 +4,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.widgets.Composite;
 
 import net.sourceforge.plantuml.eclipse.Activator;
@@ -20,7 +16,10 @@ import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkSupport;
 import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
 import net.sourceforge.plantuml.eclipse.utils.LinkData;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlUtil;
+import net.sourceforge.plantuml.util.AbstractDiagramIntent;
 import net.sourceforge.plantuml.util.DiagramData;
+import net.sourceforge.plantuml.util.DiagramIntent;
+import net.sourceforge.plantuml.util.ResourceInfo;
 
 public abstract class AbstractPlantUmlView extends AbstractDiagramSourceView implements ILinkSupport {
 
@@ -39,26 +38,51 @@ public abstract class AbstractPlantUmlView extends AbstractDiagramSourceView imp
 
 	protected DiagramData diagramData = null;
 
+	protected boolean shouldUpdateView(final DiagramData diagramData) {
+		return this.diagramData == null || this.diagramData == diagramData;
+	}
+
 	@Override
 	public String getDiagramText() {
 		return diagramData != null ? diagramData.getTextDiagram() : null;
 	}
 
 	@Override
-	protected void updateDiagramText(final String textDiagram, final IPath original, final Map<String, Object> markerAttributes) {
+	protected void updateDiagramText(final String textDiagram, final DiagramIntent diagramIntent, final IProgressMonitor monitor) {
 		if (isVisible() && textDiagram != null && (diagramData == null || (! textDiagram.equals(diagramData.getTextDiagram())))) {
-			diagramData = new DiagramData(textDiagram);
-			diagramData.setOriginal(original);
-			diagramData.setMarkerAttributes(markerAttributes);
-			updateDiagram();
+			this.diagramData = null;
+			final DiagramData diagramData = new DiagramData(textDiagram);
+			setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW_TEXT, textDiagram);
+			if (diagramIntent instanceof AbstractDiagramIntent<?>) {
+				final ResourceInfo resourceInfo = ((AbstractDiagramIntent<?>) diagramIntent).getResourceInfo();
+				if (resourceInfo != null) {
+					if (resourceInfo.getOriginalPath() != null) {
+						diagramData.setOriginal(new Path(resourceInfo.getOriginalPath()));
+					}
+					diagramData.setMarkerAttributes(resourceInfo.getMarkerAttributes());
+				}
+			}
+			updateDiagram(diagramData, monitor);
+			if (monitor == null || (! monitor.isCanceled())) {
+				this.diagramData = diagramData;
+				updateDiagramMarkers();
+			}
 		}
 	}
+
+	protected void updateDiagram(final IProgressMonitor monitor) {
+		if (this.diagramData != null) {
+			updateDiagram(diagramData, monitor);
+		}
+	}
+
+	protected abstract void updateDiagram(final DiagramData diagramData, IProgressMonitor monitor);
 
 	@Override
 	public void setVisible(final boolean visible) {
 		super.setVisible(visible);
 		if (visible && diagramData != null) {
-			updateDiagram();
+			updateDiagramText(true, null, null);
 		}
 	}
 
@@ -67,23 +91,6 @@ public abstract class AbstractPlantUmlView extends AbstractDiagramSourceView imp
 			composite.layout();
 		}
 	};
-
-	protected abstract void updateDiagram(final IProgressMonitor monitor);
-
-	protected void updateDiagram() {
-		final Job job = new Job("Generate diagram") {
-			@Override
-			protected IStatus run(final IProgressMonitor monitor) {
-				updateDiagram(monitor);
-				if (! composite.isDisposed()) {
-					composite.getDisplay().asyncExec(layoutComposite);
-				}
-				updateDiagramMarkers();
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
-	}
 
 	protected void updateDiagramMarkers() {
 		if (diagramData.getOriginal() != null) {
@@ -113,7 +120,6 @@ public abstract class AbstractPlantUmlView extends AbstractDiagramSourceView imp
 				linkData = new LinkData();
 				linkData.href = uri.toString();
 			} catch (final URISyntaxException e) {
-				System.out.println(e);
 			}
 		}
 		if (linkData != null) {

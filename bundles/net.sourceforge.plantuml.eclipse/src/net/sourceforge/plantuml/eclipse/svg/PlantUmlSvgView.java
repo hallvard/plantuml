@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import net.sourceforge.plantuml.eclipse.imagecontrol.ILinkSupport;
 import net.sourceforge.plantuml.eclipse.views.AbstractPlantUmlView;
+import net.sourceforge.plantuml.util.DiagramData;
 
 public class PlantUmlSvgView extends AbstractPlantUmlView implements ILinkSupport {
 
@@ -36,12 +37,18 @@ public class PlantUmlSvgView extends AbstractPlantUmlView implements ILinkSuppor
 		});
 	}
 
+	@Override
+	public void dispose() {
+		browser = null;
+		super.dispose();
+	}
+
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
 	@Override
 	public void setFocus() {
-		if (browser != null) {
+		if (isValidControl(browser)) {
 			browser.setFocus();
 		}
 	}
@@ -49,17 +56,16 @@ public class PlantUmlSvgView extends AbstractPlantUmlView implements ILinkSuppor
 	private final Svg2HtmlConverter svg2HtmlConverter = new Svg2InteractiveHtmlConverter();
 
 	@Override
-	protected void updateDiagram(final IProgressMonitor monitor) {
+	protected void updateDiagram(final DiagramData diagramData, final IProgressMonitor monitor) {
 		final String svg = diagramData.getSvg(0);
 		final String html = svg2HtmlConverter.convert2Html(svg);
-		System.out.println(html);
-		if (! browser.isDisposed()) {
-			browser.getDisplay().asyncExec(() -> {
-				if (! browser.isDisposed()) {
-					browser.setText(html);
-				}
-			});
-		}
+		setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW_DATA, html);
+		asyncExec(() -> {
+			if (isValidControl(browser) && shouldUpdateView(diagramData)) {
+				browser.setText(html);
+				setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW, html);
+			}
+		});
 	}
 
 	@Override

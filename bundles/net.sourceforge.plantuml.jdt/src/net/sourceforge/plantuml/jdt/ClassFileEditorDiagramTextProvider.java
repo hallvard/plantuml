@@ -1,32 +1,35 @@
 package net.sourceforge.plantuml.jdt;
 
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.javaeditor.IClassFileEditorInput;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-public class ClassFileEditorDiagramTextProvider extends JdtDiagramTextProvider {
+import net.sourceforge.plantuml.eclipse.utils.WorkbenchEditorPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.text.AbstractDiagramIntentProvider;
+import net.sourceforge.plantuml.util.DiagramIntent;
+
+public class ClassFileEditorDiagramTextProvider extends AbstractDiagramIntentProvider {
 
 	public ClassFileEditorDiagramTextProvider() {
 		setEditorType(ITextEditor.class);
 	}
-	
+
 	@Override
-	protected String getDiagramText(IEditorPart editorPart, IEditorInput editorInput, ISelection ignore, Map<String, Object> ignore2) {
+	protected Collection<DiagramIntent> getDiagramInfos(final WorkbenchEditorPartDiagramIntentProviderContext context) {
+		final IEditorInput editorInput = context.getEditorPart().getEditorInput();
 		if (editorInput instanceof IClassFileEditorInput) {
-			IClassFile classFile = ((IClassFileEditorInput) editorInput).getClassFile();
+			final IClassFile classFile = ((IClassFileEditorInput) editorInput).getClassFile();
 			try {
 				classFile.open(new NullProgressMonitor());
-				StringBuilder result = new StringBuilder();
-				generateForType(classFile.getType(), result, GEN_MEMBERS | GEN_MODIFIERS | GEN_EXTENDS | GEN_IMPLEMENTS, null);
-				return (result.length() > 0 ? result.toString() : null);
-			} catch (JavaModelException e) {
+				return Collections.singletonList(new JdtDiagramIntent(Arrays.asList(classFile.getType())));
+			} catch (final JavaModelException e) {
 			}
 		}
 		return null;

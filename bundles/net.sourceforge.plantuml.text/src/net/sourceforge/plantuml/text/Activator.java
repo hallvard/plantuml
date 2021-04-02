@@ -10,9 +10,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
-import net.sourceforge.plantuml.eclipse.DiagramTextProviderInfo;
+import net.sourceforge.plantuml.eclipse.DiagramIntentProviderInfo;
 import net.sourceforge.plantuml.eclipse.DiagramTextProviderProcessor;
-import net.sourceforge.plantuml.eclipse.DiagramTextProviderRegistry;
+import net.sourceforge.plantuml.eclipse.DiagramIntentProviderRegistry;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -42,7 +42,7 @@ public class Activator extends Plugin implements DiagramTextProviderProcessor {
 	}
 
 	@Override
-	public void processDiagramTextProviders(final DiagramTextProviderRegistry registry) {
+	public void processDiagramIntentProviders(final DiagramIntentProviderRegistry registry) {
 		final IExtensionPoint ep = Platform.getExtensionRegistry().getExtensionPoint("net.sourceforge.plantuml.text.textDiagramProvider");
 		final IExtension[] extensions = ep.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
@@ -54,7 +54,7 @@ public class Activator extends Plugin implements DiagramTextProviderProcessor {
 						final String diagramSuffix = ces.getAttribute("diagramSuffix");
 						final String fileExtensionsString = ces.getAttribute("fileExtensions");
 						final String[] fileExtensions = (fileExtensionsString != null ? fileExtensionsString.split("[, ]") : new String[0]);
-						final TextEditorDiagramTextProvider textDiagramProvider = new TextEditorDiagramTextProvider(
+						final TextEditorDiagramIntentProvider textDiagramIntentProvider = new TextEditorDiagramIntentProvider(
 								diagramPrefix, diagramSuffix,
 								fileExtensions
 								);
@@ -66,15 +66,15 @@ public class Activator extends Plugin implements DiagramTextProviderProcessor {
 						if (diagramSuffixRegex == null) {
 							diagramSuffixRegex = Pattern.quote(diagramSuffix);
 						}
-						textDiagramProvider.setDiagramPrefixRegex(diagramPrefixRegex);
-						textDiagramProvider.setDiagramSuffixRegex(diagramSuffixRegex);
+						textDiagramIntentProvider.setDiagramPrefixRegex(diagramPrefixRegex);
+						textDiagramIntentProvider.setDiagramSuffixRegex(diagramSuffixRegex);
 
 						final int priority = net.sourceforge.plantuml.eclipse.Activator.NORMAL_PRIORITY;
-						final DiagramTextProviderInfo info = new DiagramTextProviderInfo();
+						final DiagramIntentProviderInfo info = new DiagramIntentProviderInfo();
 						info.id = ces.getAttribute("id");
 						info.label = ces.getAttribute("label");
 						info.priority = priority;
-						registry.registerDiagramTextProvider(textDiagramProvider, info);
+						registry.registerDiagramIntentProvider(textDiagramIntentProvider, info);
 					} catch (final InvalidRegistryObjectException e) {
 					}
 				}

@@ -28,6 +28,8 @@ import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.util.DiagramData;
 import net.sourceforge.plantuml.util.DiagramImageData;
+import net.sourceforge.plantuml.util.DiagramIntentProvider;
+import net.sourceforge.plantuml.util.DiagramTextIntentProvider;
 
 public class PlantumlUtil {
 
@@ -56,7 +58,6 @@ public class PlantumlUtil {
 			attributes.put(DIAGRAM_SOURCE_ATTRIBUTE, textDiagram);
 			attributes.put(TARGET_PATH_ATTRIBUTE, (target != null ? target.toString() : null));
 			try {
-				//				System.out.println("Updating marker for " + file.getFullPath() + ": " + attributes);
 				marker.setAttributes(attributes);
 			} catch (final CoreException e) {
 			}
@@ -103,22 +104,23 @@ public class PlantumlUtil {
 					final Object target = marker.getAttribute(TARGET_PATH_ATTRIBUTE);
 					if (target != null) {
 						final IPath path = resource.getFullPath();
-						//						System.out.println("Updating image for " + path + " @ " + target);
-						for (final DiagramTextProvider diagramTextProvider : Activator.getDefault().getDiagramTextProviders(null)) {
-							if (diagramTextProvider instanceof DiagramTextProvider2) {
-								final DiagramTextProvider2 diagramTextProvider2 = (DiagramTextProvider2) diagramTextProvider;
-								if (diagramTextProvider2.supportsPath(path)) {
-									final String textDiagram = diagramTextProvider2.getDiagramText(path);
-									//									System.out.println("Diagram for " + path + ": " + textDiagram);
-									if (textDiagram != null) {
-										final DiagramData diagram = new DiagramData(textDiagram);
-										diagram.setOriginal(path);
-										try {
-											saveDiagramImage(path, textDiagram, diagram.getImage(), new Path(target.toString()), false);
-										} catch (final Exception e) {
-											System.err.println(e);
+						for (final DiagramIntentProvider diagramIntentProvider : Activator.getDefault().getDiagramIntentProviders(null)) {
+							if (diagramIntentProvider instanceof DiagramTextIntentProvider) {
+								final DiagramTextProvider diagramTextProvider = ((DiagramTextIntentProvider) diagramIntentProvider).getDiagramTextProvider();
+								if (diagramTextProvider instanceof DiagramTextProvider2) {
+									final DiagramTextProvider2 diagramTextProvider2 = (DiagramTextProvider2) diagramTextProvider;
+									if (diagramTextProvider2.supportsPath(path)) {
+										final String textDiagram = diagramTextProvider2.getDiagramText(path);
+										if (textDiagram != null) {
+											final DiagramData diagram = new DiagramData(textDiagram);
+											diagram.setOriginal(path);
+											try {
+												saveDiagramImage(path, textDiagram, diagram.getImage(), new Path(target.toString()), false);
+											} catch (final Exception e) {
+												System.err.println(e);
+											}
+											break;
 										}
-										break;
 									}
 								}
 							}

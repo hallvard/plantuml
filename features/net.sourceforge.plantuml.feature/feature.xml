@@ -18,7 +18,7 @@
    </license>
 
    <requires>
-      <import feature="net.sourceforge.plantuml.lib.feature" version="1.2019.11" match="greaterOrEqual"/>
+      <import feature="net.sourceforge.plantuml.lib.feature" version="1.2021.3" match="greaterOrEqual"/>
    </requires>
 
    <plugin

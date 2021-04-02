@@ -1,27 +1,20 @@
 package net.sourceforge.plantuml.eclipse.views.actions;
 
+import java.util.function.Supplier;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.graphics.ImageData;
 
-import net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions.ImageControlAction;
-import net.sourceforge.plantuml.eclipse.views.DiagramImageControl;
 import net.sourceforge.plantuml.util.DiagramImageData;
 
-public abstract class DiagramImageAction extends ImageControlAction {
+public abstract class DiagramImageAction<C> extends DiagramAction<DiagramImageData, C> {
 
-	protected final DiagramImageData diagramImageData;
-
-	public DiagramImageAction(final DiagramImageControl control, final DiagramImageData diagramImageData) {
-		super(control);
-		this.diagramImageData = diagramImageData;
-	}
-
-	public DiagramImageAction(final DiagramImageControl control) {
-		this(control, null);
+	public DiagramImageAction(final Supplier<DiagramImageData> diagramImageDataSupplier, final C context) {
+		super(diagramImageDataSupplier, context);
 	}
 
 	protected DiagramImageData getDiagramImageData() {
-		return ((DiagramImageControl) getControl()).getDiagramImageData();
+		return getDiagramData();
 	}
 
 	protected IPath getSourcePath() {

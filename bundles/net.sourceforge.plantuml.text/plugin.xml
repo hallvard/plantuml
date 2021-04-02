@@ -2,26 +2,6 @@
 <?eclipse version="3.2"?>
 <plugin>
 
-   <extension
-         point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
-         
-      <!--
-      <diagramTextProvider
-            id="net.sourceforge.plantuml.text.TextEditorDiagramTextProvider"
-            providerClass="net.sourceforge.plantuml.text.TextEditorDiagramTextProvider"
-            label="Diagrams in text editor"
-            >
-      </diagramTextProvider>
-	  -->
-
-      <diagramTextProvider
-            id="net.sourceforge.plantuml.text.console.ConsoleViewDiagramTextProvider"
-            providerClass="net.sourceforge.plantuml.text.console.ConsoleViewDiagramTextProvider"
-            label="Diagrams in text console"
-            >
-      </diagramTextProvider>
-   </extension>
-
    <extension-point id="textDiagramProvider" name="Text diagram provider" schema="schema/textDiagramProvider.exsd"/>
    <extension
          point="net.sourceforge.plantuml.text.textDiagramProvider">
@@ -64,6 +44,22 @@
             label="Gantt diagrams in text editor"
 			diagramPrefix="@startgantt"
 			diagramSuffix="@endgantt"
+            >
+      </textDiagramProvider>
+
+      <textDiagramProvider
+            id="net.sourceforge.plantuml.text.jsonDiagramProvider"
+            label="JSON data in text editor"
+			diagramPrefix="@startjson"
+			diagramSuffix="@endjson"
+            >
+      </textDiagramProvider>
+
+      <textDiagramProvider
+            id="net.sourceforge.plantuml.text.yamlDiagramProvider"
+            label="YAML data in text editor"
+			diagramPrefix="@startyaml"
+			diagramSuffix="@endyaml"
             >
       </textDiagramProvider>
 

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: JLatexMath
 Bundle-SymbolicName: net.sourceforge.plantuml.lib.jlatexmath
 Bundle-Version: 1.0.7
-Fragment-Host: net.sourceforge.plantuml.lib;bundle-version="1.2019.11"
+Fragment-Host: net.sourceforge.plantuml.lib;bundle-version="1.2021.3"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: lib/jlatexmath-1.0.7.jar,
  .

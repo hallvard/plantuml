@@ -3,20 +3,20 @@
 <plugin>
 
    <extension
-         point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
+         point="net.sourceforge.plantuml.eclipse.diagramIntentProvider">
 
-      <diagramTextProvider
-      	id="net.sourceforge.plantuml.osgi.ManifestDiagramTextProvider"
-      	providerClass="net.sourceforge.plantuml.osgi.ManifestDiagramTextProvider"
+      <diagramIntentProvider
+      	id="net.sourceforge.plantuml.osgi.ManifestDiagramIntentProvider"
+      	providerClass="net.sourceforge.plantuml.osgi.ManifestDiagramIntentProvider"
       	label="Bundle dependency diagrams generated from OSGi manifests"
       	>
-      </diagramTextProvider>
-      <diagramTextProvider
-        id="net.sourceforge.plantuml.osgi.OsgiComponentDiagramTextProvider"
-        providerClass="net.sourceforge.plantuml.osgi.OsgiComponentDiagramTextProvider"
+      </diagramIntentProvider>
+      <diagramIntentProvider
+        id="net.sourceforge.plantuml.osgi.OsgiComponentDiagramIntentProvider"
+        providerClass="net.sourceforge.plantuml.osgi.OsgiComponentDiagramIntentProvider"
       	label="Component diagrams generated from OSGi manifests and component XML files"
         >
-      </diagramTextProvider>
+      </diagramIntentProvider>
    </extension>
 
 </plugin>

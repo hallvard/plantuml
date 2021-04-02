@@ -1,11 +1,11 @@
 package net.sourceforge.plantuml.eclipse.views;
 
-import java.util.Map;
-
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+
+import net.sourceforge.plantuml.util.DiagramIntent;
 
 public class DiagramSourceView extends AbstractDiagramSourceView {
 
@@ -19,15 +19,23 @@ public class DiagramSourceView extends AbstractDiagramSourceView {
 	}
 
 	@Override
-	protected void updateDiagramText(final String text, final IPath original, final Map<String, Object> markerAttributes) {
-		if (diagramTextView != null && (! diagramTextView.isDisposed())) {
-			diagramTextView.setText(text == null ? "" : text);
+	protected void updateDiagramText(final String textDiagram, final DiagramIntent diagramIntent, final IProgressMonitor progressMonitor) {
+		if (isValidControl(diagramTextView)) {
+			setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW_TEXT, textDiagram);
+			asyncExec(() -> {
+				if (isValidControl(diagramTextView)) {
+					final String text = (textDiagram == null ? "" : textDiagram);
+					setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW_DATA, textDiagram);
+					diagramTextView.setText(text);
+					setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW, text);
+				}
+			});
 		}
 	}
 
 	@Override
 	public String getDiagramText() {
-		return (diagramTextView != null && (! diagramTextView.isDisposed()) ? diagramTextView.getText() : null);
+		return (isValidControl(diagramTextView) ? diagramTextView.getText() : null);
 	}
 
 	@Override

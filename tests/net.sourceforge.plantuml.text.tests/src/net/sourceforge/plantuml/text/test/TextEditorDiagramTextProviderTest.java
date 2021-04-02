@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import net.sourceforge.plantuml.eclipse.test.util.AbstractDiagramTextTest;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
-import net.sourceforge.plantuml.text.TextEditorDiagramTextProvider;
+import net.sourceforge.plantuml.text.TextEditorDiagramIntentProvider;
 
 public class TextEditorDiagramTextProviderTest {
 
-	private final TextEditorDiagramTextProvider diagramTextProvider = new TextEditorDiagramTextProvider(PlantumlConstants.START_UML, PlantumlConstants.END_UML);
+	private final TextEditorDiagramIntentProvider diagramTextProvider = new TextEditorDiagramIntentProvider(PlantumlConstants.START_UML, PlantumlConstants.END_UML);
 
 	private final String toto = PlantumlConstants.START_UML + "\ntoto\n" + PlantumlConstants.END_UML;
 

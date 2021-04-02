@@ -2,17 +2,21 @@ package net.sourceforge.plantuml.eclipse.views;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -24,7 +28,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IPathEditorInput;
@@ -32,7 +35,6 @@ import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IURIEditorInput;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -42,10 +44,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import net.sourceforge.plantuml.eclipse.Activator;
-import net.sourceforge.plantuml.eclipse.utils.DiagramTextIteratorProvider;
-import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
-import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider2;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
+import net.sourceforge.plantuml.eclipse.utils.WorkbenchEditorPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.util.DiagramIntent;
+import net.sourceforge.plantuml.util.DiagramIntentContext;
+import net.sourceforge.plantuml.util.DiagramIntentProvider;
+import net.sourceforge.plantuml.util.SimpleDiagramIntent;
 
 public abstract class AbstractDiagramSourceView extends ViewPart {
 
@@ -74,13 +79,15 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	}
 
 	public boolean isLinkingActive() {
-		return isLinkedToActivePart() && toggleAction == null || toggleAction.isChecked();
+		return isLinkedToActivePart() && toggleLinkAction == null || toggleLinkAction.isChecked();
 	}
 
 	private Control parent;
 
 	protected void asyncExec(final Runnable runnable) {
-		parent.getDisplay().asyncExec(runnable);
+		if (parent != null && (! parent.isDisposed())) {
+			parent.getDisplay().asyncExec(runnable);
+		}
 	}
 
 	@Override
@@ -95,7 +102,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 					if (pinnedTo != null || initialDiagramSource == null) {
 						updateDiagramText(true, pinnedTo, null);
 					} else if (initialDiagramSource != null) {
-						updateDiagramText(initialDiagramSource, null, null);
+						updateDiagramText(new SimpleDiagramIntent(initialDiagramSource));
 					}
 				}
 			});
@@ -104,10 +111,30 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		contributeToActionBars();
 	}
 
-	protected void contributeToActionBars() {
+	protected boolean isValidControl(final Control control) {
+		return control != null && (! control.isDisposed());
 	}
 
-	private IAction toggleAction, pinToAction, spawnAction;
+	protected void contributeToActionBars() {
+		final IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		addViewActions(toolBarManager);
+
+		final IMenuManager menu = getViewSite().getActionBars().getMenuManager();
+		final MenuManager editorSelectionActionMenu = new MenuManager("Diagrams");
+		editorSelectionActionMenu.add(new Action() {}); // will be removed, needed for the submenu to actually show
+		editorSelectionActionMenu.setRemoveAllWhenShown(true);
+		editorSelectionActionMenu.addMenuListener(new IMenuListener() {
+			@Override
+			public void menuAboutToShow(final IMenuManager menu) {
+				for (final ActionContributionItem actionContributionItem : getEditorSelectionActions(menu)) {
+					menu.add(actionContributionItem);
+				}
+			}
+		});
+		menu.add(editorSelectionActionMenu);
+	}
+
+	private IAction toggleLinkAction, pinToAction, spawnAction;
 
 	protected void makeActions() {
 		pinToAction = new Action() {
@@ -145,7 +172,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		spawnAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/spawn.png"));
 
 		// action to start or stop the generation of the actual diagram
-		toggleAction = 	new Action() {
+		toggleLinkAction = 	new Action() {
 			@Override
 			public void run() {
 				if (isChecked()) {
@@ -153,9 +180,9 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 				}
 			}
 		};
-		toggleAction.setToolTipText(PlantumlConstants.TOGGLE_GENERATION_BUTTON);
-		toggleAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/link.gif"));
-		toggleAction.setChecked(true);
+		toggleLinkAction.setToolTipText(PlantumlConstants.TOGGLE_GENERATION_BUTTON);
+		toggleLinkAction.setImageDescriptor(ImageDescriptor.createFromFile(PlantumlConstants.class, "/icons/link.gif"));
+		toggleLinkAction.setChecked(true);
 	}
 
 	protected void addActions(final IContributionManager manager, final IAction... actions) {
@@ -168,7 +195,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	}
 
 	protected void addViewActions(final IContributionManager toolBarManager) {
-		addActions(toolBarManager, spawnAction, pinToAction, toggleAction);
+		addActions(toolBarManager, spawnAction, pinToAction, toggleLinkAction);
 	}
 
 	protected String getEditorInputId(final IEditorInput editorInput) {
@@ -213,11 +240,6 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	protected void registerListeners() {
 		getSite().getPage().addPartListener(partListener);
 		getSite().getPage().addPostSelectionListener(diagramTextChangedListener);
-		for (final DiagramTextProvider diagramTextProvider : Activator.getDefault().getDiagramTextProviders(null)) {
-			if (diagramTextProvider instanceof ISelectionProvider) {
-				((ISelectionProvider) diagramTextProvider).addSelectionChangedListener(diagramTextChangedListener);
-			}
-		}
 	}
 
 	@Override
@@ -227,14 +249,16 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		}
 		getSite().getPage().removePartListener(partListener);
 		getSite().getPage().removePostSelectionListener(diagramTextChangedListener);
-		for (final DiagramTextProvider diagramTextProvider : Activator.getDefault().getDiagramTextProviders(null)) {
-			if (diagramTextProvider instanceof ISelectionProvider) {
-				((ISelectionProvider) diagramTextProvider).removeSelectionChangedListener(diagramTextChangedListener);
-			}
-		}
 	}
 
-	protected abstract void updateDiagramText(String text, IPath path, Map<String, Object> markerAttributes);
+	/**
+	 * Update view with the provided text derived from the (optional) diagramIntent
+	 * @param text diagram text
+	 * @param diagramIntent original (or equivalent) diagram intent from which the diagram text is derived
+	 * @param monitor a monitor that indicates the method is called outside the UI thread
+	 */
+	protected abstract void updateDiagramText(String text, DiagramIntent diagramIntent, final IProgressMonitor monitor);
+
 	public abstract String getDiagramText();
 
 	private boolean visible = false;
@@ -328,14 +352,14 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 		@Override
 		public void selectionChanged(final SelectionChangedEvent event) {
-			if ((! (event.getSource() instanceof DiagramTextProvider)) || Activator.getDefault().isEnabled((DiagramTextProvider) event.getSource())) {
+			if ((! (event.getSource() instanceof DiagramIntentProvider)) || Activator.getDefault().isEnabled((DiagramIntentProvider) event.getSource())) {
 				final ISelection selection = event.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					final Object o = ((IStructuredSelection) selection).getFirstElement();
 					asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							updateDiagramText(String.valueOf(o), null, null);
+							updateDiagramText(new SimpleDiagramIntent(String.valueOf(o)));
 						}
 					});
 				}
@@ -358,33 +382,38 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 	protected Collection<ActionContributionItem> getEditorSelectionActions(final IMenuManager menu) {
 		final Collection<ActionContributionItem> actions = new ArrayList<ActionContributionItem>();
-		final DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders(true);
-		final IEditorPart editor = (pinnedTo != null ? pinnedTo : getSite().getPage().getActiveEditor());
-		final ISelectionProvider selectionProvider = editor.getSite().getSelectionProvider();
-		if (selectionProvider != null) {
-			for (final DiagramTextProvider diagramTextProvider : diagramTextProviders) {
-				if (diagramTextProvider instanceof DiagramTextIteratorProvider && diagramTextProvider.supportsEditor(editor)) {
-					final Iterator<ISelection> selections = ((DiagramTextIteratorProvider) diagramTextProvider).getDiagramText(editor);
-					while (selections.hasNext()) {
-						final ISelection selection = selections.next();
-						final ActionContributionItem action = new ActionContributionItem(createEditorSelectionAction(editor, selectionProvider, selection));
-						actions.add(action);
+		final DiagramIntentProvider[] diagramIntentProviders = Activator.getDefault().getDiagramIntentProviders(true);
+		// must use activeEditorPart instead of activePart, since the latter will be the plantuml view
+		final IEditorPart part = (pinnedTo != null ? pinnedTo : getSite().getPage().getActiveEditor());
+		final ISelectionProvider selectionProvider = part.getSite().getSelectionProvider();
+		final DiagramIntentContext partContext = new WorkbenchEditorPartDiagramIntentProviderContext(part, selectionProvider != null ? selectionProvider.getSelection() : null);
+		for (final DiagramIntentProvider diagramIntentProvider : diagramIntentProviders) {
+			final Collection<? extends DiagramIntent> diagramInfos = diagramIntentProvider.getDiagramInfos(partContext);
+			if (diagramInfos != null) {
+				final String diagramIntentProviderLabel = Activator.getDefault().getDiagramIntentProviderLabel(diagramIntentProvider);
+				int count = 0;
+				for (final DiagramIntent diagramIntent : diagramInfos) {
+					String label = diagramIntentProviderLabel;
+					if (diagramInfos.size() > 1) {
+						label += " " + (count + 1);
 					}
+					final ActionContributionItem action = new ActionContributionItem(createEditorSelectionAction(diagramIntent, label));
+					actions.add(action);
+					count++;
 				}
 			}
 		}
 		return actions;
 	}
 
-	private Action createEditorSelectionAction(final IEditorPart editor, final ISelectionProvider selectionProvider, final ISelection selection) {
-		return new Action(selection.toString()) {
+	private Action createEditorSelectionAction(final DiagramIntent diagramIntent, final String label) {
+		return new Action(label) {
 			@Override
 			public void run() {
 				asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						diagramTextChangedListener.diagramChanged(editor, selection);
-						selectionProvider.setSelection(selection);
+						updateDiagramText(diagramIntent);
 					}
 				});
 			}
@@ -402,73 +431,137 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		final IWorkbenchPart activePart = (part != null ? part : (isLinkedToActivePart() ? getSite().getPage().getActivePart() : null));
 		if (force || activePart != currentPart) {
 			if (activePart == null || acceptPart(activePart)) {
-				IPath path = null;
 				handlePartChange(activePart);
 				if (activePart != null) {
-					if (activePart instanceof IEditorPart && ((IEditorPart) activePart).getEditorInput() instanceof IFileEditorInput) {
-						path = ((IFileEditorInput) ((IEditorPart) activePart).getEditorInput()).getFile().getFullPath();
-					}
 					if (selection == null) {
 						final ISelectionProvider selectionProvider = activePart.getSite().getSelectionProvider();
 						if (selectionProvider != null) {
 							selection = selectionProvider.getSelection();
 						}
 					}
-					if (updateDiagramText(activePart, selection, path)) {
-						return;
-					}
-					if (selection != null && updateDiagramText(activePart, null, path)) {
+					if (updateDiagramText(activePart, selection)) {
 						return;
 					}
 				}
-				updateDiagramText((String) null, (IPath) null, (Map<String, Object>) null);
+				updateDiagramText(null, null, null);
 			}
 		}
 	}
 
-	protected boolean supportsPart(final DiagramTextProvider diagramTextProvider, final IWorkbenchPart part) {
-		if (part instanceof IViewPart) {
-			return diagramTextProvider.supportsView((IViewPart) part);
-		} else if (part instanceof IEditorPart) {
-			return diagramTextProvider.supportsEditor((IEditorPart) part);
+	// listener support, partly to support testing
+
+	private Collection<DiagramViewStatusListener> diagramViewListeners = new ArrayList<DiagramViewStatusListener>();
+
+	public void addDiagramViewListener(final DiagramViewStatusListener listener) {
+		if (diagramViewListeners == null) {
+			diagramViewListeners = new ArrayList<DiagramViewStatusListener>();
 		}
-		return false;
+		diagramViewListeners.add(listener);
 	}
 
-	protected String getDiagramText(final DiagramTextProvider diagramTextProvider, final IWorkbenchPart part, final ISelection selection) {
-		if (part instanceof IViewPart) {
-			return diagramTextProvider.getDiagramText((IViewPart) part, selection);
-		} else if (part instanceof IEditorPart) {
-			return diagramTextProvider.getDiagramText((IEditorPart) part, selection);
+	public void removeDiagramViewListener(final DiagramViewStatusListener listener) {
+		if (diagramViewListeners != null) {
+			diagramViewListeners.remove(listener);
 		}
-		return null;
 	}
 
-	private boolean updateDiagramText(final IWorkbenchPart activePart, final ISelection selection, final IPath path) {
+	public enum ViewStatus {
+		DIAGRAM_INTENT, DIAGRAM_TEXT, DIAGRAM_VIEW_TEXT, DIAGRAM_VIEW_DATA, DIAGRAM_VIEW
+	}
+
+	private ViewStatus viewStatus;
+
+	protected ViewStatus getViewStatus() {
+		return viewStatus;
+	}
+
+	protected void setDiagramViewStatus(final ViewStatus status, final Object diagram) {
+		fireDiagramViewStatusChanged(status, diagram);
+		//		String diagramText = diagram.toString();
+		//		final int pos = diagramText.indexOf('\n');
+		//		if (pos >= 0) {
+		//			diagramText = diagramText.substring(0, pos);
+		//		}
+		//		System.out.println(this + " -> " + status + " (" + diagramText + ")");
+	}
+
+	private void fireDiagramViewStatusChanged(final ViewStatus status, final Object diagram) {
+		if (diagramViewListeners != null) {
+			for (final DiagramViewStatusListener listener : diagramViewListeners) {
+				listener.diagramViewStatusChanged(this, status, diagram);
+			}
+		}
+	}
+
+	//
+
+	private boolean updateDiagramText(final IWorkbenchPart activePart, final ISelection selection) {
 		if (activePart != null) {
-			// TODO: do this in a Job
-			final DiagramTextProvider[] diagramTextProviders = Activator.getDefault().getDiagramTextProviders(true);
-			final Map<String, Object> markerAttributes = new HashMap<String, Object>();
-			for (int i = 0; i < diagramTextProviders.length; i++) {
-				final DiagramTextProvider diagramTextProvider = diagramTextProviders[i];
-				if (supportsPart(diagramTextProvider, activePart) && (selection == null || diagramTextProvider.supportsSelection(selection))) {
-					String diagramText = null;
-					if (activePart instanceof IEditorPart && diagramTextProvider instanceof DiagramTextProvider2) {
-						markerAttributes.clear();
-						diagramText = ((DiagramTextProvider2) diagramTextProvider).getDiagramText((IEditorPart) activePart, selection, markerAttributes);
-					} else {
-						diagramText = getDiagramText(diagramTextProvider, activePart, selection);
-					}
-					if (diagramText != null) {
-						// default to @startuml ... @enduml diagram
-						diagramText = ensureDiagram(diagramText);
-						updateDiagramText(diagramText, path, markerAttributes);
-						return true;
+			final DiagramIntentContext context = (activePart instanceof IEditorPart ?
+					new WorkbenchEditorPartDiagramIntentProviderContext((IEditorPart) activePart, selection) :
+						new WorkbenchPartDiagramIntentProviderContext(activePart, selection));
+			final DiagramIntentProvider[] diagramIntentProviders = Activator.getDefault().getDiagramIntentProviders(true);
+
+			// intent providers are sorted on priority
+			// within the same provider priority, the intent's priority is used
+			DiagramIntent bestIntent = null;
+			int bestPriority = -1;
+
+			int lastProviderPriority = Activator.DEFAULT_PRIORITY;
+			for (int i = 0; i < diagramIntentProviders.length; i++) {
+				final DiagramIntentProvider diagramIntentProvider = diagramIntentProviders[i];
+				final int providerPriority = Activator.getDefault().getDiagramIntentProviderPriority(diagramIntentProvider);
+				if (providerPriority < lastProviderPriority && bestIntent != null) {
+					break;
+				}
+				final Collection<? extends DiagramIntent> diagramInfos = diagramIntentProvider.getDiagramInfos(context);
+				if (diagramInfos != null && (! diagramInfos.isEmpty())) {
+					for (final DiagramIntent diagramIntent : diagramInfos) {
+						if (diagramIntent.getPriority() > bestPriority) {
+							bestIntent = diagramIntent;
+							bestPriority = diagramIntent.getPriority();
+						}
 					}
 				}
+				lastProviderPriority = providerPriority;
+			}
+			if (bestIntent != null) {
+				setDiagramViewStatus(ViewStatus.DIAGRAM_INTENT, bestIntent);
+				updateDiagramText(bestIntent);
+				return true;
 			}
 		}
 		return false;
+	}
+
+	private Job currentJob = null;
+
+	protected synchronized void updateDiagramText(final DiagramIntent diagramIntent) {
+		if (currentJob != null) {
+			currentJob.cancel();
+		}
+		currentJob = new Job("Generate diagram") {
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				try {
+					String diagramText = diagramIntent.getDiagramText();
+					if (monitor == null || (! monitor.isCanceled())) {
+						if (diagramText != null) {
+							// default to @startuml ... @enduml diagram
+							diagramText = ensureDiagram(diagramText);
+							setDiagramViewStatus(ViewStatus.DIAGRAM_TEXT, diagramText);
+							updateDiagramText(diagramText, diagramIntent, monitor);
+						}
+					}
+				} catch (final Exception e) {
+					System.err.println(e);
+				}
+				currentJob = null;
+				return monitor != null && monitor.isCanceled() ? Status.CANCEL_STATUS : Status.OK_STATUS;
+			}
+		};
+		//		Thread.dumpStack();
+		currentJob.schedule();
 	}
 
 	protected String ensureDiagram(String diagramText) {

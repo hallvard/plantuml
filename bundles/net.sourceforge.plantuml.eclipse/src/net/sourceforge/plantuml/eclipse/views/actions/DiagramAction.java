@@ -1,22 +1,24 @@
 package net.sourceforge.plantuml.eclipse.views.actions;
 
+import java.util.function.Supplier;
+
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.widgets.Display;
 
-import net.sourceforge.plantuml.util.DiagramData;
+public abstract class DiagramAction<D, C> extends Action {
 
-public abstract class DiagramAction extends Action {
+	protected final Supplier<D> diagramDataSupplier;
+	protected final C context;
 
-	protected final Display display;
-	protected final DiagramData diagram;
-
-	public DiagramAction(final Display display, final DiagramData diagram) {
-		this.display = display;
-		this.diagram = diagram;
+	public DiagramAction(final Supplier<D> diagramDataSupplier, final C context) {
+		this.diagramDataSupplier = diagramDataSupplier;
+		this.context = context;
 	}
 
-	protected ImageData getImage() {
-		return diagram.getImage();
+	public C getContext() {
+		return context;
+	}
+
+	protected D getDiagramData() {
+		return diagramDataSupplier.get();
 	}
 }

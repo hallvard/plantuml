@@ -1,14 +1,11 @@
 package net.sourceforge.plantuml.eclipse.views;
 
+import java.util.function.Supplier;
+
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -16,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -33,6 +31,8 @@ import net.sourceforge.plantuml.eclipse.views.actions.CopySourceAction;
 import net.sourceforge.plantuml.eclipse.views.actions.ExportAction;
 import net.sourceforge.plantuml.eclipse.views.actions.PrintAction;
 import net.sourceforge.plantuml.eclipse.views.actions.SaveAction;
+import net.sourceforge.plantuml.util.DiagramData;
+import net.sourceforge.plantuml.util.DiagramImageData;
 
 /**
  *
@@ -61,9 +61,9 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 
 	@Override
 	protected void createDiagramControl(final Composite parent) {
-		createImageControls(0);
+		ensureImageControls(0);
 		menuSupport = new MenuSupport();
-		addListeners();
+		addCanvasActions();
 	}
 
 	private final Listener mouseWheelListener = new Listener() {
@@ -104,7 +104,7 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 		return imageControl;
 	}
 
-	private void createImageControls(final int count) {
+	private synchronized void ensureImageControls(final int count) {
 		if (imageControls != null && imageControls.length == count) {
 			return;
 		}
@@ -123,8 +123,8 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 		} else {
 			imageControls = new DiagramImageControl[count];
 		}
-		// here imageControls exists, may contain disposed items and may be too short or
-		// long
+		// here imageControls exists, may contain disposed items and
+		// may be too short or long
 		if (imageControls.length != count) {
 			final DiagramImageControl[] newImageControls = new DiagramImageControl[count];
 			System.arraycopy(imageControls, 0, newImageControls, 0,
@@ -147,41 +147,17 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 		}
 	}
 
-	/**
-	 * add listeners to the canvas
-	 */
-	private void addListeners() {
-		addCanvasActions();
-	}
-
 	private void addCanvasActions() {
+		final Supplier<DiagramData> diagramDataSupplier = () -> diagramData;
+		final Supplier<DiagramImageData> diagramImageDataSupplier = () -> getCurrentImageControl().getDiagramImageData();
 		final Display display = composite.getDisplay();
-		menuSupport.addMenuAction(new CopyAction(null) {
-			@Override
-			public ImageControl getControl() {
-				return getCurrentImageControl();
-			}
-		});
-		menuSupport.addMenuAction(new CopySourceAction(display, diagramData));
-		menuSupport.addMenuAction(new CopyAsciiAction(display, diagramData));
-		menuSupport.addMenuAction(new SaveAction(null, diagramData) {
-			@Override
-			public ImageControl getControl() {
-				return getCurrentImageControl();
-			}
-		});
-		menuSupport.addMenuAction(new ExportAction(null, diagramData) {
-			@Override
-			public ImageControl getControl() {
-				return getCurrentImageControl();
-			}
-		});
-		menuSupport.addMenuAction(new PrintAction(null) {
-			@Override
-			public ImageControl getControl() {
-				return getCurrentImageControl();
-			}
-		});
+		menuSupport.addMenuAction(new CopyAction(diagramImageDataSupplier, display));
+		menuSupport.addMenuAction(new CopySourceAction(diagramDataSupplier, display));
+		menuSupport.addMenuAction(new CopyAsciiAction(diagramImageDataSupplier, display));
+		final Shell shell = composite.getShell();
+		menuSupport.addMenuAction(new SaveAction(diagramImageDataSupplier, shell));
+		menuSupport.addMenuAction(new ExportAction(diagramImageDataSupplier, shell));
+		menuSupport.addMenuAction(new PrintAction(diagramImageDataSupplier, shell));
 	}
 
 	private IAction zoomInAction, zoomOutAction, fitCanvasAction, showOriginalAction;
@@ -200,58 +176,25 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 	@Override
 	protected void makeActions() {
 		super.makeActions();
-		zoomInAction = new ZoomAction(null, ZOOMIN_RATE) {
-			@Override
-			public ImageControl getControl() {
-				return getCurrentImageControl();
-			};
-		};
+		final Supplier<ImageControl> imageControlSupplier = () -> getCurrentImageControl();
+		zoomInAction = new ZoomAction(imageControlSupplier, ZOOMIN_RATE);
 		zoomInAction.setToolTipText(PlantumlConstants.ZOOM_IN_BUTTON);
 
-		zoomOutAction = new ZoomAction(null, ZOOMOUT_RATE) {
-			@Override
-			public ImageControl getControl() {
-				return getCurrentImageControl();
-			};
-		};
+		zoomOutAction = new ZoomAction(imageControlSupplier, ZOOMOUT_RATE);
 		zoomOutAction.setToolTipText(PlantumlConstants.ZOOM_OUT_BUTTON);
 
-		fitCanvasAction = new ZoomFitAction(null) {
-			@Override
-			public ImageControl getControl() {
-				return getCurrentImageControl();
-			};
-		};
+		fitCanvasAction = new ZoomFitAction(imageControlSupplier);
 		fitCanvasAction.setToolTipText(PlantumlConstants.FIT_CANVAS_BUTTON);
 
-		showOriginalAction = new ZoomResetAction(null) {
-			@Override
-			public ImageControl getControl() {
-				return getCurrentImageControl();
-			};
-		};
+		showOriginalAction = new ZoomResetAction(imageControlSupplier);
 		showOriginalAction.setToolTipText(PlantumlConstants.SHOW_ORIGINAL_BUTTON);
 	}
 
 	@Override
 	protected void contributeToActionBars() {
+		super.contributeToActionBars();
 		final IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		addZoomActions(toolBarManager);
-		addViewActions(toolBarManager);
-
-		final IMenuManager menu = getViewSite().getActionBars().getMenuManager();
-		final MenuManager editorSelectionActionMenu = new MenuManager("Diagrams");
-		editorSelectionActionMenu.add(new Action() {}); // will be removed, needed for the submenu to actually show
-		editorSelectionActionMenu.setRemoveAllWhenShown(true);
-		editorSelectionActionMenu.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(final IMenuManager menu) {
-				for (final ActionContributionItem actionContributionItem : getEditorSelectionActions(menu)) {
-					menu.add(actionContributionItem);
-				}
-			}
-		});
-		menu.add(editorSelectionActionMenu);
 	}
 
 	protected void addZoomActions(final IContributionManager toolBarManager) {
@@ -270,18 +213,34 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 	//
 
 	@Override
-	protected void updateDiagram(final IProgressMonitor monitor) {
-		for (int i = 0; i < imageControls.length; i++) {
-			if (imageControls.length > i && imageControls[i] != null && (!imageControls[i].isDisposed())) {
-				imageControls[i].updateDiagramImage(diagramData, i);
+	protected void updateDiagram(final DiagramData diagramData, final IProgressMonitor monitor) {
+		// load all images before updating controls
+		final DiagramImageData[] diagramImageDatas = new DiagramImageData[diagramData.getImageCount()];
+		for (int imageNum = 0; imageNum < diagramImageDatas.length; imageNum++) {
+			if (monitor != null && monitor.isCanceled()) {
+				return;
 			}
+			final DiagramImageData diagramImageData = new DiagramImageData(diagramData, imageNum, null);
+			diagramImageData.getImage();
+			diagramImageDatas[imageNum] = diagramImageData;
 		}
-	}
-
-	@Override
-	protected void updateDiagram() {
-		createImageControls(diagramData.getImageCount());
-		super.updateDiagram();
+		if (monitor != null && monitor.isCanceled()) {
+			return;
+		}
+		setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW_DATA, diagramImageDatas);
+		asyncExec(() -> {
+			// check if the view still matches the model
+			if (shouldUpdateView(diagramData)) {
+				ensureImageControls(diagramImageDatas.length);
+				for (int imageNum = 0; imageNum < imageControls.length; imageNum++) {
+					if (imageControls[imageNum] != null && (! imageControls[imageNum].isDisposed())) {
+						imageControls[imageNum].updateDiagramImage(diagramImageDatas[imageNum]);
+					}
+				}
+				setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW, diagramImageDatas);
+			}
+		});
+		asyncExec(layoutComposite);
 	}
 
 	@Override
