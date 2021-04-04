@@ -2,6 +2,7 @@ package net.sourceforge.plantuml.text;
 
 import java.util.Collection;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
@@ -10,6 +11,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchEditorPartDiagramIntentProviderContext;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.eclipse.utils.WorkspaceDiagramIntentProviderContext;
 import net.sourceforge.plantuml.util.DiagramIntent;
 import net.sourceforge.plantuml.util.DiagramIntentContext;
 import net.sourceforge.plantuml.util.DiagramIntentProvider;
@@ -66,6 +68,10 @@ public abstract class AbstractDiagramIntentProvider implements DiagramIntentProv
 		return true;
 	}
 
+	protected boolean supportsPath(final IPath path) {
+		return false;
+	}
+
 	//
 
 	protected String getStartPlantUml() {
@@ -99,6 +105,11 @@ public abstract class AbstractDiagramIntentProvider implements DiagramIntentProv
 				return null;
 			}
 			return getDiagramInfos(workbenchContext);
+		} else if (context instanceof WorkspaceDiagramIntentProviderContext) {
+			final WorkspaceDiagramIntentProviderContext workspaceContext = (WorkspaceDiagramIntentProviderContext) context;
+			if (supportsPath(workspaceContext.getPath())) {
+				return getDiagramInfos(workspaceContext);
+			}
 		}
 		return null;
 	}
@@ -108,6 +119,10 @@ public abstract class AbstractDiagramIntentProvider implements DiagramIntentProv
 	}
 
 	protected Collection<? extends DiagramIntent> getDiagramInfos(final WorkbenchPartDiagramIntentProviderContext context) {
+		return null;
+	}
+
+	protected Collection<? extends DiagramIntent> getDiagramInfos(final WorkspaceDiagramIntentProviderContext context) {
 		return null;
 	}
 }

@@ -7,6 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: net.sourceforge.plantuml.eclipse.utils,
  net.sourceforge.plantuml.ecore,
  net.sourceforge.plantuml.text,
+ net.sourceforge.plantuml.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.ecore.resource,
  org.eclipse.emf.ecore.util,
@@ -17,3 +18,5 @@ Import-Package: net.sourceforge.plantuml.eclipse.utils,
  org.eclipse.xtext.resource,
  org.eclipse.xtext.ui.editor,
  org.eclipse.xtext.util.concurrent
+Bundle-ClassPath: .
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.10.0"

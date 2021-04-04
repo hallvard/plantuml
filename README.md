@@ -23,21 +23,22 @@ This repo uses the [EPL license](net.sourceforge.plantuml.feature/epl-v10.html).
 
 We use github pages @ http://hallvard.github.io/plantuml as the update site URL, in the Help > Install New Software... dialog.
 
-# Main plugins
-- net.sourceforge.plantuml.lib - plantuml.jar packaged as a bundle
-- net.sourceforge.plantuml.lib.jlatexmath - fragment to the lib bundle that adds the jlatexmath lib
-- net.sourceforge.plantuml.eclipse - core Eclipse integration, including the extension point for providing diagrams
-- net.sourceforge.plantuml.eclipse.imagecontrol - the control for viewing the generated images
-- net.sourceforge.plantuml.text - diagrams based on explicit DSL code, with support for editors based on the standard Eclipse text editor
-- net.sourceforge.plantuml.jdt - diagrams based on the Eclipse Java model, with support for Java and Class File editors
-- net.sourceforge.plantuml.ecore - diagrams based on Ecore models, with support for most Ecore editors
-- net.sourceforge.plantuml.osgi - component diagrams based on OSGi meta-data
-(- net.sourceforge.plantuml.xcore - diagrams based on Xcore models, with support for the Xtext editor)
+# Main plugins (net.sourceforge.plantuml.)
+- lib - plantuml.jar packaged as a bundle
+- lib.jlatexmath - fragment to the lib bundle that adds the jlatexmath lib
+- eclipse - core Eclipse integration, including the extension point for providing diagrams
+- eclipse.imagecontrol - the control for viewing the generated images
+- text - diagrams based on explicit DSL code, with support for editors based on the standard Eclipse text editor
+- jdt - diagrams based on the Eclipse Java model, with support for Java and Class File editors
+- ecore - diagrams based on Ecore models, with support for most Ecore editors
+- osgi - component diagrams based on OSGi meta-data
+- (xcore - diagrams based on Xcore models, with support for the Xtext editor)
+- (uml2 - diagrams based on UML2 models)
 
 # Releases
 
 Notable features in recent releases, details are found in [releases](https://github.com/hallvard/plantuml/releases).
-Note that the version numbers are a bit special, since they include the version of the included plantuml.jar
+Note that the version numbers of the plantuml.lib plugin are a bit special, since they use the version of the included plantuml.jar
 
 ## [1.1.25](https://github.com/hallvard/plantuml/releases/tag/1.1.25)
 - Updated to use PlantUML library version 1.2021.3 (see [changes](https://plantuml.com/changes)).

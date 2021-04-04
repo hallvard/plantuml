@@ -50,6 +50,7 @@
             >
       </view>
    </extension>
+
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension

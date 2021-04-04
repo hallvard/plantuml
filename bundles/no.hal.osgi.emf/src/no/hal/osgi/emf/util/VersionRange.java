@@ -1,11 +1,11 @@
 package no.hal.osgi.emf.util;
 
 public class VersionRange {
-	
+
 	public final Version minimum, maximum;
 	public final boolean minimumExclusive, maximumExclusive;
 
-	public VersionRange(Version minimum, Version maximum, boolean minimumExclusive, boolean maximumExclusive) {
+	public VersionRange(final Version minimum, final Version maximum, final boolean minimumExclusive, final boolean maximumExclusive) {
 		this.minimum = minimum;
 		this.maximum = maximum;
 		this.minimumExclusive = minimumExclusive;
@@ -18,12 +18,12 @@ public class VersionRange {
 			if (maximum != null && minimum.compareTo(maximum) == 0) {
 				return minimum.toString();
 			}
-			return (minimumExclusive ? "(" : "[") + minimum + (maximum != null ? "," + maximum : "") + (maximumExclusive ? ")" : "]"); 
+			return (minimumExclusive ? "(" : "[") + minimum + (maximum != null ? "," + maximum : "") + (maximumExclusive ? ")" : "]");
 		}
 		return null;
 	}
-	
-	public static VersionRange valueOf(String s) {
+
+	public static VersionRange valueOf(final String s) {
 		Version minimum = null, maximum = null;
 		boolean minimumExclusive = false, maximumExclusive = false;
 		int pos1 = 0;
@@ -42,7 +42,7 @@ public class VersionRange {
 		char nextChar = '\0';
 		while (pos2 < s.length()) {
 			nextChar = s.charAt(pos2);
-			if (! (Character.isDigit(nextChar) || nextChar == '.')) {
+			if (! (Character.isDigit(nextChar) || Character.isLetter(nextChar) || nextChar == '.')) {
 				break;
 			}
 			pos2++;
@@ -80,10 +80,10 @@ public class VersionRange {
 	}
 
 	private static RuntimeException createIllegalSyntaxException() {
-		return new IllegalArgumentException("A version has the following format: major.minor.micro.qualifier, where major, minor and micro har integers");
+		return new IllegalArgumentException("Illegal version range format");
 	}
 
-	public boolean contains(Version version) {
+	public boolean contains(final Version version) {
 		return true;
 	}
 }

@@ -15,3 +15,4 @@ Import-Package: net.sourceforge.plantuml.eclipse.utils,
  org.eclipse.jface.viewers,
  org.eclipse.ui,
  org.eclipse.uml2.uml
+Bundle-ClassPath: .

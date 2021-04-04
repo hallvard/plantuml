@@ -11,6 +11,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider2;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.eclipse.utils.WorkspaceDiagramIntentProviderContext;
 
 public class DiagramTextIntentProvider implements DiagramIntentProvider {
 
@@ -26,24 +27,31 @@ public class DiagramTextIntentProvider implements DiagramIntentProvider {
 
 	@Override
 	public Collection<DiagramIntent> getDiagramInfos(final DiagramIntentContext context) {
+		String diagramText = null;
 		if (context instanceof WorkbenchPartDiagramIntentProviderContext) {
 			final WorkbenchPartDiagramIntentProviderContext intentProviderContext = (WorkbenchPartDiagramIntentProviderContext) context;
 			final IWorkbenchPart workbenchPart = intentProviderContext.getWorkbenchPart();
-			String diagramText = null;
 			final ISelection selection = intentProviderContext.getSelection();
 			if (workbenchPart instanceof IEditorPart) {
 				if (diagramTextProvider instanceof DiagramTextProvider2) {
+					final DiagramTextProvider2 diagramTextProvider2 = (DiagramTextProvider2) diagramTextProvider;
 					// TODO
-					diagramText = ((DiagramTextProvider2) diagramTextProvider).getDiagramText((IEditorPart) workbenchPart, selection);
+					diagramText = diagramTextProvider2.getDiagramText((IEditorPart) workbenchPart, selection);
 				} else {
 					diagramText = diagramTextProvider.getDiagramText((IEditorPart) workbenchPart, selection);
 				}
 			} else if (workbenchPart instanceof IViewPart) {
 				diagramText = diagramTextProvider.getDiagramText((IViewPart) workbenchPart, selection);
 			}
-			if (diagramText != null) {
-				return Collections.singletonList(new SimpleDiagramIntent(diagramText));
+		} else if (context instanceof WorkspaceDiagramIntentProviderContext && diagramTextProvider instanceof DiagramTextProvider2) {
+			final WorkspaceDiagramIntentProviderContext intentProviderContext = (WorkspaceDiagramIntentProviderContext) context;
+			final DiagramTextProvider2 diagramTextProvider2 = (DiagramTextProvider2) diagramTextProvider;
+			if (diagramTextProvider2.supportsPath(intentProviderContext.getPath())) {
+				diagramText = diagramTextProvider2.getDiagramText(intentProviderContext.getPath());
 			}
+		}
+		if (diagramText != null) {
+			return Collections.singletonList(new SimpleDiagramIntent(diagramText));
 		}
 		return null;
 	}

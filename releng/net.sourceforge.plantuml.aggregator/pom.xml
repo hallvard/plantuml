@@ -31,8 +31,8 @@
 		<module>../../tests/no.hal.osgi.emf.tests</module>
 		<module>../../bundles/net.sourceforge.plantuml.osgi</module>
 		<!-- 
-		<module>../bundles/net.sourceforge.plantuml.xcore</module>
 		 -->
+		<module>../bundles/net.sourceforge.plantuml.xcore</module>
 
 		<module>../../bundles/net.sourceforge.plantuml.lib.jlatexmath</module>
 		<module>../../features/net.sourceforge.plantuml.lib.jlatexmath.feature</module>

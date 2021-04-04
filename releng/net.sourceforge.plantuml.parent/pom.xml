@@ -116,38 +116,31 @@
 				<version>${tycho-maven-plugin-version}</version>
 				<extensions>true</extensions>
 			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-source-feature-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<executions>
-					<execution>
-						<id>source-feature</id>
-						<phase>package</phase>
-						<goals>
-							<goal>source-feature</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<excludes>
-						<!-- provide plug-ins not containing any source code -->
-						<plugin id="net.sourceforge.plantuml.lib" />
-						<plugin id="net.sourceforge.plantuml.lib.jlatexmath" />
-					</excludes>
-				</configuration>
-			</plugin>
+			
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-source-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<executions>
-					<execution>
+				    <execution>
 						<id>plugin-source</id>
 						<goals>
-							<goal>plugin-source</goal>
+						    <goal>plugin-source</goal>
 						</goals>
-					</execution>
+				    </execution>
+				     <execution>
+						<id>feature-source</id>
+						<goals>
+						    <goal>feature-source</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<!-- provide plug-ins not containing any source code -->
+								<plugin id="net.sourceforge.plantuml.lib" />
+								<plugin id="net.sourceforge.plantuml.lib.jlatexmath" />
+							</excludes>
+						</configuration>
+				    </execution>
 				</executions>
 			</plugin>
 			<plugin>

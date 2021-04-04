@@ -25,3 +25,4 @@ Import-Package: net.sourceforge.plantuml.eclipse.utils,
 Export-Package: net.sourceforge.plantuml.jdt
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: net.sourceforge.plantuml.jdt.Activator
+Bundle-ClassPath: .

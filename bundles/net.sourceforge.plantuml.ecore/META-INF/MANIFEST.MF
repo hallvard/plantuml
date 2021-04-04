@@ -17,3 +17,4 @@ Import-Package: net.sourceforge.plantuml.eclipse.utils,
  org.eclipse.emf.edit.domain,
  org.eclipse.jface.viewers,
  org.eclipse.ui
+Bundle-ClassPath: .
