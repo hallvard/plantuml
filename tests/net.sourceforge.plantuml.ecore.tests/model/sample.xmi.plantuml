@@ -1,16 +1,16 @@
 @startuml
 object "~#1: Library" as o1 {
 }
-url of o1 is  [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.xmi?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.xmi%23/]]
+url of o1 is  [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.xmi?uri=platform:/resource/ecoreeditortest/model/sample.xmi%23/]]
 object "~#2: Book" as o2 {
 	name = "Sult"
 	kind = Novel
 }
-url of o2 is  [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.xmi?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.xmi%23//@books.0]]
+url of o2 is  [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.xmi?uri=platform:/resource/ecoreeditortest/model/sample.xmi%23//@books.0]]
 object "~#3: Author" as o3 {
 	name = "Knut Hamsun"
 }
-url of o3 is  [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.xmi?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.xmi%23//@authors.0]]
+url of o3 is  [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.xmi?uri=platform:/resource/ecoreeditortest/model/sample.xmi%23//@authors.0]]
 o1 *-- "books" o2
 o1 *-- "authors" o3
 o2 --> "author" o3

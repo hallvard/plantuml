@@ -25,3 +25,51 @@ class "Bar"
 @startuml
 class "Foo"
 @enduml
+
+@startjson
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "isAlive": true,
+  "age": 27,
+  "address": {
+    "streetAddress": "21 2nd Street",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": "10021-3100"
+  },
+  "phoneNumbers": [
+    {
+      "type": "home",
+      "number": "212 555-1234"
+    },
+    {
+      "type": "office",
+      "number": "646 555-4567"
+    }
+  ],
+  "children": [],
+  "spouse": null
+}
+@endjson
+
+@startyaml
+doe: "a deer, a female deer"
+ray: "a drop of golden sun"
+pi: 3.14159
+xmas: true
+french-hens: 3
+calling-birds: 
+	- huey
+	- dewey
+	- louie
+	- fred
+xmas-fifth-day: 
+	calling-birds: four
+	french-hens: 3
+	golden-rings: 5
+	partridges: 
+		count: 1
+		location: "a pear tree"
+	turtle-doves: two
+@endyaml

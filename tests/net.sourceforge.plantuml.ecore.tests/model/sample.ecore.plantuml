@@ -1,15 +1,15 @@
 @startuml
-class Library [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.ecore?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.ecore%23//Library]] {
+class Library [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.ecore?uri=platform:/resource/ecoreeditortest/model/sample.ecore%23//Library]] {
 }
-class Book [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.ecore?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.ecore%23//Book]] {
+class Book [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.ecore?uri=platform:/resource/ecoreeditortest/model/sample.ecore%23//Book]] {
 	kind: BookKind
 }
-class Author [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.ecore?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.ecore%23//Author]] {
+class Author [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.ecore?uri=platform:/resource/ecoreeditortest/model/sample.ecore%23//Author]] {
 }
-class Named [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.ecore?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.ecore%23//Named]] {
+class Named [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.ecore?uri=platform:/resource/ecoreeditortest/model/sample.ecore%23//Named]] {
 	name: String
 }
-enum BookKind {
+enum BookKind [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.ecore?uri=platform:/resource/ecoreeditortest/model/sample.ecore%23//BookKind]] {
 	Novel: Novel
 	Non-fiction: Non-fiction
 }
