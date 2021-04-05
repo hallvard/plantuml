@@ -9,6 +9,7 @@ import net.sourceforge.plantuml.util.DiagramIntent;
 
 public class DiagramSourceView extends AbstractDiagramSourceView {
 
+	private String diagramText;
 	private Text diagramTextView;
 
 	@Override
@@ -22,10 +23,11 @@ public class DiagramSourceView extends AbstractDiagramSourceView {
 	protected void updateDiagramText(final String textDiagram, final DiagramIntent diagramIntent, final IProgressMonitor progressMonitor) {
 		if (isValidControl(diagramTextView)) {
 			setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW_TEXT, textDiagram);
+			this.diagramText = textDiagram;
+			setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW_DATA, textDiagram);
 			asyncExec(() -> {
 				if (isValidControl(diagramTextView)) {
 					final String text = (textDiagram == null ? "" : textDiagram);
-					setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW_DATA, textDiagram);
 					diagramTextView.setText(text);
 					setDiagramViewStatus(ViewStatus.DIAGRAM_VIEW, text);
 				}
@@ -35,7 +37,7 @@ public class DiagramSourceView extends AbstractDiagramSourceView {
 
 	@Override
 	public String getDiagramText() {
-		return (isValidControl(diagramTextView) ? diagramTextView.getText() : null);
+		return diagramText;
 	}
 
 	@Override

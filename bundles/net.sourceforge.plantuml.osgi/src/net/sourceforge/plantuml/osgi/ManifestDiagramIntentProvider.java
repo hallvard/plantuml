@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPathEditorInput;
@@ -26,11 +25,6 @@ public class ManifestDiagramIntentProvider extends AbstractDiagramIntentProvider
 
 	public ManifestDiagramIntentProvider() {
 		super(null);
-	}
-
-	@Override
-	public boolean supportsSelection(final ISelection selection) {
-		return false;
 	}
 
 	@Override

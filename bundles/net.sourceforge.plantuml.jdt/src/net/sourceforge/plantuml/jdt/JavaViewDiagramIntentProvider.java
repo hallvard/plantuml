@@ -32,7 +32,7 @@ public class JavaViewDiagramIntentProvider extends AbstractDiagramIntentProvider
 	}
 
 	@Override
-	public boolean supportsSelection(final ISelection selection) {
+	public Boolean supportsSelection(final ISelection selection) {
 		final Collection<IType> selectedTypes = getSelectedTypes(selection);
 		return selectedTypes != null && (! selectedTypes.isEmpty());
 	}

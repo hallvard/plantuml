@@ -1,0 +1,21 @@
+@startuml
+class Library [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.ecore?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.ecore%23//Library]] {
+}
+class Book [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.ecore?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.ecore%23//Book]] {
+	kind: BookKind
+}
+class Author [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.ecore?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.ecore%23//Author]] {
+}
+class Named [[marker:/org.eclipse.emf.ecore.diagnostic/net.sourceforge.plantuml.ecore.tests/model/sample.ecore?uri=platform:/resource/net.sourceforge.plantuml.ecore.tests/model/sample.ecore%23//Named]] {
+	name: String
+}
+enum BookKind {
+	Novel: Novel
+	Non-fiction: Non-fiction
+}
+Named <|-- Book
+Named <|-- Author
+Library *--> "books *" Book
+Library *--> "authors *" Author
+Book --> "author" Author
+@enduml

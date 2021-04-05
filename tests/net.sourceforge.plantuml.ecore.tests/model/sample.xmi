@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sample:Library
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:sample="platform:/plugin/net.sourceforge.plantuml.ecore.tests/model/sample.ecore"
+    xsi:schemaLocation="platform:/plugin/net.sourceforge.plantuml.ecore.tests/model/sample.ecore sample.ecore">
+  <books name="Sult"
+      author="//@authors.0"/>
+  <authors name="Knut Hamsun"/>
+</sample:Library>

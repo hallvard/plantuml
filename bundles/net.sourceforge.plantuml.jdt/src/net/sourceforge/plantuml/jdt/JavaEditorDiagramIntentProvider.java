@@ -36,7 +36,7 @@ public class JavaEditorDiagramIntentProvider extends AbstractDiagramIntentProvid
 	}
 
 	@Override
-	protected boolean supportsPath(final IPath path) {
+	protected Boolean supportsPath(final IPath path) {
 		return "java".equals(path.getFileExtension());
 	}
 
@@ -54,7 +54,7 @@ public class JavaEditorDiagramIntentProvider extends AbstractDiagramIntentProvid
 
 	@Override
 	protected Collection<DiagramIntent> getDiagramInfos(final WorkspaceDiagramIntentProviderContext context) {
-		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(context.getPath());
+		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(context.getPath());
 		return getDiagramInfos(file);
 	}
 }

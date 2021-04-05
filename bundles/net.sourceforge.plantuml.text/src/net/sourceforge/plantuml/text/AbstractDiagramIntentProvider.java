@@ -56,20 +56,42 @@ public abstract class AbstractDiagramIntentProvider implements DiagramIntentProv
 		return (T) (partType.isInstance(part) ? part : part.getAdapter(partType));
 	}
 
+	/**
+	 * Is this DiagramIntentProvider interested in the given editor?
+	 * @param editorPart
+	 * @return
+	 */
 	protected boolean supportsEditor(final IEditorPart editorPart) {
 		return isWorkbenchPart(editorPart, partType);
 	}
 
+	/**
+	 * Is this DiagramIntentProvider interested in the given view?
+	 * @param viewPart
+	 * @return
+	 */
 	protected boolean supportsView(final IViewPart viewPart) {
 		return isWorkbenchPart(viewPart, partType);
 	}
 
-	protected boolean supportsSelection(final ISelection selection) {
-		return true;
+	/**
+	 * Is the given selection relevant and interesting for this DiagramIntentProvider?
+	 * null means irrelevant, while true/false tells if it is interesting
+	 * @param selection
+	 * @return
+	 */
+	protected Boolean supportsSelection(final ISelection selection) {
+		return null;
 	}
 
-	protected boolean supportsPath(final IPath path) {
-		return false;
+	/**
+	 * Is the given path relevant and interesting for this DiagramIntentProvider?
+	 * null means irrelevant, while true/false tells if it is interesting
+	 * @param path
+	 * @return
+	 */
+	protected Boolean supportsPath(final IPath path) {
+		return null;
 	}
 
 	//
@@ -91,7 +113,7 @@ public abstract class AbstractDiagramIntentProvider implements DiagramIntentProv
 			if (workbenchContext.getEditorPart() != null && (! supportsEditor(workbenchContext.getEditorPart()))) {
 				return null;
 			}
-			if (workbenchContext.getSelection() != null && (! supportsSelection(workbenchContext.getSelection()))) {
+			if (workbenchContext.getSelection() != null && Boolean.FALSE.equals(supportsSelection(workbenchContext.getSelection()))) {
 				return null;
 			}
 			return getDiagramInfos(workbenchContext);
@@ -101,13 +123,13 @@ public abstract class AbstractDiagramIntentProvider implements DiagramIntentProv
 			if (workbenchPart instanceof IViewPart && (! supportsView((IViewPart) workbenchPart))) {
 				return null;
 			}
-			if (workbenchContext.getSelection() != null && (! supportsSelection(workbenchContext.getSelection()))) {
+			if (workbenchContext.getSelection() != null && Boolean.FALSE.equals(supportsSelection(workbenchContext.getSelection()))) {
 				return null;
 			}
 			return getDiagramInfos(workbenchContext);
 		} else if (context instanceof WorkspaceDiagramIntentProviderContext) {
 			final WorkspaceDiagramIntentProviderContext workspaceContext = (WorkspaceDiagramIntentProviderContext) context;
-			if (supportsPath(workspaceContext.getPath())) {
+			if (! Boolean.FALSE.equals(supportsPath(workspaceContext.getPath()))) {
 				return getDiagramInfos(workspaceContext);
 			}
 		}

@@ -22,7 +22,7 @@ public abstract class AbstractTextDiagramIntentProvider extends AbstractDiagramI
 	}
 
 	@Override
-	public boolean supportsSelection(final ISelection selection) {
+	public Boolean supportsSelection(final ISelection selection) {
 		return selection instanceof ITextSelection;
 	}
 

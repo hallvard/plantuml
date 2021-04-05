@@ -566,7 +566,12 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 	protected String ensureDiagram(String diagramText) {
 		if (! diagramText.startsWith("@")) {
-			diagramText = PlantumlConstants.START_UML + "\n" + diagramText + "\n" + PlantumlConstants.END_UML;
+			diagramText = PlantumlConstants.START_UML + "\n" + diagramText;
+			String suffix = PlantumlConstants.END_UML;
+			if (! diagramText.endsWith("\n")) {
+				suffix = "\n" + suffix;
+			}
+			diagramText += suffix;
 		}
 		return diagramText;
 	}

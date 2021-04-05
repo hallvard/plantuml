@@ -218,7 +218,11 @@ public class EcoreClassDiagramIntent extends AbstractClassDiagramIntent<Collecti
 	}
 
 	protected void appendDataType(final EDataType dataType, final int genFlags, final StringBuilder buffer) {
-		appendClassStart(null, "class", dataType.getName(), getClassifierColor(dataType), buffer);
+		String link = null;
+		if (includes(genFlags, GEN_CLASS_HYPERLINKS)) {
+			link = diagramHelper.getEObjectHyperlink(dataType);
+		}
+		appendClassStart(null, "class", dataType.getName(), link, getClassifierColor(dataType), buffer);
 		if (dataType.getInstanceClassName() != null) {
 			appendAttribute(null, null, null, dataType.getInstanceClassName(), buffer);
 		}
@@ -226,7 +230,11 @@ public class EcoreClassDiagramIntent extends AbstractClassDiagramIntent<Collecti
 	}
 
 	protected void appendEnum(final EEnum eEnum, final int genFlags, final StringBuilder buffer) {
-		appendClassStart(null, "enum", eEnum.getName(), getClassifierColor(eEnum), buffer);
+		String link = null;
+		if (includes(genFlags, GEN_CLASS_HYPERLINKS)) {
+			link = diagramHelper.getEObjectHyperlink(eEnum);
+		}
+		appendClassStart(null, "enum", eEnum.getName(), link, getClassifierColor(eEnum), buffer);
 		for (final EEnumLiteral literal : eEnum.getELiterals()) {
 			appendAttribute(null, null, literal.getName(), literal.getLiteral(), buffer);
 		}

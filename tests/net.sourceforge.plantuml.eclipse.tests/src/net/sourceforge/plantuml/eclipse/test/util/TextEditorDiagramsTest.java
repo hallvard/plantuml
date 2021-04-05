@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.sourceforge.plantuml.eclipse.views.AbstractDiagramSourceView;
+import net.sourceforge.plantuml.eclipse.views.DiagramViewStatusListener;
 
 public class TextEditorDiagramsTest extends AbstractWorkbenchTest {
 
@@ -111,9 +112,25 @@ public class TextEditorDiagramsTest extends AbstractWorkbenchTest {
 		return null;
 	}
 
+	private AbstractDiagramSourceView.ViewStatus expectedStatus = null;
+	private AbstractDiagramSourceView.ViewStatus actualStatus = null;
+
+	final DiagramViewStatusListener statusListener = (view, status, diagram) -> {
+		if (view == diagramView) {
+			//			System.out.println(status + " == " + expectedStatus + "?");
+			//			Thread.dumpStack();
+			if (actualStatus == null && (expectedStatus == null || status == expectedStatus)) {
+				actualStatus = status;
+			}
+		}
+	};
+
 	protected void testEditorDiagram(final IFile file, final IConfigurationElement ces) {
 		final String diagramTextUri = getDiagramTextUri(ces, ces.getAttribute("sourceFileUri"));
 		try {
+			diagramView.addDiagramViewListener(statusListener);
+			this.expectedStatus = AbstractDiagramSourceView.ViewStatus.DIAGRAM_VIEW_DATA;
+			this.actualStatus = null;
 			final IEditorPart editor = openEditor(file, getEditorId(ces));
 			if (ces.getAttribute("selectionsProvider") != null) {
 				final SelectionIterable selections = (SelectionIterable) ces.createExecutableExtension("selectionsProvider");
@@ -121,10 +138,10 @@ public class TextEditorDiagramsTest extends AbstractWorkbenchTest {
 				final ISelectionProvider selectionProvider = editor.getSite().getSelectionProvider();
 				int counter = 0;
 				for (final ISelection selection : selections) {
+					this.actualStatus = null;
 					selectionProvider.setSelection(selection);
-					// must force an update, since the selection change isn't propagated at once
-					// when we listen to post selection change
 					diagramView.updateDiagramText();
+					Assert.assertTrue("Timeout for diagram #" + (counter + 1) + " in " + file.getFullPath(), waitForDiagramView(5));
 					final String diagramText = diagramView.getDiagramText();
 					counter++;
 					final int pos = diagramTextUri.lastIndexOf('.');
@@ -132,12 +149,34 @@ public class TextEditorDiagramsTest extends AbstractWorkbenchTest {
 					checkDiagramText(diagramSelectionTextUri, diagramText);
 				};
 			} else {
+				Assert.assertTrue("Timeout for diagram in " + file.getFullPath(), waitForDiagramView(5));
 				final String diagramText = diagramView.getDiagramText();
 				checkDiagramText(diagramTextUri, diagramText);
 			}
 		} catch (final Exception e) {
-			Assert.fail("Couldn't open " + file.getFullPath() + " in editor and test diagram: " + e.getMessage());
+			e.printStackTrace();
+			Assert.fail("Couldn't open " + file.getFullPath() + " in editor and test diagram: " + e);
+		} finally {
+			diagramView.removeDiagramViewListener(statusListener);
 		}
+	}
+
+	private boolean waitForDiagramView(final float timeout) {
+		float timeLeft = timeout;
+		while (true) {
+			try {
+				Thread.sleep(500);
+			} catch (final InterruptedException e) {
+			}
+			timeLeft -= 0.5;
+			if (actualStatus != null) {
+				return true;
+			}
+			if (timeLeft <= 0.0) {
+				break;
+			}
+		}
+		return false;
 	}
 
 	protected String getDiagramTextUri(final IConfigurationElement ces, final String fileUri) {
@@ -155,13 +194,13 @@ public class TextEditorDiagramsTest extends AbstractWorkbenchTest {
 			final StringTokenizer tokenizer = new StringTokenizer(actual, "\n");
 			int lineNum = 1;
 			while (scanner.hasNextLine()) {
-				Assert.assertTrue("Missing lines in actual diagram text", tokenizer.hasMoreTokens());
+				Assert.assertTrue("Missing lines (>=" + lineNum + ") in actual diagram text of " + expected, tokenizer.hasMoreTokens());
 				final String expectedLine = scanner.nextLine().trim();
 				final String actualLine = tokenizer.nextToken().trim();
-				Assert.assertEquals("Mismatch at line " + lineNum, expectedLine, actualLine);
+				Assert.assertEquals("Mismatch at line " + lineNum + " in actual diagram text of " + expected, expectedLine, actualLine);
 				lineNum++;
 			}
-			Assert.assertFalse("Too many lines in actual diagram text", tokenizer.hasMoreTokens());
+			Assert.assertFalse("Too many lines in actual diagram text of " + expected, tokenizer.hasMoreTokens());
 		}
 	}
 }

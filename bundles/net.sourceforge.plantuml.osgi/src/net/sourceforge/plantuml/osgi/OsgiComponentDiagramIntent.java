@@ -25,8 +25,8 @@ public class OsgiComponentDiagramIntent extends AbstractDiagramIntent<URI> {
 	public String getDiagramText() {
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xml", new ScrResourceFactoryImpl());
-		final Resource res = resourceSet.getResource(getSource(), true);
 		try {
+			final Resource res = resourceSet.createResource(getSource());
 			res.load(null);
 			return getDiagramText(res);
 		} catch (final IOException e) {

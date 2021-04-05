@@ -156,24 +156,51 @@ public class DiagramData {
 			//					areaElement = areaElement.substring(0, areaElement.length() - 1);
 			//				}
 			//			}
-			final LinkData link = new LinkData();
-			link.href = getAttributeValue(areaElement, "href");
-			link.title = getAttributeValue(areaElement, "title");
-			link.altText = getAttributeValue(areaElement, "alt");
 			final String coords = getAttributeValue(areaElement, "coords");
 			if (coords != null) {
+				final LinkData link = new LinkData();
+				link.href = getAttributeValue(areaElement, "href");
+				link.title = getAttributeValue(areaElement, "title");
+				link.altText = getAttributeValue(areaElement, "alt");
 				final String[] ints = coords.split(",");
 				if (ints.length == 4) {
 					try {
 						final int x1 = Integer.valueOf(ints[0]), y1 = Integer.valueOf(ints[1]), x2 = Integer.valueOf(ints[2]), y2 = Integer.valueOf(ints[3]);
 						link.rect = new Rectangle(x1, y1, x2 - x1, y2 - y1);
+						links.add(link);
 					} catch (final NumberFormatException e) {
 					}
 				}
 			}
-			links.add(link);
+		}
+		if (links != null && links.size() > 0) {
+			scaleLinks(links);
 		}
 	}
+
+	// assumes image is scaled, but the margin is the same
+	private static void scaleLinks(final Collection<LinkData> links) {
+		int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+		for (final LinkData link : links) {
+			if (link.rect.x < minX) {
+				minX = link.rect.x;
+			}
+			if (link.rect.y < minY) {
+				minY = link.rect.y;
+			}
+		}
+		// empirically identified
+		final int marginX = 7, marginY = 7;
+		final int sx = minX / marginX, sy = minY / marginY;
+		System.out.println("Scaling with " + sx + "," + sy);
+		for (final LinkData link : links) {
+			link.rect.x /= sx;
+			link.rect.y /= sy;
+			link.rect.width /= sx;
+			link.rect.height /= sy;
+		}
+	}
+
 	/*
 	    @startuml
 		actor Bob [[http://plantuml.com/sequence]]

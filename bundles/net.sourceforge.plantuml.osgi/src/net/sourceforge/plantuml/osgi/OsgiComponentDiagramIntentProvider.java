@@ -5,7 +5,6 @@ import java.util.Collections;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPathEditorInput;
@@ -18,11 +17,6 @@ public class OsgiComponentDiagramIntentProvider extends AbstractDiagramIntentPro
 
 	public OsgiComponentDiagramIntentProvider() {
 		super(null);
-	}
-
-	@Override
-	public boolean supportsSelection(final ISelection selection) {
-		return false;
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class JavaProjectConfigurer implements ProjectConfigurer {
 		final IJavaProject javaProject = JavaCore.create(project);
 
 		final List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
-		entries.add(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath().append("org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType").append("JavaSE-1.6")));
+		entries.add(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath().append("org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType").append("JavaSE-1.8")));
 
 		final IPackageFragmentRoot srcRoot = javaProject.getPackageFragmentRoot(workspaceHelper.createFolder(project, "src"));
 		entries.add(JavaCore.newSourceEntry(srcRoot.getPath()));

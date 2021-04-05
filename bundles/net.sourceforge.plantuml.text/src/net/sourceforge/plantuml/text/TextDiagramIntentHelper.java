@@ -53,7 +53,7 @@ public class TextDiagramIntentHelper {
 					intent.setResourceInfo(new ResourceInfo(resourceInfo));
 				}
 				// indicate a preference for diagram containing selection
-				if (selectionStart >= 0 && selectionStart > regionStart.getOffset() && selectionStart < regionEnd.getOffset() + regionEnd.getLength()) {
+				if (selectionStart >= 0 && selectionStart >= regionStart.getOffset() && selectionStart < regionEnd.getOffset() + regionEnd.getLength()) {
 					intent.setPriority(AbstractDiagramIntent.SELECTED_PRIORITY);
 				}
 				intents.add(intent);
@@ -86,7 +86,7 @@ public class TextDiagramIntentHelper {
 				final IRegion end = finder.find(startOffset + start.getLength(), suffixRegex, true, true, false, true);
 				if (end != null && end.getOffset() >= selectionStart) {
 					final int endOffset = end.getOffset() + end.getLength();
-					final String linePrefix = document.get(startLinePos, startOffset - startLinePos);
+					final String linePrefix = document.get(startLinePos, Math.max(0,  startOffset - startLinePos));
 					final StringBuilder result = new StringBuilder();
 					final int maxLine = Math.min(document.getLineOfOffset(endOffset) + (includeEnd ? 1 : 0), document.getNumberOfLines());
 					for (int lineNum = startLine + (includeStart ? 0 : 1); lineNum < maxLine; lineNum++) {

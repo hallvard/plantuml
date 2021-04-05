@@ -13,26 +13,32 @@
 
 	<modules>
 		<module>../net.sourceforge.plantuml.target</module>
+
 		<module>../../bundles/net.sourceforge.plantuml.lib</module>
+
 		<module>../../bundles/net.sourceforge.plantuml.eclipse.imagecontrol</module>
+
 		<module>../../bundles/net.sourceforge.plantuml.eclipse</module>
 		<module>../../tests/net.sourceforge.plantuml.eclipse.tests</module>
+
 		<module>../../bundles/net.sourceforge.plantuml.text</module>
 		<module>../../tests/net.sourceforge.plantuml.text.tests</module>
+
 		<module>../../bundles/net.sourceforge.plantuml.jdt</module>
 		<module>../../tests/net.sourceforge.plantuml.jdt.tests</module>
 
 		<module>../../bundles/net.sourceforge.plantuml.ecore</module>
-		<!-- 
-		<module>../../bundles/net.sourceforge.plantuml.uml2</module>
-		 -->
+		<module>../../bundles/net.sourceforge.plantuml.ecore.tests</module>
+
 
 		<module>../../bundles/no.hal.osgi.emf</module>
 		<module>../../tests/no.hal.osgi.emf.tests</module>
 		<module>../../bundles/net.sourceforge.plantuml.osgi</module>
-		<!-- 
-		 -->
+
 		<module>../bundles/net.sourceforge.plantuml.xcore</module>
+		<!-- 
+		<module>../../bundles/net.sourceforge.plantuml.uml2</module>
+		 -->
 
 		<module>../../bundles/net.sourceforge.plantuml.lib.jlatexmath</module>
 		<module>../../features/net.sourceforge.plantuml.lib.jlatexmath.feature</module>

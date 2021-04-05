@@ -6,18 +6,10 @@
          point="net.sourceforge.plantuml.eclipse.diagramIntentProvider">
 
       <diagramIntentProvider
-	    id="net.sourceforge.plantuml.ecore.EcoreClassDiagramIntentProvider"
-	    providerClass="net.sourceforge.plantuml.ecore.EcoreClassDiagramIntentProvider"
-      	label="Class diagrams generated from ecore models"
+	    id="net.sourceforge.plantuml.ecore.EcoreDiagramIntentProvider"
+	    providerClass="net.sourceforge.plantuml.ecore.EcoreDiagramIntentProvider"
+      	label="Class and object diagrams generated from ecore models and instances"
 	    >
-      </diagramIntentProvider>
-
-      <diagramIntentProvider
-          id="net.sourceforge.plantuml.ecore.EcoreObjectDiagramIntentProvider"
-          providerClass="net.sourceforge.plantuml.ecore.EcoreObjectDiagramIntentProvider"
-          priority="default"
-	      label="Object diagrams generated from ecore model instances"
-      >
       </diagramIntentProvider>
    </extension>
 

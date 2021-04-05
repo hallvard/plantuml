@@ -24,6 +24,11 @@ public class TextEditorDiagramIntentProvider extends AbstractTextDiagramIntentPr
 		this.fileExtensions.addAll(Arrays.asList(fileExtensions));
 	}
 
+	@Override
+	public Boolean supportsPath(final IPath path) {
+		return fileExtensions == null || fileExtensions.isEmpty() || fileExtensions.contains(path.getFileExtension());
+	}
+
 	public void setDiagramPrefixRegex(final String diagramPrefixRegex) {
 		this.diagramPrefixRegex = diagramPrefixRegex;
 	}
@@ -48,9 +53,5 @@ public class TextEditorDiagramIntentProvider extends AbstractTextDiagramIntentPr
 	@Override
 	protected String getEndPlantUmlRegex() {
 		return diagramSuffixRegex;
-	}
-
-	public boolean supportsPath(final IPath path) {
-		return fileExtensions == null || fileExtensions.isEmpty() || fileExtensions.contains(path.getFileExtension());
 	}
 }

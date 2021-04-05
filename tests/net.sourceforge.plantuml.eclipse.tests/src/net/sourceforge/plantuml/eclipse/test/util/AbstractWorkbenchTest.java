@@ -218,7 +218,6 @@ public abstract class AbstractWorkbenchTest {
 	protected void cleanWorkspace() throws CoreException {
 		try {
 			new WorkspaceModifyOperation() {
-
 				@Override
 				protected void execute(final IProgressMonitor monitor)
 						throws CoreException, InvocationTargetException,
