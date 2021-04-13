@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sourceforge.plantuml</groupId>
 	<artifactId>net.sourceforge.plantuml.parent</artifactId>
-	<version>1.1.25-SNAPSHOT</version>
+	<version>1.1.25</version>
 	<packaging>pom</packaging>
 	<name>net.sourceforge.plantuml maven parent project</name>
 
@@ -89,7 +89,7 @@
 						<artifact>
 							<groupId>net.sourceforge.plantuml</groupId>
 							<artifactId>net.sourceforge.plantuml.target</artifactId>
-							<version>1.1.25-SNAPSHOT</version>
+							<version>1.1.25</version>
 						</artifact>
 					</target>
 					<filters>

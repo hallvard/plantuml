@@ -7,7 +7,7 @@
 	  <parent>
 	  	<groupId>net.sourceforge.plantuml</groupId>
 	  	<artifactId>net.sourceforge.plantuml.parent</artifactId>
-	  	<version>1.1.25-SNAPSHOT</version>
+	  	<version>1.1.25</version>
 	  	<relativePath>../net.sourceforge.plantuml.parent</relativePath>
 	  </parent>
 
@@ -28,14 +28,14 @@
 		<module>../../tests/net.sourceforge.plantuml.jdt.tests</module>
 
 		<module>../../bundles/net.sourceforge.plantuml.ecore</module>
-		<module>../../bundles/net.sourceforge.plantuml.ecore.tests</module>
+		<module>../../tests/net.sourceforge.plantuml.ecore.tests</module>
 
 
 		<module>../../bundles/no.hal.osgi.emf</module>
 		<module>../../tests/no.hal.osgi.emf.tests</module>
 		<module>../../bundles/net.sourceforge.plantuml.osgi</module>
 
-		<module>../bundles/net.sourceforge.plantuml.xcore</module>
+		<module>../../bundles/net.sourceforge.plantuml.xcore</module>
 		<!-- 
 		<module>../../bundles/net.sourceforge.plantuml.uml2</module>
 		 -->

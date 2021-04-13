@@ -21,6 +21,6 @@
 		<child location='plantuml.eclipse/1.1.22' />
 		<child location='plantuml.eclipse/1.1.23' />
 		<child location='plantuml.eclipse/1.1.24' />
-		<child location='plantuml.eclipse/1.1.25.qualifier' />
+		<child location='plantuml.eclipse/1.1.25' />
 	</children>
 </repository>
