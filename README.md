@@ -43,6 +43,7 @@ Note that the version numbers of the plantuml.lib plugin are a bit special, sinc
 ## [1.1.25](https://github.com/hallvard/plantuml/releases/tag/1.1.25)
 - Updated to use PlantUML library version 1.2021.3 (see [changes](https://plantuml.com/changes)).
 - Added new extension point that supports generating several alternative diagrams for the same content ([issue #109](https://github.com/hallvard/plantuml/issues/109)) and delays the computation of the diagram so it can run on a non-UI thread ([issue #82](https://github.com/hallvard/plantuml/issues/82)). Uses of old extension point should still work, but should be updated to use new one.
+- I needed to remove (for now) the feature that recomputes saved diagram images during builds, when their source have changed.
 - Experimental PlantUML SVG view that handles zooming better ([issue #116](https://github.com/hallvard/plantuml/issues/116))
 - Association is generated when type is Optional and for methods with a specific signature. (thanks to [dpolivaev](https://github.com/dpolivaev))
 - Changes generated diagrams to use `name : type` UML format for attributes instead of java style `type name` ([issue #115](https://github.com/hallvard/plantuml/issues/115))

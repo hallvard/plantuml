@@ -44,7 +44,7 @@ public class ExportAction extends DiagramImageAction<Shell> {
 			final String filePathName = fDialog.getFilterPath() + System.getProperty("file.separator") + fileName;
 			final String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
 			if ("svg".equals(ext)) {
-				createImageFileSvg(filePathName, getDiagramImageData().getDiagram().getTextDiagram());
+				createImageFileSvg(filePathName, getDiagramImageData().getDiagramData().getTextDiagram());
 			} else {
 				createImageFile(filePathName, ext);
 			}
@@ -54,9 +54,9 @@ public class ExportAction extends DiagramImageAction<Shell> {
 	private void createImageFile(final String filePathName, final String format) {
 		final Function<Integer, String> fileNameProvider = PlantumlUtil.getImageFileNameProvider(filePathName);
 		if (fileNameProvider != null) {
-			final int imageCount = getDiagramImageData().getDiagram().getImageCount();
+			final int imageCount = getDiagramImageData().getDiagramData().getImageCount();
 			for (int i = 0; i < imageCount; i++) {
-				createImageFile(fileNameProvider.apply(i), format, getDiagramImageData().getDiagram().getImage(i, null));
+				createImageFile(fileNameProvider.apply(i), format, getDiagramImageData().getDiagramData().getImage(i, null));
 			}
 		} else {
 			createImageFile(filePathName, format, getImage());
@@ -77,7 +77,7 @@ public class ExportAction extends DiagramImageAction<Shell> {
 	private void createImageFileSvg(final String filePathName, final String textDiagram) {
 		final Function<Integer, String> fileNameProvider = PlantumlUtil.getImageFileNameProvider(filePathName);
 		if (fileNameProvider != null) {
-			final int imageCount = getDiagramImageData().getDiagram().getImageCount();
+			final int imageCount = getDiagramImageData().getDiagramData().getImageCount();
 			for (int i = 0; i < imageCount; i++) {
 				createImageFileSvg(fileNameProvider.apply(i), textDiagram, i);
 			}

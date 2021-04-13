@@ -24,7 +24,6 @@ import org.osgi.framework.BundleContext;
 
 import net.sourceforge.plantuml.eclipse.utils.DiagramTextProvider;
 import net.sourceforge.plantuml.eclipse.utils.ILinkOpener;
-import net.sourceforge.plantuml.eclipse.utils.PlantumlUtil;
 import net.sourceforge.plantuml.preferences.DiagramIntentProvidersPreferencePage;
 import net.sourceforge.plantuml.util.DiagramIntentProvider;
 import net.sourceforge.plantuml.util.DiagramTextIntentProvider;
@@ -60,7 +59,7 @@ public class Activator extends AbstractUIPlugin implements DiagramIntentProvider
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		resourceListener = PlantumlUtil.createResourceListener();
+		resourceListener = null; // TODO: re-enable PlantumlUtil.createResourceListener();
 		if (resourceListener != null) {
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceListener, IResourceChangeEvent.POST_BUILD);
 		}

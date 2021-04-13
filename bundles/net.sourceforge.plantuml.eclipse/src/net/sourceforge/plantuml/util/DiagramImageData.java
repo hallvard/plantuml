@@ -10,15 +10,16 @@ import net.sourceforge.plantuml.eclipse.utils.LinkData;
 
 public class DiagramImageData {
 
-	private final DiagramData diagram;
+	private final DiagramData diagramData;
 	private final int imageNum;
+
 	private ImageData imageData;
 
 	private final Collection<LinkData> links = new ArrayList<LinkData>();
 
 	public DiagramImageData(final DiagramData diagram, final int imageNum, final ImageData imageData) {
 		super();
-		this.diagram = diagram;
+		this.diagramData = diagram;
 		this.imageNum = imageNum;
 		this.imageData = imageData;
 	}
@@ -36,15 +37,15 @@ public class DiagramImageData {
 	}
 
 	public DiagramImageData withImageNum(final int imageNum) {
-		return new DiagramImageData(diagram, imageNum);
+		return new DiagramImageData(diagramData, imageNum);
 	}
 
-	public DiagramData getDiagram() {
-		return diagram;
+	public DiagramData getDiagramData() {
+		return diagramData;
 	}
 
 	public IPath getSourcePath() {
-		return diagram.getOriginal();
+		return diagramData.getOriginal();
 	}
 
 	public int getImageNum() {
@@ -53,7 +54,7 @@ public class DiagramImageData {
 
 	public ImageData getImage() {
 		if (imageData == null) {
-			imageData = diagram.getImage(imageNum, links);
+			imageData = diagramData.getImage(imageNum, links);
 		}
 		return imageData;
 	}

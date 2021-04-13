@@ -100,6 +100,7 @@ public abstract class AbstractPlantUmlView extends AbstractDiagramSourceView imp
 			}
 		}
 	}
+
 	private Collection<ILinkOpener> linkOpeners = null;
 
 	private Collection<ILinkOpener> getLinkOpeners() {

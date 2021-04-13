@@ -36,6 +36,7 @@ public class PlantumlUtil {
 
 	public static final String PLANTUML_MARKER = "plantumlmarker";
 	public static final String ORIGINAL_PATH_ATTRIBUTE = "original";
+	public static final String DIAGRAM_INTENT_PROVIDER_ID_ATTRIBUTE = "diagramIntentProviderId";
 	public static final String DIAGRAM_SOURCE_ATTRIBUTE = "diagramSource";
 	public static final String TARGET_PATH_ATTRIBUTE = "target";
 
@@ -103,22 +104,27 @@ public class PlantumlUtil {
 				final IMarker marker = getPlantUmlMarker((IFile) resource, false);
 				if (marker != null) {
 					final Object target = marker.getAttribute(TARGET_PATH_ATTRIBUTE);
+					final Object diagramIntentProviderId = marker.getAttribute(DIAGRAM_INTENT_PROVIDER_ID_ATTRIBUTE);
 					if (target != null) {
 						final IPath path = resource.getFullPath();
 						final WorkspaceDiagramIntentProviderContext intentProviderContext = new WorkspaceDiagramIntentProviderContext(path);
 						for (final DiagramIntentProvider diagramIntentProvider : Activator.getDefault().getDiagramIntentProviders(null)) {
-							final Collection<? extends DiagramIntent> diagramInfos = diagramIntentProvider.getDiagramInfos(intentProviderContext);
-							for (final DiagramIntent diagramIntent : diagramInfos) {
-								final String textDiagram = diagramIntent.getDiagramText();
-								if (textDiagram != null) {
-									final DiagramData diagram = new DiagramData(textDiagram);
-									diagram.setOriginal(path);
-									try {
-										saveDiagramImage(path, textDiagram, diagram.getImage(), new Path(target.toString()), false);
-									} catch (final Exception e) {
-										System.err.println(e);
+							if (diagramIntentProviderId == null || diagramIntentProviderId.toString().equals(Activator.getDefault().getDiagramIntentProviderId(diagramIntentProvider))) {
+								final Collection<? extends DiagramIntent> diagramInfos = diagramIntentProvider.getDiagramInfos(intentProviderContext);
+								if (diagramInfos != null) {
+									for (final DiagramIntent diagramIntent : diagramInfos) {
+										final String textDiagram = diagramIntent.getDiagramText();
+										if (textDiagram != null) {
+											final DiagramData diagram = new DiagramData(textDiagram);
+											diagram.setOriginal(path);
+											try {
+												saveDiagramImage(path, textDiagram, diagram.getImage(), new Path(target.toString()), false);
+											} catch (final Exception e) {
+												System.err.println(e);
+											}
+											return false;
+										}
 									}
-									break;
 								}
 							}
 						}
@@ -131,7 +137,7 @@ public class PlantumlUtil {
 
 	public static void saveDiagramImage(final DiagramImageData diagramImageData, final IPath path, final boolean b) throws Exception {
 		final Function<Integer, String> fileNameProvider = PlantumlUtil.getImageFileNameProvider(path.lastSegment());
-		final DiagramData diagram = diagramImageData.getDiagram();
+		final DiagramData diagram = diagramImageData.getDiagramData();
 		if (fileNameProvider != null) {
 			final IPath folderPath = path.removeLastSegments(1);
 			final int imageCount = diagram.getImageCount();
@@ -148,7 +154,7 @@ public class PlantumlUtil {
 		saveDiagramImage(sourcePath, textDiagram, 0, image, targetPath, create);
 	}
 
-	public static void saveDiagramImage(final IPath sourcePath, final String textDiagram, final int imageNum, final ImageData image, final IPath targetPath, final boolean create) throws Exception {
+	private static void saveDiagramImage(final IPath sourcePath, final String textDiagram, final int imageNum, final ImageData image, final IPath targetPath, final boolean create) throws Exception {
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(targetPath);
 		if (file != null && (create || file.exists())) {
 			final String ext = targetPath.getFileExtension();
