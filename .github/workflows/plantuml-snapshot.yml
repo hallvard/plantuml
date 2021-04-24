@@ -1,0 +1,31 @@
+name: plantuml-snapshot CI
+
+on:
+  push:
+    branches:
+      - snapshot
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Cache maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Install with maven
+        run: mvn --batch-mode --update-snapshots install -f releng/net.sourceforge.plantuml.composite/pom.xml
+      - run: mkdir repository && cp releng/net.sourceforge.plantuml.composite/target/* repository
+  - uses: actions/upload-artifact@v2
+    with:
+      name: Repository
+      path: repository

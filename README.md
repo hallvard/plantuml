@@ -40,6 +40,8 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 Notable features in recent releases, details are found in [releases](https://github.com/hallvard/plantuml/releases).
 Note that the version numbers of the plantuml.lib plugin are a bit special, since they use the version of the included plantuml.jar
 
+## 1.1.26-snapshot
+
 ## [1.1.25](https://github.com/hallvard/plantuml/releases/tag/1.1.25)
 - Updated to use PlantUML library version 1.2021.3 (see [changes](https://plantuml.com/changes)).
 - Added new extension point that supports generating several alternative diagrams for the same content ([issue #109](https://github.com/hallvard/plantuml/issues/109)) and delays the computation of the diagram so it can run on a non-UI thread ([issue #82](https://github.com/hallvard/plantuml/issues/82)). Uses of old extension point should still work, but should be updated to use new one.
