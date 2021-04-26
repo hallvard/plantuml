@@ -50,7 +50,9 @@ public abstract class AbstractTextDiagramIntentProvider extends AbstractDiagramI
 		final ISelection selection = context.getSelection();
 		final int selectionStart = ((ITextSelection) (selection != null ? selection : textEditor.getSelectionProvider().getSelection())).getOffset();
 		final ResourceInfo resourceInfo = new ResourceInfo();
-		resourceInfo.setOriginalPath(context.getPath().toString());
+		if (context.getPath() != null) {
+			resourceInfo.setOriginalPath(context.getPath().toString());
+		}
 		return getTextDiagramIntentHelper().getDiagramInfos(document, selectionStart, resourceInfo);
 	}
 
