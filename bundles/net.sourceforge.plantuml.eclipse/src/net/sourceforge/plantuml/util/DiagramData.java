@@ -192,7 +192,6 @@ public class DiagramData {
 		// empirically identified
 		final int marginX = 7, marginY = 7;
 		final int sx = minX / marginX, sy = minY / marginY;
-		System.out.println("Scaling with " + sx + "," + sy);
 		for (final LinkData link : links) {
 			link.rect.x /= sx;
 			link.rect.y /= sy;
