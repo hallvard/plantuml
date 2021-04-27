@@ -1,0 +1,3 @@
+@startuml
+:<math>R(t) = e^(-lambda*t)</math>;
+@enduml

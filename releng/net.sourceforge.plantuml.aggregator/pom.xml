@@ -40,6 +40,9 @@
 		<module>../../bundles/net.sourceforge.plantuml.uml2</module>
 		 -->
 
+		<module>../../bundles/net.sourceforge.plantuml.lib.elk</module>
+		<module>../../features/net.sourceforge.plantuml.lib.elk.feature</module>
+
 		<module>../../bundles/net.sourceforge.plantuml.lib.jlatexmath</module>
 		<module>../../features/net.sourceforge.plantuml.lib.jlatexmath.feature</module>
 

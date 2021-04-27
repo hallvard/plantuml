@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/net.sourceforge.plantuml.lib.feature_1.2021.3.jar" id="net.sourceforge.plantuml.lib.feature" version="1.2021.3">
+   <feature url="features/net.sourceforge.plantuml.lib.feature_1.2021.5.jar" id="net.sourceforge.plantuml.lib.feature" version="1.2021.5">
       <category name="net.sourceforge.plantuml.lib.feature"/>
    </feature>
    <feature url="features/net.sourceforge.plantuml.lib.jlatexmath.feature_1.0.7.jar" id="net.sourceforge.plantuml.lib.jlatexmath.feature" version="1.0.7">
+      <category name="net.sourceforge.plantuml.lib.feature"/>
+   </feature>
+   <feature url="features/net.sourceforge.plantuml.lib.jlatexmath.feature_0.7.1.jar" id="net.sourceforge.plantuml.lib.elk.feature" version="0.7.1">
       <category name="net.sourceforge.plantuml.lib.feature"/>
    </feature>
    <category-def name="net.sourceforge.plantuml.lib.feature" label="PlantUML Library"/>

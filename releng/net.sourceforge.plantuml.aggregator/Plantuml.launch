@@ -287,6 +287,7 @@
         <setEntry value="net.sourceforge.plantuml.eclipse@default:default"/>
         <setEntry value="net.sourceforge.plantuml.ecore@default:default"/>
         <setEntry value="net.sourceforge.plantuml.jdt@default:default"/>
+        <setEntry value="net.sourceforge.plantuml.lib.elk@default:false"/>
         <setEntry value="net.sourceforge.plantuml.lib.jlatexmath@default:false"/>
         <setEntry value="net.sourceforge.plantuml.lib@default:default"/>
         <setEntry value="net.sourceforge.plantuml.osgi@default:default"/>

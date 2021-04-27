@@ -15,6 +15,7 @@
 		<child location='plantuml.lib/1.2019.0' />
 		<child location='plantuml.lib/1.2019.11' />
 		<child location='plantuml.lib/1.2021.3' />
+		<child location='plantuml.lib/1.2021.5' />
 		<child location='plantuml.eclipse/1.1.20' />
 		<child location='plantuml.eclipse/1.1.21' />
 		<child location='plantuml.eclipse/1.1.22' />
