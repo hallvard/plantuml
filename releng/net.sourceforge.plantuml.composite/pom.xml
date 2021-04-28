@@ -35,7 +35,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
@@ -48,13 +47,14 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target</outputDirectory>
+							<outputDirectory>${basedir}/target/gh-pages</outputDirectory>
 							<resources>
 								<resource>
 									<directory>repository</directory>
 									<filtering>false</filtering>
 								</resource>
 							</resources>
+							<overwrite>true</overwrite>
 						</configuration>
 					</execution>
 					<execution>
@@ -64,13 +64,14 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/plantuml.lib/1.2021.5</outputDirectory>
+							<outputDirectory>${basedir}/target/gh-pages/plantuml.lib/1.2021.5</outputDirectory>
 							<resources>
 								<resource>
 									<directory>../net.sourceforge.plantuml.lib.repository/target/repository</directory>
 									<filtering>false</filtering>
 								</resource>
 							</resources>
+							<overwrite>true</overwrite>
 						</configuration>
 					</execution>
 					<execution>
@@ -80,17 +81,94 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/plantuml.eclipse/1.1.26-snapshot</outputDirectory>
+							<outputDirectory>${basedir}/target/gh-pages/plantuml.eclipse/1.1.26-snapshot</outputDirectory>
 							<resources>
 								<resource>
 									<directory>../net.sourceforge.plantuml.repository/target/repository</directory>
 									<filtering>false</filtering>
 								</resource>
 							</resources>
+							<overwrite>true</overwrite>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-readme</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/gh-pages</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../..</directory>
+									<includes>
+										<include>README.md</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+							<overwrite>true</overwrite>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <inherited>false</inherited> <!-- only execute these in the parent -->
+                <configuration>
+                    <executable>git</executable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>git-clone-gh-pages</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>
+                                <argument>clone</argument><argument>-b</argument><argument>gh-pages</argument>
+                                <argument>https://github.com/hallvard/plantuml.git</argument>
+                                <argument>${basedir}/target/gh-pages</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>git-add-gh-pages</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>
+                                <argument>-C</argument>
+                                <argument>${basedir}/target/gh-pages</argument>
+                                <argument>add</argument>
+                                <argument>--all</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>git-commit-gh-pages</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>
+                                <argument>-C</argument>
+                                <argument>${basedir}/target/gh-pages</argument>
+                                <argument>commit</argument>
+                                <argument>-m</argument>
+                                <argument>-m</argument>                                
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 
