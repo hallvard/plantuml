@@ -24,8 +24,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Install with maven
         run: mvn --batch-mode --update-snapshots install -f releng/net.sourceforge.plantuml.composite/pom.xml
-      - run: mkdir repository && cp releng/net.sourceforge.plantuml.composite/target/* repository
-  - uses: actions/upload-artifact@v2
-    with:
-      name: Repository
-      path: repository
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Repository
+          path: releng/net.sourceforge.plantuml.composite/target
