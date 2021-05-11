@@ -7,12 +7,11 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPathEditorInput;
 import org.osgi.scr.Component;
 
-import net.sourceforge.plantuml.eclipse.utils.WorkbenchEditorPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
 import net.sourceforge.plantuml.text.AbstractDiagramIntentProvider;
 import net.sourceforge.plantuml.util.DiagramIntent;
 import no.hal.osgi.Bundle;
@@ -39,11 +38,10 @@ public class ManifestDiagramIntentProvider extends AbstractDiagramIntentProvider
 	}
 
 	@Override
-	protected Collection<DiagramIntent> getDiagramInfos(final WorkbenchEditorPartDiagramIntentProviderContext context) {
-		final IEditorInput editorInput = context.getEditorPart().getEditorInput();
-		if (editorInput instanceof IPathEditorInput) {
-			final IPath path = ((IPathEditorInput) editorInput).getPath();
-			final URI uri = URI.createFileURI(path.toString());
+	protected Collection<DiagramIntent> getDiagramInfos(final WorkbenchPartDiagramIntentProviderContext context) {
+		final IPath path = context.getPath();
+		if (path != null) {
+			final URI uri = URI.createPlatformResourceURI(path.toString(), true);
 			return Collections.singletonList(new OsgiComponentDiagramIntent(uri) {
 
 				@Override

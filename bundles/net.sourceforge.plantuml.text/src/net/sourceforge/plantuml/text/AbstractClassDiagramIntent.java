@@ -4,6 +4,11 @@ import java.util.Iterator;
 
 public abstract class AbstractClassDiagramIntent<T> extends AbstractDiagramIntent<T> {
 
+	public final static String CLASS_DIAGRAM__IS_JAVA_STYLE = "classDiagram.isJavaStyle";
+	public final static String CLASS_DIAGRAM__NAME_TYPE_SEPARATOR = "classDiagram.nameTypeSeparator";
+
+	//
+
 	public AbstractClassDiagramIntent(final T source) {
 		super(source);
 	}
@@ -69,14 +74,18 @@ public abstract class AbstractClassDiagramIntent<T> extends AbstractDiagramInten
 	private boolean javaStyle = false;
 
 	public boolean isJavaStyle() {
-		return javaStyle;
+		return getIntentProperties().getProperty(CLASS_DIAGRAM__IS_JAVA_STYLE, Boolean.class, javaStyle);
 	}
 
 	public void setJavaStyle(final boolean javaStyle) {
 		this.javaStyle = javaStyle;
 	}
 
-	protected String NAME_TYPE_SEPARATOR = ": ";
+	private final String NAME_TYPE_SEPARATOR = ": ";
+
+	protected String getNameTypeSeparator() {
+		return getIntentProperties().getProperty(CLASS_DIAGRAM__NAME_TYPE_SEPARATOR, String.class, NAME_TYPE_SEPARATOR);
+	}
 
 	private void appendMember(final String modifiers, final String visibility, final String type, final String name, final Iterable<String> parameters, final StringBuilder buffer) {
 		buffer.append("\t");
@@ -106,7 +115,7 @@ public abstract class AbstractClassDiagramIntent<T> extends AbstractDiagramInten
 			buffer.append(")");
 		}
 		if (type != null && (! isJavaStyle())) {
-			buffer.append(NAME_TYPE_SEPARATOR);
+			buffer.append(getNameTypeSeparator());
 			buffer.append(type);
 		}
 		buffer.append("\n");

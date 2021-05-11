@@ -8,10 +8,11 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
-import net.sourceforge.plantuml.eclipse.utils.WorkbenchEditorPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
 import net.sourceforge.plantuml.util.DiagramIntent;
 import net.sourceforge.plantuml.util.ResourceInfo;
 
@@ -44,9 +45,9 @@ public abstract class AbstractTextDiagramIntentProvider extends AbstractDiagramI
 	}
 
 	@Override
-	protected Collection<? extends DiagramIntent> getDiagramInfos(final WorkbenchEditorPartDiagramIntentProviderContext context) {
-		final ITextEditor textEditor = getWorkbenchPart(context.getEditorPart(), ITextEditor.class);
-		final IDocument document = textEditor.getDocumentProvider().getDocument(context.getEditorPart().getEditorInput());
+	protected Collection<? extends DiagramIntent> getDiagramInfos(final WorkbenchPartDiagramIntentProviderContext context) {
+		final ITextEditor textEditor = getWorkbenchPart(context.getWorkbenchPart(), ITextEditor.class);
+		final IDocument document = textEditor.getDocumentProvider().getDocument(((IEditorPart) context.getWorkbenchPart()).getEditorInput());
 		final ISelection selection = context.getSelection();
 		final int selectionStart = ((ITextSelection) (selection != null ? selection : textEditor.getSelectionProvider().getSelection())).getOffset();
 		final ResourceInfo resourceInfo = new ResourceInfo();

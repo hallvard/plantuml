@@ -44,12 +44,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import net.sourceforge.plantuml.eclipse.Activator;
+import net.sourceforge.plantuml.eclipse.utils.LocationDiagramIntentProviderContext;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
-import net.sourceforge.plantuml.eclipse.utils.WorkbenchEditorPartDiagramIntentProviderContext;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.util.AbstractDiagramIntent;
+import net.sourceforge.plantuml.util.AbstractProperties;
 import net.sourceforge.plantuml.util.DiagramIntent;
 import net.sourceforge.plantuml.util.DiagramIntentContext;
 import net.sourceforge.plantuml.util.DiagramIntentProvider;
+import net.sourceforge.plantuml.util.DiagramTextPostProcessor;
 import net.sourceforge.plantuml.util.SimpleDiagramIntent;
 
 public abstract class AbstractDiagramSourceView extends ViewPart {
@@ -386,7 +389,7 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		// must use activeEditorPart instead of activePart, since the latter will be the plantuml view
 		final IEditorPart part = (pinnedTo != null ? pinnedTo : getSite().getPage().getActiveEditor());
 		final ISelectionProvider selectionProvider = part.getSite().getSelectionProvider();
-		final DiagramIntentContext partContext = new WorkbenchEditorPartDiagramIntentProviderContext(part, selectionProvider != null ? selectionProvider.getSelection() : null);
+		final DiagramIntentContext partContext = new WorkbenchPartDiagramIntentProviderContext(part, selectionProvider != null ? selectionProvider.getSelection() : null);
 		for (final DiagramIntentProvider diagramIntentProvider : diagramIntentProviders) {
 			final Collection<? extends DiagramIntent> diagramInfos = diagramIntentProvider.getDiagramInfos(partContext);
 			if (diagramInfos != null) {
@@ -497,19 +500,15 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 
 	private boolean updateDiagramText(final IWorkbenchPart activePart, final ISelection selection) {
 		if (activePart != null) {
-			final DiagramIntentContext context = (activePart instanceof IEditorPart ?
-					new WorkbenchEditorPartDiagramIntentProviderContext((IEditorPart) activePart, selection) :
-						new WorkbenchPartDiagramIntentProviderContext(activePart, selection));
-			final DiagramIntentProvider[] diagramIntentProviders = Activator.getDefault().getDiagramIntentProviders(true);
+			final DiagramIntentContext context = new WorkbenchPartDiagramIntentProviderContext(activePart, selection);
 
 			// intent providers are sorted on priority
 			// within the same provider priority, the intent's priority is used
 			DiagramIntent bestIntent = null;
-			int bestPriority = -1;
+			int bestPriority = AbstractDiagramIntent.DEFAULT_PRIORITY - 1;
 
 			int lastProviderPriority = Activator.DEFAULT_PRIORITY;
-			for (int i = 0; i < diagramIntentProviders.length; i++) {
-				final DiagramIntentProvider diagramIntentProvider = diagramIntentProviders[i];
+			for (final DiagramIntentProvider diagramIntentProvider : Activator.getDefault().getDiagramIntentProviders(true)) {
 				final int providerPriority = Activator.getDefault().getDiagramIntentProviderPriority(diagramIntentProvider);
 				if (providerPriority < lastProviderPriority && bestIntent != null) {
 					break;
@@ -520,6 +519,9 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 						if (diagramIntent.getPriority() > bestPriority) {
 							bestIntent = diagramIntent;
 							bestPriority = diagramIntent.getPriority();
+							if (bestIntent instanceof AbstractDiagramIntent<?>) {
+								setDiagramContextProperties(((AbstractDiagramIntent<?>) bestIntent).getContextProperties(), diagramIntentProvider);
+							}
 						}
 					}
 				}
@@ -527,11 +529,30 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 			}
 			if (bestIntent != null) {
 				setDiagramViewStatus(ViewStatus.DIAGRAM_INTENT, bestIntent);
+				if (bestIntent instanceof AbstractDiagramIntent<?>) {
+					setDiagramContextProperties(((AbstractDiagramIntent<?>) bestIntent).getContextProperties(), context);
+				}
 				updateDiagramText(bestIntent);
 				return true;
 			}
 		}
 		return false;
+	}
+
+	private void setDiagramContextProperties(final AbstractProperties diagramContextProperties, final DiagramIntentProvider diagramIntentProvider) {
+		diagramContextProperties.setProperty("diagramIntentProviderId", Activator.getDefault().getDiagramIntentProviderId(diagramIntentProvider));
+	}
+
+	private void setDiagramContextProperties(final AbstractProperties diagramContextProperties, final DiagramIntentContext context) {
+		if (context instanceof WorkbenchPartDiagramIntentProviderContext) {
+			diagramContextProperties.setProperty("workbenchPartId", ((WorkbenchPartDiagramIntentProviderContext) context).getWorkbenchPart().getSite().getId());
+		}
+		if (context instanceof LocationDiagramIntentProviderContext) {
+			final IPath path = ((LocationDiagramIntentProviderContext) context).getPath();
+			if (path != null) {
+				diagramContextProperties.setProperty("path", path.toString());
+			}
+		}
 	}
 
 	private Job currentJob = null;
@@ -549,6 +570,9 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 						if (diagramText != null) {
 							// default to @startuml ... @enduml diagram
 							diagramText = ensureDiagram(diagramText);
+							if (diagramIntent instanceof AbstractDiagramIntent<?>) {
+								diagramText = postProcessDiagramText(diagramText, (AbstractDiagramIntent<?>) diagramIntent);
+							}
 							setDiagramViewStatus(ViewStatus.DIAGRAM_TEXT, diagramText);
 							updateDiagramText(diagramText, diagramIntent, monitor);
 						}
@@ -562,6 +586,16 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 		};
 		//		Thread.dumpStack();
 		currentJob.schedule();
+	}
+
+	private String postProcessDiagramText(String diagramText, final AbstractDiagramIntent<?> diagramIntent) {
+		for (final DiagramTextPostProcessor postProcessor : Activator.getDefault().getDiagramTextPostProcessors()) {
+			final String altDiagramText = postProcessor.getDiagramText(diagramText, diagramIntent);
+			if (altDiagramText != null) {
+				diagramText = altDiagramText;
+			}
+		}
+		return diagramText;
 	}
 
 	protected String ensureDiagram(String diagramText) {

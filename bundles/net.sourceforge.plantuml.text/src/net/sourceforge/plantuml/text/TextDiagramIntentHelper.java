@@ -53,7 +53,7 @@ public class TextDiagramIntentHelper {
 					intent.setResourceInfo(new ResourceInfo(resourceInfo));
 				}
 				// indicate a preference for diagram containing selection
-				if (selectionStart >= 0 && selectionStart >= regionStart.getOffset() && selectionStart < regionEnd.getOffset() + regionEnd.getLength()) {
+				if (selectionStart >= 0 && selectionStart >= regionStart.getOffset() && selectionStart <= regionEnd.getOffset() + regionEnd.getLength()) {
 					intent.setPriority(AbstractDiagramIntent.SELECTED_PRIORITY);
 				}
 				intents.add(intent);
@@ -90,14 +90,15 @@ public class TextDiagramIntentHelper {
 					final StringBuilder result = new StringBuilder();
 					final int maxLine = Math.min(document.getLineOfOffset(endOffset) + (includeEnd ? 1 : 0), document.getNumberOfLines());
 					for (int lineNum = startLine + (includeStart ? 0 : 1); lineNum < maxLine; lineNum++) {
-						String line = document.get(document.getLineOffset(lineNum), document.getLineLength(lineNum));
-						if (line.startsWith(linePrefix)) {
-							line = line.substring(linePrefix.length());
-						}
-						result.append(line);
-						if (! line.endsWith("\n")) {
-							result.append("\n");
-						}
+						final String line = document.get(document.getLineOffset(lineNum), document.getLineLength(lineNum));
+						// remove prefix
+						final int pos1 = (line.startsWith(linePrefix) ? linePrefix.length() : 0);
+						// remove platform-specific line-ending
+						final String lineEnd = document.getLineDelimiter(lineNum);
+						final int pos2 = line.length() - (lineEnd != null ? lineEnd.length() : 0);
+						result.append(line, pos1, pos2);
+						// use standard line-ending
+						result.append("\n");
 					}
 					if (markerAttributes != null) {
 						markerAttributes.put(IMarker.CHAR_START, start.getOffset());

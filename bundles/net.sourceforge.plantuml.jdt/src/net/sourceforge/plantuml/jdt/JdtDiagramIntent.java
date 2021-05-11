@@ -192,7 +192,7 @@ public class JdtDiagramIntent extends AbstractClassDiagramIntent<Collection<ITyp
 								if (isJavaStyle()) {
 									param += " " + parameterNames[i];
 								} else {
-									param = parameterNames[i] + NAME_TYPE_SEPARATOR + param;
+									param = parameterNames[i] + getNameTypeSeparator() + param;
 								}
 							}
 							parameters.add(param);

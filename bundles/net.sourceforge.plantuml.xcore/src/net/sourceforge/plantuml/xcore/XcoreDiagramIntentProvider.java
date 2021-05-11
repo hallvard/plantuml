@@ -7,7 +7,7 @@ import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
-import net.sourceforge.plantuml.eclipse.utils.WorkbenchEditorPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
 import net.sourceforge.plantuml.ecore.EcoreDiagramIntentProvider;
 import net.sourceforge.plantuml.util.DiagramIntent;
 
@@ -18,8 +18,8 @@ public class XcoreDiagramIntentProvider extends EcoreDiagramIntentProvider {
 	}
 
 	@Override
-	protected Collection<? extends DiagramIntent> getDiagramInfos(final WorkbenchEditorPartDiagramIntentProviderContext context) {
-		return ((XtextEditor) context.getEditorPart()).getDocument().readOnly(new IUnitOfWork<Collection<? extends DiagramIntent>, XtextResource>() {
+	protected Collection<? extends DiagramIntent> getDiagramInfos(final WorkbenchPartDiagramIntentProviderContext context) {
+		return ((XtextEditor) context.getWorkbenchPart()).getDocument().readOnly(new IUnitOfWork<Collection<? extends DiagramIntent>, XtextResource>() {
 			@Override
 			public Collection<? extends DiagramIntent> exec(final XtextResource state) throws Exception {
 				return getDiagramInfos(((Resource) state).getResourceSet());

@@ -9,7 +9,6 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
-import net.sourceforge.plantuml.eclipse.utils.WorkbenchEditorPartDiagramIntentProviderContext;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
 import net.sourceforge.plantuml.eclipse.utils.WorkspaceDiagramIntentProviderContext;
 import net.sourceforge.plantuml.util.DiagramIntent;
@@ -108,35 +107,32 @@ public abstract class AbstractDiagramIntentProvider implements DiagramIntentProv
 
 	@Override
 	public Collection<? extends DiagramIntent> getDiagramInfos(final DiagramIntentContext context) {
-		if (context instanceof WorkbenchEditorPartDiagramIntentProviderContext) {
-			final WorkbenchEditorPartDiagramIntentProviderContext workbenchContext = (WorkbenchEditorPartDiagramIntentProviderContext) context;
-			if (workbenchContext.getEditorPart() != null && (! supportsEditor(workbenchContext.getEditorPart()))) {
-				return null;
-			}
-			if (workbenchContext.getSelection() != null && Boolean.FALSE.equals(supportsSelection(workbenchContext.getSelection()))) {
-				return null;
-			}
-			return getDiagramInfos(workbenchContext);
-		} else if (context instanceof WorkbenchPartDiagramIntentProviderContext) {
+		if (context instanceof WorkbenchPartDiagramIntentProviderContext) {
 			final WorkbenchPartDiagramIntentProviderContext workbenchContext = (WorkbenchPartDiagramIntentProviderContext) context;
 			final IWorkbenchPart workbenchPart = workbenchContext.getWorkbenchPart();
-			if (workbenchPart instanceof IViewPart && (! supportsView((IViewPart) workbenchPart))) {
-				return null;
+			if (workbenchPart instanceof IEditorPart) {
+				if (! supportsEditor((IEditorPart) workbenchPart)) {
+					return null;
+				}
+				if (workbenchContext.getSelection() != null && Boolean.FALSE.equals(supportsSelection(workbenchContext.getSelection()))) {
+					return null;
+				}
+				return getDiagramInfos(workbenchContext);
+			} else {
+				if (! supportsView((IViewPart) workbenchPart)) {
+					return null;
+				}
+				if (workbenchContext.getSelection() != null && Boolean.FALSE.equals(supportsSelection(workbenchContext.getSelection()))) {
+					return null;
+				}
+				return getDiagramInfos(workbenchContext);
 			}
-			if (workbenchContext.getSelection() != null && Boolean.FALSE.equals(supportsSelection(workbenchContext.getSelection()))) {
-				return null;
-			}
-			return getDiagramInfos(workbenchContext);
 		} else if (context instanceof WorkspaceDiagramIntentProviderContext) {
 			final WorkspaceDiagramIntentProviderContext workspaceContext = (WorkspaceDiagramIntentProviderContext) context;
 			if (! Boolean.FALSE.equals(supportsPath(workspaceContext.getPath()))) {
 				return getDiagramInfos(workspaceContext);
 			}
 		}
-		return null;
-	}
-
-	protected Collection<? extends DiagramIntent> getDiagramInfos(final WorkbenchEditorPartDiagramIntentProviderContext context) {
 		return null;
 	}
 

@@ -14,6 +14,12 @@
             category="net.sourceforge.plantuml.preferences.about"
             name="Diagram text providers">
       </page>
+      <page
+            id="net.sourceforge.plantuml.preferences.DiagramIntentPreferencePage"
+            class="net.sourceforge.plantuml.preferences.DiagramIntentPreferencePage"
+            category="net.sourceforge.plantuml.preferences.about"
+            name="Diagram generation">
+      </page>
    </extension>
 
    <extension
@@ -79,6 +85,7 @@
    <extension-point id="diagramTextProvider" name="Diagram Text Provider" schema="schema/diagramTextProvider.exsd"/>
    <extension-point id="diagramIntentProvider" name="Diagram Intent Provider" schema="schema/diagramIntentProvider.exsd"/>
    <extension-point id="linkOpener" name="Link Opener" schema="schema/linkOpener.exsd"/>
+   <extension-point id="diagramTextPostProcessor" name="Diagram Text Post-processor" schema="schema/diagramTextPostProcessor.exsd"/>
    <extension
          point="net.sourceforge.plantuml.eclipse.linkOpener">
       <linkOpener
@@ -90,5 +97,12 @@
       <linkOpener
             linkOpenerClass="net.sourceforge.plantuml.eclipse.utils.MarkerLinkOpener">
       </linkOpener>
+   </extension>
+
+   <extension
+         point="net.sourceforge.plantuml.eclipse.diagramTextPostProcessor">
+      <diagramTextPostProcessor
+            postProcessorClass="net.sourceforge.plantuml.postprocessors.DiagramTextInjectionPostProcessor">
+      </diagramTextPostProcessor>
    </extension>
 </plugin>

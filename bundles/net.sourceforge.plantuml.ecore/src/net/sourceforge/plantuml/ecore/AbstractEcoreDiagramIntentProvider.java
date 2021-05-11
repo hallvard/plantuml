@@ -12,7 +12,7 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-import net.sourceforge.plantuml.eclipse.utils.WorkbenchEditorPartDiagramIntentProviderContext;
+import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
 import net.sourceforge.plantuml.eclipse.utils.WorkspaceDiagramIntentProviderContext;
 import net.sourceforge.plantuml.text.AbstractDiagramIntentProvider;
 import net.sourceforge.plantuml.util.DiagramIntent;
@@ -49,7 +49,7 @@ public abstract class AbstractEcoreDiagramIntentProvider extends AbstractDiagram
 	//
 
 	@Override
-	protected Collection<? extends DiagramIntent> getDiagramInfos(final WorkbenchEditorPartDiagramIntentProviderContext context) {
+	protected Collection<? extends DiagramIntent> getDiagramInfos(final WorkbenchPartDiagramIntentProviderContext context) {
 		if (context.getSelection() instanceof IStructuredSelection) {
 			final Object selection = ((IStructuredSelection) context.getSelection()).getFirstElement();
 			if (selection instanceof Resource) {

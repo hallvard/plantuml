@@ -1,5 +1,7 @@
 package net.sourceforge.plantuml.util;
 
+import net.sourceforge.plantuml.eclipse.Activator;
+
 public abstract class AbstractDiagramIntent<T> implements DiagramIntent {
 
 	private final T source;
@@ -32,6 +34,20 @@ public abstract class AbstractDiagramIntent<T> implements DiagramIntent {
 	@Override
 	public String toString() {
 		return source.toString();
+	}
+
+	//
+
+	private final AbstractProperties contextProperties = new BasicProperties(null);
+
+	public AbstractProperties getContextProperties() {
+		return contextProperties;
+	}
+
+	private final AbstractProperties intentProperties = new BasicProperties(Activator.getDefault().getProperties(getClass()));
+
+	public AbstractProperties getIntentProperties() {
+		return intentProperties;
 	}
 
 	//
