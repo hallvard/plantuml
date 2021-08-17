@@ -21,6 +21,8 @@
 		<module>../../bundles/net.sourceforge.plantuml.eclipse</module>
 		<module>../../tests/net.sourceforge.plantuml.eclipse.tests</module>
 
+		<module>../../bundles/net.sourceforge.plantuml.svg</module>
+
 		<module>../../bundles/net.sourceforge.plantuml.text</module>
 		<module>../../tests/net.sourceforge.plantuml.text.tests</module>
 

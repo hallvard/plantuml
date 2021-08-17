@@ -1,6 +1,6 @@
 package net.sourceforge.plantuml.eclipse.svg;
 
-public class SimpleSvg2HtmlConverter implements Svg2HtmlConverter {
+public class SimpleSvg2HtmlConverter extends AbstractSvg2HtmlConverter {
 
 	private final String prefix;
 	private final String suffix;
@@ -12,19 +12,6 @@ public class SimpleSvg2HtmlConverter implements Svg2HtmlConverter {
 
 	public SimpleSvg2HtmlConverter() {
 		this("<html>\n  <body>\n", "\n  </body>\n</html>");
-	}
-
-	protected final String idAttrPrefix = "<svg", idAttr = " id='plantuml'";
-
-	protected String cleanSvg(String svg) {
-		if (svg.startsWith("<?xml")) {
-			svg = svg.substring(svg.indexOf("?>") + 2);
-		}
-		final int pos = svg.indexOf(idAttrPrefix);
-		if (pos > 0) {
-			svg = svg.substring(pos);
-		}
-		return svg;
 	}
 
 	@Override

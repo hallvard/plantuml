@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Plantuml Plug-in
+Bundle-SymbolicName: net.sourceforge.plantuml.svg; singleton:=true
+Bundle-Version: 1.1.26.qualifier
+Bundle-Vendor: PlantUML Team
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.10.0",
+ org.eclipse.core.resources;bundle-version="3.9.1",
+ org.eclipse.ui;bundle-version="3.106.1",
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.ide;bundle-version="3.10.2"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .,
+ libs/jmustache-1.15.jar
+Import-Package: net.sourceforge.plantuml.eclipse,
+ net.sourceforge.plantuml.eclipse.imagecontrol,
+ net.sourceforge.plantuml.eclipse.views,
+ net.sourceforge.plantuml.util,
+ org.eclipse.swt.layout,
+ org.eclipse.swt.widgets

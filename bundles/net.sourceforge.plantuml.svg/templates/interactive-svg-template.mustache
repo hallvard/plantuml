@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <script src=\"https://bumbu.github.io/svg-pan-zoom/dist/svg-pan-zoom.min.js\"></script>
+    <style type=\"text/css\" media=\"screen\">
+      svg {
+        display:block; border:1px; position:absolute;
+        width:100% !important; height:100% !important;
+      }
+    </style>
+  </head>
+  <body>
+  	{{{svg}}}
+    <script>
+      window.onload = function() {
+        window.zoomPlantuml = svgPanZoom('#plantuml', {
+          zoomEnabled: true,
+          controlIconsEnabled: true,
+          fit: true,
+          center: true,
+        });
+      };
+    </script>
+  </body>
+</html>

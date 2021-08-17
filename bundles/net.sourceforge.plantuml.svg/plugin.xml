@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            id="net.sourceforge.plantuml.svg.preferences.SvgPreferencePage"
+            class="net.sourceforge.plantuml.eclipse.svg.SvgPreferencePage"
+            category="net.sourceforge.plantuml.preferences.about"
+            name="Svg view">
+      </page>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="PlantUML Svg"
+            icon="platform:/plugin/net.sourceforge.plantuml.eclipse/icons/p5.gif"
+            category="net.sourceforge.plantuml.eclipse"
+            class="net.sourceforge.plantuml.eclipse.svg.PlantUmlSvgView"
+            id="net.sourceforge.plantuml.eclipse.views.PlantUmlSvgView"
+            allowMultiple="true"
+            >
+      </view>
+   </extension>
+
+</plugin>
