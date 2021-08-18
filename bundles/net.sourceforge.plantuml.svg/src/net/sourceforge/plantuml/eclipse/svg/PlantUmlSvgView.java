@@ -1,8 +1,6 @@
 package net.sourceforge.plantuml.eclipse.svg;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -103,28 +101,20 @@ public class PlantUmlSvgView extends AbstractPlantUmlView implements ILinkSuppor
 
 	//
 
-	private static ImageDescriptor browserImage(final String name) {
-		try {
-			return ImageDescriptor.createFromURL(new URL("platform:/plugin/org.eclipse.ui.browser/icons/obj16/" + name + ".png"));
-		} catch (final MalformedURLException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Override
 	protected void addViewActions(final IContributionManager toolBarManager) {
 		super.addViewActions(toolBarManager);
-		addActions(toolBarManager, new Action("Open external browser", browserImage("external_browser")) {
+		addActions(toolBarManager, new Action("Open in external browser", ImageDescriptor.createFromFile(this.getClass(), "/icons/external_browser.png")) {
 			@Override
 			public void run() {
-				openBrowser(true);
+				openInBrowser(true);
 			}
 		});
 	}
 
 	private final int browserStyle = IWorkbenchBrowserSupport.LOCATION_BAR | IWorkbenchBrowserSupport.NAVIGATION_BAR | IWorkbenchBrowserSupport.STATUS;
 
-	protected void openBrowser(final boolean external) {
+	protected void openInBrowser(final boolean external) {
 		if (this.diagramHtml != null) {
 			try {
 				final IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
