@@ -41,7 +41,9 @@ public class SvgMustache2HtmlConverter extends AbstractSvg2HtmlConverter {
 
 	protected Map<String, Object> getTemplateContext(final String svg) {
 		final Map<String, Object> context = new HashMap<String, Object>();
-		context.put("svg", cleanSvg(svg));
+		final String cleaned = cleanSvg(svg);
+		context.put("svgSource", cleaned);
+		context.put("svgSelector", "#plantuml");
 		return context;
 	}
 

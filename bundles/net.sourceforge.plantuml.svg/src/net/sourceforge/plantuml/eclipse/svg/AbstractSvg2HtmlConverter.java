@@ -12,8 +12,8 @@ public abstract class AbstractSvg2HtmlConverter implements Svg2HtmlConverter {
 			svg = svg.substring(svg.indexOf("?>") + 2);
 		}
 		final int pos = svg.indexOf(idAttrPrefix);
-		if (pos > 0) {
-			svg = svg.substring(pos);
+		if (pos >= 0) {
+			svg = svg.substring(0, pos) + idAttrPrefix + idAttr + svg.substring(pos + idAttrPrefix.length());
 		}
 		return svg;
 	}

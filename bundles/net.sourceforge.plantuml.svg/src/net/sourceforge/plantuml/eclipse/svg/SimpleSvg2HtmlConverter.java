@@ -19,9 +19,7 @@ public class SimpleSvg2HtmlConverter extends AbstractSvg2HtmlConverter {
 		svg = cleanSvg(svg);
 		final StringBuilder builder = new StringBuilder(prefix.length() + svg.length() + suffix.length());
 		builder.append(prefix);
-		builder.append(idAttrPrefix);
-		builder.append(idAttr);
-		builder.append(svg.substring(idAttrPrefix.length()));
+		builder.append(svg);
 		builder.append(suffix);
 		return builder.toString();
 	}
