@@ -24,19 +24,19 @@ Module for building and releasing new version.
 ### Update github pages
 
 - open file explorer on clone of gh-pages branch
-- copy contents in the target/repository folder into the proper places
+- copy contents in the target/repository folder into the proper places (should have been done by the build)
 -- cp -r releng/net.sourceforge.plantuml.composite/target/repository/{compositeArtifacts.xml,compositeContent.xml} gh-pages/
 -- cp -r releng/net.sourceforge.plantuml.composite/target/repository/plantuml.lib/* gh-pages/plantuml.lib/
 -- cp -r releng/net.sourceforge.plantuml.composite/target/repository/plantuml.eclipse/* gh-pages/plantuml.eclipse/
 - copy the README.md in the proper place
 -- cp README.md gh-pages/
-- add, commit and push
+- add, commit (should have been done by the build) and push
 
 ### Release on github
 
 - add a release and tag with items from README.md
 - close issues that (supposedly) are fixed
- 
+
 ### Post-release
 
 - merge back into master
