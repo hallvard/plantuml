@@ -2,12 +2,9 @@ package net.sourceforge.plantuml.text;
 
 import java.util.Iterator;
 
+import net.sourceforge.plantuml.eclipse.utils.DiagramIntentProperty;
+
 public abstract class AbstractClassDiagramIntent<T> extends AbstractDiagramIntent<T> {
-
-	public final static String CLASS_DIAGRAM__IS_JAVA_STYLE = "classDiagram.isJavaStyle";
-	public final static String CLASS_DIAGRAM__NAME_TYPE_SEPARATOR = "classDiagram.nameTypeSeparator";
-
-	//
 
 	public AbstractClassDiagramIntent(final T source) {
 		super(source);
@@ -71,20 +68,18 @@ public abstract class AbstractClassDiagramIntent<T> extends AbstractDiagramInten
 		buffer.append("}\n");
 	}
 
-	private boolean javaStyle = false;
+	private final static String CLASS_DIAGRAM__IS_JAVA_STYLE = "classDiagram.isJavaStyle";
 
-	public boolean isJavaStyle() {
-		return getIntentProperties().getProperty(CLASS_DIAGRAM__IS_JAVA_STYLE, Boolean.class, javaStyle);
+	@DiagramIntentProperty(name = CLASS_DIAGRAM__IS_JAVA_STYLE, type = Boolean.class)
+	protected boolean isJavaStyle() {
+		return getIntentProperties().getProperty(CLASS_DIAGRAM__IS_JAVA_STYLE, Boolean.class, false);
 	}
 
-	public void setJavaStyle(final boolean javaStyle) {
-		this.javaStyle = javaStyle;
-	}
+	private final static String CLASS_DIAGRAM__NAME_TYPE_SEPARATOR = "classDiagram.nameTypeSeparator";
 
-	private final String NAME_TYPE_SEPARATOR = ": ";
-
+	@DiagramIntentProperty(name = CLASS_DIAGRAM__NAME_TYPE_SEPARATOR)
 	protected String getNameTypeSeparator() {
-		return getIntentProperties().getProperty(CLASS_DIAGRAM__NAME_TYPE_SEPARATOR, String.class, NAME_TYPE_SEPARATOR);
+		return getIntentProperties().getProperty(CLASS_DIAGRAM__NAME_TYPE_SEPARATOR, String.class, ": ");
 	}
 
 	private void appendMember(final String modifiers, final String visibility, final String type, final String name, final Iterable<String> parameters, final StringBuilder buffer) {

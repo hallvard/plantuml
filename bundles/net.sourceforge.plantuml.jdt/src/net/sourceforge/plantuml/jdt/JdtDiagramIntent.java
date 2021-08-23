@@ -19,9 +19,12 @@ import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
+import net.sourceforge.plantuml.eclipse.utils.DiagramIntentProperty;
 import net.sourceforge.plantuml.text.AbstractClassDiagramIntent;
 
 public class JdtDiagramIntent extends AbstractClassDiagramIntent<Collection<IType>> {
+
+	public final static String JAVA_CLASS_DIAGRAM__USE_JAVA_LINKS = "javaClassDiagram.useJavaLinks";
 
 	public JdtDiagramIntent(final Collection<IType> source) {
 		super(source, "Class diagram");
@@ -117,10 +120,13 @@ public class JdtDiagramIntent extends AbstractClassDiagramIntent<Collection<ITyp
 		}
 	}
 
-	private final boolean useJavaLinks = true;
+	@DiagramIntentProperty(name = JAVA_CLASS_DIAGRAM__USE_JAVA_LINKS, type = Boolean.class)
+	protected boolean isUseJavaLinks() {
+		return getIntentProperties().getProperty(JAVA_CLASS_DIAGRAM__USE_JAVA_LINKS, Boolean.class, true);
+	}
 
 	protected String getHyperlink(final IType type) {
-		if (useJavaLinks) {
+		if (isUseJavaLinks()) {
 			return JavaLinkOpener.JAVA_LINK_PREFIX + type.getFullyQualifiedName();
 		} else {
 			final IResource resource = type.getResource();
