@@ -29,6 +29,7 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 - lib.elk - fragment to the lib bundle that adds the ELK layout engine lib
 - eclipse - core Eclipse integration, including the extension point for providing diagrams
 - eclipse.imagecontrol - the control for viewing the generated images
+- svg - the browser-based svg view
 - text - diagrams based on explicit DSL code, with support for editors based on the standard Eclipse text editor
 - jdt - diagrams based on the Eclipse Java model, with support for Java and Class File editors
 - ecore - diagrams based on Ecore models, with support for most Ecore editors
@@ -41,7 +42,8 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 Notable features in recent releases, details are found in [releases](https://github.com/hallvard/plantuml/releases).
 Note that the version numbers of the plantuml.lib plugin are a bit special, since they use the version of the included plantuml.jar
 
-## 1.1.26-snapshot
+## [1.1.26](https://github.com/hallvard/plantuml/releases/tag/1.1.26)
+- The svg view can use a jmustache template (according to a preference) when generating its contents [issue #116](https://github.com/hallvard/plantuml/issues/116)
 - Updated to use PlantUML library version 1.2021.5 see [changes](https://plantuml.com/changes).
 - Support for the ELK layout engine, see [plantuml.com/changes](https://plantuml.com/changes).
 - Fix for [issue #132](https://github.com/hallvard/plantuml/issues/132)

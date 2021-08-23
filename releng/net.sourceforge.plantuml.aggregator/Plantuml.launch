@@ -291,6 +291,7 @@
         <setEntry value="net.sourceforge.plantuml.lib.jlatexmath@default:false"/>
         <setEntry value="net.sourceforge.plantuml.lib@default:default"/>
         <setEntry value="net.sourceforge.plantuml.osgi@default:default"/>
+        <setEntry value="net.sourceforge.plantuml.svg@default:default"/>
         <setEntry value="net.sourceforge.plantuml.text@default:default"/>
         <setEntry value="no.hal.osgi.emf@default:default"/>
     </setAttribute>

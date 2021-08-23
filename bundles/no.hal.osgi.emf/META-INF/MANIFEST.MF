@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EMF model for OSGi
 Bundle-SymbolicName: no.hal.osgi.emf;singleton:=true
-Bundle-Version: 1.1.26.qualifier
+Bundle-Version: 1.1.26
 Bundle-ClassPath: .
 Bundle-Vendor: PlantUML Team
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
