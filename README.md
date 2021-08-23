@@ -42,7 +42,7 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 Notable features in recent releases, details are found in [releases](https://github.com/hallvard/plantuml/releases).
 Note that the version numbers of the plantuml.lib plugin are a bit special, since they use the version of the included plantuml.jar
 
-## 1.1.26
+## [1.1.26](https://github.com/hallvard/plantuml/releases/tag/1.1.26)
 - The svg view can use a jmustache template (according to a preference) when generating its contents [issue #116](https://github.com/hallvard/plantuml/issues/116)
 - Updated to use PlantUML library version 1.2021.5 see [changes](https://plantuml.com/changes).
 - Support for the ELK layout engine, see [plantuml.com/changes](https://plantuml.com/changes).
