@@ -19,6 +19,12 @@ Diagram generation is handled by (implementations of) an extension point, so you
 
 This repo uses the [EPL license](net.sourceforge.plantuml.feature/epl-v10.html). 
 
+# Community
+
+We use [Issues](https://github.com/hallvard/plantuml/issues) for issue tracking, so head there concerning bugs or suggest features (check if they already exist before adding).
+
+However, we have now (September 2021) started using [Discussions](https://github.com/hallvard/plantuml/discussions), so please consider it, before use Issues, as the dialog may resolve the issue before it is even raised! Of course, you can also ask questions about how to use PlantUML, tell us about how you use it, comment on where the plug-in should be heading, etc.
+
 # Installation
 
 We use github pages @ http://hallvard.github.io/plantuml as the update site URL, in the Help > Install New Software... dialog.
