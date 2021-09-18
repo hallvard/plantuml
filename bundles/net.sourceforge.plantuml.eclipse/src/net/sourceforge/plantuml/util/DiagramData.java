@@ -94,7 +94,11 @@ public class DiagramData {
 		if (original != null) {
 			// find the real file, which may be linked and thus is not located under the root itself
 			final IResource member = ResourcesPlugin.getWorkspace().getRoot().getFile(original);
-			final SFile dirPath = SFile.fromFile(member.getLocation().toFile().getAbsoluteFile().getParentFile());
+			IPath location = member.getLocation();
+			if (location == null) {
+				location = member.getFullPath();
+			}
+			final SFile dirPath = SFile.fromFile(location.toFile().getAbsoluteFile().getParentFile());
 			FileSystem.getInstance().setCurrentDir(dirPath);
 		} else {
 			FileSystem.getInstance().reset();
@@ -189,14 +193,15 @@ public class DiagramData {
 				minY = link.rect.y;
 			}
 		}
-		// empirically identified
 		final int marginX = 7, marginY = 7;
-		final int sx = minX / marginX, sy = minY / marginY;
+		minX = Math.max(minX, marginX);
+		minY = Math.max(minY, marginY);
+		// empirically identified
 		for (final LinkData link : links) {
-			link.rect.x /= sx;
-			link.rect.y /= sy;
-			link.rect.width /= sx;
-			link.rect.height /= sy;
+			link.rect.x = link.rect.x * marginX / minX;
+			link.rect.y = link.rect.y * marginY / minY;
+			link.rect.width = link.rect.width * marginX / minX;
+			link.rect.height = link.rect.height * marginY / minY;
 		}
 	}
 
