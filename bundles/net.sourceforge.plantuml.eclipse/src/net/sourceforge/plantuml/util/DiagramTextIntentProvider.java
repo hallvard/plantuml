@@ -38,12 +38,19 @@ public class DiagramTextIntentProvider implements DiagramIntentProvider {
 					// TODO
 					diagramText = diagramTextProvider2.getDiagramText((IEditorPart) workbenchPart, selection);
 				} else {
-					diagramText = diagramTextProvider.getDiagramText((IEditorPart) workbenchPart, selection);
+					if (diagramTextProvider.supportsEditor((IEditorPart) workbenchPart)
+							&& diagramTextProvider.supportsSelection(selection)) {
+						diagramText = diagramTextProvider.getDiagramText((IEditorPart) workbenchPart, selection);
+					}
 				}
 			} else if (workbenchPart instanceof IViewPart) {
-				diagramText = diagramTextProvider.getDiagramText((IViewPart) workbenchPart, selection);
+				if (diagramTextProvider.supportsView((IViewPart) workbenchPart)
+						&& diagramTextProvider.supportsSelection(selection)) {
+					diagramText = diagramTextProvider.getDiagramText((IViewPart) workbenchPart, selection);
+				}
 			}
-		} else if (context instanceof WorkspaceDiagramIntentProviderContext && diagramTextProvider instanceof DiagramTextProvider2) {
+		} else if (context instanceof WorkspaceDiagramIntentProviderContext
+				&& diagramTextProvider instanceof DiagramTextProvider2) {
 			final WorkspaceDiagramIntentProviderContext intentProviderContext = (WorkspaceDiagramIntentProviderContext) context;
 			final DiagramTextProvider2 diagramTextProvider2 = (DiagramTextProvider2) diagramTextProvider;
 			if (diagramTextProvider2.supportsPath(intentProviderContext.getPath())) {
