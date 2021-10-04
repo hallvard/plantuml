@@ -195,7 +195,7 @@ public class EcoreClassDiagramIntent extends AbstractClassDiagramIntent<Collecti
 				final EClassifier eType = feature.getEType();
 				if (feature instanceof EAttribute) {
 					if (! (diagramHelper.shouldSuppress(feature, null) || (eType != null && diagramHelper.shouldSuppress(eType, "attribute")))) {
-						appendAttribute(null, null, getTypedName(feature, "?"), feature.getName(), buffer);
+						appendAttribute(feature.isDerived(), null, null, getTypedName(feature, "?"), feature.getName(), buffer);
 					}
 				}
 			}
@@ -270,16 +270,18 @@ public class EcoreClassDiagramIntent extends AbstractClassDiagramIntent<Collecti
 		final EClass sourceClass = ref.getEContainingClass();
 		final String source = sourceClass.getName();
 		final EClassifier targetType = ref.getEType();
+		final String role2Name = (ref.isDerived() ? "/ " + ref.getName() : ref.getName());
 		final String target = getOtherName(sourceClass, targetType);
 		final String direction = diagramHelper.getAnnotation(ref, "direction", false, null);
 		if (opposite != null) {
 			// avoid duplicates
+			final String role1Name = (opposite.isDerived() ? "/ " + opposite.getName() : opposite.getName());
 			final int otherIndex = classifiers.indexOf(targetType);
 			if (classifiers.indexOf(sourceClass) < otherIndex || otherIndex < 0) {
-				appendAssociation(source, ref.isContainment(), opposite.getName(), getMultiplicity(opposite), direction, target, opposite.isContainment(), ref.getName(), getMultiplicity(ref), null, buffer);
+				appendAssociation(source, ref.isContainment(), role1Name, getMultiplicity(opposite), direction, target, opposite.isContainment(), role2Name, getMultiplicity(ref), null, buffer);
 			}
 		} else {
-			appendAssociation(source, ref.isContainment(), null, 0, direction, target, false, ref.getName(), getMultiplicity(ref), null, buffer);
+			appendAssociation(source, ref.isContainment(), null, 0, direction, target, false, role2Name, getMultiplicity(ref), null, buffer);
 		}
 	}
 

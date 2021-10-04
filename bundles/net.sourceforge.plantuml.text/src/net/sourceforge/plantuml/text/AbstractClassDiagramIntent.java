@@ -82,8 +82,11 @@ public abstract class AbstractClassDiagramIntent<T> extends AbstractDiagramInten
 		return getIntentProperties().getProperty(CLASS_DIAGRAM__NAME_TYPE_SEPARATOR, String.class, ": ");
 	}
 
-	private void appendMember(final String modifiers, final String visibility, final String type, final String name, final Iterable<String> parameters, final StringBuilder buffer) {
+	private void appendMember(final boolean derived, final String modifiers, final String visibility, final String type, final String name, final Iterable<String> parameters, final StringBuilder buffer) {
 		buffer.append("\t");
+		if (derived) {
+			buffer.append("/ ");
+		}
 		if (visibility != null) {
 			buffer.append(visibility);
 		}
@@ -116,12 +119,15 @@ public abstract class AbstractClassDiagramIntent<T> extends AbstractDiagramInten
 		buffer.append("\n");
 	}
 
+	protected void appendAttribute(final boolean derived, final String modifiers, final String visibility, final String type, final String name, final StringBuilder buffer) {
+		appendMember(derived, modifiers, visibility, type, name, null, buffer);
+	}
 	protected void appendAttribute(final String modifiers, final String visibility, final String type, final String name, final StringBuilder buffer) {
-		appendMember(modifiers, visibility, type, name, null, buffer);
+		appendAttribute(false, modifiers, visibility, type, name, buffer);
 	}
 
 	protected void appendOperation(final String modifiers, final String visibility, final String type, final String name, final Iterable<String> parameters, final StringBuilder buffer) {
-		appendMember(modifiers, visibility, type, name, parameters, buffer);
+		appendMember(false, modifiers, visibility, type, name, parameters, buffer);
 	}
 
 	protected void appendGeneralisation(final String subClass, final String superClass, final boolean isImplements, final StringBuilder buffer) {
