@@ -92,11 +92,15 @@ public class TextDiagramIntentHelper {
 					for (int lineNum = startLine + (includeStart ? 0 : 1); lineNum < maxLine; lineNum++) {
 						final String line = document.get(document.getLineOffset(lineNum), document.getLineLength(lineNum));
 						// remove prefix
-						final int pos1 = (line.startsWith(linePrefix) ? linePrefix.length() : 0);
+						final boolean startsWithLinePrefix = line.startsWith(linePrefix);
+						final int pos1 = (startsWithLinePrefix ? linePrefix.length() : 0);
 						// remove platform-specific line-ending
 						final String lineEnd = document.getLineDelimiter(lineNum);
 						final int pos2 = line.length() - (lineEnd != null ? lineEnd.length() : 0);
-						result.append(line, pos1, pos2);
+						// check specially for the case where the line equals the right-trimmed line prefix, i.e.
+						if (startsWithLinePrefix || pos2 - pos1 >= linePrefix.length() || (! equalsRightTrimmed(line, pos2, linePrefix))) {
+							result.append(line, pos1, pos2);
+						}
 						// use standard line-ending
 						result.append("\n");
 					}
@@ -110,6 +114,22 @@ public class TextDiagramIntentHelper {
 		}
 		return null;
 	}
+
+	private static boolean equalsRightTrimmed(final String s1, final int end, final String s2) {
+		for (int i = 0; i < end; i++) {
+			if (i >= s2.length() || s1.charAt(i) != s2.charAt(i)) {
+				return false;
+			}
+		}
+		// common prefix, now s2 should have just blanks
+		for (int i = end; i < s2.length(); i++) {
+			if (! Character.isWhitespace(s2.charAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public String getDiagramText(final CharSequence lines) {
 		return getDiagramText(new StringBuilder(lines.toString()));
 	}
