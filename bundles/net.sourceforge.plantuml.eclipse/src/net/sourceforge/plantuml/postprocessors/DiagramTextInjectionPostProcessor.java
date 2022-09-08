@@ -40,7 +40,9 @@ public class DiagramTextInjectionPostProcessor implements DiagramTextPostProcess
 	private Pattern getRegexProperty(final String value) {
 		String regexString = getStringProperty(value);
 		final String whatever = "...";
-		if (regexString.endsWith(whatever)) {
+		if (regexString.startsWith(whatever) && regexString.endsWith(whatever)) {
+			regexString = DiagramTextInjectorMatcher.containsRegex(regexString.substring(whatever.length(), regexString.length() - whatever.length()));
+		} else if (regexString.endsWith(whatever)) {
 			regexString = DiagramTextInjectorMatcher.startsWithRegex(regexString.substring(0, regexString.length() - whatever.length()));
 		} else if (regexString.startsWith(whatever)) {
 			regexString = DiagramTextInjectorMatcher.endsWithRegex(regexString.substring(whatever.length()));
@@ -63,9 +65,12 @@ public class DiagramTextInjectionPostProcessor implements DiagramTextPostProcess
 		return null;
 	}
 
-	// init from Properties file
+	// init from Properties files
 
-	private final BasicProperties textInjectionsProperties = new BasicProperties(Activator.getDefault().getProperties(getClass()));
+	private final BasicProperties textInjectionsProperties = new BasicProperties(Activator.getDefault().getProperties(getClass(), props -> {
+		// invalidate when underlying properties are updated
+		diagramTextInjections = null;
+	}));
 
 	private void initDiagramTextInjections() {
 		initDiagramTextInjections(textInjectionsProperties);

@@ -7,13 +7,16 @@ This project integrates plantuml's functionality into Eclipse, by means of a vie
 The rendered diagram is typically based on explicit DSL code embedded in the editor, or generated from the content of the editor.
 
 We currently support generating diagrams for
-- DSL code embedded in text in any text editor
-- the class in the Java and Class File editors, based on the Eclipse Java model
+- DSL code embedded in text in any text editor inheriting from the standard eclipse text editor
+- the class in the Java editor, based on the Eclipse Java model
 - the EClasses in Ecore models in the Ecore editor
+- OSGi Manifest files
 
-There's also experimental support for generating a diagram for all the Java classes in a Java project (or within one or more Java packages).
+There's also support for generating a diagram for all the Java classes within one or more Java packages.
 
-Diagram generation is handled by (implementations of) an extension point, so you can customize the process of generating a diagram for other file types or editor content.
+Diagram generation is handled by (implementations of) an extension point, called *diagram intent providers* (supersedes *diagram text providers*), so you can customize the process of generating a diagram for other file types or editor content. Each diagram intent provider supports a certain way of generating a diagram from a source, typically the content of an editor. There may be several diagram intent providers for a certain source, so the user may select the desired one.
+
+Each diagram intent provider may support properties that affect details of how diagrams are generated, that may be changed pr. workspace by adding properties in a specific **properties** file in a specific folder. The folder is settable in the PlantUML property sheet. E.g. the diagram intent provider for class diagrams supports two properties,  that controls how attributes' name and type are rendered. Certain other behavior is also controlled by properties in **properties** files, details can be found in Customization.
 
 # License
 
@@ -47,6 +50,14 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 
 Notable features in recent releases, details are found in [releases](https://github.com/hallvard/plantuml/releases).
 Note that the version numbers of the plantuml.lib plugin are a bit special, since they use the version of the included plantuml.jar
+
+## [1.1.27](https://github.com/hallvard/plantuml/releases/tag/1.1.27)
+- Support for injecting code into diagrams, based on regular expressions on the diagram text, e.g. custom styles can be inserted all state diagrams. See section about custom properties.
+- Updated to use PlantUML library version 1.2022.1 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
+- Fix for [issue #152](https://github.com/hallvard/plantuml/issues/144) to more gracefully handle "empty" line.
+- Fix for [issue #144](https://github.com/hallvard/plantuml/issues/144) concerning installation in Eclipse 2021-09.
+- Fix for [issue #140](https://github.com/hallvard/plantuml/issues/140) where methods for selecting relevant diagrams weren't called.
+- Fix for [issue #139](https://github.com/hallvard/plantuml/issues/139) preventing diagram from appearing.
 
 ## [1.1.26](https://github.com/hallvard/plantuml/releases/tag/1.1.26)
 - The svg view can use a jmustache template (according to a preference) when generating its contents [issue #116](https://github.com/hallvard/plantuml/issues/116)

@@ -13,6 +13,11 @@ public class BasicProperties extends AbstractProperties {
 		this.properties = new Properties(defaults);
 	}
 
+	@Override
+	public String toString() {
+		return properties.toString();
+	}
+
 	//
 
 	@Override

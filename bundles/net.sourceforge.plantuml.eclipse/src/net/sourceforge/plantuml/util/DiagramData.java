@@ -46,13 +46,13 @@ public class DiagramData {
 	// attributes from file marker
 	private Map<String, Object> markerAttributes;
 
-	private static final Pattern pattern = Pattern.compile("(?i)(?m)^\\W*newpage( .*)?$");
+	private static final Pattern newpagePattern = Pattern.compile("(?i)(?m)^\\W*newpage( .*)?$");
 
 	public DiagramData(final String diagramText) {
 		textDiagram = diagramText;
 		imageCount = 1;
 		// We must count the number of "newpage" instructions
-		final Matcher matcherNewpage = pattern.matcher(diagramText);
+		final Matcher matcherNewpage = newpagePattern.matcher(diagramText);
 		while (matcherNewpage.find()) {
 			imageCount++;
 		}

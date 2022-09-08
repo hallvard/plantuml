@@ -21,8 +21,12 @@ public class PropertiesLoader implements IResourceChangeListener, IResourceDelta
 	private final Map<IPath, Properties> pathProperties = new HashMap<IPath, Properties>();
 
 	public void register(final Properties properties, final IPath path) {
-		loadProperties(properties, ResourcesPlugin.getWorkspace().getRoot().getFile(path));
 		pathProperties.put(path, properties);
+	}
+
+	public void load(final Properties properties, final IPath path) {
+		loadProperties(properties, ResourcesPlugin.getWorkspace().getRoot().getFile(path));
+		register(properties, path);
 	}
 
 	@Override

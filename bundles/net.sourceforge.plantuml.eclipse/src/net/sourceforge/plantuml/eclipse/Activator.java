@@ -39,6 +39,7 @@ import net.sourceforge.plantuml.preferences.DiagramIntentProvidersPreferencePage
 import net.sourceforge.plantuml.util.DiagramIntentProvider;
 import net.sourceforge.plantuml.util.DiagramTextIntentProvider;
 import net.sourceforge.plantuml.util.DiagramTextPostProcessor;
+import net.sourceforge.plantuml.util.ObservableProperties;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -74,7 +75,6 @@ public class Activator extends AbstractUIPlugin implements DiagramIntentProvider
 		super.start(context);
 		plugin = this;
 		resourceListeners = Arrays.asList(
-				// TODO: re-enable PlantumlUtil.createResourceListener();
 				propertiesLoader = new PropertiesLoader()
 				);
 		for (final IResourceChangeListener resourceListener : resourceListeners) {
@@ -340,52 +340,57 @@ public class Activator extends AbstractUIPlugin implements DiagramIntentProvider
 
 	//
 
-	private final Map<Class<?>, Properties> classProperties = new HashMap<Class<?>, Properties>();
+	private final Map<Class<?>, ObservableProperties> classProperties = new HashMap<Class<?>, ObservableProperties>();
 
 	private IPath basePropertiesPath = null;
 
 	public void setBasePropertiesPath(final IPath basePropertiesPath) {
 		final IPath oldPath = this.basePropertiesPath;
 		this.basePropertiesPath = basePropertiesPath;
-		// invalidate all properties, so they're loaded from new paths
 		if (! Objects.equals(oldPath, basePropertiesPath)) {
-			classProperties.clear();
+			for (final Map.Entry<Class<?>, ObservableProperties> entry : classProperties.entrySet()) {
+				loadProperties(entry.getValue(), entry.getKey());
+			}
 		}
 	}
 
 	public final static String propertiesFileExtension = "properties";
 
-	private final Map<Class<?>, String> classAliases = new HashMap<Class<?>, String>();
-
-	public Properties getProperties(final Class<?> clazz) {
+	public ObservableProperties getProperties(final Class<?> clazz, final ObservableProperties.Listener listener) {
 		if (clazz == Object.class) {
 			return null;
 		}
-		Properties props = classProperties.get(clazz);
+		ObservableProperties props = classProperties.get(clazz);
 		if (props == null) {
-			final Properties staticProps = new Properties(getProperties(clazz.getSuperclass()));
+			final ObservableProperties staticProps = new ObservableProperties(getProperties(clazz.getSuperclass()));
 			try (InputStream input = clazz.getResourceAsStream(clazz.getSimpleName() + "." + propertiesFileExtension)) {
 				if (input != null) {
 					propertiesLoader.loadProperties(staticProps, input);
 				}
 			} catch (final IOException e) {
 			}
-			props = new Properties(staticProps);
-			registerPropertiesPath(props, clazz.getSimpleName());
-			final String classAlias = classAliases.get(clazz);
-			if (classAlias != null) {
-				props = new Properties(props);
-				registerPropertiesPath(props, classAlias);
-			}
+			props = new ObservableProperties(staticProps);
+			loadProperties(props, clazz);
 			classProperties.put(clazz, props);
+		}
+		if (listener != null) {
+			props.addListener(listener);
 		}
 		return props;
 	}
 
-	private void registerPropertiesPath(final Properties props, final String key) {
+	public Properties getProperties(final Class<?> clazz) {
+		return getProperties(clazz, null);
+	}
+
+	private void loadProperties(final Properties props, final Class<?> clazz) {
+		loadProperties(props, clazz.getSimpleName());
+	}
+
+	private void loadProperties(final Properties props, final String key) {
 		final IPath path = getPropertiesFullPath(key);
 		if (path != null) {
-			propertiesLoader.register(props, path);
+			propertiesLoader.load(props, path);
 		}
 	}
 

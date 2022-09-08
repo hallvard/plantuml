@@ -23,6 +23,14 @@ public class DiagramTextInjectorMatcher {
 	public void setPropertyStartsWith(final String key, final String s) {
 		setPropertyRegex(key, startsWithRegex(s));
 	}
+
+	public static String containsRegex(final String s) {
+		return "^(?s).*" + Pattern.quote(s) + "(?s).*$";
+	}
+	public void setPropertyContains(final String key, final String s) {
+		setPropertyRegex(key, containsRegex(s));
+	}
+
 	public void setPropertyEndsWith(final String key, final String s) {
 		setPropertyRegex(key, endsWithRegex(s));
 	}

@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 
+import net.sourceforge.plantuml.eclipse.utils.DiagramIntentProperty;
 import net.sourceforge.plantuml.text.AbstractClassDiagramIntent;
 
 public class EcoreClassDiagramIntent extends AbstractClassDiagramIntent<Collection<EPackage>> {
@@ -53,7 +54,9 @@ public class EcoreClassDiagramIntent extends AbstractClassDiagramIntent<Collecti
 	}
 
 	public static boolean isEcoreClassDiagramObject(final Object object) {
-		return object instanceof EModelElement;
+		return object instanceof EModelElement ||
+				// needed for EAnnotation key/value pairs
+				object instanceof EObject && ((EObject) object).eContainer() instanceof EModelElement;
 	}
 
 	private final int maxResourceCount = 1, maxPackageCount = 1;
@@ -250,10 +253,17 @@ public class EcoreClassDiagramIntent extends AbstractClassDiagramIntent<Collecti
 		return getSimpleName(typeName);
 	}
 
+	private final static String CLASS_DIAGRAM__USE_DATA_TYPE_INSTANCE_CLASS_NAME = "ecoreClassDiagram.useDataTypeInstanceClassName";
+
+	@DiagramIntentProperty(name = CLASS_DIAGRAM__USE_DATA_TYPE_INSTANCE_CLASS_NAME, type = Boolean.class)
+	protected boolean useDataTypeInstanceClassName() {
+		return getIntentProperties().getProperty(CLASS_DIAGRAM__USE_DATA_TYPE_INSTANCE_CLASS_NAME, Boolean.class, false);
+	}
+
 	protected String getTypeName(final EClassifier type, final String def) {
 		String typeName = null;
 		if (type != null) {
-			if (type instanceof EDataType) {
+			if (type instanceof EDataType && useDataTypeInstanceClassName()) {
 				typeName = type.getInstanceClassName();
 			}
 			if (typeName == null) {

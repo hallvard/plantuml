@@ -15,11 +15,15 @@ public abstract class AbstractProperties {
 
 	//
 
+	protected void propertiesChanged(final String... propertyNames) {
+	}
+
 	public void setProperty(final String key, final Object value) {
 		if (value != null) {
 			checkValueType(value);
 		}
 		putProperty(key, value);
+		propertiesChanged(key);
 	}
 
 	private final Class<?>[] valueOfParamTypes = { String.class };
