@@ -25,7 +25,7 @@ public class ClassFileEditorDiagramTextProvider extends AbstractDiagramIntentPro
 	protected Collection<DiagramIntent> getDiagramInfos(final WorkbenchPartDiagramIntentProviderContext context) {
 		if (context.getWorkbenchPart() instanceof IEditorPart) {
 			final IEditorInput editorInput = ((IEditorPart) context.getWorkbenchPart()).getEditorInput();
-			IClassFile classFile = editorInput.getAdapter(IClassFile.class);
+			IClassFile classFile = (IClassFile) editorInput.getAdapter(IClassFile.class);
 			try {
 				classFile.open(new NullProgressMonitor());
 				return Collections.singletonList(new JdtDiagramIntent(Arrays.asList(classFile.getType())));
