@@ -17,7 +17,7 @@ public class TextEditorDiagramTextProviderTest2 extends AbstractDiagramTextTest 
 	}
 	
 	private void testJavaEditorDiagramText(String path, String expected) throws Exception, Exception {
-		String pluginProject = "net.sourceforge.plantuml.text.test";
+		String pluginProject = "net.sourceforge.plantuml.text.tests";
 		IFile file = createFile(new Path("/texteditortest/" + path), getPluginTestFileContents(pluginProject, path));
 		waitForBuild();
 		openEditor(file, "org.eclipse.ui.DefaultTextEditor");
@@ -27,6 +27,6 @@ public class TextEditorDiagramTextProviderTest2 extends AbstractDiagramTextTest 
 
 	@Test
 	public void testJavaEditorDiagramFromComment() throws Exception, Exception {
-		testJavaEditorDiagramText("src/net/sourceforge/plantuml/text/tests/ClassWithDiagramInComment.java", PlantumlConstants.START_UML + "\nclass ClassWithDiagramInComment {\nint field\n}\n" + PlantumlConstants.END_UML);
+		testJavaEditorDiagramText("src/net/sourceforge/plantuml/text/test/ClassWithDiagramInComment.java", PlantumlConstants.START_UML + "\nclass ClassWithDiagramInComment {\nint field\n}\n" + PlantumlConstants.END_UML);
 	}
 }
