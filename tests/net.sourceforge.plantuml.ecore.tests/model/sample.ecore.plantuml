@@ -7,7 +7,7 @@ class Book [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/samp
 class Author [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.ecore?uri=platform:/resource/ecoreeditortest/model/sample.ecore%23//Author]] {
 }
 class Named [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.ecore?uri=platform:/resource/ecoreeditortest/model/sample.ecore%23//Named]] {
-	name: String
+	name: EString
 }
 enum BookKind [[marker:/org.eclipse.emf.ecore.diagnostic/ecoreeditortest/model/sample.ecore?uri=platform:/resource/ecoreeditortest/model/sample.ecore%23//BookKind]] {
 	Novel: Novel
