@@ -80,7 +80,7 @@ public class OsgiResourceTest {
 		Assert.assertEquals("%providerName", bundle.getVendor());
 		Assert.assertEquals(ActivationPolicyKind.LAZY, bundle.getActivationPolicy());
 //		Assert.assertEquals("plugin", bundle.getLocalization());
-		Assert.assertEquals(Arrays.asList(RequiredExecutionEnvironmentKind.JAVA6), bundle.getRequiredExecutionEnvironment());
+		Assert.assertEquals(Arrays.asList(RequiredExecutionEnvironmentKind.JAVA8), bundle.getRequiredExecutionEnvironment());
 		EList<RequiredBundle> requireBundles = bundle.getRequireBundle();
 		Assert.assertEquals(3, requireBundles.size());
 		RequiredBundle rb1 = requireBundles.get(0), rb2 = requireBundles.get(1), rb3 = requireBundles.get(2);
