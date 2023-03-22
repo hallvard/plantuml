@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/no.hal.osgi.emf/src" modelPluginID="no.hal.osgi.emf"
     modelName="Osgi" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
-    usedGenPackages="scr.genmodel#//scr" operationReflection="true" importOrganizing="true">
+    usedGenPackages="scr-1.2.0.genmodel#//scr" operationReflection="true" importOrganizing="true">
   <foreignModel>osgi.ecore</foreignModel>
   <genPackages prefix="Osgi" basePackage="no.hal" resource="Basic" disposableProviderFactory="true"
       fileExtensions="MF" ecorePackage="osgi.ecore#/">

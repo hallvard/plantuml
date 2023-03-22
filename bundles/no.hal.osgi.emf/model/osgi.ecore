@@ -81,7 +81,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceComponent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="#//Path"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="ecore:EClass scr.ecore#//Component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="ecore:EClass scr-1.2.0.ecore#//Component"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Path" instanceClassName="no.hal.osgi.emf.util.Path"/>
 </ecore:EPackage>
