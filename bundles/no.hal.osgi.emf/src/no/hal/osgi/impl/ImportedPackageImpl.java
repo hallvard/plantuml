@@ -85,6 +85,7 @@ public class ImportedPackageImpl extends BundlePackageImpl implements ImportedPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRange getVersion() {
 		return version;
 	}
@@ -94,6 +95,7 @@ public class ImportedPackageImpl extends BundlePackageImpl implements ImportedPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersion(VersionRange newVersion) {
 		VersionRange oldVersion = version;
 		version = newVersion;
@@ -106,6 +108,7 @@ public class ImportedPackageImpl extends BundlePackageImpl implements ImportedPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Bundle> getResolvesTo() {
 		if (resolvesTo == null) {
 			resolvesTo = new EObjectResolvingEList<Bundle>(Bundle.class, this, OsgiPackage.IMPORTED_PACKAGE__RESOLVES_TO);
@@ -192,7 +195,7 @@ public class ImportedPackageImpl extends BundlePackageImpl implements ImportedPa
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (version: ");
 		result.append(version);
 		result.append(')');

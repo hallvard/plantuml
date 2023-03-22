@@ -76,7 +76,95 @@ public enum RequiredExecutionEnvironmentKind implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	JAVA8(8, "Java8", "JavaSE-1.8");
+	JAVA8(8, "Java8", "JavaSE-1.8"), /**
+	 * The '<em><b>Java9</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA9_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA9(9, "Java9", "JavaSE-9"), /**
+	 * The '<em><b>Java10</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA10_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA10(10, "Java10", "JavaSE-10"), /**
+	 * The '<em><b>Java11</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA11_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA11(11, "Java11", "JavaSE-11"), /**
+	 * The '<em><b>Java12</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA12_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA12(12, "Java12", "JavaSE-12"), /**
+	 * The '<em><b>Java13</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA13_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA13(13, "Java13", "JavaSE-13"), /**
+	 * The '<em><b>Java14</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA14_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA14(14, "Java14", "JavaSE-14"), /**
+	 * The '<em><b>Java15</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA15_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA15(15, "Java15", "JavaSE-15"), /**
+	 * The '<em><b>Java16</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA16_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA16(16, "Java16", "JavaSE-16"), /**
+	 * The '<em><b>Java17</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA17_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA17(17, "Java17", "JavaSE-17"), /**
+	 * The '<em><b>Java18</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA18_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA18(18, "Java18", "JavaSE-18"), /**
+	 * The '<em><b>Java19</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA19_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	JAVA19(19, "Java19", "JavaSE-19");
 
 	/**
 	 * The '<em><b>Default</b></em>' literal value.
@@ -169,6 +257,127 @@ public enum RequiredExecutionEnvironmentKind implements Enumerator {
 	public static final int JAVA8_VALUE = 8;
 
 	/**
+	 * The '<em><b>Java9</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA9
+	 * @model name="Java9" literal="JavaSE-9"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA9_VALUE = 9;
+
+	/**
+	 * The '<em><b>Java10</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA10
+	 * @model name="Java10" literal="JavaSE-10"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA10_VALUE = 10;
+
+	/**
+	 * The '<em><b>Java11</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA11
+	 * @model name="Java11" literal="JavaSE-11"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA11_VALUE = 11;
+
+	/**
+	 * The '<em><b>Java12</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA12
+	 * @model name="Java12" literal="JavaSE-12"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA12_VALUE = 12;
+
+	/**
+	 * The '<em><b>Java13</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA13
+	 * @model name="Java13" literal="JavaSE-13"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA13_VALUE = 13;
+
+	/**
+	 * The '<em><b>Java14</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA14
+	 * @model name="Java14" literal="JavaSE-14"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA14_VALUE = 14;
+
+	/**
+	 * The '<em><b>Java15</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA15
+	 * @model name="Java15" literal="JavaSE-15"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA15_VALUE = 15;
+
+	/**
+	 * The '<em><b>Java16</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA16
+	 * @model name="Java16" literal="JavaSE-16"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA16_VALUE = 16;
+
+	/**
+	 * The '<em><b>Java17</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA17
+	 * @model name="Java17" literal="JavaSE-17"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA17_VALUE = 17;
+
+	/**
+	 * The '<em><b>Java18</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA18
+	 * @model name="Java18" literal="JavaSE-18"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA18_VALUE = 18;
+
+	/**
+	 * The '<em><b>Java19</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #JAVA19
+	 * @model name="Java19" literal="JavaSE-19"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int JAVA19_VALUE = 19;
+
+	/**
 	 * An array of all the '<em><b>Required Execution Environment Kind</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -182,6 +391,17 @@ public enum RequiredExecutionEnvironmentKind implements Enumerator {
 			JAVA6,
 			JAVA7,
 			JAVA8,
+			JAVA9,
+			JAVA10,
+			JAVA11,
+			JAVA12,
+			JAVA13,
+			JAVA14,
+			JAVA15,
+			JAVA16,
+			JAVA17,
+			JAVA18,
+			JAVA19,
 		};
 
 	/**
@@ -244,6 +464,17 @@ public enum RequiredExecutionEnvironmentKind implements Enumerator {
 			case JAVA6_VALUE: return JAVA6;
 			case JAVA7_VALUE: return JAVA7;
 			case JAVA8_VALUE: return JAVA8;
+			case JAVA9_VALUE: return JAVA9;
+			case JAVA10_VALUE: return JAVA10;
+			case JAVA11_VALUE: return JAVA11;
+			case JAVA12_VALUE: return JAVA12;
+			case JAVA13_VALUE: return JAVA13;
+			case JAVA14_VALUE: return JAVA14;
+			case JAVA15_VALUE: return JAVA15;
+			case JAVA16_VALUE: return JAVA16;
+			case JAVA17_VALUE: return JAVA17;
+			case JAVA18_VALUE: return JAVA18;
+			case JAVA19_VALUE: return JAVA19;
 		}
 		return null;
 	}
@@ -286,6 +517,7 @@ public enum RequiredExecutionEnvironmentKind implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getValue() {
 	  return value;
 	}
@@ -295,6 +527,7 @@ public enum RequiredExecutionEnvironmentKind implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 	  return name;
 	}
@@ -304,6 +537,7 @@ public enum RequiredExecutionEnvironmentKind implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getLiteral() {
 	  return literal;
 	}

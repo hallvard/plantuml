@@ -298,6 +298,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Version getManifestVersion() {
 		return manifestVersion;
 	}
@@ -307,6 +308,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setManifestVersion(Version newManifestVersion) {
 		Version oldManifestVersion = manifestVersion;
 		manifestVersion = newManifestVersion;
@@ -319,6 +321,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public QualifiedName getSymbolicName() {
 		return symbolicName;
 	}
@@ -328,6 +331,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSymbolicName(QualifiedName newSymbolicName) {
 		QualifiedName oldSymbolicName = symbolicName;
 		symbolicName = newSymbolicName;
@@ -340,6 +344,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -349,6 +354,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -361,6 +367,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSingleton() {
 		return singleton;
 	}
@@ -370,6 +377,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSingleton(boolean newSingleton) {
 		boolean oldSingleton = singleton;
 		singleton = newSingleton;
@@ -382,6 +390,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Version getVersion() {
 		return version;
 	}
@@ -391,6 +400,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersion(Version newVersion) {
 		Version oldVersion = version;
 		version = newVersion;
@@ -403,6 +413,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVendor() {
 		return vendor;
 	}
@@ -412,6 +423,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVendor(String newVendor) {
 		String oldVendor = vendor;
 		vendor = newVendor;
@@ -424,6 +436,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public QualifiedName getActivator() {
 		return activator;
 	}
@@ -433,6 +446,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setActivator(QualifiedName newActivator) {
 		QualifiedName oldActivator = activator;
 		activator = newActivator;
@@ -445,6 +459,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<String> getClassPath() {
 		if (classPath == null) {
 			classPath = new EDataTypeUniqueEList<String>(String.class, this, OsgiPackage.BUNDLE__CLASS_PATH);
@@ -457,6 +472,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<RequiredExecutionEnvironmentKind> getRequiredExecutionEnvironment() {
 		if (requiredExecutionEnvironment == null) {
 			requiredExecutionEnvironment = new EDataTypeUniqueEList<RequiredExecutionEnvironmentKind>(RequiredExecutionEnvironmentKind.class, this, OsgiPackage.BUNDLE__REQUIRED_EXECUTION_ENVIRONMENT);
@@ -469,6 +485,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ActivationPolicyKind getActivationPolicy() {
 		return activationPolicy;
 	}
@@ -478,6 +495,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setActivationPolicy(ActivationPolicyKind newActivationPolicy) {
 		ActivationPolicyKind oldActivationPolicy = activationPolicy;
 		activationPolicy = newActivationPolicy == null ? ACTIVATION_POLICY_EDEFAULT : newActivationPolicy;
@@ -490,6 +508,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ExportedPackage> getExportPackage() {
 		if (exportPackage == null) {
 			exportPackage = new EObjectContainmentEList<ExportedPackage>(ExportedPackage.class, this, OsgiPackage.BUNDLE__EXPORT_PACKAGE);
@@ -502,6 +521,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ImportedPackage> getImportPackage() {
 		if (importPackage == null) {
 			importPackage = new EObjectContainmentEList<ImportedPackage>(ImportedPackage.class, this, OsgiPackage.BUNDLE__IMPORT_PACKAGE);
@@ -514,6 +534,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<RequiredBundle> getRequireBundle() {
 		if (requireBundle == null) {
 			requireBundle = new EObjectContainmentEList<RequiredBundle>(RequiredBundle.class, this, OsgiPackage.BUNDLE__REQUIRE_BUNDLE);
@@ -526,6 +547,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ServiceComponent> getServiceComponent() {
 		if (serviceComponent == null) {
 			serviceComponent = new EObjectContainmentEList<ServiceComponent>(ServiceComponent.class, this, OsgiPackage.BUNDLE__SERVICE_COMPONENT);
@@ -757,7 +779,7 @@ public class BundleImpl extends GenericAttributesContainerImpl implements Bundle
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (manifestVersion: ");
 		result.append(manifestVersion);
 		result.append(", symbolicName: ");

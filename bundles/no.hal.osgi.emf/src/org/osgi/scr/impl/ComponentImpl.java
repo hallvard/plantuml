@@ -368,6 +368,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getGroup() {
 		if (group == null) {
 			group = new BasicFeatureMap(this, ScrPackage.COMPONENT__GROUP);
@@ -380,6 +381,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Property> getProperty() {
 		return getGroup().list(ScrPackage.Literals.COMPONENT__PROPERTY);
 	}
@@ -389,6 +391,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Properties> getProperties() {
 		return getGroup().list(ScrPackage.Literals.COMPONENT__PROPERTIES);
 	}
@@ -398,6 +401,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Service getService() {
 		return service;
 	}
@@ -422,6 +426,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setService(Service newService) {
 		if (newService != service) {
 			NotificationChain msgs = null;
@@ -441,6 +446,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Reference> getReference() {
 		if (reference == null) {
 			reference = new EObjectContainmentEList<Reference>(Reference.class, this, ScrPackage.COMPONENT__REFERENCE);
@@ -453,6 +459,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Implementation getImplementation() {
 		return implementation;
 	}
@@ -477,6 +484,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setImplementation(Implementation newImplementation) {
 		if (newImplementation != implementation) {
 			NotificationChain msgs = null;
@@ -496,6 +504,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAny() {
 		if (any == null) {
 			any = new BasicFeatureMap(this, ScrPackage.COMPONENT__ANY);
@@ -508,6 +517,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getActivate() {
 		return activate;
 	}
@@ -517,6 +527,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setActivate(String newActivate) {
 		String oldActivate = activate;
 		activate = newActivate;
@@ -531,6 +542,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetActivate() {
 		String oldActivate = activate;
 		boolean oldActivateESet = activateESet;
@@ -545,6 +557,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetActivate() {
 		return activateESet;
 	}
@@ -554,6 +567,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getConfigurationPid() {
 		return configurationPid;
 	}
@@ -563,6 +577,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConfigurationPid(String newConfigurationPid) {
 		String oldConfigurationPid = configurationPid;
 		configurationPid = newConfigurationPid;
@@ -575,6 +590,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ConfigurationPolicy getConfigurationPolicy() {
 		return configurationPolicy;
 	}
@@ -584,6 +600,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConfigurationPolicy(ConfigurationPolicy newConfigurationPolicy) {
 		ConfigurationPolicy oldConfigurationPolicy = configurationPolicy;
 		configurationPolicy = newConfigurationPolicy == null ? CONFIGURATION_POLICY_EDEFAULT : newConfigurationPolicy;
@@ -598,6 +615,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetConfigurationPolicy() {
 		ConfigurationPolicy oldConfigurationPolicy = configurationPolicy;
 		boolean oldConfigurationPolicyESet = configurationPolicyESet;
@@ -612,6 +630,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetConfigurationPolicy() {
 		return configurationPolicyESet;
 	}
@@ -621,6 +640,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDeactivate() {
 		return deactivate;
 	}
@@ -630,6 +650,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDeactivate(String newDeactivate) {
 		String oldDeactivate = deactivate;
 		deactivate = newDeactivate;
@@ -644,6 +665,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetDeactivate() {
 		String oldDeactivate = deactivate;
 		boolean oldDeactivateESet = deactivateESet;
@@ -658,6 +680,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetDeactivate() {
 		return deactivateESet;
 	}
@@ -667,6 +690,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -676,6 +700,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEnabled(boolean newEnabled) {
 		boolean oldEnabled = enabled;
 		enabled = newEnabled;
@@ -690,6 +715,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetEnabled() {
 		boolean oldEnabled = enabled;
 		boolean oldEnabledESet = enabledESet;
@@ -704,6 +730,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetEnabled() {
 		return enabledESet;
 	}
@@ -713,6 +740,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getFactory() {
 		return factory;
 	}
@@ -722,6 +750,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFactory(String newFactory) {
 		String oldFactory = factory;
 		factory = newFactory;
@@ -734,6 +763,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isImmediate() {
 		return immediate;
 	}
@@ -743,6 +773,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setImmediate(boolean newImmediate) {
 		boolean oldImmediate = immediate;
 		immediate = newImmediate;
@@ -757,6 +788,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetImmediate() {
 		boolean oldImmediate = immediate;
 		boolean oldImmediateESet = immediateESet;
@@ -771,6 +803,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetImmediate() {
 		return immediateESet;
 	}
@@ -780,6 +813,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getModified() {
 		return modified;
 	}
@@ -789,6 +823,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setModified(String newModified) {
 		String oldModified = modified;
 		modified = newModified;
@@ -801,6 +836,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -810,6 +846,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -822,6 +859,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAnyAttribute() {
 		if (anyAttribute == null) {
 			anyAttribute = new BasicFeatureMap(this, ScrPackage.COMPONENT__ANY_ATTRIBUTE);
@@ -1091,7 +1129,7 @@ public class ComponentImpl extends MinimalEObjectImpl.Container implements Compo
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (group: ");
 		result.append(group);
 		result.append(", any: ");

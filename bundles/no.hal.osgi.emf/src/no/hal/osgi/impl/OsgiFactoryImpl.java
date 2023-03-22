@@ -133,6 +133,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Manifest createManifest() {
 		ManifestImpl manifest = new ManifestImpl();
 		return manifest;
@@ -143,6 +144,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GenericAttributesContainer createGenericAttributesContainer() {
 		GenericAttributesContainerImpl genericAttributesContainer = new GenericAttributesContainerImpl();
 		return genericAttributesContainer;
@@ -153,6 +155,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GenericAttribute createGenericAttribute() {
 		GenericAttributeImpl genericAttribute = new GenericAttributeImpl();
 		return genericAttribute;
@@ -163,6 +166,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public GenericAttributeValue createGenericAttributeValue() {
 		GenericAttributeValueImpl genericAttributeValue = new GenericAttributeValueImpl();
 		return genericAttributeValue;
@@ -173,6 +177,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Bundle createBundle() {
 		BundleImpl bundle = new BundleImpl();
 		return bundle;
@@ -183,6 +188,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RequiredBundle createRequiredBundle() {
 		RequiredBundleImpl requiredBundle = new RequiredBundleImpl();
 		return requiredBundle;
@@ -193,6 +199,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ExportedPackage createExportedPackage() {
 		ExportedPackageImpl exportedPackage = new ExportedPackageImpl();
 		return exportedPackage;
@@ -203,6 +210,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ImportedPackage createImportedPackage() {
 		ImportedPackageImpl importedPackage = new ImportedPackageImpl();
 		return importedPackage;
@@ -213,6 +221,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ServiceComponent createServiceComponent() {
 		ServiceComponentImpl serviceComponent = new ServiceComponentImpl();
 		return serviceComponent;
@@ -355,6 +364,7 @@ public class OsgiFactoryImpl extends EFactoryImpl implements OsgiFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OsgiPackage getOsgiPackage() {
 		return (OsgiPackage)getEPackage();
 	}

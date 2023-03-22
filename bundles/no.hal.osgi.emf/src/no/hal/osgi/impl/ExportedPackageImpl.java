@@ -66,6 +66,7 @@ public class ExportedPackageImpl extends BundlePackageImpl implements ExportedPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Version getVersion() {
 		return version;
 	}
@@ -75,6 +76,7 @@ public class ExportedPackageImpl extends BundlePackageImpl implements ExportedPa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersion(Version newVersion) {
 		Version oldVersion = version;
 		version = newVersion;
@@ -149,7 +151,7 @@ public class ExportedPackageImpl extends BundlePackageImpl implements ExportedPa
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (version: ");
 		result.append(version);
 		result.append(')');

@@ -151,6 +151,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public QualifiedName getName() {
 		return name;
 	}
@@ -160,6 +161,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(QualifiedName newName) {
 		QualifiedName oldName = name;
 		name = newName;
@@ -172,6 +174,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRange getBundleVersion() {
 		return bundleVersion;
 	}
@@ -181,6 +184,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBundleVersion(VersionRange newBundleVersion) {
 		VersionRange oldBundleVersion = bundleVersion;
 		bundleVersion = newBundleVersion;
@@ -193,6 +197,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isOptional() {
 		return optional;
 	}
@@ -202,6 +207,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOptional(boolean newOptional) {
 		boolean oldOptional = optional;
 		optional = newOptional;
@@ -214,6 +220,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VisibilityKind getVisibility() {
 		return visibility;
 	}
@@ -223,6 +230,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVisibility(VisibilityKind newVisibility) {
 		VisibilityKind oldVisibility = visibility;
 		visibility = newVisibility == null ? VISIBILITY_EDEFAULT : newVisibility;
@@ -235,6 +243,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Bundle> getResolvesTo() {
 		if (resolvesTo == null) {
 			resolvesTo = new EObjectResolvingEList<Bundle>(Bundle.class, this, OsgiPackage.REQUIRED_BUNDLE__RESOLVES_TO);
@@ -351,7 +360,7 @@ public class RequiredBundleImpl extends MinimalEObjectImpl.Container implements 
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", bundleVersion: ");

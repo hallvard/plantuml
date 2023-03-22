@@ -87,6 +87,7 @@ public class GenericAttributeValueImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getValue() {
 		return value;
 	}
@@ -96,6 +97,7 @@ public class GenericAttributeValueImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(String newValue) {
 		String oldValue = value;
 		value = newValue;
@@ -108,6 +110,7 @@ public class GenericAttributeValueImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<String> getExtraAttributes() {
 		if (extraAttributes == null) {
 			extraAttributes = new EDataTypeUniqueEList<String>(String.class, this, OsgiPackage.GENERIC_ATTRIBUTE_VALUE__EXTRA_ATTRIBUTES);
@@ -194,7 +197,7 @@ public class GenericAttributeValueImpl extends MinimalEObjectImpl.Container impl
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (value: ");
 		result.append(value);
 		result.append(", extraAttributes: ");

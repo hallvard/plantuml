@@ -126,6 +126,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getMixed() {
 		if (mixed == null) {
 			mixed = new BasicFeatureMap(this, ScrPackage.DOCUMENT_ROOT__MIXED);
@@ -138,6 +139,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EMap<String, String> getXMLNSPrefixMap() {
 		if (xMLNSPrefixMap == null) {
 			xMLNSPrefixMap = new EcoreEMap<String,String>(EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY, EStringToStringMapEntryImpl.class, this, ScrPackage.DOCUMENT_ROOT__XMLNS_PREFIX_MAP);
@@ -150,6 +152,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EMap<String, String> getXSISchemaLocation() {
 		if (xSISchemaLocation == null) {
 			xSISchemaLocation = new EcoreEMap<String,String>(EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY, EStringToStringMapEntryImpl.class, this, ScrPackage.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION);
@@ -162,6 +165,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Component getComponent() {
 		return (Component)getMixed().get(ScrPackage.Literals.DOCUMENT_ROOT__COMPONENT, true);
 	}
@@ -180,6 +184,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComponent(Component newComponent) {
 		((FeatureMap.Internal)getMixed()).set(ScrPackage.Literals.DOCUMENT_ROOT__COMPONENT, newComponent);
 	}
@@ -189,6 +194,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isMustUnderstand() {
 		return mustUnderstand;
 	}
@@ -198,6 +204,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMustUnderstand(boolean newMustUnderstand) {
 		boolean oldMustUnderstand = mustUnderstand;
 		mustUnderstand = newMustUnderstand;
@@ -212,6 +219,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetMustUnderstand() {
 		boolean oldMustUnderstand = mustUnderstand;
 		boolean oldMustUnderstandESet = mustUnderstandESet;
@@ -226,6 +234,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetMustUnderstand() {
 		return mustUnderstandESet;
 	}
@@ -360,7 +369,7 @@ public class DocumentRootImpl extends MinimalEObjectImpl.Container implements Do
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (mixed: ");
 		result.append(mixed);
 		result.append(", mustUnderstand: ");

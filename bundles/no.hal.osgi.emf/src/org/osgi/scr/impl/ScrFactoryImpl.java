@@ -143,6 +143,7 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DocumentRoot createDocumentRoot() {
 		DocumentRootImpl documentRoot = new DocumentRootImpl();
 		return documentRoot;
@@ -153,6 +154,7 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Component createComponent() {
 		ComponentImpl component = new ComponentImpl();
 		return component;
@@ -163,6 +165,7 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Implementation createImplementation() {
 		ImplementationImpl implementation = new ImplementationImpl();
 		return implementation;
@@ -173,6 +176,7 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Properties createProperties() {
 		PropertiesImpl properties = new PropertiesImpl();
 		return properties;
@@ -183,6 +187,7 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Property createProperty() {
 		PropertyImpl property = new PropertyImpl();
 		return property;
@@ -193,6 +198,7 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Provide createProvide() {
 		ProvideImpl provide = new ProvideImpl();
 		return provide;
@@ -203,6 +209,7 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Reference createReference() {
 		ReferenceImpl reference = new ReferenceImpl();
 		return reference;
@@ -213,6 +220,7 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Service createService() {
 		ServiceImpl service = new ServiceImpl();
 		return service;
@@ -413,6 +421,7 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScrPackage getScrPackage() {
 		return (ScrPackage)getEPackage();
 	}
