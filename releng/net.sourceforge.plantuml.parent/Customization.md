@@ -12,7 +12,7 @@ Below the various diagram generation behaviors and corresponding properties are 
 
 The following sections details the diagram intent providers and the customization properties they support. The type of each property and the default value is shown in parenthesis behind each property name).
 
-### Class diagra generation
+### Class diagram generation
 
 Class diagrams are generated from both Java files and Ecore files may be customized by the following properties in the **AbstractClassDiagramIntent.properties** file:
 
