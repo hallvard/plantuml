@@ -5,7 +5,7 @@ public abstract class AbstractSvg2HtmlConverter implements Svg2HtmlConverter {
 	protected AbstractSvg2HtmlConverter() {
 	}
 
-	protected final String idAttrPrefix = "<svg", idAttr = " id='plantuml'";
+	protected final String idAttrPrefix = "<svg", idAttr = " id=\"plantuml\"";
 
 	protected String cleanSvg(String svg) {
 		if (svg.startsWith("<?xml")) {

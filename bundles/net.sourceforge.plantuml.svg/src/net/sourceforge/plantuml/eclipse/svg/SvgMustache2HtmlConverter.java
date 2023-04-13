@@ -53,7 +53,7 @@ public class SvgMustache2HtmlConverter extends AbstractSvg2HtmlConverter {
 			final Template template = getTemplate();
 			final Map<String, Object> context = getTemplateContext(svg);
 			final String converted = template.execute(context);
-			return converted;
+			return converted.replace("\r\n", "\n");
 		} catch (final Exception e) {
 			return "<verbatim>" + e.getMessage() + "</verbatim>";
 		}
