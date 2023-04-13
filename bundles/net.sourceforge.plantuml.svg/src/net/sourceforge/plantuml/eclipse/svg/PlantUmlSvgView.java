@@ -45,6 +45,9 @@ public class PlantUmlSvgView extends AbstractPlantUmlView implements ILinkSuppor
 			@Override
 			public void changing(final LocationEvent event) {
 				openLink(event.location);
+				if(!"about:blank".equals(event.location)) {
+					event.doit = false;
+				}
 			}
 
 			@Override
