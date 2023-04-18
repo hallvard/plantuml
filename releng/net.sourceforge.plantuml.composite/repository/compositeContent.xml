@@ -16,7 +16,7 @@
 		<child location='plantuml.lib/1.2019.11' />
 		<child location='plantuml.lib/1.2021.3' />
 		<child location='plantuml.lib/1.2021.5' />
-		<child location='plantuml.lib/1.2022.1' />
+		<child location='plantuml.lib/1.2022.7' />
 		<child location='plantuml.eclipse/1.1.20' />
 		<child location='plantuml.eclipse/1.1.21' />
 		<child location='plantuml.eclipse/1.1.22' />
@@ -24,6 +24,6 @@
 		<child location='plantuml.eclipse/1.1.24' />
 		<child location='plantuml.eclipse/1.1.25' />
 		<child location='plantuml.eclipse/1.1.26' />
-		<child location='plantuml.eclipse/1.1.27-SNAPSHOT' />
+		<child location='plantuml.eclipse/1.1.27' />
 	</children>
 </repository>
