@@ -4,6 +4,7 @@ package no.hal.osgi;
 
 import no.hal.osgi.emf.util.Path;
 import org.eclipse.emf.ecore.EObject;
+import org.osgi.scr.Component;
 
 /**
  * <!-- begin-user-doc -->
@@ -59,12 +60,12 @@ public interface ServiceComponent extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Component</em>' reference.
-	 * @see #setComponent(org.osgi.scr.Component)
+	 * @see #setComponent(Component)
 	 * @see no.hal.osgi.OsgiPackage#getServiceComponent_Component()
 	 * @model
 	 * @generated
 	 */
-	org.osgi.scr.Component getComponent();
+	Component getComponent();
 
 	/**
 	 * Sets the value of the '{@link no.hal.osgi.ServiceComponent#getComponent <em>Component</em>}' reference.
@@ -74,5 +75,5 @@ public interface ServiceComponent extends EObject {
 	 * @see #getComponent()
 	 * @generated
 	 */
-	void setComponent(org.osgi.scr.Component value);
+	void setComponent(Component value);
 } // ServiceComponent

@@ -98,6 +98,7 @@ public class PropertiesImpl extends MinimalEObjectImpl.Container implements Prop
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAny() {
 		if (any == null) {
 			any = new BasicFeatureMap(this, ScrPackage.PROPERTIES__ANY);
@@ -110,6 +111,7 @@ public class PropertiesImpl extends MinimalEObjectImpl.Container implements Prop
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getEntry() {
 		return entry;
 	}
@@ -119,6 +121,7 @@ public class PropertiesImpl extends MinimalEObjectImpl.Container implements Prop
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEntry(String newEntry) {
 		String oldEntry = entry;
 		entry = newEntry;
@@ -131,6 +134,7 @@ public class PropertiesImpl extends MinimalEObjectImpl.Container implements Prop
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAnyAttribute() {
 		if (anyAttribute == null) {
 			anyAttribute = new BasicFeatureMap(this, ScrPackage.PROPERTIES__ANY_ATTRIBUTE);
@@ -243,7 +247,7 @@ public class PropertiesImpl extends MinimalEObjectImpl.Container implements Prop
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (any: ");
 		result.append(any);
 		result.append(", entry: ");

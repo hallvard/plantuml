@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+import org.osgi.scr.ScrPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -183,7 +184,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link OsgiPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -197,12 +198,13 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 		if (isInited) return (OsgiPackage)EPackage.Registry.INSTANCE.getEPackage(OsgiPackage.eNS_URI);
 
 		// Obtain or create and register package
-		OsgiPackageImpl theOsgiPackage = (OsgiPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof OsgiPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new OsgiPackageImpl());
+		Object registeredOsgiPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		OsgiPackageImpl theOsgiPackage = registeredOsgiPackage instanceof OsgiPackageImpl ? (OsgiPackageImpl)registeredOsgiPackage : new OsgiPackageImpl();
 
 		isInited = true;
 
 		// Initialize simple dependencies
-		org.osgi.scr.ScrPackage.eINSTANCE.eClass();
+		ScrPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theOsgiPackage.createPackageContents();
@@ -213,7 +215,6 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 		// Mark meta-data to indicate it can't be changed
 		theOsgiPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(OsgiPackage.eNS_URI, theOsgiPackage);
 		return theOsgiPackage;
@@ -224,6 +225,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getManifest() {
 		return manifestEClass;
 	}
@@ -233,6 +235,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getManifest_Version() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(0);
 	}
@@ -242,6 +245,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getGenericAttributesContainer() {
 		return genericAttributesContainerEClass;
 	}
@@ -251,6 +255,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getGenericAttributesContainer_GenericAttributes() {
 		return (EReference)genericAttributesContainerEClass.getEStructuralFeatures().get(0);
 	}
@@ -260,6 +265,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getGenericAttribute() {
 		return genericAttributeEClass;
 	}
@@ -269,6 +275,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getGenericAttribute_Name() {
 		return (EAttribute)genericAttributeEClass.getEStructuralFeatures().get(0);
 	}
@@ -278,6 +285,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getGenericAttribute_Values() {
 		return (EReference)genericAttributeEClass.getEStructuralFeatures().get(1);
 	}
@@ -287,6 +295,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getGenericAttributeValue() {
 		return genericAttributeValueEClass;
 	}
@@ -296,6 +305,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getGenericAttributeValue_Value() {
 		return (EAttribute)genericAttributeValueEClass.getEStructuralFeatures().get(0);
 	}
@@ -305,6 +315,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getGenericAttributeValue_ExtraAttributes() {
 		return (EAttribute)genericAttributeValueEClass.getEStructuralFeatures().get(1);
 	}
@@ -314,6 +325,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getVersion() {
 		return versionEDataType;
 	}
@@ -323,6 +335,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getVersionRange() {
 		return versionRangeEDataType;
 	}
@@ -332,6 +345,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBundle() {
 		return bundleEClass;
 	}
@@ -341,6 +355,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_ManifestVersion() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(0);
 	}
@@ -350,6 +365,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_SymbolicName() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(1);
 	}
@@ -359,6 +375,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_Name() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(2);
 	}
@@ -368,6 +385,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_Singleton() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(3);
 	}
@@ -377,6 +395,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_Version() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(4);
 	}
@@ -386,6 +405,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_Vendor() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(5);
 	}
@@ -395,6 +415,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_Activator() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(6);
 	}
@@ -404,6 +425,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_ClassPath() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(7);
 	}
@@ -413,6 +435,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_RequiredExecutionEnvironment() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(8);
 	}
@@ -422,6 +445,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundle_ActivationPolicy() {
 		return (EAttribute)bundleEClass.getEStructuralFeatures().get(9);
 	}
@@ -431,6 +455,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBundle_ExportPackage() {
 		return (EReference)bundleEClass.getEStructuralFeatures().get(10);
 	}
@@ -440,6 +465,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBundle_ImportPackage() {
 		return (EReference)bundleEClass.getEStructuralFeatures().get(11);
 	}
@@ -449,6 +475,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBundle_RequireBundle() {
 		return (EReference)bundleEClass.getEStructuralFeatures().get(12);
 	}
@@ -458,6 +485,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBundle_ServiceComponent() {
 		return (EReference)bundleEClass.getEStructuralFeatures().get(13);
 	}
@@ -467,6 +495,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getRequiredBundle() {
 		return requiredBundleEClass;
 	}
@@ -476,6 +505,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRequiredBundle_Name() {
 		return (EAttribute)requiredBundleEClass.getEStructuralFeatures().get(0);
 	}
@@ -485,6 +515,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRequiredBundle_BundleVersion() {
 		return (EAttribute)requiredBundleEClass.getEStructuralFeatures().get(1);
 	}
@@ -494,6 +525,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRequiredBundle_Optional() {
 		return (EAttribute)requiredBundleEClass.getEStructuralFeatures().get(2);
 	}
@@ -503,6 +535,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getRequiredBundle_Visibility() {
 		return (EAttribute)requiredBundleEClass.getEStructuralFeatures().get(3);
 	}
@@ -512,6 +545,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getRequiredBundle_ResolvesTo() {
 		return (EReference)requiredBundleEClass.getEStructuralFeatures().get(4);
 	}
@@ -521,6 +555,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBundlePackage() {
 		return bundlePackageEClass;
 	}
@@ -530,6 +565,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBundlePackage_Name() {
 		return (EAttribute)bundlePackageEClass.getEStructuralFeatures().get(0);
 	}
@@ -539,6 +575,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getExportedPackage() {
 		return exportedPackageEClass;
 	}
@@ -548,6 +585,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getExportedPackage_Version() {
 		return (EAttribute)exportedPackageEClass.getEStructuralFeatures().get(0);
 	}
@@ -557,6 +595,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getImportedPackage() {
 		return importedPackageEClass;
 	}
@@ -566,6 +605,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getImportedPackage_Version() {
 		return (EAttribute)importedPackageEClass.getEStructuralFeatures().get(0);
 	}
@@ -575,6 +615,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getImportedPackage_ResolvesTo() {
 		return (EReference)importedPackageEClass.getEStructuralFeatures().get(1);
 	}
@@ -584,6 +625,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getServiceComponent() {
 		return serviceComponentEClass;
 	}
@@ -593,6 +635,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getServiceComponent_Path() {
 		return (EAttribute)serviceComponentEClass.getEStructuralFeatures().get(0);
 	}
@@ -602,6 +645,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getServiceComponent_Component() {
 		return (EReference)serviceComponentEClass.getEStructuralFeatures().get(1);
 	}
@@ -611,6 +655,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getRequiredExecutionEnvironmentKind() {
 		return requiredExecutionEnvironmentKindEEnum;
 	}
@@ -620,6 +665,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getActivationPolicyKind() {
 		return activationPolicyKindEEnum;
 	}
@@ -629,6 +675,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getVisibilityKind() {
 		return visibilityKindEEnum;
 	}
@@ -638,6 +685,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getQualifiedName() {
 		return qualifiedNameEDataType;
 	}
@@ -647,6 +695,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getPath() {
 		return pathEDataType;
 	}
@@ -656,6 +705,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OsgiFactory getOsgiFactory() {
 		return (OsgiFactory)getEFactoryInstance();
 	}
@@ -766,7 +816,7 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		org.osgi.scr.ScrPackage theScrPackage = (org.osgi.scr.ScrPackage)EPackage.Registry.INSTANCE.getEPackage(org.osgi.scr.ScrPackage.eNS_URI);
+		ScrPackage theScrPackage = (ScrPackage)EPackage.Registry.INSTANCE.getEPackage(ScrPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -838,6 +888,17 @@ public class OsgiPackageImpl extends EPackageImpl implements OsgiPackage {
 		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA6);
 		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA7);
 		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA8);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA9);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA10);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA11);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA12);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA13);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA14);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA15);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA16);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA17);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA18);
+		addEEnumLiteral(requiredExecutionEnvironmentKindEEnum, RequiredExecutionEnvironmentKind.JAVA19);
 
 		initEEnum(activationPolicyKindEEnum, ActivationPolicyKind.class, "ActivationPolicyKind");
 		addEEnumLiteral(activationPolicyKindEEnum, ActivationPolicyKind.DEFAULT);

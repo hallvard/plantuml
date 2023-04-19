@@ -71,6 +71,7 @@ public abstract class BundlePackageImpl extends MinimalEObjectImpl.Container imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public QualifiedName getName() {
 		return name;
 	}
@@ -80,6 +81,7 @@ public abstract class BundlePackageImpl extends MinimalEObjectImpl.Container imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(QualifiedName newName) {
 		QualifiedName oldName = name;
 		name = newName;
@@ -154,7 +156,7 @@ public abstract class BundlePackageImpl extends MinimalEObjectImpl.Container imp
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(')');

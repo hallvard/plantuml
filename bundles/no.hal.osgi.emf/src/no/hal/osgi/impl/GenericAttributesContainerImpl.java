@@ -64,6 +64,7 @@ public class GenericAttributesContainerImpl extends MinimalEObjectImpl.Container
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<GenericAttribute> getGenericAttributes() {
 		if (genericAttributes == null) {
 			genericAttributes = new EObjectResolvingEList<GenericAttribute>(GenericAttribute.class, this, OsgiPackage.GENERIC_ATTRIBUTES_CONTAINER__GENERIC_ATTRIBUTES);

@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.osgi.scr.Component;
 
 /**
  * <!-- begin-user-doc -->
@@ -54,7 +55,7 @@ public class ServiceComponentImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 * @ordered
 	 */
-	protected org.osgi.scr.Component component;
+	protected Component component;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -79,6 +80,7 @@ public class ServiceComponentImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Path getPath() {
 		return path;
 	}
@@ -88,6 +90,7 @@ public class ServiceComponentImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPath(Path newPath) {
 		Path oldPath = path;
 		path = newPath;
@@ -100,10 +103,11 @@ public class ServiceComponentImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public org.osgi.scr.Component getComponent() {
+	@Override
+	public Component getComponent() {
 		if (component != null && component.eIsProxy()) {
 			InternalEObject oldComponent = (InternalEObject)component;
-			component = (org.osgi.scr.Component)eResolveProxy(oldComponent);
+			component = (Component)eResolveProxy(oldComponent);
 			if (component != oldComponent) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, OsgiPackage.SERVICE_COMPONENT__COMPONENT, oldComponent, component));
@@ -117,7 +121,7 @@ public class ServiceComponentImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public org.osgi.scr.Component basicGetComponent() {
+	public Component basicGetComponent() {
 		return component;
 	}
 
@@ -126,8 +130,9 @@ public class ServiceComponentImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setComponent(org.osgi.scr.Component newComponent) {
-		org.osgi.scr.Component oldComponent = component;
+	@Override
+	public void setComponent(Component newComponent) {
+		Component oldComponent = component;
 		component = newComponent;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, OsgiPackage.SERVICE_COMPONENT__COMPONENT, oldComponent, component));
@@ -163,7 +168,7 @@ public class ServiceComponentImpl extends MinimalEObjectImpl.Container implement
 				setPath((Path)newValue);
 				return;
 			case OsgiPackage.SERVICE_COMPONENT__COMPONENT:
-				setComponent((org.osgi.scr.Component)newValue);
+				setComponent((Component)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -181,7 +186,7 @@ public class ServiceComponentImpl extends MinimalEObjectImpl.Container implement
 				setPath(PATH_EDEFAULT);
 				return;
 			case OsgiPackage.SERVICE_COMPONENT__COMPONENT:
-				setComponent((org.osgi.scr.Component)null);
+				setComponent((Component)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -212,7 +217,7 @@ public class ServiceComponentImpl extends MinimalEObjectImpl.Container implement
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (path: ");
 		result.append(path);
 		result.append(')');

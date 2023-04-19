@@ -67,6 +67,7 @@ public class ManifestImpl extends GenericAttributesContainerImpl implements Mani
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Version getVersion() {
 		return version;
 	}
@@ -76,6 +77,7 @@ public class ManifestImpl extends GenericAttributesContainerImpl implements Mani
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersion(Version newVersion) {
 		Version oldVersion = version;
 		version = newVersion;
@@ -151,7 +153,7 @@ public class ManifestImpl extends GenericAttributesContainerImpl implements Mani
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (version: ");
 		result.append(version);
 		result.append(')');

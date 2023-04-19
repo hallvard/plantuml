@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -154,13 +155,19 @@ public class TextDiagramIntentHelper {
 			String line = lines.substring(start, lineEnd);
 			if (line.startsWith(linePrefix)) {
 				line = line.substring(linePrefix.length());
+			} else if (line.matches("\\s+" + Pattern.quote(linePrefix) + ".*")) {
+				int indexOfPrefix = line.indexOf(linePrefix);
+				line = line.substring(indexOfPrefix + linePrefix.length());
+				line = line.trim();
 			}
 			result.append(line);
-			result.append("\n");
+			if (!line.equals(suffix)) {
+				result.append("\n");
+			}
 			start = lineEnd + 1;
 		}
 		if (suffixPos < 0) {
-			result.append(PlantumlConstants.END_UML + "\n");
+			result.append(PlantumlConstants.END_UML);
 		}
 		return result.toString();
 	}

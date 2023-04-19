@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Image Control Plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.eclipse.imagecontrol
-Bundle-Version: 1.1.27
+Bundle-Version: 1.1.28.qualifier
 Bundle-Vendor: PlantUML Team
 Require-Bundle: org.eclipse.jface;bundle-version="3.10.2"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: org.eclipse.jface.action,
  org.eclipse.jface.resource,
  org.eclipse.swt,

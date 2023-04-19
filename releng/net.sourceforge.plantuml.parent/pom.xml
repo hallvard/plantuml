@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sourceforge.plantuml</groupId>
 	<artifactId>net.sourceforge.plantuml.parent</artifactId>
-	<version>1.1.27</version>
+	<version>1.1.28-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>net.sourceforge.plantuml maven parent project</name>
+	<name>net.sourceforge.plantuml Eclipse plug-in maven parent project</name>
 
 	<properties>
 		<tycho-maven-plugin-version>2.2.0</tycho-maven-plugin-version>
@@ -14,25 +14,7 @@
 		<skip-ui-tests>true</skip-ui-tests>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>eclipse-luna</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/luna</url>
-		</repository>
-	</repositories>
-
 	<profiles>
-		<profile>
-			<id>latest</id>
-			<repositories>
-				<repository>
-					<id>latest</id>
-					<layout>p2</layout>
-					<url>http://download.eclipse.org/releases/2021-03</url>
-				</repository>
-			</repositories>
-		</profile>
 		<profile>
 			<id>sign</id>
 			<activation>
@@ -84,29 +66,32 @@
 				<version>${tycho-version}</version>
 				<configuration>
 					<pomDependencies>consider</pomDependencies>
-					<executionEnvironment>JavaSE-1.8</executionEnvironment>
+					<executionEnvironment>JavaSE-11</executionEnvironment>
 					<target>
 						<artifact>
 							<groupId>net.sourceforge.plantuml</groupId>
-							<artifactId>net.sourceforge.plantuml.target</artifactId>
-							<version>1.1.27</version>
+							<artifactId>eclipse-2022-09</artifactId>
+							<version>1.1.28-SNAPSHOT</version>
 						</artifact>
 					</target>
-					<filters>
-						<filter>
-							<type>eclipse-plugin</type>
-							<id>org.eclipse.jdt.core</id>
-							<restrictTo>
-								<version>3.10.2.v20150120-1634</version>
-							</restrictTo>
-						</filter>
-					</filters>
-					<!-- <environments> <environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch> 
-						</environment> <environment> <os>linux</os> <ws>gtk</ws> <arch>x86_64</arch> 
-						</environment> <environment> <os>win32</os> <ws>win32</ws> <arch>x86</arch> 
-						</environment> <environment> <os>win32</os> <ws>win32</ws> <arch>x86_64</arch> 
-						</environment> <environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> 
-						</environment> </environments> -->
+					<environments>
+						<!-- see https://wiki.eclipse.org/Tycho/Reference_Card#Target_runtime_environment -->
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
 				</configuration>
 			</plugin>
 

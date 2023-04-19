@@ -98,6 +98,7 @@ public class ProvideImpl extends MinimalEObjectImpl.Container implements Provide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAny() {
 		if (any == null) {
 			any = new BasicFeatureMap(this, ScrPackage.PROVIDE__ANY);
@@ -110,6 +111,7 @@ public class ProvideImpl extends MinimalEObjectImpl.Container implements Provide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getInterface() {
 		return interface_;
 	}
@@ -119,6 +121,7 @@ public class ProvideImpl extends MinimalEObjectImpl.Container implements Provide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInterface(String newInterface) {
 		String oldInterface = interface_;
 		interface_ = newInterface;
@@ -131,6 +134,7 @@ public class ProvideImpl extends MinimalEObjectImpl.Container implements Provide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAnyAttribute() {
 		if (anyAttribute == null) {
 			anyAttribute = new BasicFeatureMap(this, ScrPackage.PROVIDE__ANY_ATTRIBUTE);
@@ -243,7 +247,7 @@ public class ProvideImpl extends MinimalEObjectImpl.Container implements Provide
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (any: ");
 		result.append(any);
 		result.append(", interface: ");

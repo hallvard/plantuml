@@ -124,6 +124,7 @@ public class ServiceImpl extends MinimalEObjectImpl.Container implements Service
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Provide> getProvide() {
 		if (provide == null) {
 			provide = new EObjectContainmentEList<Provide>(Provide.class, this, ScrPackage.SERVICE__PROVIDE);
@@ -136,6 +137,7 @@ public class ServiceImpl extends MinimalEObjectImpl.Container implements Service
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAny() {
 		if (any == null) {
 			any = new BasicFeatureMap(this, ScrPackage.SERVICE__ANY);
@@ -148,6 +150,7 @@ public class ServiceImpl extends MinimalEObjectImpl.Container implements Service
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isServicefactory() {
 		return servicefactory;
 	}
@@ -157,6 +160,7 @@ public class ServiceImpl extends MinimalEObjectImpl.Container implements Service
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setServicefactory(boolean newServicefactory) {
 		boolean oldServicefactory = servicefactory;
 		servicefactory = newServicefactory;
@@ -171,6 +175,7 @@ public class ServiceImpl extends MinimalEObjectImpl.Container implements Service
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetServicefactory() {
 		boolean oldServicefactory = servicefactory;
 		boolean oldServicefactoryESet = servicefactoryESet;
@@ -185,6 +190,7 @@ public class ServiceImpl extends MinimalEObjectImpl.Container implements Service
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetServicefactory() {
 		return servicefactoryESet;
 	}
@@ -194,6 +200,7 @@ public class ServiceImpl extends MinimalEObjectImpl.Container implements Service
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAnyAttribute() {
 		if (anyAttribute == null) {
 			anyAttribute = new BasicFeatureMap(this, ScrPackage.SERVICE__ANY_ATTRIBUTE);
@@ -320,7 +327,7 @@ public class ServiceImpl extends MinimalEObjectImpl.Container implements Service
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (any: ");
 		result.append(any);
 		result.append(", servicefactory: ");

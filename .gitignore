@@ -1,3 +1,8 @@
 bin/
 target/
+.idea
 **/.polyglot.build.properties
+**/.META-INF_MANIFEST.MF
+**/.polyglot.*
+feature.xml.takari_issue_192
+category.xml.takari_issue_192

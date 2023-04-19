@@ -50,6 +50,17 @@
     <eLiterals name="Java6" value="6" literal="JavaSE-1.6"/>
     <eLiterals name="Java7" value="7" literal="JavaSE-1.7"/>
     <eLiterals name="Java8" value="8" literal="JavaSE-1.8"/>
+    <eLiterals name="Java9" value="9" literal="JavaSE-9"/>
+    <eLiterals name="Java10" value="10" literal="JavaSE-10"/>
+    <eLiterals name="Java11" value="11" literal="JavaSE-11"/>
+    <eLiterals name="Java12" value="12" literal="JavaSE-12"/>
+    <eLiterals name="Java13" value="13" literal="JavaSE-13"/>
+    <eLiterals name="Java14" value="14" literal="JavaSE-14"/>
+    <eLiterals name="Java15" value="15" literal="JavaSE-15"/>
+    <eLiterals name="Java16" value="16" literal="JavaSE-16"/>
+    <eLiterals name="Java17" value="17" literal="JavaSE-17"/>
+    <eLiterals name="Java18" value="18" literal="JavaSE-18"/>
+    <eLiterals name="Java19" value="19" literal="JavaSE-19"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ActivationPolicyKind">
     <eLiterals name="default" literal="default"/>
@@ -81,7 +92,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceComponent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="#//Path"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="ecore:EClass scr.ecore#//Component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="ecore:EClass scr-1.2.0.ecore#//Component"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Path" instanceClassName="no.hal.osgi.emf.util.Path"/>
 </ecore:EPackage>

@@ -192,7 +192,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ScrPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -206,7 +206,8 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		if (isInited) return (ScrPackage)EPackage.Registry.INSTANCE.getEPackage(ScrPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ScrPackageImpl theScrPackage = (ScrPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ScrPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ScrPackageImpl());
+		Object registeredScrPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ScrPackageImpl theScrPackage = registeredScrPackage instanceof ScrPackageImpl ? (ScrPackageImpl)registeredScrPackage : new ScrPackageImpl();
 
 		isInited = true;
 
@@ -222,7 +223,6 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		// Mark meta-data to indicate it can't be changed
 		theScrPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ScrPackage.eNS_URI, theScrPackage);
 		return theScrPackage;
@@ -233,6 +233,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDocumentRoot() {
 		return documentRootEClass;
 	}
@@ -242,6 +243,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDocumentRoot_Mixed() {
 		return (EAttribute)documentRootEClass.getEStructuralFeatures().get(0);
 	}
@@ -251,6 +253,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDocumentRoot_XMLNSPrefixMap() {
 		return (EReference)documentRootEClass.getEStructuralFeatures().get(1);
 	}
@@ -260,6 +263,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDocumentRoot_XSISchemaLocation() {
 		return (EReference)documentRootEClass.getEStructuralFeatures().get(2);
 	}
@@ -269,6 +273,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDocumentRoot_Component() {
 		return (EReference)documentRootEClass.getEStructuralFeatures().get(3);
 	}
@@ -278,6 +283,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDocumentRoot_MustUnderstand() {
 		return (EAttribute)documentRootEClass.getEStructuralFeatures().get(4);
 	}
@@ -287,6 +293,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getComponent() {
 		return componentEClass;
 	}
@@ -296,6 +303,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_Group() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(0);
 	}
@@ -305,6 +313,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getComponent_Property() {
 		return (EReference)componentEClass.getEStructuralFeatures().get(1);
 	}
@@ -314,6 +323,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getComponent_Properties() {
 		return (EReference)componentEClass.getEStructuralFeatures().get(2);
 	}
@@ -323,6 +333,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getComponent_Service() {
 		return (EReference)componentEClass.getEStructuralFeatures().get(3);
 	}
@@ -332,6 +343,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getComponent_Reference() {
 		return (EReference)componentEClass.getEStructuralFeatures().get(4);
 	}
@@ -341,6 +353,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getComponent_Implementation() {
 		return (EReference)componentEClass.getEStructuralFeatures().get(5);
 	}
@@ -350,6 +363,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_Any() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(6);
 	}
@@ -359,6 +373,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_Activate() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(7);
 	}
@@ -368,6 +383,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_ConfigurationPid() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(8);
 	}
@@ -377,6 +393,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_ConfigurationPolicy() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(9);
 	}
@@ -386,6 +403,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_Deactivate() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(10);
 	}
@@ -395,6 +413,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_Enabled() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(11);
 	}
@@ -404,6 +423,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_Factory() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(12);
 	}
@@ -413,6 +433,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_Immediate() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(13);
 	}
@@ -422,6 +443,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_Modified() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(14);
 	}
@@ -431,6 +453,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_Name() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(15);
 	}
@@ -440,6 +463,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getComponent_AnyAttribute() {
 		return (EAttribute)componentEClass.getEStructuralFeatures().get(16);
 	}
@@ -449,6 +473,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getImplementation() {
 		return implementationEClass;
 	}
@@ -458,6 +483,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getImplementation_Any() {
 		return (EAttribute)implementationEClass.getEStructuralFeatures().get(0);
 	}
@@ -467,6 +493,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getImplementation_Class() {
 		return (EAttribute)implementationEClass.getEStructuralFeatures().get(1);
 	}
@@ -476,6 +503,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getImplementation_AnyAttribute() {
 		return (EAttribute)implementationEClass.getEStructuralFeatures().get(2);
 	}
@@ -485,6 +513,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getProperties() {
 		return propertiesEClass;
 	}
@@ -494,6 +523,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProperties_Any() {
 		return (EAttribute)propertiesEClass.getEStructuralFeatures().get(0);
 	}
@@ -503,6 +533,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProperties_Entry() {
 		return (EAttribute)propertiesEClass.getEStructuralFeatures().get(1);
 	}
@@ -512,6 +543,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProperties_AnyAttribute() {
 		return (EAttribute)propertiesEClass.getEStructuralFeatures().get(2);
 	}
@@ -521,6 +553,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getProperty() {
 		return propertyEClass;
 	}
@@ -530,6 +563,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProperty_Value() {
 		return (EAttribute)propertyEClass.getEStructuralFeatures().get(0);
 	}
@@ -539,6 +573,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProperty_Name() {
 		return (EAttribute)propertyEClass.getEStructuralFeatures().get(1);
 	}
@@ -548,6 +583,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProperty_Type() {
 		return (EAttribute)propertyEClass.getEStructuralFeatures().get(2);
 	}
@@ -557,6 +593,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProperty_Value1() {
 		return (EAttribute)propertyEClass.getEStructuralFeatures().get(3);
 	}
@@ -566,6 +603,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProperty_AnyAttribute() {
 		return (EAttribute)propertyEClass.getEStructuralFeatures().get(4);
 	}
@@ -575,6 +613,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getProvide() {
 		return provideEClass;
 	}
@@ -584,6 +623,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProvide_Any() {
 		return (EAttribute)provideEClass.getEStructuralFeatures().get(0);
 	}
@@ -593,6 +633,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProvide_Interface() {
 		return (EAttribute)provideEClass.getEStructuralFeatures().get(1);
 	}
@@ -602,6 +643,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getProvide_AnyAttribute() {
 		return (EAttribute)provideEClass.getEStructuralFeatures().get(2);
 	}
@@ -611,6 +653,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getReference() {
 		return referenceEClass;
 	}
@@ -620,6 +663,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_Any() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(0);
 	}
@@ -629,6 +673,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_Bind() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(1);
 	}
@@ -638,6 +683,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_Cardinality() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(2);
 	}
@@ -647,6 +693,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_Interface() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(3);
 	}
@@ -656,6 +703,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_Name() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(4);
 	}
@@ -665,6 +713,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_Policy() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(5);
 	}
@@ -674,6 +723,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_PolicyOption() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(6);
 	}
@@ -683,6 +733,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_Target() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(7);
 	}
@@ -692,6 +743,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_Unbind() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(8);
 	}
@@ -701,6 +753,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_Updated() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(9);
 	}
@@ -710,6 +763,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getReference_AnyAttribute() {
 		return (EAttribute)referenceEClass.getEStructuralFeatures().get(10);
 	}
@@ -719,6 +773,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getService() {
 		return serviceEClass;
 	}
@@ -728,6 +783,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getService_Provide() {
 		return (EReference)serviceEClass.getEStructuralFeatures().get(0);
 	}
@@ -737,6 +793,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getService_Any() {
 		return (EAttribute)serviceEClass.getEStructuralFeatures().get(1);
 	}
@@ -746,6 +803,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getService_Servicefactory() {
 		return (EAttribute)serviceEClass.getEStructuralFeatures().get(2);
 	}
@@ -755,6 +813,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getService_AnyAttribute() {
 		return (EAttribute)serviceEClass.getEStructuralFeatures().get(3);
 	}
@@ -764,6 +823,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getCardinality() {
 		return cardinalityEEnum;
 	}
@@ -773,6 +833,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getConfigurationPolicy() {
 		return configurationPolicyEEnum;
 	}
@@ -782,6 +843,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getJavaTypes() {
 		return javaTypesEEnum;
 	}
@@ -791,6 +853,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getPolicy() {
 		return policyEEnum;
 	}
@@ -800,6 +863,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getPolicyOption() {
 		return policyOptionEEnum;
 	}
@@ -809,6 +873,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getCardinalityObject() {
 		return cardinalityObjectEDataType;
 	}
@@ -818,6 +883,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getConfigurationPolicyObject() {
 		return configurationPolicyObjectEDataType;
 	}
@@ -827,6 +893,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getJavaTypesObject() {
 		return javaTypesObjectEDataType;
 	}
@@ -836,6 +903,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getPolicyObject() {
 		return policyObjectEDataType;
 	}
@@ -845,6 +913,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getPolicyOptionObject() {
 		return policyOptionObjectEDataType;
 	}
@@ -854,6 +923,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScrFactory getScrFactory() {
 		return (ScrFactory)getEFactoryInstance();
 	}
@@ -1112,514 +1182,514 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * @generated
 	 */
 	protected void createExtendedMetaDataAnnotations() {
-		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";	
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
 		addAnnotation
-		  (documentRootEClass, 
-		   source, 
+		  (documentRootEClass,
+		   source,
 		   new String[] {
-			 "name", "",
-			 "kind", "mixed"
-		   });	
+			   "name", "",
+			   "kind", "mixed"
+		   });
 		addAnnotation
-		  (getDocumentRoot_Mixed(), 
-		   source, 
+		  (getDocumentRoot_Mixed(),
+		   source,
 		   new String[] {
-			 "kind", "elementWildcard",
-			 "name", ":mixed"
-		   });	
+			   "kind", "elementWildcard",
+			   "name", ":mixed"
+		   });
 		addAnnotation
-		  (getDocumentRoot_XMLNSPrefixMap(), 
-		   source, 
+		  (getDocumentRoot_XMLNSPrefixMap(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "xmlns:prefix"
-		   });	
+			   "kind", "attribute",
+			   "name", "xmlns:prefix"
+		   });
 		addAnnotation
-		  (getDocumentRoot_XSISchemaLocation(), 
-		   source, 
+		  (getDocumentRoot_XSISchemaLocation(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "xsi:schemaLocation"
-		   });	
+			   "kind", "attribute",
+			   "name", "xsi:schemaLocation"
+		   });
 		addAnnotation
-		  (getDocumentRoot_Component(), 
-		   source, 
+		  (getDocumentRoot_Component(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "component",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "component",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getDocumentRoot_MustUnderstand(), 
-		   source, 
+		  (getDocumentRoot_MustUnderstand(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "must-understand",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "attribute",
+			   "name", "must-understand",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (cardinalityEEnum, 
-		   source, 
+		  (cardinalityEEnum,
+		   source,
 		   new String[] {
-			 "name", "Tcardinality"
-		   });	
+			   "name", "Tcardinality"
+		   });
 		addAnnotation
-		  (cardinalityObjectEDataType, 
-		   source, 
+		  (cardinalityObjectEDataType,
+		   source,
 		   new String[] {
-			 "name", "cardinality:Object",
-			 "baseType", "Cardinality"
-		   });	
+			   "name", "cardinality:Object",
+			   "baseType", "Cardinality"
+		   });
 		addAnnotation
-		  (componentEClass, 
-		   source, 
+		  (componentEClass,
+		   source,
 		   new String[] {
-			 "name", "Component",
-			 "kind", "elementOnly"
-		   });	
+			   "name", "Component",
+			   "kind", "elementOnly"
+		   });
 		addAnnotation
-		  (getComponent_Group(), 
-		   source, 
+		  (getComponent_Group(),
+		   source,
 		   new String[] {
-			 "kind", "group",
-			 "name", "group:0"
-		   });	
+			   "kind", "group",
+			   "name", "group:0"
+		   });
 		addAnnotation
-		  (getComponent_Property(), 
-		   source, 
+		  (getComponent_Property(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "property",
-			 "group", "#group:0"
-		   });	
+			   "kind", "element",
+			   "name", "property",
+			   "group", "#group:0"
+		   });
 		addAnnotation
-		  (getComponent_Properties(), 
-		   source, 
+		  (getComponent_Properties(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "properties",
-			 "group", "#group:0"
-		   });	
+			   "kind", "element",
+			   "name", "properties",
+			   "group", "#group:0"
+		   });
 		addAnnotation
-		  (getComponent_Service(), 
-		   source, 
+		  (getComponent_Service(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "service"
-		   });	
+			   "kind", "element",
+			   "name", "service"
+		   });
 		addAnnotation
-		  (getComponent_Reference(), 
-		   source, 
+		  (getComponent_Reference(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "reference"
-		   });	
+			   "kind", "element",
+			   "name", "reference"
+		   });
 		addAnnotation
-		  (getComponent_Implementation(), 
-		   source, 
+		  (getComponent_Implementation(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "implementation"
-		   });	
+			   "kind", "element",
+			   "name", "implementation"
+		   });
 		addAnnotation
-		  (getComponent_Any(), 
-		   source, 
+		  (getComponent_Any(),
+		   source,
 		   new String[] {
-			 "kind", "elementWildcard",
-			 "wildcards", "##any",
-			 "name", ":6",
-			 "processing", "lax"
-		   });	
+			   "kind", "elementWildcard",
+			   "wildcards", "##any",
+			   "name", ":6",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (getComponent_Activate(), 
-		   source, 
+		  (getComponent_Activate(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "activate"
-		   });	
+			   "kind", "attribute",
+			   "name", "activate"
+		   });
 		addAnnotation
-		  (getComponent_ConfigurationPid(), 
-		   source, 
+		  (getComponent_ConfigurationPid(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "configuration-pid"
-		   });	
+			   "kind", "attribute",
+			   "name", "configuration-pid"
+		   });
 		addAnnotation
-		  (getComponent_ConfigurationPolicy(), 
-		   source, 
+		  (getComponent_ConfigurationPolicy(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "configuration-policy"
-		   });	
+			   "kind", "attribute",
+			   "name", "configuration-policy"
+		   });
 		addAnnotation
-		  (getComponent_Deactivate(), 
-		   source, 
+		  (getComponent_Deactivate(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "deactivate"
-		   });	
+			   "kind", "attribute",
+			   "name", "deactivate"
+		   });
 		addAnnotation
-		  (getComponent_Enabled(), 
-		   source, 
+		  (getComponent_Enabled(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "enabled"
-		   });	
+			   "kind", "attribute",
+			   "name", "enabled"
+		   });
 		addAnnotation
-		  (getComponent_Factory(), 
-		   source, 
+		  (getComponent_Factory(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "factory"
-		   });	
+			   "kind", "attribute",
+			   "name", "factory"
+		   });
 		addAnnotation
-		  (getComponent_Immediate(), 
-		   source, 
+		  (getComponent_Immediate(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "immediate"
-		   });	
+			   "kind", "attribute",
+			   "name", "immediate"
+		   });
 		addAnnotation
-		  (getComponent_Modified(), 
-		   source, 
+		  (getComponent_Modified(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "modified"
-		   });	
+			   "kind", "attribute",
+			   "name", "modified"
+		   });
 		addAnnotation
-		  (getComponent_Name(), 
-		   source, 
+		  (getComponent_Name(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "name"
-		   });	
+			   "kind", "attribute",
+			   "name", "name"
+		   });
 		addAnnotation
-		  (getComponent_AnyAttribute(), 
-		   source, 
+		  (getComponent_AnyAttribute(),
+		   source,
 		   new String[] {
-			 "kind", "attributeWildcard",
-			 "wildcards", "##any",
-			 "name", ":16",
-			 "processing", "lax"
-		   });	
+			   "kind", "attributeWildcard",
+			   "wildcards", "##any",
+			   "name", ":16",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (configurationPolicyEEnum, 
-		   source, 
+		  (configurationPolicyEEnum,
+		   source,
 		   new String[] {
-			 "name", "Tconfiguration-policy"
-		   });	
+			   "name", "Tconfiguration-policy"
+		   });
 		addAnnotation
-		  (configurationPolicyObjectEDataType, 
-		   source, 
+		  (configurationPolicyObjectEDataType,
+		   source,
 		   new String[] {
-			 "name", "configuration-policy:Object",
-			 "baseType", "configuration-policy"
-		   });	
+			   "name", "configuration-policy:Object",
+			   "baseType", "configuration-policy"
+		   });
 		addAnnotation
-		  (implementationEClass, 
-		   source, 
+		  (implementationEClass,
+		   source,
 		   new String[] {
-			 "name", "implementation",
-			 "kind", "elementOnly"
-		   });	
+			   "name", "implementation",
+			   "kind", "elementOnly"
+		   });
 		addAnnotation
-		  (getImplementation_Any(), 
-		   source, 
+		  (getImplementation_Any(),
+		   source,
 		   new String[] {
-			 "kind", "elementWildcard",
-			 "wildcards", "##any",
-			 "name", ":0",
-			 "processing", "lax"
-		   });	
+			   "kind", "elementWildcard",
+			   "wildcards", "##any",
+			   "name", ":0",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (getImplementation_Class(), 
-		   source, 
+		  (getImplementation_Class(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "class"
-		   });	
+			   "kind", "attribute",
+			   "name", "class"
+		   });
 		addAnnotation
-		  (getImplementation_AnyAttribute(), 
-		   source, 
+		  (getImplementation_AnyAttribute(),
+		   source,
 		   new String[] {
-			 "kind", "attributeWildcard",
-			 "wildcards", "##any",
-			 "name", ":2",
-			 "processing", "lax"
-		   });	
+			   "kind", "attributeWildcard",
+			   "wildcards", "##any",
+			   "name", ":2",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (javaTypesEEnum, 
-		   source, 
+		  (javaTypesEEnum,
+		   source,
 		   new String[] {
-			 "name", "java-types"
-		   });	
+			   "name", "java-types"
+		   });
 		addAnnotation
-		  (javaTypesObjectEDataType, 
-		   source, 
+		  (javaTypesObjectEDataType,
+		   source,
 		   new String[] {
-			 "name", "java-types:Object",
-			 "baseType", "java-types"
-		   });	
+			   "name", "java-types:Object",
+			   "baseType", "java-types"
+		   });
 		addAnnotation
-		  (policyEEnum, 
-		   source, 
+		  (policyEEnum,
+		   source,
 		   new String[] {
-			 "name", "policy"
-		   });	
+			   "name", "policy"
+		   });
 		addAnnotation
-		  (policyObjectEDataType, 
-		   source, 
+		  (policyObjectEDataType,
+		   source,
 		   new String[] {
-			 "name", "policy:Object",
-			 "baseType", "policy"
-		   });	
+			   "name", "policy:Object",
+			   "baseType", "policy"
+		   });
 		addAnnotation
-		  (policyOptionEEnum, 
-		   source, 
+		  (policyOptionEEnum,
+		   source,
 		   new String[] {
-			 "name", "policy-option"
-		   });	
+			   "name", "policy-option"
+		   });
 		addAnnotation
-		  (policyOptionObjectEDataType, 
-		   source, 
+		  (policyOptionObjectEDataType,
+		   source,
 		   new String[] {
-			 "name", "policy-option:Object",
-			 "baseType", "policy-option"
-		   });	
+			   "name", "policy-option:Object",
+			   "baseType", "policy-option"
+		   });
 		addAnnotation
-		  (propertiesEClass, 
-		   source, 
+		  (propertiesEClass,
+		   source,
 		   new String[] {
-			 "name", "properties",
-			 "kind", "elementOnly"
-		   });	
+			   "name", "properties",
+			   "kind", "elementOnly"
+		   });
 		addAnnotation
-		  (getProperties_Any(), 
-		   source, 
+		  (getProperties_Any(),
+		   source,
 		   new String[] {
-			 "kind", "elementWildcard",
-			 "wildcards", "##any",
-			 "name", ":0",
-			 "processing", "lax"
-		   });	
+			   "kind", "elementWildcard",
+			   "wildcards", "##any",
+			   "name", ":0",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (getProperties_Entry(), 
-		   source, 
+		  (getProperties_Entry(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "entry"
-		   });	
+			   "kind", "attribute",
+			   "name", "entry"
+		   });
 		addAnnotation
-		  (getProperties_AnyAttribute(), 
-		   source, 
+		  (getProperties_AnyAttribute(),
+		   source,
 		   new String[] {
-			 "kind", "attributeWildcard",
-			 "wildcards", "##any",
-			 "name", ":2",
-			 "processing", "lax"
-		   });	
+			   "kind", "attributeWildcard",
+			   "wildcards", "##any",
+			   "name", ":2",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (propertyEClass, 
-		   source, 
+		  (propertyEClass,
+		   source,
 		   new String[] {
-			 "name", "property",
-			 "kind", "simple"
-		   });	
+			   "name", "property",
+			   "kind", "simple"
+		   });
 		addAnnotation
-		  (getProperty_Value(), 
-		   source, 
+		  (getProperty_Value(),
+		   source,
 		   new String[] {
-			 "name", ":0",
-			 "kind", "simple"
-		   });	
+			   "name", ":0",
+			   "kind", "simple"
+		   });
 		addAnnotation
-		  (getProperty_Name(), 
-		   source, 
+		  (getProperty_Name(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "name"
-		   });	
+			   "kind", "attribute",
+			   "name", "name"
+		   });
 		addAnnotation
-		  (getProperty_Type(), 
-		   source, 
+		  (getProperty_Type(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "type"
-		   });	
+			   "kind", "attribute",
+			   "name", "type"
+		   });
 		addAnnotation
-		  (getProperty_Value1(), 
-		   source, 
+		  (getProperty_Value1(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "value"
-		   });	
+			   "kind", "attribute",
+			   "name", "value"
+		   });
 		addAnnotation
-		  (getProperty_AnyAttribute(), 
-		   source, 
+		  (getProperty_AnyAttribute(),
+		   source,
 		   new String[] {
-			 "kind", "attributeWildcard",
-			 "wildcards", "##any",
-			 "name", ":4",
-			 "processing", "lax"
-		   });	
+			   "kind", "attributeWildcard",
+			   "wildcards", "##any",
+			   "name", ":4",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (provideEClass, 
-		   source, 
+		  (provideEClass,
+		   source,
 		   new String[] {
-			 "name", "provide",
-			 "kind", "elementOnly"
-		   });	
+			   "name", "provide",
+			   "kind", "elementOnly"
+		   });
 		addAnnotation
-		  (getProvide_Any(), 
-		   source, 
+		  (getProvide_Any(),
+		   source,
 		   new String[] {
-			 "kind", "elementWildcard",
-			 "wildcards", "##any",
-			 "name", ":0",
-			 "processing", "lax"
-		   });	
+			   "kind", "elementWildcard",
+			   "wildcards", "##any",
+			   "name", ":0",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (getProvide_Interface(), 
-		   source, 
+		  (getProvide_Interface(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "interface"
-		   });	
+			   "kind", "attribute",
+			   "name", "interface"
+		   });
 		addAnnotation
-		  (getProvide_AnyAttribute(), 
-		   source, 
+		  (getProvide_AnyAttribute(),
+		   source,
 		   new String[] {
-			 "kind", "attributeWildcard",
-			 "wildcards", "##any",
-			 "name", ":2",
-			 "processing", "lax"
-		   });	
+			   "kind", "attributeWildcard",
+			   "wildcards", "##any",
+			   "name", ":2",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (referenceEClass, 
-		   source, 
+		  (referenceEClass,
+		   source,
 		   new String[] {
-			 "name", "reference",
-			 "kind", "elementOnly"
-		   });	
+			   "name", "reference",
+			   "kind", "elementOnly"
+		   });
 		addAnnotation
-		  (getReference_Any(), 
-		   source, 
+		  (getReference_Any(),
+		   source,
 		   new String[] {
-			 "kind", "elementWildcard",
-			 "wildcards", "##any",
-			 "name", ":0",
-			 "processing", "lax"
-		   });	
+			   "kind", "elementWildcard",
+			   "wildcards", "##any",
+			   "name", ":0",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (getReference_Bind(), 
-		   source, 
+		  (getReference_Bind(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "bind"
-		   });	
+			   "kind", "attribute",
+			   "name", "bind"
+		   });
 		addAnnotation
-		  (getReference_Cardinality(), 
-		   source, 
+		  (getReference_Cardinality(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "cardinality"
-		   });	
+			   "kind", "attribute",
+			   "name", "cardinality"
+		   });
 		addAnnotation
-		  (getReference_Interface(), 
-		   source, 
+		  (getReference_Interface(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "interface"
-		   });	
+			   "kind", "attribute",
+			   "name", "interface"
+		   });
 		addAnnotation
-		  (getReference_Name(), 
-		   source, 
+		  (getReference_Name(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "name"
-		   });	
+			   "kind", "attribute",
+			   "name", "name"
+		   });
 		addAnnotation
-		  (getReference_Policy(), 
-		   source, 
+		  (getReference_Policy(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "policy"
-		   });	
+			   "kind", "attribute",
+			   "name", "policy"
+		   });
 		addAnnotation
-		  (getReference_PolicyOption(), 
-		   source, 
+		  (getReference_PolicyOption(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "policy-option"
-		   });	
+			   "kind", "attribute",
+			   "name", "policy-option"
+		   });
 		addAnnotation
-		  (getReference_Target(), 
-		   source, 
+		  (getReference_Target(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "target"
-		   });	
+			   "kind", "attribute",
+			   "name", "target"
+		   });
 		addAnnotation
-		  (getReference_Unbind(), 
-		   source, 
+		  (getReference_Unbind(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "unbind"
-		   });	
+			   "kind", "attribute",
+			   "name", "unbind"
+		   });
 		addAnnotation
-		  (getReference_Updated(), 
-		   source, 
+		  (getReference_Updated(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "updated"
-		   });	
+			   "kind", "attribute",
+			   "name", "updated"
+		   });
 		addAnnotation
-		  (getReference_AnyAttribute(), 
-		   source, 
+		  (getReference_AnyAttribute(),
+		   source,
 		   new String[] {
-			 "kind", "attributeWildcard",
-			 "wildcards", "##any",
-			 "name", ":10",
-			 "processing", "lax"
-		   });	
+			   "kind", "attributeWildcard",
+			   "wildcards", "##any",
+			   "name", ":10",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (serviceEClass, 
-		   source, 
+		  (serviceEClass,
+		   source,
 		   new String[] {
-			 "name", "service",
-			 "kind", "elementOnly"
-		   });	
+			   "name", "service",
+			   "kind", "elementOnly"
+		   });
 		addAnnotation
-		  (getService_Provide(), 
-		   source, 
+		  (getService_Provide(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "provide"
-		   });	
+			   "kind", "element",
+			   "name", "provide"
+		   });
 		addAnnotation
-		  (getService_Any(), 
-		   source, 
+		  (getService_Any(),
+		   source,
 		   new String[] {
-			 "kind", "elementWildcard",
-			 "wildcards", "##other",
-			 "name", ":1",
-			 "processing", "lax"
-		   });	
+			   "kind", "elementWildcard",
+			   "wildcards", "##other",
+			   "name", ":1",
+			   "processing", "lax"
+		   });
 		addAnnotation
-		  (getService_Servicefactory(), 
-		   source, 
+		  (getService_Servicefactory(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "servicefactory"
-		   });	
+			   "kind", "attribute",
+			   "name", "servicefactory"
+		   });
 		addAnnotation
-		  (getService_AnyAttribute(), 
-		   source, 
+		  (getService_AnyAttribute(),
+		   source,
 		   new String[] {
-			 "kind", "attributeWildcard",
-			 "wildcards", "##any",
-			 "name", ":3",
-			 "processing", "lax"
+			   "kind", "attributeWildcard",
+			   "wildcards", "##any",
+			   "name", ":3",
+			   "processing", "lax"
 		   });
 	}
 

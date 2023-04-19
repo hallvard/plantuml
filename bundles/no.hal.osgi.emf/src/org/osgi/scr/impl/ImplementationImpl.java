@@ -98,6 +98,7 @@ public class ImplementationImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAny() {
 		if (any == null) {
 			any = new BasicFeatureMap(this, ScrPackage.IMPLEMENTATION__ANY);
@@ -110,6 +111,7 @@ public class ImplementationImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getClass_() {
 		return class_;
 	}
@@ -119,6 +121,7 @@ public class ImplementationImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setClass(String newClass) {
 		String oldClass = class_;
 		class_ = newClass;
@@ -131,6 +134,7 @@ public class ImplementationImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAnyAttribute() {
 		if (anyAttribute == null) {
 			anyAttribute = new BasicFeatureMap(this, ScrPackage.IMPLEMENTATION__ANY_ATTRIBUTE);
@@ -243,7 +247,7 @@ public class ImplementationImpl extends MinimalEObjectImpl.Container implements 
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (any: ");
 		result.append(any);
 		result.append(", class: ");

@@ -296,6 +296,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAny() {
 		if (any == null) {
 			any = new BasicFeatureMap(this, ScrPackage.REFERENCE__ANY);
@@ -308,6 +309,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getBind() {
 		return bind;
 	}
@@ -317,6 +319,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBind(String newBind) {
 		String oldBind = bind;
 		bind = newBind;
@@ -329,6 +332,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Cardinality getCardinality() {
 		return cardinality;
 	}
@@ -338,6 +342,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCardinality(Cardinality newCardinality) {
 		Cardinality oldCardinality = cardinality;
 		cardinality = newCardinality == null ? CARDINALITY_EDEFAULT : newCardinality;
@@ -352,6 +357,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCardinality() {
 		Cardinality oldCardinality = cardinality;
 		boolean oldCardinalityESet = cardinalityESet;
@@ -366,6 +372,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCardinality() {
 		return cardinalityESet;
 	}
@@ -375,6 +382,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getInterface() {
 		return interface_;
 	}
@@ -384,6 +392,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInterface(String newInterface) {
 		String oldInterface = interface_;
 		interface_ = newInterface;
@@ -396,6 +405,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -405,6 +415,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -417,6 +428,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Policy getPolicy() {
 		return policy;
 	}
@@ -426,6 +438,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPolicy(Policy newPolicy) {
 		Policy oldPolicy = policy;
 		policy = newPolicy == null ? POLICY_EDEFAULT : newPolicy;
@@ -440,6 +453,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPolicy() {
 		Policy oldPolicy = policy;
 		boolean oldPolicyESet = policyESet;
@@ -454,6 +468,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPolicy() {
 		return policyESet;
 	}
@@ -463,6 +478,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PolicyOption getPolicyOption() {
 		return policyOption;
 	}
@@ -472,6 +488,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPolicyOption(PolicyOption newPolicyOption) {
 		PolicyOption oldPolicyOption = policyOption;
 		policyOption = newPolicyOption == null ? POLICY_OPTION_EDEFAULT : newPolicyOption;
@@ -486,6 +503,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPolicyOption() {
 		PolicyOption oldPolicyOption = policyOption;
 		boolean oldPolicyOptionESet = policyOptionESet;
@@ -500,6 +518,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPolicyOption() {
 		return policyOptionESet;
 	}
@@ -509,6 +528,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getTarget() {
 		return target;
 	}
@@ -518,6 +538,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTarget(String newTarget) {
 		String oldTarget = target;
 		target = newTarget;
@@ -530,6 +551,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getUnbind() {
 		return unbind;
 	}
@@ -539,6 +561,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnbind(String newUnbind) {
 		String oldUnbind = unbind;
 		unbind = newUnbind;
@@ -551,6 +574,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getUpdated() {
 		return updated;
 	}
@@ -560,6 +584,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUpdated(String newUpdated) {
 		String oldUpdated = updated;
 		updated = newUpdated;
@@ -572,6 +597,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FeatureMap getAnyAttribute() {
 		if (anyAttribute == null) {
 			anyAttribute = new BasicFeatureMap(this, ScrPackage.REFERENCE__ANY_ATTRIBUTE);
@@ -764,7 +790,7 @@ public class ReferenceImpl extends MinimalEObjectImpl.Container implements Refer
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (any: ");
 		result.append(any);
 		result.append(", bind: ");
