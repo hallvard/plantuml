@@ -7,7 +7,7 @@ Module for building and releasing new version.
 ### Pre-release
 
 - build and test and build and test... add, commit and push
-- swith to new branch named <version>-release
+- switch to new branch named <version>-release
 
 ## Release
 
