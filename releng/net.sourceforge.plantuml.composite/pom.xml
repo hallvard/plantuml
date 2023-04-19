@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>net.sourceforge.plantuml</groupId>
 		<artifactId>net.sourceforge.plantuml.parent</artifactId>
-		<version>1.1.27-SNAPSHOT</version>
+		<version>1.1.27</version>
 		<relativePath>../net.sourceforge.plantuml.parent</relativePath>
 	</parent>
 
@@ -81,7 +81,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/gh-pages/plantuml.eclipse/1.1.27-SNAPSHOT</outputDirectory>
+							<outputDirectory>${basedir}/target/gh-pages/plantuml.eclipse/1.1.27</outputDirectory>
 							<resources>
 								<resource>
 									<directory>../net.sourceforge.plantuml.repository/target/repository</directory>
@@ -163,7 +163,7 @@
                                 <argument>${basedir}/target/gh-pages</argument>
                                 <argument>commit</argument>
                                 <argument>-m</argument>
-                                <argument>New release (1.1.27-SNAPSHOT)</argument>                                
+                                <argument>New release (1.1.27)</argument>                                
                             </arguments>
                         </configuration>
                     </execution>
