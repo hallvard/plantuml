@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sourceforge.plantuml</groupId>
 	<artifactId>net.sourceforge.plantuml.parent</artifactId>
-	<version>1.1.27</version>
+	<version>1.1.28-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>net.sourceforge.plantuml maven parent project</name>
+	<name>net.sourceforge.plantuml Eclipse plug-in maven parent project</name>
 
 	<properties>
 		<tycho-maven-plugin-version>2.2.0</tycho-maven-plugin-version>
@@ -89,7 +89,7 @@
 						<artifact>
 							<groupId>net.sourceforge.plantuml</groupId>
 							<artifactId>net.sourceforge.plantuml.target</artifactId>
-							<version>1.1.27</version>
+							<version>1.1.28-SNAPSHOT</version>
 						</artifact>
 					</target>
 					<filters>
