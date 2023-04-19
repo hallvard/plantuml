@@ -51,6 +51,11 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 Notable features in recent releases, details are found in [releases](https://github.com/hallvard/plantuml/releases).
 Note that the version numbers of the plantuml.lib plugin are a bit special, since they use the version of the included plantuml.jar
 
+
+## [1.1.28](https://github.com/hallvard/plantuml/releases/tag/1.1.28)
+- Updated to use PlantUML library version 1.2023.5 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
+- Updated target platform to Eclipse 2022-09 and JRE 11 (JavaSE-11).
+
 ## [1.1.27](https://github.com/hallvard/plantuml/releases/tag/1.1.27)
 - Support for injecting code into diagrams, based on regular expressions on the diagram text, e.g. custom styles can be inserted all state diagrams. See section about custom properties.
 - Updated to use PlantUML library version 1.2022.7 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
