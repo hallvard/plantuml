@@ -55,6 +55,7 @@
 								</resource>
 							</resources>
 							<overwrite>true</overwrite>
+							<encoding>UTF-8</encoding>
 						</configuration>
 					</execution>
 					<execution>
@@ -72,6 +73,7 @@
 								</resource>
 							</resources>
 							<overwrite>true</overwrite>
+							<encoding>UTF-8</encoding>
 						</configuration>
 					</execution>
 					<execution>
@@ -89,6 +91,7 @@
 								</resource>
 							</resources>
 							<overwrite>true</overwrite>
+							<encoding>UTF-8</encoding>
 						</configuration>
 					</execution>
 					<execution>
@@ -109,6 +112,7 @@
 								</resource>
 							</resources>
 							<overwrite>true</overwrite>
+							<encoding>UTF-8</encoding>
 						</configuration>
 					</execution>
 				</executions>
