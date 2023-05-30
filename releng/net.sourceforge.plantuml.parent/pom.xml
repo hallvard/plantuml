@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sourceforge.plantuml</groupId>
 	<artifactId>net.sourceforge.plantuml.parent</artifactId>
-	<version>1.1.28-SNAPSHOT</version>
+	<version>1.1.28</version>
 	<packaging>pom</packaging>
 	<name>net.sourceforge.plantuml Eclipse plug-in maven parent project</name>
 
@@ -71,7 +71,7 @@
 						<artifact>
 							<groupId>net.sourceforge.plantuml</groupId>
 							<artifactId>eclipse-2022-09</artifactId>
-							<version>1.1.28-SNAPSHOT</version>
+							<version>1.1.28</version>
 						</artifact>
 					</target>
 					<environments>

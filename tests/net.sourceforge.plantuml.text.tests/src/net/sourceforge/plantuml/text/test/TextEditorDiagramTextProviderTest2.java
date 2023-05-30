@@ -22,11 +22,16 @@ public class TextEditorDiagramTextProviderTest2 extends AbstractDiagramTextTest 
 		waitForBuild();
 		openEditor(file, "org.eclipse.ui.DefaultTextEditor");
 		PlantUmlView view = openView("net.sourceforge.plantuml.eclipse.views.PlantUmlView", PlantUmlView.class);
+		
+		// wait some time, otherwise the view has not been initialized and filled
+		sleep(1500);
+		
 		AbstractDiagramTextTest.assertDiagramText(expected, view.getDiagramText());
 	}
 
 	@Test
 	public void testJavaEditorDiagramFromComment() throws Exception {
-		testJavaEditorDiagramText("src/net/sourceforge/plantuml/text/test/ClassWithDiagramInComment.java", PlantumlConstants.START_UML + "\nclass ClassWithDiagramInComment {\nint field\n}\n" + PlantumlConstants.END_UML);
+		testJavaEditorDiagramText("src/net/sourceforge/plantuml/text/test/ClassWithDiagramInComment.java",
+				PlantumlConstants.START_UML + "\nclass ClassWithDiagramInComment {\n\tint field\n}\n" + PlantumlConstants.END_UML);
 	}
 }
