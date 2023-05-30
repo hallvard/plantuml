@@ -45,10 +45,14 @@ If everything is as expected, push the changes to GitHub pages.
 
 ### Release on GitHub
 
-- add a release and tag with items from README.md
+- add a release (create a draft first, fill all the details)
+- add release notes from README.md in root folder
+- merge the release branch back into master
+- tag the new version on master branch with e.g. 1.1.28
+- choose a git tag (e.g. 1.1.28) and the branch `master`
+- publish the release
 - close issues that (supposedly) are fixed
 
 ### Post-release
 
-- merge back into master
 - search and replace <version> with <version+1>-SNAPSHOT in pom.xml, and <version> with <version+1>.qualifier in MANIFEST.MF, feature.xml and category.xml (think that's enough)
