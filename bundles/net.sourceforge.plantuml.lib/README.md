@@ -6,4 +6,4 @@ Once in a while it should be updated with a new version. This isn't currently au
 
 - Download the EPL-ed version from https://plantuml.com/download and unzip
 - Copy the jar into this plugin's lib folder and change its name to include the version and license name, e.g. plantuml-epl-1.2021.3.jar
-- Search and replace the previous version with the new one throughout the workspace _except_ `compositeArtifacts.xml and compositeContent.xml` in the releng/composite module, to update meta-data in plugin and feature projects (`MANIFEST.MF`, `build.properties`, `pom.xml`, `feature.xml`, `category.xml`)
+- Search and replace the previous version with the new one throughout the workspace _except_ `compositeArtifacts.xml` and `compositeContent.xml` in the `releng/composite` module, to update meta-data in plug-in and feature projects (`MANIFEST.MF`, `build.properties`, `pom.xml`, `feature.xml`, `category.xml`)

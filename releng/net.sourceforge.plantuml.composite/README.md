@@ -6,7 +6,11 @@ Module for building and releasing new version.
 
 ### Pre-release
 
-- build and test and build and test... add, commit and push
+- build and test and build and test...
+- run `mvn clean install` on project `net.sourceforge.plantuml.composite` or just run the launch configuration *Build all with Maven*
+  (that builds and runs all non-UI unit tests)
+- run the plug-ins tests, too (see `net.sourceforge.plantuml.*.tests` and `no.hal.osgi.emf.tests` projects)
+- git add, commit and push
 - switch to new branch named <version>-release
 
 ## Release
@@ -16,6 +20,7 @@ Module for building and releasing new version.
 - do a `mvn clean` to clear target folders
 - search and replace <version>-SNAPSHOT with <version> in *.*
 - search and replace <version>.qualifier with <version> in *.*
+- do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`
 - do this also for the plantuml.lib version (see README.md in plantuml.lib bundle
 - update `compositeArtifacts.xml` and `compositeContent.xml` files so they list the new version(s)
 - build with `mvn install` and test
