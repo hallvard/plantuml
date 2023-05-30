@@ -55,4 +55,8 @@ If everything is as expected, push the changes to GitHub pages.
 
 ### Post-release
 
-- search and replace <version> with <version+1>-SNAPSHOT in pom.xml, and <version> with <version+1>.qualifier in MANIFEST.MF, feature.xml and category.xml (think that's enough)
+- search and replace <version> with <version+1>-SNAPSHOT in pom.xml, and <version> with <version+1>.qualifier in MANIFEST.MF, feature.xml and category.xml
+- add the new version to `compositeArtifacts.xml` and `compositeContent.xml` and update the number of files
+- build, commit and push
+
+(think that's enough)
