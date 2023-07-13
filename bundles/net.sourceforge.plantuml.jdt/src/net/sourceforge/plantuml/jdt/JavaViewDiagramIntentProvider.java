@@ -55,7 +55,7 @@ public class JavaViewDiagramIntentProvider extends AbstractDiagramIntentProvider
 		if (javaElement instanceof ICompilationUnit) {
 			try {
 				final IType[] types = ((ICompilationUnit) javaElement).getTypes();
-				if (types != null && types.length > 0) {
+				if (types != null && types.length > 0 && !javaElements.contains(types[0])) {
 					javaElements.add(types[0]);
 				}
 			} catch (final JavaModelException e) {
