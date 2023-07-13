@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ecore PlantUML mapping
 Bundle-SymbolicName: net.sourceforge.plantuml.ecore; singleton:=true
-Bundle-Version: 1.1.29.qualifier
+Bundle-Version: 1.1.29
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: net.sourceforge.plantuml.ecore
 Import-Package: net.sourceforge.plantuml.eclipse.utils,

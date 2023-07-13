@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.feature"
       label="%featureName"
-      version="1.1.29.qualifier"
+      version="1.1.29"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
@@ -25,35 +25,35 @@
          id="net.sourceforge.plantuml.eclipse"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
    <plugin
          id="net.sourceforge.plantuml.jdt"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
    <plugin
          id="net.sourceforge.plantuml.text"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
    <plugin
          id="net.sourceforge.plantuml.eclipse.imagecontrol"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
    <plugin
          id="net.sourceforge.plantuml.svg"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
 </feature>
