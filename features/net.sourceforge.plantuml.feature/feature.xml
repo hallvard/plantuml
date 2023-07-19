@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.feature"
       label="%featureName"
-      version="1.1.29.qualifier"
+      version="1.1.29"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
@@ -18,42 +18,62 @@
    </license>
 
    <requires>
-      <import feature="net.sourceforge.plantuml.lib.feature" version="1.2021.3" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.10.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.106.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.9.1" match="greaterOrEqual"/>
+      <import plugin="net.sourceforge.plantuml.eclipse.imagecontrol"/>
+      <import plugin="org.eclipse.core.jobs"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="net.sourceforge.plantuml.eclipse"/>
+      <import plugin="net.sourceforge.plantuml.text"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.jdt.core.manipulation"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.core.runtime" version="3.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.8.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.jface" version="3.10.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.browser" version="3.4.200" match="greaterOrEqual"/>
+      <import feature="net.sourceforge.plantuml.lib.feature" version="1.2023.10" match="greaterOrEqual"/>
+      <import plugin="net.sourceforge.plantuml.lib" version="1.2023.10" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="net.sourceforge.plantuml.eclipse"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
    <plugin
          id="net.sourceforge.plantuml.jdt"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
    <plugin
          id="net.sourceforge.plantuml.text"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
    <plugin
          id="net.sourceforge.plantuml.eclipse.imagecontrol"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
    <plugin
          id="net.sourceforge.plantuml.svg"
          download-size="0"
          install-size="0"
-         version="1.1.29.qualifier"
+         version="1.1.29"
          unpack="false"/>
 
 </feature>

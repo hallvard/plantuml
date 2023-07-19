@@ -6,6 +6,7 @@ Module for building and releasing new version.
 
 ### Pre-release
 
+- re-calculate / update all features' dependencies
 - build and test and build and test...
 - run `mvn clean install` on project `net.sourceforge.plantuml.composite` or just run the launch configuration *Build all with Maven*
   (that builds and runs all non-UI unit tests)

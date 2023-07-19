@@ -54,6 +54,7 @@ Note that the version numbers of the plantuml.lib plugin are a bit special, sinc
 
 ## [1.1.29](https://github.com/hallvard/plantuml/releases/tag/1.1.29)
 - Updated PlantUML library version to 1.2023.10 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
+- Fixed duplicated Java type members entries in diagrams created from Java packages.
 
 ## [1.1.28](https://github.com/hallvard/plantuml/releases/tag/1.1.28)
 - Updated to use PlantUML library version 1.2023.5 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).

@@ -17,6 +17,10 @@
       %license
    </license>
 
+   <requires>
+      <import plugin="net.sourceforge.plantuml.lib" version="1.2023.10" match="greaterOrEqual"/>
+   </requires>
+
    <plugin
          id="net.sourceforge.plantuml.lib.elk"
          download-size="0"
