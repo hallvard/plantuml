@@ -43,7 +43,13 @@ public class MenuSupport {
 			if (menu != null) {
 				menu.dispose();
 			}
-			menu = new Menu(control.getDisplay().getFocusControl());
+			
+			Control focusControl = control.getDisplay().getFocusControl();
+			if (focusControl == null) {
+				return;
+			}
+			
+			menu = new Menu(focusControl);
 			for (final Action action : menuActions) {
 				MenuItem item = new MenuItem(menu, SWT.PUSH);
 				item.setText(action.getText());
