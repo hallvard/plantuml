@@ -122,11 +122,19 @@ public class DiagramData {
 			System.setProperty("GRAPHVIZ_DOT", dotPath);
 		}
 	}
+	
+	private static void setPlantUmlSecurityProfile() {
+		// Set security profile for enabling access to local file system and environment variables from PlantUML source code,
+		// see https://plantuml.com/en/security
+		System.setProperty("PLANTUML_SECURITY_PROFILE", "UNSECURE");
+	}
 
 	private static FileFormatOption imageFileFormatOption = new FileFormatOption(FileFormat.PNG);
 
 	private static ImageData getImage(final String textDiagram, final int imageNum, final Collection<LinkData> links) {
 		setGraphvizPath();
+		setPlantUmlSecurityProfile();
+		
 		ImageData imageData = null;
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			// image generation
@@ -250,6 +258,8 @@ public class DiagramData {
 
 	public String getSvg(final int imageNum) {
 		setGraphvizPath();
+		setPlantUmlSecurityProfile();
+		
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			// image generation
 			final SourceStringReader reader = new SourceStringReader(textDiagram);
