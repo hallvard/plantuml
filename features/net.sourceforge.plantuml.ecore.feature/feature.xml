@@ -18,7 +18,7 @@
    </license>
 
    <requires>
-      <import feature="net.sourceforge.plantuml.feature" version="1.1.29"/>
+      <import feature="net.sourceforge.plantuml.feature" version="1.1.30"/>
       <import plugin="net.sourceforge.plantuml.eclipse"/>
       <import plugin="net.sourceforge.plantuml.text"/>
       <import plugin="org.eclipse.core.runtime"/>
