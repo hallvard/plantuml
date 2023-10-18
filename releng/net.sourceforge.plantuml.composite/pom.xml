@@ -134,8 +134,10 @@
                         </goals>
                         <configuration>
                             <arguments>
-                                <argument>clone</argument><argument>-b</argument><argument>gh-pages</argument>
-                                <argument>https://github.com/hallvard/plantuml.git</argument>
+                                <argument>clone</argument>
+                                <argument>-b</argument>
+                                <argument>gh-pages</argument>
+                                <argument>git@github.com:hallvard/plantuml.git</argument>
                                 <argument>${basedir}/target/gh-pages</argument>
                             </arguments>
                         </configuration>
