@@ -56,7 +56,7 @@ Note that the version numbers of the plantuml.lib plugin are a bit special, sinc
 - Fixed access to environment variables from PlantUML code, using PlantUML functions like %getenv("MY_ENV_VAR"), see [PlantUML security profiles](https://plantuml.com/en/security).
 
 ## [1.1.29](https://github.com/hallvard/plantuml/releases/tag/1.1.29)
-- Updated PlantUML library version to 1.2023.10 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
+- Updated PlantUML library version to 1.2023.11 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
 - Fixed duplicated Java type members entries in diagrams created from Java packages.
 
 ## [1.1.28](https://github.com/hallvard/plantuml/releases/tag/1.1.28)
