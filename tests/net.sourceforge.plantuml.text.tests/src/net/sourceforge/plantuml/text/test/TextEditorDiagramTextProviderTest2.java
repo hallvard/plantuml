@@ -31,6 +31,7 @@ public class TextEditorDiagramTextProviderTest2 extends AbstractDiagramTextTest 
 
 	@Test
 	public void testJavaEditorDiagramFromComment() throws Exception {
+		// TODO Improve this test, sometimes it fails, maybe because of timing issues
 		testJavaEditorDiagramText("src/net/sourceforge/plantuml/text/test/ClassWithDiagramInComment.java",
 				PlantumlConstants.START_UML + "\nclass ClassWithDiagramInComment {\n\tint field\n}\n" + PlantumlConstants.END_UML);
 	}
