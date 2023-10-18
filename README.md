@@ -52,11 +52,13 @@ Notable features in recent releases, details are found in [releases](https://git
 Note that the version numbers of the plantuml.lib plugin are a bit special, since they use the version of the included plantuml.jar
 
 
-## [1.1.30](https://github.com/hallvard/plantuml/releases/tag/1.1.29)
+## [1.1.30](https://github.com/hallvard/plantuml/releases/tag/1.1.30)
 - Fixed access to environment variables from PlantUML code, using PlantUML functions like %getenv("MY_ENV_VAR"), see [PlantUML security profiles](https://plantuml.com/en/security).
+- Fixed installation on Windows without having to explicitly install Graphviz ([issue #175](https://github.com/hallvard/plantuml/discussions/175))
+- Updated PlantUML library version to 1.2023.11 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
 
 ## [1.1.29](https://github.com/hallvard/plantuml/releases/tag/1.1.29)
-- Updated PlantUML library version to 1.2023.11 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
+- Updated PlantUML library version to 1.2023.10 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
 - Fixed duplicated Java type members entries in diagrams created from Java packages.
 
 ## [1.1.28](https://github.com/hallvard/plantuml/releases/tag/1.1.28)
