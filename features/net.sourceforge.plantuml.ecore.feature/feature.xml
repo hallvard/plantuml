@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.ecore.feature"
       label="%featureName"
-      version="1.1.30.qualifier"
+      version="1.1.30"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
@@ -18,7 +18,7 @@
    </license>
 
    <requires>
-      <import feature="net.sourceforge.plantuml.feature" version="1.1.29"/>
+      <import feature="net.sourceforge.plantuml.feature" version="1.1.30"/>
       <import plugin="net.sourceforge.plantuml.eclipse"/>
       <import plugin="net.sourceforge.plantuml.text"/>
       <import plugin="org.eclipse.core.runtime"/>
@@ -33,7 +33,7 @@
          id="net.sourceforge.plantuml.ecore"
          download-size="0"
          install-size="0"
-         version="1.1.30.qualifier"
+         version="1.1.30"
          unpack="false"/>
 
 </feature>

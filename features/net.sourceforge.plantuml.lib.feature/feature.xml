@@ -2,10 +2,10 @@
 <feature
       id="net.sourceforge.plantuml.lib.feature"
       label="%featureName"
-      version="1.2023.10"
+      version="1.2023.11"
       provider-name="PlantUML Team">
 
-   <description url="http://plantuml.sourceforge.net/">
+   <description url="https://plantuml.com/">
       %description
    </description>
 
@@ -21,6 +21,6 @@
          id="net.sourceforge.plantuml.lib"
          download-size="0"
          install-size="0"
-         version="1.2023.10"/>
+         version="1.2023.11"/>
 
 </feature>

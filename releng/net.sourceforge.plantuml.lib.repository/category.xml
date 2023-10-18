@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/net.sourceforge.plantuml.lib.feature_1.2023.10.jar" id="net.sourceforge.plantuml.lib.feature" version="1.2023.10">
+   <feature url="features/net.sourceforge.plantuml.lib.feature_1.2023.11.jar" id="net.sourceforge.plantuml.lib.feature" version="1.2023.11">
       <category name="net.sourceforge.plantuml.lib.feature"/>
    </feature>
    <feature url="features/net.sourceforge.plantuml.lib.jlatexmath.feature_1.0.7.jar" id="net.sourceforge.plantuml.lib.jlatexmath.feature" version="1.0.7">

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/net.sourceforge.plantuml.ecore.feature_1.1.30.qualifier.jar" id="net.sourceforge.plantuml.ecore.feature" version="1.1.30.qualifier">
+   <feature url="features/net.sourceforge.plantuml.ecore.feature_1.1.30.jar" id="net.sourceforge.plantuml.ecore.feature" version="1.1.30">
       <category name="net.sourceforge.plantuml.feature"/>
    </feature>
-   <feature url="features/net.sourceforge.plantuml.feature_1.1.30.qualifier.jar" id="net.sourceforge.plantuml.feature" version="1.1.30.qualifier">
+   <feature url="features/net.sourceforge.plantuml.feature_1.1.30.jar" id="net.sourceforge.plantuml.feature" version="1.1.30">
       <category name="net.sourceforge.plantuml.feature"/>
    </feature>
    <category-def name="net.sourceforge.plantuml.feature" label="PlantUML Eclipse support"/>
 
    <!-- Source code feature(s) -->
    <category-def name="net.sourceforge.plantuml.feature.source" label="Source"/>
-   <feature id="net.sourceforge.plantuml.feature.source" version="1.1.30.qualifier">
+   <feature id="net.sourceforge.plantuml.feature.source" version="1.1.30">
       <category name="net.sourceforge.plantuml.feature.source"/>
    </feature>
-   <feature id="net.sourceforge.plantuml.ecore.feature.source" version="1.1.30.qualifier">
+   <feature id="net.sourceforge.plantuml.ecore.feature.source" version="1.1.30">
       <category name="net.sourceforge.plantuml.feature.source"/>
    </feature>
 </site>
