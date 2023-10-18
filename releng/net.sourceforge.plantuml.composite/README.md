@@ -23,7 +23,7 @@ Module for building and releasing new version.
 - search and replace <version>-SNAPSHOT with <version> in *.*
 - search and replace <version>.qualifier with <version> in *.*
 - do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`
-- do this also for the plantuml.lib version (see README.md in plantuml.lib bundle
+- do this also for the plantuml.lib version (see README.md in plantuml.lib bundle)
 - update `compositeArtifacts.xml` and `compositeContent.xml` files so they list the new version(s)
 - build with `mvn install` and test
 - add, commit and push
