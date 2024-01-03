@@ -8,8 +8,7 @@
 	<name>net.sourceforge.plantuml Eclipse plug-in maven parent project</name>
 
 	<properties>
-		<tycho-maven-plugin-version>2.2.0</tycho-maven-plugin-version>
-		<tycho-version>2.2.0</tycho-version>
+		<tycho-version>2.7.5</tycho-version>
 		<!-- <xtextVersion>2.9.1</xtextVersion> <xtend-maven-plugin-version>2.9.1</xtend-maven-plugin-version> -->
 		<skip-ui-tests>true</skip-ui-tests>
 	</properties>
@@ -98,7 +97,7 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho-maven-plugin-version}</version>
+				<version>${tycho-version}</version>
 				<extensions>true</extensions>
 			</plugin>
 			
