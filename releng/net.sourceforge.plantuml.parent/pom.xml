@@ -8,6 +8,8 @@
 	<name>net.sourceforge.plantuml Eclipse plug-in maven parent project</name>
 
 	<properties>
+		<!-- tycho-version variable is defined in repo-root-folder/.mvn/maven.config, see https://tycho.eclipseprojects.io/doc/latest/StructuredBuild.html,
+		     in addition, we specify it here to avoid IDE warnings because of an unrecognized variable definition -->
 		<tycho-version>2.7.5</tycho-version>
 		<!-- <xtextVersion>2.9.1</xtextVersion> <xtend-maven-plugin-version>2.9.1</xtend-maven-plugin-version> -->
 		<skip-ui-tests>true</skip-ui-tests>
@@ -95,6 +97,8 @@
 			</plugin>
 
 			<plugin>
+				<!-- for pom-less builds see https://tycho.eclipseprojects.io/doc/latest/StructuredBuild.html -->
+				<!-- Also see repo-root-folder/.mvn/extensions.xml -->
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
