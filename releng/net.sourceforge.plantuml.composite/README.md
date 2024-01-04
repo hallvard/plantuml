@@ -6,6 +6,11 @@ Module for building and releasing new version.
 
 ### Pre-release
 
+- update all pom.xml, MANIFEST.MF, feature.xml, etc. to new version, e.g. 1.1.31-SNAPSHOT or 1.1.31.qualifier,
+  also update dependencies and other version-dependant configurations,
+  do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`,
+  do this also for the plantuml.lib version (see README.md in plantuml.lib bundle)
+- update `compositeArtifacts.xml` and `compositeContent.xml` files so they list the new version(s)
 - re-calculate / update all features' dependencies
 - build and test and build and test...
 - run `mvn clean install` on project `net.sourceforge.plantuml.composite` or just run the launch configuration *Build all with Maven*
@@ -20,13 +25,15 @@ Module for building and releasing new version.
 ### Build artifacts and repository
 
 - do a `mvn clean` to clear target folders
-- search and replace <version>-SNAPSHOT with <version> in *.*
+- search and replace <version>-SNAPSHOT with <version> in *.* (e.g. to `1.1.31`)
 - search and replace <version>.qualifier with <version> in *.*
-  (it seems, tycho/maven otherwise fails to build the plug-ins with the right non-SNAPSHOT version)
+  (tycho-versions:set-version -DnewVersion=<version> seems not to work reliably, does not change all necessary places)
 - do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`
 - do this also for the plantuml.lib version (see README.md in plantuml.lib bundle)
 - update `compositeArtifacts.xml` and `compositeContent.xml` files so they list the new version(s)
 - build with `mvn install` and test
+- check the PlantUML lib update site / repository in target/gh-pages/plantuml.lib/<version>,
+  ensure that you have only the latest plug-in / feature versions there and only one version per plug-in / feature
 - add, commit and push
 
 ### Update GitHub pages
