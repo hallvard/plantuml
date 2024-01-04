@@ -65,7 +65,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/gh-pages/plantuml.lib/1.2023.11</outputDirectory>
+							<outputDirectory>${basedir}/target/gh-pages/plantuml.lib/1.2023.11-SNAPSHOT</outputDirectory>
 							<resources>
 								<resource>
 									<directory>../net.sourceforge.plantuml.lib.repository/target/repository</directory>

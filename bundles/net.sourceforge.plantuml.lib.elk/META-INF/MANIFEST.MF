@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ELK
 Bundle-SymbolicName: net.sourceforge.plantuml.lib.elk
-Bundle-Version: 0.7.1
-Fragment-Host: net.sourceforge.plantuml.lib;bundle-version="1.2023.11"
+Bundle-Version: 0.7.1.qualifier
+Fragment-Host: net.sourceforge.plantuml.lib;bundle-version="1.2023.11.qualifier"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ClassPath: lib/elk-full.jar

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>net.sourceforge.plantuml.lib</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<version>1.2023.11</version>
+	<version>1.2023.11-SNAPSHOT</version>
 
 	<parent>
 	    <groupId>net.sourceforge.plantuml</groupId>

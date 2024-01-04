@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.lib.elk.feature"
       label="%featureName"
-      version="0.7.1"
+      version="0.7.1.qualifier"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
@@ -23,8 +23,6 @@
 
    <plugin
          id="net.sourceforge.plantuml.lib.elk"
-         download-size="0"
-         install-size="0"
-         version="0.7.1"/>
+         version="0.7.1.qualifier"/>
 
 </feature>
