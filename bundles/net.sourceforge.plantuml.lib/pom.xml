@@ -11,10 +11,6 @@
 	    <version>1.1.31-SNAPSHOT</version>
 	    <relativePath>../../releng/net.sourceforge.plantuml.parent</relativePath>
 	</parent>
-	  
-	<properties>
-	    <plantuml-lib-version>1.2023.11</plantuml-lib-version>
-	</properties>
 	
 	<build>
 		<plugins>

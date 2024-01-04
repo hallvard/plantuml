@@ -65,7 +65,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/gh-pages/plantuml.lib/1.2023.11-SNAPSHOT</outputDirectory>
+							<outputDirectory>${basedir}/target/gh-pages/plantuml.lib/${plantuml-lib-version}</outputDirectory>
 							<resources>
 								<resource>
 									<directory>../net.sourceforge.plantuml.lib.repository/target/repository</directory>
@@ -83,7 +83,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/gh-pages/plantuml.eclipse/1.1.31-SNAPSHOT</outputDirectory>
+							<outputDirectory>${basedir}/target/gh-pages/plantuml.eclipse/${project.version}</outputDirectory>
 							<resources>
 								<resource>
 									<directory>../net.sourceforge.plantuml.repository/target/repository</directory>
@@ -169,7 +169,7 @@
                                 <argument>${basedir}/target/gh-pages</argument>
                                 <argument>commit</argument>
                                 <argument>-m</argument>
-                                <argument>New release (1.1.31-SNAPSHOT)</argument>
+                                <argument>New release (${project.version})</argument>
                             </arguments>
                         </configuration>
                     </execution>
