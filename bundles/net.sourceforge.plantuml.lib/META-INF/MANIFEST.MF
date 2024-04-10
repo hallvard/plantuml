@@ -9,4 +9,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.core,
  net.sourceforge.plantuml.security
-Bundle-ClassPath: lib/plantuml-epl-1.2023.11.jar
+Bundle-ClassPath: lib/plantuml-epl-1.2024.4.jar
