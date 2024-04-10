@@ -10,7 +10,7 @@
   
   <!-- See https://wiki.eclipse.org/Tycho/Packaging_Types#eclipse-target-definition -->
   <!-- The artifactId has to match the name of the target definition file, e.g. eclipse-2022-09.target, but without file extension .target -->
-  <artifactId>eclipse-2022-09</artifactId>
+  <artifactId>eclipse-2023-12</artifactId>
   <packaging>eclipse-target-definition</packaging>
   
 </project>
