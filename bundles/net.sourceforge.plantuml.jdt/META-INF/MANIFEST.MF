@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PlantUML Java Support
 Bundle-SymbolicName: net.sourceforge.plantuml.jdt;singleton:=true
 Bundle-Version: 1.1.31.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-18
 Require-Bundle: net.sourceforge.plantuml.eclipse;bundle-version="1.1.19",
  net.sourceforge.plantuml.eclipse.imagecontrol;bundle-version="1.1.19",
  org.eclipse.ui;bundle-version="3.106.1"
