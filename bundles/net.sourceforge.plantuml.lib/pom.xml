@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>net.sourceforge.plantuml.lib</artifactId>
+	<packaging>eclipse-plugin</packaging>
+	<version>1.2023.11-SNAPSHOT</version>
+
+	<parent>
+	    <groupId>net.sourceforge.plantuml</groupId>
+	    <artifactId>net.sourceforge.plantuml.parent</artifactId>
+	    <version>1.1.31-SNAPSHOT</version>
+	    <relativePath>../../releng/net.sourceforge.plantuml.parent</relativePath>
+	</parent>
+	
+	<build>
+		<plugins>
+			
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>download-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<executions>
+					<execution>
+						<id>copy-plantuml-lib</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>https://github.com/plantuml/plantuml/releases/download/v${plantuml-lib-version}/plantuml-epl-${plantuml-lib-version}.jar</url>
+							<outputFileName>plantuml-epl-${plantuml-lib-version}.jar</outputFileName>
+							<unpack>false</unpack>
+							<outputDirectory>${project.basedir}/lib</outputDirectory>
+							<overwrite>false</overwrite>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-plantuml-lib-sources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>https://github.com/plantuml/plantuml/releases/download/v${plantuml-lib-version}/plantuml-epl-${plantuml-lib-version}-sources.jar</url>
+							<outputFileName>plantuml-epl-${plantuml-lib-version}-sources.jar</outputFileName>
+							<unpack>false</unpack>
+							<outputDirectory>${project.basedir}/lib</outputDirectory>
+							<overwrite>false</overwrite>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+
+</project>

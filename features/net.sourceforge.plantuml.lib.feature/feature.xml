@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.lib.feature"
       label="%featureName"
-      version="1.2023.11"
+      version="1.2023.11.qualifier"
       provider-name="PlantUML Team">
 
    <description url="https://plantuml.com/">
@@ -19,8 +19,6 @@
 
    <plugin
          id="net.sourceforge.plantuml.lib"
-         download-size="0"
-         install-size="0"
-         version="1.2023.11"/>
+         version="1.2023.11.qualifier"/>
 
 </feature>

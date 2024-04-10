@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Plantuml library plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.lib
-Bundle-Version: 1.2023.11
+Bundle-Version: 1.2023.11.qualifier
 Bundle-Vendor: PlantUML Team
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
-Export-Package: net.sourceforge.plantuml;version="1.2023.11",
- net.sourceforge.plantuml.core;version="1.2023.11",
- net.sourceforge.plantuml.security;version="1.2023.11"
+Export-Package: net.sourceforge.plantuml,
+ net.sourceforge.plantuml.core,
+ net.sourceforge.plantuml.security
 Bundle-ClassPath: lib/plantuml-epl-1.2023.11.jar

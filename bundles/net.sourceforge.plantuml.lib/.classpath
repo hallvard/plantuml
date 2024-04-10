@@ -6,6 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry exported="true" kind="lib" path="/Users/travkin/Documents/git-repos/plantuml4eclipse/bundles/net.sourceforge.plantuml.lib/lib/plantuml-epl-1.2023.11.jar" sourcepath="lib/plantuml-epl-1.2023.11-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/plantuml-epl-1.2023.11.jar" sourcepath="lib/plantuml-epl-1.2023.11-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -23,8 +23,6 @@
 
    <plugin
          id="net.sourceforge.plantuml.lib.elk"
-         download-size="0"
-         install-size="0"
          version="0.7.1"/>
 
 </feature>
