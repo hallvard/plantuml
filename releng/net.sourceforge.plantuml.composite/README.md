@@ -11,7 +11,7 @@ Module for building and releasing new version.
   do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`,
   do this also for the plantuml.lib version (see README.md in plantuml.lib bundle)
 - update `compositeArtifacts.xml` and `compositeContent.xml` files so they list the new version(s)
-- re-calculate / update all features' dependencies
+- re-calculate / update all features' dependencies (seems to be obsolete now, see https://github.com/eclipse-pde/eclipse.pde/issues/26)
 - build and test and build and test...
 - run `mvn clean install` on project `net.sourceforge.plantuml.composite` or just run the launch configuration *Build all with Maven*
   (that builds and runs all non-UI unit tests)
