@@ -169,7 +169,7 @@
                                 <argument>${basedir}/target/gh-pages</argument>
                                 <argument>commit</argument>
                                 <argument>-m</argument>
-                                <argument>New release (${project.version})</argument>
+                                <argument>New release (${releaseVersion})</argument>
                             </arguments>
                         </configuration>
                     </execution>
