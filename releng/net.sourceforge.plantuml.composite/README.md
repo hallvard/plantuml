@@ -24,9 +24,10 @@ Module for building and releasing new version.
 
 ### Build artifacts and repository
 
-- build with `mvn clean install` on project `net.sourceforge.plantuml.composite` and test
+- build with `mvn clean install` on project `net.sourceforge.plantuml.composite` 
   or just run the launch configuration *Build all with Maven*
   (that builds and runs all non-UI unit tests)
+- test the release candidate
 - check the PlantUML lib update site / repository in target/gh-pages/plantuml.lib/<version>
   and the PlantUML Eclipse update site / repository in target/gh-pages/plantuml.eclipse/<version>,
   ensure that you have only the latest plug-in / feature versions there and only one version per plug-in / feature
@@ -34,7 +35,7 @@ Module for building and releasing new version.
 
 ### Update GitHub pages
 
-That is done be the Maven build automatically, when you run `mvn clean install`
+That is done by the Maven build automatically, when you run `mvn clean install`
 on project `net.sourceforge.plantuml.composite` or the launch configuration *Build all with Maven*.
 Just check if the following steps were successfully done by Maven.
 If everything is as expected, push the changes to GitHub pages.
@@ -47,6 +48,7 @@ If everything is as expected, push the changes to GitHub pages.
 - copy the README.md in the proper place
     - cp README.md gh-pages/
 - add, commit (should have been done by the build)
+- push to gh-pages
 
 ### Release on GitHub
 
