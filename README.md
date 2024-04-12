@@ -54,8 +54,8 @@ Note that the version numbers of the plantuml.lib plugin are a bit special, sinc
 
 ## [1.1.31](https://github.com/hallvard/plantuml/releases/tag/1.1.31)
 - Updated PlantUML library version to 1.2024.4 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
-- Updated target platform to Eclipse 2023-12 and Java 18.
-- Fixed [issue #177](https://github.com/hallvard/plantuml/issues/177) (by updating to PlantUML 1.2024.4)
+- Automated some of the steps needed to update to a new PlantUML library version ([issue #145](https://github.com/hallvard/plantuml/issues/145))
+- Updated target platform to Eclipse 2023-12 and to Java 18.
 
 ## [1.1.30](https://github.com/hallvard/plantuml/releases/tag/1.1.30)
 - Fixed access to environment variables from PlantUML code, using PlantUML functions like %getenv("MY_ENV_VAR"), see [PlantUML security profiles](https://plantuml.com/en/security).
