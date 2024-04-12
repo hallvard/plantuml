@@ -3,11 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sourceforge.plantuml</groupId>
 	<artifactId>net.sourceforge.plantuml.parent</artifactId>
-	<version>1.1.31-SNAPSHOT</version>
+	<version>${releaseVersion}${qualifier}</version>
 	<packaging>pom</packaging>
 	<name>net.sourceforge.plantuml Eclipse plug-in maven parent project</name>
 
 	<properties>
+		<releaseVersion>1.1.31</releaseVersion>
+		<qualifier>-SNAPSHOT</qualifier>
 		<plantuml-lib-version>1.2024.4</plantuml-lib-version>
 		
 		<!-- tycho-version variable is defined in repo-root-folder/.mvn/maven.config, see https://tycho.eclipseprojects.io/doc/latest/StructuredBuild.html,
@@ -78,7 +80,7 @@
 						<artifact>
 							<groupId>net.sourceforge.plantuml</groupId>
 							<artifactId>eclipse-2023-12</artifactId>
-							<version>1.1.31-SNAPSHOT</version>
+							<version>${releaseVersion}${qualifier}</version>
 						</artifact>
 					</target>
 					<environments>

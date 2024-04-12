@@ -24,15 +24,11 @@ Module for building and releasing new version.
 
 ### Build artifacts and repository
 
-- do a `mvn clean` to clear target folders
-- search and replace <version>-SNAPSHOT with <version> in *.* (e.g. to `1.1.31`)
-- search and replace <version>.qualifier with <version> in *.*
-  (tycho-versions:set-version -DnewVersion=<version> seems not to work reliably, does not change all necessary places)
-- do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`
-- do this also for the plantuml.lib version (see README.md in plantuml.lib bundle)
-- update `compositeArtifacts.xml` and `compositeContent.xml` files so they list the new version(s)
-- build with `mvn install` and test
-- check the PlantUML lib update site / repository in target/gh-pages/plantuml.lib/<version>,
+- build with `mvn clean install` on project `net.sourceforge.plantuml.composite` and test
+  or just run the launch configuration *Build all with Maven*
+  (that builds and runs all non-UI unit tests)
+- check the PlantUML lib update site / repository in target/gh-pages/plantuml.lib/<version>
+  and the PlantUML Eclipse update site / repository in target/gh-pages/plantuml.eclipse/<version>,
   ensure that you have only the latest plug-in / feature versions there and only one version per plug-in / feature
 - add, commit and push
 

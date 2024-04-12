@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>net.sourceforge.plantuml.lib</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<version>1.2024.4-SNAPSHOT</version>
+	<version>${plantuml-lib-version}${qualifier}</version>
 
 	<parent>
 	    <groupId>net.sourceforge.plantuml</groupId>
 	    <artifactId>net.sourceforge.plantuml.parent</artifactId>
-	    <version>1.1.31-SNAPSHOT</version>
+	    <version>${releaseVersion}${qualifier}</version>
 	    <relativePath>../../releng/net.sourceforge.plantuml.parent</relativePath>
 	</parent>
 	

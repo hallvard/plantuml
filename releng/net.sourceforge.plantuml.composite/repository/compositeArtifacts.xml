@@ -32,6 +32,6 @@
 		<child location='plantuml.eclipse/1.1.28' />
 		<child location='plantuml.eclipse/1.1.29' />
 		<child location='plantuml.eclipse/1.1.30' />
-		<child location='plantuml.eclipse/1.1.31-SNAPSHOT' />
+		<child location='plantuml.eclipse/1.1.31' />
 	</children>
 </repository>
