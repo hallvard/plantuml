@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.ui.ide;bundle-version="3.10.2",
  org.eclipse.core.resources;bundle-version="3.9.1",
  net.sourceforge.plantuml.lib;bundle-version="1.2024.4"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-18
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: net.sourceforge.plantuml.eclipse.imagecontrol,
  net.sourceforge.plantuml.eclipse.imagecontrol.jface,
  net.sourceforge.plantuml.eclipse.imagecontrol.jface.actions,

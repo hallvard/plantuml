@@ -7,7 +7,7 @@ Bundle-Version: 1.1.31.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-18
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: no.hal.osgi,
  no.hal.osgi.emf.util,
  no.hal.osgi.impl,
