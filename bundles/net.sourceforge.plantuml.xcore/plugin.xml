@@ -3,14 +3,12 @@
 <plugin>
 
    <extension
-         point="net.sourceforge.plantuml.eclipse.diagramTextProvider">
-
-      <diagramTextProvider
-            id="net.sourceforge.plantuml.xcore.XcoreDiagramTextProvider"
-            providerClass="net.sourceforge.plantuml.xcore.XcoreDiagramTextProvider"
+         point="net.sourceforge.plantuml.eclipse.diagramIntentProvider">
+      <diagramIntentProvider
+            id="net.sourceforge.plantuml.xcore.XcoreDiagramIntentProvider"
             label="Class diagrams generated from xcore models"
-            >
-      </diagramTextProvider>
+            providerClass="net.sourceforge.plantuml.xcore.XcoreDiagramIntentProvider">
+      </diagramIntentProvider>
    </extension>
 
 </plugin>
