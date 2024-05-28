@@ -2,6 +2,15 @@
 
 Module for building and releasing new version.
 
+## Build procedure
+
+- Open the .target file in `releng/net.sourceforge.plantuml.target`, e.g. `eclipse-2023-12.target`. and set it as active target platform.
+- Run pre-defined launch configuration *Build all with Maven* from `releng/net.sourceforge.plantuml.composite`.
+
+## Run PlantUML in Eclipse
+
+- Run the pre-defined launch configuration *PlantUML4e-2023-12* (or similar) from `releng/net.sourceforge.plantuml.aggregator`.
+
 ## Release procedure
 
 ### Pre-release
