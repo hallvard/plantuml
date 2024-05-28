@@ -10,7 +10,7 @@
 	<properties>
 		<releaseVersion>1.1.31</releaseVersion>
 		<qualifier>-SNAPSHOT</qualifier>
-		<plantuml-lib-version>1.2024.4</plantuml-lib-version>
+		<plantuml-lib-version>1.2024.5</plantuml-lib-version>
 		
 		<!-- tycho-version variable is defined in repo-root-folder/.mvn/maven.config, see https://tycho.eclipseprojects.io/doc/latest/StructuredBuild.html,
 		     in addition, we specify it here to avoid IDE warnings because of an unrecognized variable definition -->
