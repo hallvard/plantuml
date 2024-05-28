@@ -32,6 +32,12 @@ However, we have now (September 2021) started using [Discussions](https://github
 
 We use github pages @ http://hallvard.github.io/plantuml as the update site URL, in the Help > Install New Software... dialog.
 
+# For developers / contributors
+
+You'll find some developer documentation here:
+- net.sourceforge.plantuml.composite/README.md (how to build, run, and release)
+- net.sourceforge.plantuml.lib/README.md (how to update PlantUML library)
+
 # Main plugins (net.sourceforge.plantuml.)
 - lib - plantuml.jar packaged as a bundle
 - lib.jlatexmath - fragment to the lib bundle that adds the jlatexmath lib
@@ -44,13 +50,17 @@ We use github pages @ http://hallvard.github.io/plantuml as the update site URL,
 - ecore - diagrams based on Ecore models, with support for most Ecore editors
 - osgi - component diagrams based on OSGi meta-data
 - (xcore - diagrams based on Xcore models, with support for the Xtext editor)
-- (uml2 - diagrams based on UML2 models)
+- (uml2 - diagrams based on UML2 models, *obsolete*)
 
 # Releases
 
 Notable features in recent releases, details are found in [releases](https://github.com/hallvard/plantuml/releases).
 Note that the version numbers of the plantuml.lib plugin are a bit special, since they use the version of the included plantuml.jar
 
+
+
+## [1.1.32](https://github.com/hallvard/plantuml/releases/tag/1.1.32)
+- Updated PlantUML library version to 1.2024.5, see [changes](https://plantuml.com/changes).
 
 ## [1.1.31](https://github.com/hallvard/plantuml/releases/tag/1.1.31)
 - Updated PlantUML library version to 1.2024.4 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
