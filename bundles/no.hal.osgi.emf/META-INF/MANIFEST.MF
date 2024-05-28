@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: no.hal.osgi.emf;singleton:=true
 Automatic-Module-Name: no.hal.osgi.emf
-Bundle-Version: 1.1.31.qualifier
+Bundle-Version: 1.1.32.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

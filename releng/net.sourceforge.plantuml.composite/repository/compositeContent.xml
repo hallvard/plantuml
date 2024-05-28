@@ -9,7 +9,7 @@
 		<property name='p2.atomic.composite.loading' value='true' />
 	 -->
 	</properties>
-	<children size='23'>
+	<children size='25'>
 		<child location='plantuml.lib/1.2018.9' />
 		<child location='plantuml.lib/1.2018.12' />
 		<child location='plantuml.lib/1.2019.0' />
@@ -21,6 +21,7 @@
 		<child location='plantuml.lib/1.2023.10' />
 		<child location='plantuml.lib/1.2023.11' />
 		<child location='plantuml.lib/1.2024.4' />
+		<child location='plantuml.lib/1.2024.5' />
 		<child location='plantuml.eclipse/1.1.20' />
 		<child location='plantuml.eclipse/1.1.21' />
 		<child location='plantuml.eclipse/1.1.22' />
@@ -33,5 +34,6 @@
 		<child location='plantuml.eclipse/1.1.29' />
 		<child location='plantuml.eclipse/1.1.30' />
 		<child location='plantuml.eclipse/1.1.31' />
+		<child location='plantuml.eclipse/1.1.32' />
 	</children>
 </repository>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/net.sourceforge.plantuml.lib.feature_1.2024.4.qualifier.jar" id="net.sourceforge.plantuml.lib.feature" version="1.2024.4.qualifier">
+   <feature url="features/net.sourceforge.plantuml.lib.feature_1.2024.5.qualifier.jar" id="net.sourceforge.plantuml.lib.feature" version="1.2024.5.qualifier">
       <category name="net.sourceforge.plantuml.lib.feature"/>
    </feature>
    <feature url="features/net.sourceforge.plantuml.lib.jlatexmath.feature_1.0.7.jar" id="net.sourceforge.plantuml.lib.jlatexmath.feature" version="1.0.7">

@@ -2,6 +2,15 @@
 
 Module for building and releasing new version.
 
+## Build procedure
+
+- Open the .target file in `releng/net.sourceforge.plantuml.target`, e.g. `eclipse-2023-12.target`. and set it as active target platform.
+- Run pre-defined launch configuration *Build all with Maven* from `releng/net.sourceforge.plantuml.composite`.
+
+## Run PlantUML in Eclipse
+
+- Run the pre-defined launch configuration *PlantUML4e-2023-12* (or similar) from `releng/net.sourceforge.plantuml.aggregator`.
+
 ## Release procedure
 
 ### Pre-release
@@ -9,7 +18,8 @@ Module for building and releasing new version.
 - update all pom.xml, MANIFEST.MF, feature.xml, etc. to new version, e.g. 1.1.31-SNAPSHOT or 1.1.31.qualifier,
   also update dependencies and other version-dependant configurations,
   do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`,
-  do this also for the plantuml.lib version (see README.md in plantuml.lib bundle)
+  do this also for the plantuml.lib version (see README.md in plantuml.lib bundle),
+  also update `releaseVersion` property in `releng/net.sourceforge.plantuml.parent/pom.xml`
 - update `compositeArtifacts.xml` and `compositeContent.xml` files so they list the new version(s)
 - re-calculate / update all features' dependencies (seems to be obsolete now, see https://github.com/eclipse-pde/eclipse.pde/issues/26)
 - build and test and build and test...
