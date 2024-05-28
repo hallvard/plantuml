@@ -8,7 +8,7 @@
 	<name>net.sourceforge.plantuml Eclipse plug-in maven parent project</name>
 
 	<properties>
-		<releaseVersion>1.1.31</releaseVersion>
+		<releaseVersion>1.1.32</releaseVersion>
 		<qualifier>-SNAPSHOT</qualifier>
 		<plantuml-lib-version>1.2024.5</plantuml-lib-version>
 		
