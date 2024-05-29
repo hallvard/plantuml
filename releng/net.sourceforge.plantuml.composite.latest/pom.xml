@@ -1,0 +1,117 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>net.sourceforge.plantuml.composite.latest</artifactId>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>net.sourceforge.plantuml</groupId>
+		<artifactId>net.sourceforge.plantuml.parent</artifactId>
+		<version>${releaseVersion}${qualifier}</version>
+		<relativePath>../net.sourceforge.plantuml.parent</relativePath>
+	</parent>
+	
+	<properties>
+        <tycho.version>3.0.5</tycho.version>
+    </properties>
+
+	<build>
+	
+	    <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-p2-repository-plugin</artifactId>
+                    <version>${tycho.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        
+		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>target</directory>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+				<executions>
+					<!-- clean repository folder -->
+					<execution>
+						<id>auto-clean</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+                <groupId>org.eclipse.tycho.extras</groupId>
+                <artifactId>tycho-p2-extras-plugin</artifactId>
+                <version>${tycho.version}</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>mirror</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>
+                        <!-- source repositories to mirror from -->
+                        <repository>
+                            <url>https://hallvard.github.io/plantuml/</url>
+                            <!-- <url>file:/Users/travkin/Documents/git-repos/plantuml4eclipse/releng/net.sourceforge.plantuml.composite/target/gh-pages</url> -->
+                            <layout>p2</layout>
+                            <!-- supported layouts are "p2-metadata", "p2-artifacts", and "p2" (for joint repositories; default) -->
+                        </repository>
+                    </source>    
+
+                    <!-- The destination directory to mirror to. -->
+                    <destination>${project.build.directory}/repository</destination>
+                    
+                    <!-- Whether only strict dependencies should be followed. -->
+                    <!-- "strict" means perfect version match -->
+                    <followStrictOnly>false</followStrictOnly>
+                    
+                    <!-- Whether or not to follow optional requirements. -->
+                    <includeOptional>true</includeOptional>
+                    
+                    <!-- Whether or not to follow non-greedy requirements. -->
+                    <includeNonGreedy>true</includeNonGreedy>
+                    
+                    <!-- include the latest version of each IU -->
+                    <latestVersionOnly>true</latestVersionOnly>
+                    
+                    <!-- don't mirror artifacts, only metadata -->
+                    <mirrorMetadataOnly>false</mirrorMetadataOnly>
+                    
+                    <!-- whether to compress the content.xml/artifacts.xml -->
+                    <compress>true</compress>
+                    
+                    <!-- whether to append to the target repository content -->
+                    <append>true</append>
+                    
+                    <!-- whether to mirror pack200 artifacts also. Available since tycho-extras 0.17.0 -->
+                    <includePacked>true</includePacked>
+                    
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+			
+		</plugins>
+	</build>
+
+</project>
