@@ -30,7 +30,7 @@ However, we have now (September 2021) started using [Discussions](https://github
 
 # Installation
 
-We use github pages @ http://hallvard.github.io/plantuml as the update site URL, in the Help > Install New Software... dialog.
+We use github pages @ [https://hallvard.github.io/plantuml/](https://hallvard.github.io/plantuml/) as the update site URL, in the Help > Install New Software... dialog.
 
 # For developers / contributors
 
