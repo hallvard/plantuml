@@ -8,6 +8,11 @@ import java.util.function.Supplier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
+
+import org.eclipse.core.resources.ResourcesPlugin;
+
+import org.eclipse.core.runtime.IPath;
+
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -18,6 +23,7 @@ import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlUtil;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
+import net.sourceforge.plantuml.util.DiagramData;
 import net.sourceforge.plantuml.util.DiagramImageData;
 
 /**Manage the Export of the diagram.
@@ -27,26 +33,42 @@ import net.sourceforge.plantuml.util.DiagramImageData;
  */
 public class ExportAction extends DiagramImageAction<Shell> {
 
-	public ExportAction(final Supplier<DiagramImageData> diagramImageDataSupplier, final Shell shell) {
+	private Supplier<DiagramData> diagramDataSupplier;
+
+  public ExportAction(final Supplier<DiagramImageData> diagramImageDataSupplier, Supplier<DiagramData> diagramDataSupplier, final Shell shell) {
 		super(diagramImageDataSupplier, shell);
 		setText(PlantumlConstants.EXPORT_MENU);
+		this.diagramDataSupplier = diagramDataSupplier;
 	}
 
 	@Override
 	public void run() {
 		final FileDialog fDialog = new FileDialog(getContext(), SWT.SAVE);
+		DiagramData diagramData = diagramDataSupplier.get();
+		if (diagramData != null && diagramData.getOriginal() != null) {
+			String sourceDataPath = diagramData.getOriginal().toString();
+			fDialog.setFilterPath(sourceDataPath);
+			String[] split = sourceDataPath.split(String.valueOf(IPath.SEPARATOR));
+			String filename = split[split.length - 1];
+			filename = filename.substring(0, filename.lastIndexOf("."));
+			fDialog.setFileName(filename);
+		} else {
+			fDialog.setFilterPath(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString());
+		}
 		fDialog.setFilterExtensions(new String[] { "*.png", "*.svg", "*.jpg", "*.gif" });
-		fDialog.open();
+		String result = fDialog.open();
 
 		// get return from user.
-		final String fileName = fDialog.getFileName();
-		if (StringUtils.isNotEmpty(fileName)) {
-			final String filePathName = fDialog.getFilterPath() + System.getProperty("file.separator") + fileName;
-			final String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
-			if ("svg".equals(ext)) {
-				createImageFileSvg(filePathName, getDiagramImageData().getDiagramData().getTextDiagram());
-			} else {
-				createImageFile(filePathName, ext);
+		if (result != null) {
+			final String fileName = fDialog.getFileName();
+			if (StringUtils.isNotEmpty(fileName)) {
+				final String filePathName = fDialog.getFilterPath() + System.getProperty("file.separator") + fileName;
+				final String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+				if ("svg".equals(ext)) {
+					createImageFileSvg(filePathName, getDiagramImageData().getDiagramData().getTextDiagram());
+				} else {
+					createImageFile(filePathName, ext);
+				}
 			}
 		}
 	}
@@ -70,7 +92,7 @@ public class ExportAction extends DiagramImageAction<Shell> {
 			final int swtFormat = SWT.class.getField("IMAGE_" + format.toUpperCase()).getInt(null);
 			loader.save(filePathName, swtFormat);
 		} catch (final Exception e) {
-			WorkbenchUtil.errorBox("Error during file generation for export.");
+			WorkbenchUtil.errorBox("Error during file generation for export.", e);
 		}
 	}
 
@@ -91,7 +113,7 @@ public class ExportAction extends DiagramImageAction<Shell> {
 			final SourceStringReader reader = new SourceStringReader(textDiagram);
 			reader.outputImage(fos, imageNum, new FileFormatOption(FileFormat.SVG));
 		} catch (final IOException e) {
-			WorkbenchUtil.errorBox("Error during file generation for export.");
+			WorkbenchUtil.errorBox("Error during file generation for export.", e);
 		}
 	}
 }

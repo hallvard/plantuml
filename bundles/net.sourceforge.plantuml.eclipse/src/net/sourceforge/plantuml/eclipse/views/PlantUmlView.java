@@ -2,7 +2,13 @@ package net.sourceforge.plantuml.eclipse.views;
 
 import java.util.function.Supplier;
 
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -55,9 +61,31 @@ import net.sourceforge.plantuml.util.DiagramImageData;
 
 public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 
+	private static final String INITIAL_SOURCE_PATH_ID = "initialDiagramPath";
+	
 	private DiagramImageControl[] imageControls;
 	private TabFolder tabFolder = null;
 	private MenuSupport menuSupport;
+	private IPath initDiagramSourcePath = null;
+
+	@Override
+	public void saveState(final IMemento memento) {
+		super.saveState(memento);
+		memento.putString(INITIAL_SOURCE_PATH_ID, getDiagramSourcePath().toPortableString());
+	}
+
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+		String path = memento.getString(INITIAL_SOURCE_PATH_ID);
+		if (path != null && !path.isBlank()) {
+			initDiagramSourcePath = Path.fromPortableString(path);
+		}
+	}
+
+	public IPath getDiagramSourcePath() {
+		return diagramData != null ? diagramData.getOriginal() : null;
+	}
 
 	@Override
 	protected void createDiagramControl(final Composite parent) {
@@ -156,7 +184,7 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 		menuSupport.addMenuAction(new CopyAsciiAction(diagramImageDataSupplier, display));
 		final Shell shell = composite.getShell();
 		menuSupport.addMenuAction(new SaveAction(diagramImageDataSupplier, shell));
-		menuSupport.addMenuAction(new ExportAction(diagramImageDataSupplier, shell));
+		menuSupport.addMenuAction(new ExportAction(diagramImageDataSupplier, diagramDataSupplier, shell));
 		menuSupport.addMenuAction(new PrintAction(diagramImageDataSupplier, shell));
 	}
 
@@ -214,6 +242,11 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 
 	@Override
 	protected void updateDiagram(final DiagramData diagramData, final IProgressMonitor monitor) {
+		// TODO Check if have to set the initial source path somewhere else
+		if (diagramData.getOriginal() == null && initDiagramSourcePath != null) {
+			diagramData.setOriginal(initDiagramSourcePath);
+		}
+		
 		// load all images before updating controls
 		final DiagramImageData[] diagramImageDatas = new DiagramImageData[diagramData.getImageCount()];
 		for (int imageNum = 0; imageNum < diagramImageDatas.length; imageNum++) {
