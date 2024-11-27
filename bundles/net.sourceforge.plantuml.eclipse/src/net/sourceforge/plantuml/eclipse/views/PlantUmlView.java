@@ -71,7 +71,10 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 	@Override
 	public void saveState(final IMemento memento) {
 		super.saveState(memento);
-		memento.putString(INITIAL_SOURCE_PATH_ID, getDiagramSourcePath().toPortableString());
+		IPath sourcePath = getDiagramSourcePath();
+		if (sourcePath != null) {
+			memento.putString(INITIAL_SOURCE_PATH_ID, getDiagramSourcePath().toPortableString());
+		}
 	}
 
 	@Override
