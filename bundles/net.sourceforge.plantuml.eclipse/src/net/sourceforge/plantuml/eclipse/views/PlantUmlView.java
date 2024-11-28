@@ -39,6 +39,8 @@ import net.sourceforge.plantuml.eclipse.views.actions.PrintAction;
 import net.sourceforge.plantuml.eclipse.views.actions.SaveAction;
 import net.sourceforge.plantuml.util.DiagramData;
 import net.sourceforge.plantuml.util.DiagramImageData;
+import net.sourceforge.plantuml.util.ResourceInfo;
+import net.sourceforge.plantuml.util.SimpleDiagramIntent;
 
 /**
  *
@@ -68,6 +70,8 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 	private MenuSupport menuSupport;
 	private IPath initDiagramSourcePath = null;
 
+	private String initialDiagramSource;
+
 	@Override
 	public void saveState(final IMemento memento) {
 		super.saveState(memento);
@@ -80,9 +84,12 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
-		String path = memento.getString(INITIAL_SOURCE_PATH_ID);
-		if (path != null && !path.isBlank()) {
-			initDiagramSourcePath = Path.fromPortableString(path);
+		if (memento != null) {
+			String path = memento.getString(INITIAL_SOURCE_PATH_ID);
+			if (path != null && !path.isBlank()) {
+				initDiagramSourcePath = Path.fromPortableString(path);
+			}
+			initialDiagramSource = memento.getString(AbstractDiagramSourceView.INITIAL_DIAGRAM_SOURCE_ID);
 		}
 	}
 
@@ -95,6 +102,23 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 		ensureImageControls(0);
 		menuSupport = new MenuSupport();
 		addCanvasActions();
+	}
+
+	@Override
+	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+		asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				if (initDiagramSourcePath != null && initialDiagramSource != null) {
+					SimpleDiagramIntent simpleDiagramIntent = new SimpleDiagramIntent(initialDiagramSource);
+					final ResourceInfo resourceInfo = new ResourceInfo();
+					resourceInfo.setOriginalPath(initDiagramSourcePath.toOSString());
+					simpleDiagramIntent.setResourceInfo(resourceInfo);
+					updateDiagramText(simpleDiagramIntent);
+				}
+			}
+		});
 	}
 
 	private final Listener mouseWheelListener = new Listener() {
@@ -245,11 +269,6 @@ public class PlantUmlView extends AbstractPlantUmlView implements ILinkSupport {
 
 	@Override
 	protected void updateDiagram(final DiagramData diagramData, final IProgressMonitor monitor) {
-		// TODO Check if have to set the initial source path somewhere else
-		if (diagramData.getOriginal() == null && initDiagramSourcePath != null) {
-			diagramData.setOriginal(initDiagramSourcePath);
-		}
-		
 		// load all images before updating controls
 		final DiagramImageData[] diagramImageDatas = new DiagramImageData[diagramData.getImageCount()];
 		for (int imageNum = 0; imageNum < diagramImageDatas.length; imageNum++) {

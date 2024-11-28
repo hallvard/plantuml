@@ -9,8 +9,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-
 import org.eclipse.core.runtime.IPath;
 
 import org.eclipse.swt.widgets.FileDialog;
@@ -26,7 +24,8 @@ import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
 import net.sourceforge.plantuml.util.DiagramData;
 import net.sourceforge.plantuml.util.DiagramImageData;
 
-/**Manage the Export of the diagram.
+/**
+ * Manage the Export of the diagram.
  *
  * @author durif_c
  *
@@ -47,13 +46,13 @@ public class ExportAction extends DiagramImageAction<Shell> {
 		DiagramData diagramData = diagramDataSupplier.get();
 		if (diagramData != null && diagramData.getOriginal() != null) {
 			String sourceDataPath = diagramData.getOriginal().toString();
-			fDialog.setFilterPath(sourceDataPath);
-			String[] split = sourceDataPath.split(String.valueOf(IPath.SEPARATOR));
-			String filename = split[split.length - 1];
+
+			String[] pathSegments = sourceDataPath.split(String.valueOf(IPath.SEPARATOR));
+			String filename = pathSegments[pathSegments.length - 1];
+			String filterPath = sourceDataPath.substring(0, sourceDataPath.lastIndexOf(filename));
 			filename = filename.substring(0, filename.lastIndexOf("."));
 			fDialog.setFileName(filename);
-		} else {
-			fDialog.setFilterPath(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString());
+			fDialog.setFilterPath(filterPath);
 		}
 		
 		fDialog.setFilterExtensions(new String[] { "*.png", "*.svg" });
