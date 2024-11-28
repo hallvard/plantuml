@@ -57,6 +57,9 @@ import net.sourceforge.plantuml.util.SimpleDiagramIntent;
 
 public abstract class AbstractDiagramSourceView extends ViewPart {
 
+	private static final String PINNED_TO_ID = "pinnedTo";
+	protected static final String INITIAL_DIAGRAM_SOURCE_ID = "initialDiagramSource";
+	
 	private String pinnedToId = null;
 	private IEditorPart pinnedTo = null;
 	private String initialDiagramSource = null;
@@ -64,16 +67,16 @@ public abstract class AbstractDiagramSourceView extends ViewPart {
 	@Override
 	public void saveState(final IMemento memento) {
 		super.saveState(memento);
-		memento.putString("pinnedTo", (pinnedTo != null ? getEditorInputId(pinnedTo.getEditorInput()) : null));
-		memento.putString("initialDiagramSource", getDiagramText());
+		memento.putString(PINNED_TO_ID, (pinnedTo != null ? getEditorInputId(pinnedTo.getEditorInput()) : null));
+		memento.putString(INITIAL_DIAGRAM_SOURCE_ID, getDiagramText());
 	}
 
 	@Override
 	public void init(final IViewSite site, final IMemento memento) throws PartInitException {
 		super.init(site, memento);
 		if (memento != null) {
-			pinnedToId = memento.getString("pinnedTo");
-			initialDiagramSource = memento.getString("initialDiagramSource");
+			pinnedToId = memento.getString(PINNED_TO_ID);
+			initialDiagramSource = memento.getString(INITIAL_DIAGRAM_SOURCE_ID);
 		}
 	}
 
