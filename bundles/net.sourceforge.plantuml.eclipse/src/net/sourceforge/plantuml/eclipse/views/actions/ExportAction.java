@@ -55,7 +55,8 @@ public class ExportAction extends DiagramImageAction<Shell> {
 		} else {
 			fDialog.setFilterPath(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString());
 		}
-		fDialog.setFilterExtensions(new String[] { "*.png", "*.svg", "*.jpg", "*.gif" });
+		
+		fDialog.setFilterExtensions(new String[] { "*.png", "*.svg" });
 		String result = fDialog.open();
 
 		// get return from user.
