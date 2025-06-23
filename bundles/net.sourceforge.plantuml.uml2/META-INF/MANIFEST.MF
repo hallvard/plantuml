@@ -5,14 +5,13 @@ Bundle-SymbolicName: net.sourceforge.plantuml.uml2; singleton:=true
 Bundle-Version: 1.1.28.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: net.sourceforge.plantuml.uml2
+Bundle-ActivationPolicy: lazy
 Import-Package: net.sourceforge.plantuml.eclipse.utils,
- net.sourceforge.plantuml.ecore,
  net.sourceforge.plantuml.text,
  net.sourceforge.plantuml.uml2,
+ org.eclipse.core.runtime,
  org.eclipse.emf.common.util,
  org.eclipse.emf.ecore,
- org.eclipse.emf.ecore.util,
- org.eclipse.jface.viewers,
  org.eclipse.ui,
  org.eclipse.uml2.uml
 Bundle-ClassPath: .
