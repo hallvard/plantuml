@@ -38,9 +38,9 @@
 		<module>../../bundles/net.sourceforge.plantuml.osgi</module>
 
 		<module>../../bundles/net.sourceforge.plantuml.xcore</module>
-		<!-- 
+
 		<module>../../bundles/net.sourceforge.plantuml.uml2</module>
-		 -->
+		<module>../../tests/net.sourceforge.plantuml.uml2.tests</module>
 
 		<module>../../bundles/net.sourceforge.plantuml.lib.elk</module>
 		<module>../../features/net.sourceforge.plantuml.lib.elk.feature</module>
@@ -51,6 +51,7 @@
 		<module>../../features/net.sourceforge.plantuml.lib.feature</module>
 		<module>../../features/net.sourceforge.plantuml.feature</module>
 		<module>../../features/net.sourceforge.plantuml.ecore.feature</module>
+		<module>../../features/net.sourceforge.plantuml.uml2.feature</module>
 
 		<module>../net.sourceforge.plantuml.repository</module>
 	</modules>

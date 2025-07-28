@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_4460QN1wEe6AzJnW7TwwaQ" name="TestStateMachineDiag">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_45jtcN1wEe6AzJnW7TwwaQ">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_8uia8N1wEe6AzJnW7TwwaQ" name="ClassWithSM" classifierBehavior="_cDJJgN11Ee6YDPfxemLe6w">
+    <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_cDJJgN11Ee6YDPfxemLe6w" name="StateMachine">
+      <region xmi:type="uml:Region" xmi:id="_dMpvQN11Ee6YDPfxemLe6w" name="Region1">
+        <transition xmi:type="uml:Transition" xmi:id="_fVuUkN11Ee6YDPfxemLe6w" name="toChoice" source="_d7WBQN11Ee6YDPfxemLe6w" target="_DbhdgOHpEe6gUvOpXcG4yA"/>
+        <transition xmi:type="uml:Transition" xmi:id="_zZRMwOHmEe6CvbUbJFa6yw" source="_xzapQOHmEe6CvbUbJFa6yw" target="_d7WBQN11Ee6YDPfxemLe6w"/>
+        <transition xmi:type="uml:Transition" xmi:id="_FZ4noOHpEe6gUvOpXcG4yA" guard="_Fq9zwOHtEe6Kfe4jMb_Zpw" source="_DbhdgOHpEe6gUvOpXcG4yA" target="_C1le4OHpEe6gUvOpXcG4yA">
+          <ownedRule xmi:type="uml:Constraint" xmi:id="_Fq9zwOHtEe6Kfe4jMb_Zpw">
+            <specification xmi:type="uml:OpaqueExpression" xmi:id="_Fq9zweHtEe6Kfe4jMb_Zpw">
+              <language>OCL</language>
+              <body>true</body>
+            </specification>
+          </ownedRule>
+        </transition>
+        <transition xmi:type="uml:Transition" xmi:id="_GAtXEOHpEe6gUvOpXcG4yA" source="_DbhdgOHpEe6gUvOpXcG4yA" target="_elACQN11Ee6YDPfxemLe6w"/>
+        <transition xmi:type="uml:Transition" xmi:id="_9BOMMOHrEe6Kfe4jMb_Zpw" source="_elACQN11Ee6YDPfxemLe6w" target="_8K_u0OHrEe6Kfe4jMb_Zpw"/>
+        <subvertex xmi:type="uml:State" xmi:id="_d7WBQN11Ee6YDPfxemLe6w" name="State1"/>
+        <subvertex xmi:type="uml:State" xmi:id="_elACQN11Ee6YDPfxemLe6w" name="State3"/>
+        <subvertex xmi:type="uml:Pseudostate" xmi:id="_xzapQOHmEe6CvbUbJFa6yw" name="Initial4"/>
+        <subvertex xmi:type="uml:State" xmi:id="_C1le4OHpEe6gUvOpXcG4yA" name="State2"/>
+        <subvertex xmi:type="uml:Pseudostate" xmi:id="_DbhdgOHpEe6gUvOpXcG4yA" name="Choice" kind="choice"/>
+        <subvertex xmi:type="uml:FinalState" xmi:id="_8K_u0OHrEe6Kfe4jMb_Zpw" name="FinalState"/>
+      </region>
+    </ownedBehavior>
+  </packagedElement>
+</uml:Model>

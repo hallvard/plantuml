@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_4460QN1wEe6AzJnW7TwwaQ" name="TestClassDiag">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_45jtcN1wEe6AzJnW7TwwaQ">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_8IH7MN1wEe6AzJnW7TwwaQ" name="Class1">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="__JHnAd1wEe6AzJnW7TwwaQ" name="class2" type="_8uia8N1wEe6AzJnW7TwwaQ" association="__JFx0N1wEe6AzJnW7TwwaQ">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__JHnAt1wEe6AzJnW7TwwaQ"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__JIOEN1wEe6AzJnW7TwwaQ" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_CtUGgN1xEe6AzJnW7TwwaQ" name="p1">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_DmBroN17Ee6yHITxCXgjpA" name="p2">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_F4KtYN17Ee6yHITxCXgjpA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_F4lkIN17Ee6yHITxCXgjpA" value="*"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_8uia8N1wEe6AzJnW7TwwaQ" name="Class3">
+    <generalization xmi:type="uml:Generalization" xmi:id="_5O3PwGpKEfCC2vbsDrRT4w" general="_i7M8gN4wEe6jsK95cSX8yQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="__JFx0N1wEe6AzJnW7TwwaQ" memberEnd="__JHnAd1wEe6AzJnW7TwwaQ __JIOEd1wEe6AzJnW7TwwaQ">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__JG_8N1wEe6AzJnW7TwwaQ" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__JHnAN1wEe6AzJnW7TwwaQ" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="__JIOEd1wEe6AzJnW7TwwaQ" name="class1" type="_8IH7MN1wEe6AzJnW7TwwaQ" association="__JFx0N1wEe6AzJnW7TwwaQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_15rpsN11Ee6YDPfxemLe6w" name="subPackage">
+    <packagedElement xmi:type="uml:Class" xmi:id="_4c2KAN11Ee6YDPfxemLe6w" name="Class1">
+      <generalization xmi:type="uml:Generalization" xmi:id="_seAysN40Ee6xdrgRKgF_Tg" general="_i7M8gN4wEe6jsK95cSX8yQ"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_soqgUN4wEe6jsK95cSX8yQ" name="tst" visibility="public">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_i7M8gN4wEe6jsK95cSX8yQ" name="Class2"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_CzIIoN43Ee6xdrgRKgF_Tg" name="SubIntf">
+    <generalization xmi:type="uml:Generalization" xmi:id="_Fi4TcN43Ee6xdrgRKgF_Tg" general="_XATMkN43Ee6xdrgRKgF_Tg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Realization" xmi:id="_VwcHMN43Ee6xdrgRKgF_Tg" client="_8IH7MN1wEe6AzJnW7TwwaQ" supplier="_CzIIoN43Ee6xdrgRKgF_Tg"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_XATMkN43Ee6xdrgRKgF_Tg" name="SuperInterface"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_WWEowOE1Ee6XiKEncq2v9g" name="emptyPkg"/>
+</uml:Model>

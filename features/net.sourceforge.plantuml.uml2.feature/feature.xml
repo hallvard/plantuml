@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="net.sourceforge.plantuml.uml2.feature"
+      label="%featureName"
+      version="1.1.33.qualifier"
+      provider-name="PlantUML Team">
+
+   <description url="http://plantuml.sourceforge.net/">
+      %description
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <requires>
+      <import feature="net.sourceforge.plantuml.feature" version="1.1.33.qualifier"/>
+      <import plugin="net.sourceforge.plantuml.eclipse"/>
+      <import plugin="net.sourceforge.plantuml.text"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.emf.edit"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.ui.ide"/>
+   </requires>
+
+   <plugin
+         id="net.sourceforge.plantuml.uml2"
+         download-size="0"
+         install-size="0"
+         version="1.1.33.qualifier"
+         unpack="false"/>
+
+</feature>

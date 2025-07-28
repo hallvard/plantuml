@@ -1,0 +1,11 @@
+@startuml
+state State1
+state State3
+state State2
+state Choice <<choice>>
+State1 -> Choice : toChoice
+[*] -> State1
+Choice -> State2 : [true]/
+Choice -> State3
+State3 -> [*]
+@enduml

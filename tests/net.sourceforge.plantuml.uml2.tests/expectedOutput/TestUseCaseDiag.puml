@@ -1,0 +1,13 @@
+@startuml
+package "PlantUML" {
+	:Actor1:
+	:Actor2:
+	(UseCase3)
+	(UseCase4)
+	(UseCase4) .> (UseCase7) : extends
+	(UseCase4) .> (UseCase3) : include
+	(UseCase7)
+	UseCase3 "usecase3" -- "actor1" Actor1
+	UseCase4 "usecase4" -- "actor2" Actor2
+}
+@enduml

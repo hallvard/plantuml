@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2025 CEA LIST and others
+ *
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License 2.0 which
+ * accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
+
 package net.sourceforge.plantuml.uml2;
 
 import java.util.ArrayList;
@@ -23,6 +34,9 @@ import net.sourceforge.plantuml.text.AbstractDiagramIntentProvider;
 import net.sourceforge.plantuml.util.AbstractDiagramIntent;
 import net.sourceforge.plantuml.util.DiagramIntent;
 
+/**
+ * Generic UML2 intent provider handling multiple diagrams
+ */
 public class Uml2DiagramIntentProvider extends AbstractDiagramIntentProvider {
 
 	public Uml2DiagramIntentProvider() {
@@ -96,18 +110,23 @@ public class Uml2DiagramIntentProvider extends AbstractDiagramIntentProvider {
 				// Try to get an intrinsic adapter
 				eObject = ((IAdaptable) selection).getAdapter(EObject.class);
 			}
-			if (eObject instanceof Package) {
-				Package pkg = getPackage(eObject);
-				return getDiagramInfos(pkg);
-			} else if (eObject instanceof Interaction) {
-				return getDiagramInfos((Interaction) eObject);
-			} else if (eObject instanceof StateMachine) {
-				return getDiagramInfos((StateMachine) eObject);
-			} else if (eObject instanceof Classifier) {
-				return getDiagramInfos((Classifier) eObject);
-			}
+			return getDiagramInfos(eObject);
 		}
 		return super.getDiagramInfos(context);
+	}
+
+	protected Collection<? extends DiagramIntent> getDiagramInfos(EObject eObject) {
+		if (eObject instanceof Package) {
+			Package pkg = getPackage(eObject);
+			return getDiagramInfos(pkg);
+		} else if (eObject instanceof Interaction) {
+			return getDiagramInfos((Interaction) eObject);
+		} else if (eObject instanceof StateMachine) {
+			return getDiagramInfos((StateMachine) eObject);
+		} else if (eObject instanceof Classifier) {
+			return getDiagramInfos((Classifier) eObject);
+		}
+		return null;
 	}
 
 	protected boolean supportsEObject(final EObject selection) {

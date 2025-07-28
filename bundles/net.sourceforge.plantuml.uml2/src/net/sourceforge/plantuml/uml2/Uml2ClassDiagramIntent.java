@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2025 CEA LIST and others
+ *
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License 2.0 which
+ * accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
+
 package net.sourceforge.plantuml.uml2;
 
 import static net.sourceforge.plantuml.uml2.IndentUtils.indentBlock;
@@ -180,17 +191,27 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 	}
 
 	/** 
-	 * Override in order not to escape the "." in the qualified name
+	 * Override in order not to escape the "." in the qualified name, but do escape spaces
 	 */
 	protected String getLogicalName(final String name) {
-		return name;
+		String lName = super.getLogicalName(name);
+		String qName = "";
+		for (int i = 0; i<lName.length(); i++) {
+			if (name.charAt(i) == '.') {
+				qName += '.';
+			}
+			else {
+				qName += lName.charAt(i);
+			}
+		}
+		return qName;
 	}
 	
 	protected void appendGeneralisation(final Classifier subClass, final Classifier superClass,
 			final boolean isImplements, final StringBuilder buffer) {
 		indentOne(buffer);
 		Package cp = subClass.getNearestPackage();	// generalization is added in pkg of sub class
-		appendGeneralisation(NamingUtils.getName(superClass, cp), NamingUtils.getName(superClass, cp), isImplements, buffer);
+		appendGeneralisation(NamingUtils.getName(subClass, cp), NamingUtils.getName(superClass, cp), isImplements, buffer);
 	}
 
 	protected void appendDependency(NamedElement source, NamedElement target, StringBuilder buffer) {

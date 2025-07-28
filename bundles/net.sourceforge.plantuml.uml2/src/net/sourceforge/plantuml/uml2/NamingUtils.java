@@ -92,7 +92,7 @@ public class NamingUtils {
 		return name.contains(" ");
 	}
 
-	// TODO: someone redundant with getLogicalName in AbstractDiagramIntent
+	// TODO: somewhat redundant with getLogicalName in AbstractDiagramIntent
 	private static String asName(String name) {
 		return name.replace(" ", "_");
 	}

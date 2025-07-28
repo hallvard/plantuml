@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_6poUcGrVEfCC2vbsDrRT4w" name="TestCompositeDiag">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_6uXqgGrVEfCC2vbsDrRT4w">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_8MAtMGrVEfCC2vbsDrRT4w" name="System">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_GRehUGrWEfCC2vbsDrRT4w" name="a" type="_CuKLkGrWEfCC2vbsDrRT4w"/>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_G8zWQGrWEfCC2vbsDrRT4w" name="b" type="_DbJ0cGrWEfCC2vbsDrRT4w"/>
+    <ownedAttribute xmi:type="uml:Port" xmi:id="_MrYCoGrWEfCC2vbsDrRT4w" name="ps" aggregation="composite"/>
+    <ownedConnector xmi:type="uml:Connector" xmi:id="_oj5BoGrWEfCC2vbsDrRT4w" name="Connector4">
+      <end xmi:type="uml:ConnectorEnd" xmi:id="_oj9TEGrWEfCC2vbsDrRT4w" partWithPort="_GRehUGrWEfCC2vbsDrRT4w" role="_EakqEGrWEfCC2vbsDrRT4w"/>
+      <end xmi:type="uml:ConnectorEnd" xmi:id="_oj96IGrWEfCC2vbsDrRT4w" partWithPort="_G8zWQGrWEfCC2vbsDrRT4w" role="_FKIewGrWEfCC2vbsDrRT4w"/>
+    </ownedConnector>
+    <ownedConnector xmi:type="uml:Connector" xmi:id="_yf8bEGrWEfCC2vbsDrRT4w" name="Connector5">
+      <end xmi:type="uml:ConnectorEnd" xmi:id="_yf9CIGrWEfCC2vbsDrRT4w" partWithPort="_GRehUGrWEfCC2vbsDrRT4w" role="_LQG-gGrWEfCC2vbsDrRT4w"/>
+      <end xmi:type="uml:ConnectorEnd" xmi:id="_yf9CIWrWEfCC2vbsDrRT4w" role="_MrYCoGrWEfCC2vbsDrRT4w"/>
+    </ownedConnector>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_CuKLkGrWEfCC2vbsDrRT4w" name="A">
+    <ownedAttribute xmi:type="uml:Port" xmi:id="_EakqEGrWEfCC2vbsDrRT4w" name="qa" aggregation="composite"/>
+    <ownedAttribute xmi:type="uml:Port" xmi:id="_LQG-gGrWEfCC2vbsDrRT4w" name="pa" aggregation="composite"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_DbJ0cGrWEfCC2vbsDrRT4w" name="B">
+    <ownedAttribute xmi:type="uml:Port" xmi:id="_FKIewGrWEfCC2vbsDrRT4w" name="pb" aggregation="composite"/>
+  </packagedElement>
+</uml:Model>

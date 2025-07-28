@@ -1,0 +1,14 @@
+@startuml
+component System {
+	port ps
+	component "a: A" {
+		port qa as a.qa
+		port pa as a.pa
+	}
+	component "b: B" {
+		port pb as b.pb
+	}
+	a.qa -- b.pb
+	a.pa -- ps
+}
+@enduml

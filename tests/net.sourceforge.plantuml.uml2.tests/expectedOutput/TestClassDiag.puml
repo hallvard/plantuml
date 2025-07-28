@@ -1,0 +1,28 @@
+@startuml
+package "TestClassDiag" {
+	package "subPackage" {
+		class Class1 {
+			tst: String
+		}
+		class Class2 {
+		}
+		Class2 <|-- Class1
+	}
+	class Class1 {
+		class2: Class3 [0..1]
+		p1: Integer
+		p2: Integer [*]
+	}
+	class Class3 {
+	}
+	interface SubIntf {
+	}
+	interface SuperInterface {
+	}
+	SubIntf <|.. Class1
+	Class1 ..> SubIntf
+	subPackage.Class2 <|-- Class3
+	SuperInterface <|-- SubIntf
+	Class3 "class2 0..1" <-- "class1" Class1
+}
+@enduml

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:css="http://www.eclipse.org/papyrus/infra/gmfdiag/css" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.3/notation" xmlns:style="http://www.eclipse.org/papyrus/infra/gmfdiag/style" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <notation:Diagram xmi:id="_BRCtUGrWEfCC2vbsDrRT4w" type="CompositeStructure" name="System composition" measurementUnit="Pixel">
+    <children xmi:type="notation:Shape" xmi:id="_BxqHEGrWEfCC2vbsDrRT4w" type="Class_Shape">
+      <children xmi:type="notation:DecorationNode" xmi:id="_BxquIGrWEfCC2vbsDrRT4w" type="Class_NameLabel"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_BxquIWrWEfCC2vbsDrRT4w" type="Class_FloatingNameLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_BxquImrWEfCC2vbsDrRT4w" y="15"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_BxquI2rWEfCC2vbsDrRT4w" type="Class_StructureCompartment">
+        <children xmi:type="notation:Shape" xmi:id="_GRgWgGrWEfCC2vbsDrRT4w" type="Property_Shape">
+          <children xmi:type="notation:DecorationNode" xmi:id="_GRg9kGrWEfCC2vbsDrRT4w" type="Property_NameLabel"/>
+          <children xmi:type="notation:DecorationNode" xmi:id="_GRg9kWrWEfCC2vbsDrRT4w" type="Property_FloatingNameLabel">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_GRg9kmrWEfCC2vbsDrRT4w" y="15"/>
+          </children>
+          <children xmi:type="notation:BasicCompartment" xmi:id="_GRg9k2rWEfCC2vbsDrRT4w" type="Property_StructureCompartment">
+            <styles xmi:type="notation:TitleStyle" xmi:id="_GRg9lGrWEfCC2vbsDrRT4w"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRg9lWrWEfCC2vbsDrRT4w"/>
+          </children>
+          <children xmi:type="notation:BasicCompartment" xmi:id="_GR8bYGrWEfCC2vbsDrRT4w" type="compartment_shape_display">
+            <styles xmi:type="notation:TitleStyle" xmi:id="_GR8bYWrWEfCC2vbsDrRT4w"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GR8bYmrWEfCC2vbsDrRT4w"/>
+          </children>
+          <children xmi:type="notation:Shape" xmi:id="_J8NtsGrWEfCC2vbsDrRT4w" type="Port_Shape">
+            <children xmi:type="notation:DecorationNode" xmi:id="_J8NtsmrWEfCC2vbsDrRT4w" type="Port_NameLabel">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_J8Nts2rWEfCC2vbsDrRT4w" x="25" y="10"/>
+            </children>
+            <children xmi:type="notation:DecorationNode" xmi:id="_J8OUwGrWEfCC2vbsDrRT4w" type="Port_StereotypeLabel">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_J8OUwWrWEfCC2vbsDrRT4w" x="25" y="-10"/>
+            </children>
+            <element xmi:type="uml:Port" href="TestCompositeDiag.uml#_EakqEGrWEfCC2vbsDrRT4w"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_J8NtsWrWEfCC2vbsDrRT4w" x="97" y="30"/>
+          </children>
+          <children xmi:type="notation:Shape" xmi:id="_PVjJ4GrWEfCC2vbsDrRT4w" type="Port_Shape">
+            <children xmi:type="notation:DecorationNode" xmi:id="_PVjJ4mrWEfCC2vbsDrRT4w" type="Port_NameLabel">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_PVjJ42rWEfCC2vbsDrRT4w" x="25" y="3"/>
+            </children>
+            <children xmi:type="notation:DecorationNode" xmi:id="_PVjJ5GrWEfCC2vbsDrRT4w" type="Port_StereotypeLabel">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_PVjJ5WrWEfCC2vbsDrRT4w" x="25" y="-10"/>
+            </children>
+            <element xmi:type="uml:Port" href="TestCompositeDiag.uml#_LQG-gGrWEfCC2vbsDrRT4w"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_PVjJ4WrWEfCC2vbsDrRT4w" x="-10" y="30"/>
+          </children>
+          <element xmi:type="uml:Property" href="TestCompositeDiag.uml#_GRehUGrWEfCC2vbsDrRT4w"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRgWgWrWEfCC2vbsDrRT4w" x="94" y="53" width="107" height="61"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_G81LcGrWEfCC2vbsDrRT4w" type="Property_Shape">
+          <children xmi:type="notation:DecorationNode" xmi:id="_G81LcmrWEfCC2vbsDrRT4w" type="Property_NameLabel"/>
+          <children xmi:type="notation:DecorationNode" xmi:id="_G81Lc2rWEfCC2vbsDrRT4w" type="Property_FloatingNameLabel">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_G81LdGrWEfCC2vbsDrRT4w" y="15"/>
+          </children>
+          <children xmi:type="notation:BasicCompartment" xmi:id="_G81ygGrWEfCC2vbsDrRT4w" type="Property_StructureCompartment">
+            <styles xmi:type="notation:TitleStyle" xmi:id="_G81ygWrWEfCC2vbsDrRT4w"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_G81ygmrWEfCC2vbsDrRT4w"/>
+          </children>
+          <children xmi:type="notation:BasicCompartment" xmi:id="_G9B_wGrWEfCC2vbsDrRT4w" type="compartment_shape_display">
+            <styles xmi:type="notation:TitleStyle" xmi:id="_G9B_wWrWEfCC2vbsDrRT4w"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_G9B_wmrWEfCC2vbsDrRT4w"/>
+          </children>
+          <children xmi:type="notation:Shape" xmi:id="_KmmHcGrWEfCC2vbsDrRT4w" type="Port_Shape">
+            <children xmi:type="notation:DecorationNode" xmi:id="_KmmHcmrWEfCC2vbsDrRT4w" type="Port_NameLabel">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_KmmugGrWEfCC2vbsDrRT4w" x="25" y="3"/>
+            </children>
+            <children xmi:type="notation:DecorationNode" xmi:id="_KmmugWrWEfCC2vbsDrRT4w" type="Port_StereotypeLabel">
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_KmmugmrWEfCC2vbsDrRT4w" x="25" y="-10"/>
+            </children>
+            <element xmi:type="uml:Port" href="TestCompositeDiag.uml#_FKIewGrWEfCC2vbsDrRT4w"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_KmmHcWrWEfCC2vbsDrRT4w" x="-10" y="30"/>
+          </children>
+          <element xmi:type="uml:Property" href="TestCompositeDiag.uml#_G8zWQGrWEfCC2vbsDrRT4w"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_G81LcWrWEfCC2vbsDrRT4w" x="294" y="53" width="101" height="61"/>
+        </children>
+        <styles xmi:type="notation:TitleStyle" xmi:id="_BxquJGrWEfCC2vbsDrRT4w"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BxquJWrWEfCC2vbsDrRT4w"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_ByOHwGrWEfCC2vbsDrRT4w" type="compartment_shape_display">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_ByOHwWrWEfCC2vbsDrRT4w"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ByOHwmrWEfCC2vbsDrRT4w"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_MrleAGrWEfCC2vbsDrRT4w" type="Port_Shape">
+        <children xmi:type="notation:DecorationNode" xmi:id="_MrleAmrWEfCC2vbsDrRT4w" type="Port_NameLabel">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_MrleA2rWEfCC2vbsDrRT4w" x="25" y="3"/>
+        </children>
+        <children xmi:type="notation:DecorationNode" xmi:id="_MrleBGrWEfCC2vbsDrRT4w" type="Port_StereotypeLabel">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_MrleBWrWEfCC2vbsDrRT4w" x="25" y="-10"/>
+        </children>
+        <element xmi:type="uml:Port" href="TestCompositeDiag.uml#_MrYCoGrWEfCC2vbsDrRT4w"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MrleAWrWEfCC2vbsDrRT4w" x="-10" y="80"/>
+      </children>
+      <element xmi:type="uml:Class" href="TestCompositeDiag.uml#_8MAtMGrVEfCC2vbsDrRT4w"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BxqHEWrWEfCC2vbsDrRT4w" x="160" y="60" width="481" height="201"/>
+    </children>
+    <styles xmi:type="notation:StringValueStyle" xmi:id="_BRCtUWrWEfCC2vbsDrRT4w" name="diagram_compatibility_version" stringValue="1.4.0"/>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_BRCtUmrWEfCC2vbsDrRT4w"/>
+    <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_BRCtU2rWEfCC2vbsDrRT4w" diagramKindId="org.eclipse.papyrus.uml.diagram.compositeStructure.root.package">
+      <owner xmi:type="uml:Model" href="TestCompositeDiag.uml#_6poUcGrVEfCC2vbsDrRT4w"/>
+    </styles>
+    <styles xmi:type="notation:EObjectListValueStyle" xmi:id="_ToPHEGrWEfCC2vbsDrRT4w" name="css_stylesheets" eObjectListValue="_ToPuIGrWEfCC2vbsDrRT4w"/>
+    <element xmi:type="uml:Model" href="TestCompositeDiag.uml#_6poUcGrVEfCC2vbsDrRT4w"/>
+    <edges xmi:type="notation:Connector" xmi:id="_okMjoGrWEfCC2vbsDrRT4w" type="Connector_Edge" source="_J8NtsGrWEfCC2vbsDrRT4w" target="_KmmHcGrWEfCC2vbsDrRT4w">
+      <children xmi:type="notation:DecorationNode" xmi:id="_okNKsGrWEfCC2vbsDrRT4w" type="Connector_StereotypeLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_okNKsWrWEfCC2vbsDrRT4w" y="60"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_okNKsmrWEfCC2vbsDrRT4w" type="Connector_NameLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_okNKs2rWEfCC2vbsDrRT4w" y="-20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_okNKtGrWEfCC2vbsDrRT4w" type="Connector_SourceMultiplicityLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_okNKtWrWEfCC2vbsDrRT4w" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_okNKtmrWEfCC2vbsDrRT4w" type="Connector_TargetMultiplicityLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_okNKt2rWEfCC2vbsDrRT4w" y="20"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_okMjoWrWEfCC2vbsDrRT4w"/>
+      <element xmi:type="uml:Connector" href="TestCompositeDiag.uml#_oj5BoGrWEfCC2vbsDrRT4w"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_okMjomrWEfCC2vbsDrRT4w" points="[377, 181, -643984, -643984]$[456, 190, -643984, -643984]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_olTW4GrWEfCC2vbsDrRT4w" id="(0.85,0.35)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_ygLEkGrWEfCC2vbsDrRT4w" type="Connector_Edge" source="_PVjJ4GrWEfCC2vbsDrRT4w" target="_MrleAGrWEfCC2vbsDrRT4w">
+      <children xmi:type="notation:DecorationNode" xmi:id="_ygLEk2rWEfCC2vbsDrRT4w" type="Connector_StereotypeLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_ygLElGrWEfCC2vbsDrRT4w" y="60"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_ygLElWrWEfCC2vbsDrRT4w" type="Connector_NameLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_ygLElmrWEfCC2vbsDrRT4w" y="-20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_ygLEl2rWEfCC2vbsDrRT4w" type="Connector_SourceMultiplicityLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_ygLEmGrWEfCC2vbsDrRT4w" y="20"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_ygLEmWrWEfCC2vbsDrRT4w" type="Connector_TargetMultiplicityLabel">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_ygLEmmrWEfCC2vbsDrRT4w" y="20"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_ygLEkWrWEfCC2vbsDrRT4w"/>
+      <element xmi:type="uml:Connector" href="TestCompositeDiag.uml#_yf8bEGrWEfCC2vbsDrRT4w"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ygLEkmrWEfCC2vbsDrRT4w" points="[247, 212, -643984, -643984]$[161, 160, -643984, -643984]"/>
+    </edges>
+  </notation:Diagram>
+  <css:EmbeddedStyleSheet xmi:id="_ToPuIGrWEfCC2vbsDrRT4w" label="Test" content="Class, DataType, Enumeration, Interface, Component, State, Region, Property, Port {&#xA;    fillcolor: white;&#xA;    elementIcon: false;&#xA;}&#xA;&#xA;Port {&#xA;    maskLabel: name;&#xA;}&#xA;&#xA;Connector > Label:SourceMultiplicity,&#xA;Connector > Label:TargetMultiplicity {&#xA;    visible: false;&#xA;}&#xA;"/>
+</xmi:XMI>

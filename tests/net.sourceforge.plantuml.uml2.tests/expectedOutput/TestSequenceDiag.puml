@@ -1,0 +1,9 @@
+@startuml
+participant Lifeline1
+participant Lifeline2
+Lifeline1->Lifeline2 : SyncMsg
+Lifeline1->>Lifeline2 : AsyncMsg
+Lifeline2-->Lifeline1 : ReplyMessage
+Lifeline2->x] : Message14
+Lifeline1->x[ : Message16
+@enduml

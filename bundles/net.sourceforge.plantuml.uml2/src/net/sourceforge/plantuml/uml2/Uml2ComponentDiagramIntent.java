@@ -1,15 +1,23 @@
+/**
+ * Copyright (c) 2025 CEA LIST and others
+ *
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License 2.0 which
+ * accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
+
 package net.sourceforge.plantuml.uml2;
 
 import static net.sourceforge.plantuml.uml2.IndentUtils.indentBlock;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.eclipse.uml2.uml.AggregationKind;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.ConnectableElement;
@@ -23,7 +31,8 @@ import net.sourceforge.plantuml.text.AbstractClassDiagramIntent;
 
 /**
  * Produce a PlantUML component diagram from a UML package
- * TODO: no composite structure? Currently copy of class diagram
+ * TODO: PlantUML currently does not have a support for parts. Apply workaround described
+ * in https://forum.plantuml.net/18813/support-for-composite-structure-diagram-notably-parts
  */
 public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Collection<Class>> {
 
@@ -80,14 +89,13 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 			if (type instanceof Class) {
 				// TODO: combine hierarchically with prefix?
 				String atName = String.format("%s: ", attribute.getName());
-				// already handled avoids a potential stack overflow, if attribute within a class is typed with this class
+				// the alreadyHandled list avoids a potential stack overflow, if attribute within a class is typed with this class
 				if (!alreadyHandled.containsKey(type)) {
 					String sub = getDiagramText(atName, (Class) type);
 					alreadyHandled.put((Classifier) type, true);
 					indentBlock(buffer, sub);
 				}
 			}
-			// appendAttribute(attribute.isDerived(), null, null, getTypedName(attribute, "?"), attribute.getName(), buffer);
 		}
 		for (final Connector connector : clazz.getOwnedConnectors()) {
 			if (connector.getEnds().size() == 2) {
@@ -95,7 +103,6 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 				String txtT = getPortRef(connector.getEnds().get(1));
 				indentBlock(buffer, String.format("%s -- %s\n", txtS, txtT));
 			}
-			// appendAttribute(attribute.isDerived(), null, null, getTypedName(attribute, "?"), attribute.getName(), buffer);
 		}
 
 
@@ -119,8 +126,6 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 	}
 
 	protected String getClassifierColor(final Classifier classifier) {
-		// final Map<String, String> skinParams = diagramHelper.getSkinParams(classifier, null);
-		// return (skinParams != null ? skinParams.get("BackgroundColor") : null);
 		return null;
 	}
 }
