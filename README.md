@@ -1,3 +1,6 @@
+> [!CAUTION]
+> This project moved to a new place at https://github.com/plantuml/plantuml-eclipse
+
 # plantuml - generate UML diagrams from files and view them in Eclipse
 
 The plantuml library implements a DSL and renderer for many UML diagrams (class, sequence, objects, states, activities, ...).
